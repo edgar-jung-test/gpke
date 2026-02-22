@@ -1,22 +1,23 @@
 type: object
-required:
-  - identificationMode
 properties:
   identificationMode:
     type: string
     description: How the market location is identified
     x-de: Art der Identifikation der Marktlokation
-    enum:
-      - maloIdOnly
-      - multiAttribute
+    enum: [maloIdOnly, multiAttribute]
+
   maloId:
+    $ref: maloId.ymal
 
   meterNumber:
     type: string
     nullable: true
     description: Meter number (Zählernummer)
     x-de: Zählernummer
+
   address:
     $ref: PostalAddress.yaml
   customer:
     $ref: CustomerReference.yaml
+
+required: [identificationMode]
