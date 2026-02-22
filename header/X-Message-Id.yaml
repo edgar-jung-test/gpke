@@ -1,9 +1,0 @@
-type: object
-properties:
-  field0:
-    type: string
-  field1:
-    type: number
-required:
-  - field0
-  - field1
