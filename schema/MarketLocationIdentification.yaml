@@ -23,18 +23,3 @@ properties:
     $ref: PostalAddress.yaml
   customer:
     $ref: CustomerReference.yaml
-allOf:
-  - if:
-      properties:
-        identificationMode:
-          const: maloIdOnly
-    then:
-      required:
-        - maloId
-  - if:
-      properties:
-        identificationMode:
-          const: multiAttribute
-    then:
-      required:
-        - address
