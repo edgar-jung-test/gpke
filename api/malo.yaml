@@ -153,6 +153,15 @@ paths:
         schema:
           type: string
         required: true
+      - in: header
+        name: X-Message-Id
+        description: TranskationsID, Lebensdauer über den kompletten Lieferantenwechsel
+        schema: &ref_0
+          type: string
+      - in: header
+        name: X-Request-Id
+        description: Eindeutige Kennung für diesen einzelnen Request
+        schema: *ref_0
   /supply-starts/{supplyStartId}/submit:
     post:
       summary: Submit the supply start request for processing
@@ -208,3 +217,14 @@ components:
   parameters:
     maloID:
       $ref: ../schema/maloId.yaml
+  headers:
+    X-Message-Id:
+      required: false
+      description: TranskationsID, Lebensdauer über den kompletten Lieferantenwechsel
+      schema:
+        type: string
+    X-Request-Id:
+      required: false
+      description: Eindeutige Kennung für diesen einzelnen Request
+      schema:
+        type: string
