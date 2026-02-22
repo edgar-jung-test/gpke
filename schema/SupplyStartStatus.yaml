@@ -1,0 +1,9 @@
+type: string
+description: Current processing status
+x-de: Aktueller Bearbeitungsstatus
+enum:
+- draft
+- submitted
+- accepted
+- rejected
+- cancelled
