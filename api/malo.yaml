@@ -199,5 +199,5 @@ components:
     RejectionReason:
       $ref: ../schemas/components/schemas/RejectionReason
   parameters:
-    malID:
+    maloID:
       $ref: ../schema/maloId.yaml
