@@ -1,9 +1,18 @@
 type: object
-properties:
-  field0:
-    type: string
-  field1:
-    type: number
 required:
-  - field0
-  - field1
+  - balancingGroupId
+properties:
+  balancingGroupId:
+    type: string
+    description: Balancing group assignment (Bilanzkreis)
+    x-de: Bilanzkreiszuordnung (Bilanzkreis-ID)
+  balancingGroupRole:
+    type: string
+    nullable: true
+    description: Optional role/context for balancing
+    x-de: Optionale Rolle/Kontext zur Bilanzierung
+  authorizationReference:
+    type: string
+    nullable: true
+    description: Reference to balancing authorization (if applicable)
+    x-de: Referenz der Zuordnungsermächtigung (falls vorhanden)
