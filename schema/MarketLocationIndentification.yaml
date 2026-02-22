@@ -9,6 +9,7 @@ properties:
       - multiAttribute
   maloId:
     $ref: maloId.yaml
+    description: MaloId
   meterNumber:
     type: string
     nullable: true
