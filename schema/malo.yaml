@@ -1,9 +1,47 @@
-type: object
-properties:
-  field0:
-    type: string
-  field1:
-    type: number
-required:
-  - field0
-  - field1
+MarketLocationIdentification:
+  type: object
+  required:
+    - identificationMode
+  properties:
+    identificationMode:
+      type: string
+      description: >
+        How the market location is identified. If "maloIdOnly", identification
+        is solely via MaLo-ID.
+      enum:
+        - maloIdOnly
+        - multiAttribute
+    maloId:
+      type: string
+      nullable: true
+      description: Market location ID (MaLo-ID).
+    meterNumber:
+      type: string
+      nullable: true
+      description: >-
+        Meter number (Zählernummer), used as an identification attribute in some
+        cases.
+    address:
+      $ref: '#/components/schemas/PostalAddress'
+    customer:
+      $ref: '#/components/schemas/CustomerReference'
+  allOf:
+    - if:
+        properties:
+          identificationMode:
+            const: maloIdOnly
+      then:
+        required:
+          - maloId
+    - if:
+        properties:
+          identificationMode:
+            const: multiAttribute
+      then:
+        description: >
+          Multi-attribute identification may include maloId and/or meterNumber
+          and address; for a new connection it may require customer name/company
+          + address.
+        required:
+          - address
+type: string
