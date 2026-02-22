@@ -117,13 +117,9 @@ paths:
         Typical use: add notes, correct identification details, etc.
       operationId: patchSupplyStart
       parameters:
-        - in: path
-          name: supplyStartId
-          required: true
-          schema:
-            type: string
-          description: Supply start request ID
-          x-de: Lieferbeginn-Anfrage-ID
+        - $ref: ../schema/MarketLocationIdentification.yaml
+        - $ref: ''
+          in: path
       requestBody:
         required: true
         content:
@@ -147,6 +143,7 @@ paths:
       - $ref: ../schema/MarketLocationIdentification.yaml
       - $ref: ../schema/MarketLocationIdentification.yaml
       - $ref: ../schema/malo.yaml
+      - $ref: ../schema/MarketLocationIdentification.yaml
   /supply-starts/{supplyStartId}/submit:
     post:
       summary: Submit the supply start request for processing
@@ -199,3 +196,6 @@ components:
       $ref: ../schemas/components/schemas/MeterReadingCycle
     RejectionReason:
       $ref: ../schemas/components/schemas/RejectionReason
+  parameters:
+    MaloIdent:
+      $ref: ../schema/MarketLocationIdentification.yaml
