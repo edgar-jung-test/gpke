@@ -145,11 +145,7 @@ paths:
       - $ref: ../schema/malo.yaml
       - $ref: ../schema/MarketLocationIdentification.yaml
       - $ref: ../schema/maloId.yaml
-      - in: path
-        name: ''
-        description: maloId
-        schema:
-          type: string
+      - $ref: ../schema/maloId.yaml
   /supply-starts/{supplyStartId}/submit:
     post:
       summary: Submit the supply start request for processing
@@ -203,5 +199,5 @@ components:
     RejectionReason:
       $ref: ../schemas/components/schemas/RejectionReason
   parameters:
-    MaloIdent:
-      $ref: ../schema/MarketLocationIdentification.yaml
+    malID:
+      $ref: ../schema/maloId.yaml
