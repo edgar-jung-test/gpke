@@ -1,22 +1,199 @@
 openapi: 3.0.3
 info:
-  title: New Spec - OpenAPI 3.0
-  description: This is a sample description about this spec.
-  termsOfService: ''
-  contact:
-    email: ''
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: GPKE Supply Start (Lieferbeginn) REST API
   version: 1.0.0
-externalDocs:
-  description: Find out more about spec
-  url: ''
-servers: []
-tags:
-  - name: Default
-    description: ''
-paths: {}
+  description: 'REST API for the GPKE use-case "Lieferbeginn" (supply start), representing
+    the business data typically transported via UTILMD.
+
+    '
+servers:
+- url: https://api.example.com
+paths:
+  /supply-starts:
+    post:
+      summary: Create a supply start request
+      description: Submit a new Lieferbeginn (registration) request.
+      operationId: createSupplyStart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplyStartCreateRequest'
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              description: URL of the created resource
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyStart'
+        '400':
+          description: Validation error
+        '409':
+          description: Conflict (e.g., another registration already in progress)
+    get:
+      summary: List supply start requests
+      operationId: listSupplyStarts
+      parameters:
+      - in: query
+        name: status
+        schema:
+          $ref: '#/components/schemas/SupplyStartStatus'
+        description: Filter by status
+        x-de: Status-Filter
+      - in: query
+        name: maloId
+        schema:
+          type: string
+        description: Filter by MaLo-ID
+        x-de: Filter nach MaLo-ID
+      - in: query
+        name: fromDate
+        schema:
+          type: string
+          format: date
+        description: Filter by requested supply start date (from)
+        x-de: Filter nach Lieferbeginn-Datum (von)
+      - in: query
+        name: toDate
+        schema:
+          type: string
+          format: date
+        description: Filter by requested supply start date (to)
+        x-de: Filter nach Lieferbeginn-Datum (bis)
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 500
+          default: 50
+        description: Page size
+        x-de: Seitengröße
+      - in: query
+        name: offset
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+        description: Page offset
+        x-de: Seitenoffset
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyStartList'
+  /supply-starts/{supplyStartId}:
+    get:
+      summary: Get a supply start request by ID
+      operationId: getSupplyStart
+      parameters:
+      - in: path
+        name: supplyStartId
+        required: true
+        schema:
+          type: string
+        description: Supply start request ID
+        x-de: Lieferbeginn-Anfrage-ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyStart'
+        '404':
+          description: Not found
+    patch:
+      summary: Update mutable fields of a supply start request
+      description: 'Update fields that are still changeable before submission/processing.
+        Typical use: add notes, correct identification details, etc.
+
+        '
+      operationId: patchSupplyStart
+      parameters:
+      - in: path
+        name: supplyStartId
+        required: true
+        schema:
+          type: string
+        description: Supply start request ID
+        x-de: Lieferbeginn-Anfrage-ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplyStartPatchRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyStart'
+        '400':
+          description: Validation error
+        '404':
+          description: Not found
+        '409':
+          description: Conflict (e.g., cannot modify in current status)
+  /supply-starts/{supplyStartId}/submit:
+    post:
+      summary: Submit the supply start request for processing
+      description: Transition from draft to submitted.
+      operationId: submitSupplyStart
+      parameters:
+      - in: path
+        name: supplyStartId
+        required: true
+        schema:
+          type: string
+        description: Supply start request ID
+        x-de: Lieferbeginn-Anfrage-ID
+      responses:
+        '202':
+          description: Accepted for processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyStart'
+        '404':
+          description: Not found
+        '409':
+          description: Conflict (e.g., already submitted)
 components:
-  schemas: {}
-  securitySchemes: {}
+  schemas:
+    SupplyStartList:
+      $ref: ./components/schemas/SupplyStartList.yaml
+    SupplyStart:
+      $ref: ./components/schemas/SupplyStart.yaml
+    SupplyStartCreateRequest:
+      $ref: ./components/schemas/SupplyStartCreateRequest.yaml
+    SupplyStartPatchRequest:
+      $ref: ./components/schemas/SupplyStartPatchRequest.yaml
+    SupplyStartStatus:
+      $ref: ./components/schemas/SupplyStartStatus.yaml
+    MessageHeader:
+      $ref: ./components/schemas/MessageHeader.yaml
+    TransactionReason:
+      $ref: ./components/schemas/TransactionReason.yaml
+    MarketLocationIdentification:
+      $ref: ./components/schemas/MarketLocationIdentification.yaml
+    PostalAddress:
+      $ref: ./components/schemas/PostalAddress.yaml
+    CustomerReference:
+      $ref: ./components/schemas/CustomerReference.yaml
+    BalancingData:
+      $ref: ./components/schemas/BalancingData.yaml
+    MeterReadingCycle:
+      $ref: ./components/schemas/MeterReadingCycle.yaml
+    RejectionReason:
+      $ref: ./components/schemas/RejectionReason.yaml
