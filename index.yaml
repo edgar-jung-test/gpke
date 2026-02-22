@@ -5,12 +5,10 @@ info:
   description: >
     REST API for the GPKE use-case "Lieferbeginn" (supply start), representing
     the business data typically transported via UTILMD.
-
 servers:
   - url: https://api.example.com
-
 paths:
-  /supply-starts:
+  /malo/{maloid}:
     post:
       summary: Create a supply start request
       description: Submit a new Lieferbeginn (registration) request.
@@ -37,7 +35,6 @@ paths:
           description: Validation error
         '409':
           description: Conflict (e.g., another registration already in progress)
-
     get:
       summary: List supply start requests
       operationId: listSupplyStarts
@@ -92,7 +89,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SupplyStartList'
-
+    patch:
+      summary: Supply start
+      description: ''
+      operationId: ''
+      tags: []
+      parameters: []
+      responses:
+        '200':
+          description: OK
+    parameters:
+      - $ref: ''
+        in: path
   /supply-starts/{supplyStartId}:
     get:
       summary: Get a supply start request by ID
@@ -114,7 +122,6 @@ paths:
                 $ref: '#/components/schemas/SupplyStart'
         '404':
           description: Not found
-
     patch:
       summary: Update mutable fields of a supply start request
       description: >
@@ -148,7 +155,6 @@ paths:
           description: Not found
         '409':
           description: Conflict (e.g., cannot modify in current status)
-
   /supply-starts/{supplyStartId}/submit:
     post:
       summary: Submit the supply start request for processing
@@ -173,12 +179,13 @@ paths:
           description: Not found
         '409':
           description: Conflict (e.g., already submitted)
-
 components:
   schemas:
     SupplyStartList:
       type: object
-      required: [items, count]
+      required:
+        - items
+        - count
       properties:
         items:
           type: array
@@ -190,7 +197,6 @@ components:
           type: integer
           description: Total number of items (after filtering)
           x-de: Gesamtanzahl (nach Filter)
-
     SupplyStart:
       type: object
       required:
@@ -264,7 +270,6 @@ components:
           nullable: true
           description: Free-text notes
           x-de: Freitext-Notizen
-
     SupplyStartCreateRequest:
       type: object
       required:
@@ -305,7 +310,6 @@ components:
           nullable: true
           description: Free-text notes
           x-de: Freitext-Notizen
-
     SupplyStartPatchRequest:
       type: object
       description: Mutable fields only
@@ -337,7 +341,6 @@ components:
           nullable: true
           description: Free-text notes
           x-de: Freitext-Notizen
-
     SupplyStartStatus:
       type: string
       description: Current processing status
@@ -348,7 +351,6 @@ components:
         - accepted
         - rejected
         - cancelled
-
     MessageHeader:
       type: object
       required:
@@ -384,7 +386,6 @@ components:
           nullable: true
           description: Message/process version
           x-de: Nachrichten-/Prozessversion
-
     TransactionReason:
       type: string
       description: Transaction reason for supply start
@@ -395,7 +396,6 @@ components:
         - newConnection
         - resumptionAfterInterruption
         - other
-
     MarketLocationIdentification:
       type: object
       required:
@@ -428,14 +428,15 @@ components:
               identificationMode:
                 const: maloIdOnly
           then:
-            required: [maloId]
+            required:
+              - maloId
         - if:
             properties:
               identificationMode:
                 const: multiAttribute
           then:
-            required: [address]
-
+            required:
+              - address
     PostalAddress:
       type: object
       required:
@@ -467,7 +468,6 @@ components:
           maxLength: 2
           description: ISO 3166-1 alpha-2 country code
           x-de: Ländercode (ISO 3166-1 alpha-2)
-
     CustomerReference:
       type: object
       description: Customer reference used for identification (esp. new connection)
@@ -475,7 +475,9 @@ components:
       properties:
         customerType:
           type: string
-          enum: [person, company]
+          enum:
+            - person
+            - company
           description: Customer type
           x-de: Kundentyp
         nameOrCompany:
@@ -483,7 +485,6 @@ components:
           nullable: true
           description: Person name or company name
           x-de: Name der Person oder Firma
-
     BalancingData:
       type: object
       required:
@@ -503,7 +504,6 @@ components:
           nullable: true
           description: Reference to balancing authorization (if applicable)
           x-de: Referenz der Zuordnungsermächtigung (falls vorhanden)
-
     MeterReadingCycle:
       type: object
       nullable: true
@@ -512,13 +512,17 @@ components:
       properties:
         cycle:
           type: string
-          enum: [yearly, semiAnnual, quarterly, monthly]
+          enum:
+            - yearly
+            - semiAnnual
+            - quarterly
+            - monthly
           description: Meter reading cycle
           x-de: Ableseturnus
-
     RejectionReason:
       type: object
-      required: [code]
+      required:
+        - code
       properties:
         code:
           type: string
