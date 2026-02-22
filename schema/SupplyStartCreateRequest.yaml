@@ -1,9 +1,39 @@
 type: object
-properties:
-  field0:
-    type: string
-  field1:
-    type: number
 required:
-  - field0
-  - field1
+- header
+- supplyStartDate
+- transactionReason
+- marketLocationIdentification
+- balancing
+- isHouseholdCustomer
+properties:
+  header:
+    $ref: ./MessageHeader.yaml
+  supplyStartDate:
+    type: string
+    format: date
+    description: Requested supply start date (Anmeldedatum)
+    x-de: Gewünschtes Lieferbeginn-Datum (Anmeldedatum)
+  transactionReason:
+    $ref: ./TransactionReason.yaml
+  isHouseholdCustomer:
+    type: boolean
+    description: Whether the end customer is a household customer
+    x-de: Haushaltskunde (ja/nein)
+  marketLocationIdentification:
+    $ref: ./MarketLocationIdentification.yaml
+  balancing:
+    $ref: ./BalancingData.yaml
+  meterReadingCycle:
+    $ref: ./MeterReadingCycle.yaml
+  requestedStartDateForNewConnection:
+    type: string
+    format: date
+    nullable: true
+    description: Estimated supply start date for a new connection
+    x-de: Voraussichtliches Lieferbeginn-Datum bei Neuanlage
+  notes:
+    type: string
+    nullable: true
+    description: Free-text notes
+    x-de: Freitext-Notizen
