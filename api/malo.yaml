@@ -144,6 +144,12 @@ paths:
       - $ref: ../schema/MarketLocationIdentification.yaml
       - $ref: ../schema/malo.yaml
       - $ref: ../schema/MarketLocationIdentification.yaml
+      - $ref: ../schema/maloId.yaml
+      - in: path
+        name: ''
+        description: maloId
+        schema:
+          type: string
   /supply-starts/{supplyStartId}/submit:
     post:
       summary: Submit the supply start request for processing
