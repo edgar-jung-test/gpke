@@ -1,9 +1,30 @@
 type: object
-properties:
-  field0:
-    type: string
-  field1:
-    type: number
 required:
-  - field0
-  - field1
+- street
+- houseNumber
+- postalCode
+- city
+- countryCode
+properties:
+  street:
+    type: string
+    description: Street name
+    x-de: Straße
+  houseNumber:
+    type: string
+    description: House number
+    x-de: Hausnummer
+  postalCode:
+    type: string
+    description: Postal code
+    x-de: Postleitzahl
+  city:
+    type: string
+    description: City
+    x-de: Ort
+  countryCode:
+    type: string
+    minLength: 2
+    maxLength: 2
+    description: ISO 3166-1 alpha-2 country code
+    x-de: Ländercode (ISO 3166-1 alpha-2)
