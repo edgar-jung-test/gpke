@@ -141,11 +141,7 @@ paths:
           description: Conflict (e.g., cannot modify in current status)
     parameters:
       - $ref: ../schema/MarketLocationIdentification.yaml
-      - $ref: ../schema/MarketLocationIdentification.yaml
       - $ref: ../schema/malo.yaml
-      - $ref: ../schema/MarketLocationIdentification.yaml
-      - $ref: ../schema/maloId.yaml
-      - $ref: ../schema/maloId.yaml
       - $ref: ../schema/maloId.yaml
       - in: path
         name: maloId
@@ -153,8 +149,7 @@ paths:
         schema:
           type: string
         required: true
-      - $ref: ''
-        in: header
+      - $ref: ../header/X-Message-Id.yaml
       - in: header
         name: X-Request-Id
         description: Eindeutige Kennung für diesen einzelnen Request
