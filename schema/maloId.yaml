@@ -1,9 +1,5 @@
-type: object
-properties:
-  field0:
+maloId:    
     type: string
-  field1:
-    type: number
-required:
-  - field0
-  - field1
+    nullable: true
+    description: Market location ID (MaLo-ID)
+    x-de: Marktlokations-ID (MaLo-ID)
