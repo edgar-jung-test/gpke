@@ -10,10 +10,7 @@ properties:
       - maloIdOnly
       - multiAttribute
   maloId:
-    type: string
-    nullable: true
-    description: Market location ID (MaLo-ID)
-    x-de: Marktlokations-ID (MaLo-ID)
+
   meterNumber:
     type: string
     nullable: true
