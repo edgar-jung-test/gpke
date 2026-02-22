@@ -89,7 +89,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SupplyStartList'
-  /supply-starts/{supplyStartId}:
+  /malo:
     get:
       summary: Get a supply start request by ID
       operationId: getSupplyStart
@@ -143,6 +143,10 @@ paths:
           description: Not found
         '409':
           description: Conflict (e.g., cannot modify in current status)
+    parameters:
+      - $ref: ../schema/MarketLocationIdentification.yaml
+      - $ref: ../schema/MarketLocationIdentification.yaml
+      - $ref: ../schema/malo.yaml
   /supply-starts/{supplyStartId}/submit:
     post:
       summary: Submit the supply start request for processing
@@ -172,26 +176,26 @@ components:
     SupplyStartList:
       $ref: ../schema/SupplyStartList.yaml
     SupplyStart:
-      $ref: '../schemas/SupplyStart'
+      $ref: ../schemas/SupplyStart
     SupplyStartCreateRequest:
-      $ref: '../schemas/SupplyStartCreateRequest'
+      $ref: ../schemas/SupplyStartCreateRequest
     SupplyStartPatchRequest:
-      $ref: '../schemas/components/schemas/SupplyStartPatchRequest'
+      $ref: ../schemas/components/schemas/SupplyStartPatchRequest
     SupplyStartStatus:
-      $ref: '../schemas/components/schemas/SupplyStartStatus'
+      $ref: ../schemas/components/schemas/SupplyStartStatus
     MessageHeader:
-      $ref: '../schemas/components/schemas/MessageHeader'
+      $ref: ../schemas/components/schemas/MessageHeader
     TransactionReason:
-      $ref: '../schemas/components/schemas/TransactionReason'
+      $ref: ../schemas/components/schemas/TransactionReason
     MarketLocationIdentification:
-      $ref: '../schemas/components/schemas/MarketLocationIdentification'
+      $ref: ../schemas/components/schemas/MarketLocationIdentification
     PostalAddress:
-      $ref: '../schemas/components/schemas/PostalAddress'
+      $ref: ../schemas/components/schemas/PostalAddress
     CustomerReference:
-      $ref: '../schemas/components/schemas/CustomerReference'
+      $ref: ../schemas/components/schemas/CustomerReference
     BalancingData:
-      $ref: '../schemas/components/schemas/BalancingData'
+      $ref: ../schemas/components/schemas/BalancingData
     MeterReadingCycle:
-      $ref: '../schemas/components/schemas/MeterReadingCycle'
+      $ref: ../schemas/components/schemas/MeterReadingCycle
     RejectionReason:
-      $ref: '../schemas/components/schemas/RejectionReason'
+      $ref: ../schemas/components/schemas/RejectionReason
