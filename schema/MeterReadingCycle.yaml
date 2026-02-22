@@ -1,9 +1,14 @@
 type: object
+nullable: true
+description: Optional meter reading cycle differing from yearly
+x-de: Optionaler Ableseturnus (abweichend von jährlich)
 properties:
-  field0:
+  cycle:
     type: string
-  field1:
-    type: number
-required:
-  - field0
-  - field1
+    enum:
+    - yearly
+    - semiAnnual
+    - quarterly
+    - monthly
+    description: Meter reading cycle
+    x-de: Ableseturnus
