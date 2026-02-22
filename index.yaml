@@ -1,0 +1,531 @@
+openapi: 3.0.3
+info:
+  title: GPKE Supply Start (Lieferbeginn) REST API
+  version: 1.0.0
+  description: >
+    REST API for the GPKE use-case "Lieferbeginn" (supply start), representing
+    the business data typically transported via UTILMD.
+
+servers:
+  - url: https://api.example.com
+
+paths:
+  /supply-starts:
+    post:
+      summary: Create a supply start request
+      description: Submit a new Lieferbeginn (registration) request.
+      operationId: createSupplyStart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplyStartCreateRequest'
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              description: URL of the created resource
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyStart'
+        '400':
+          description: Validation error
+        '409':
+          description: Conflict (e.g., another registration already in progress)
+
+    get:
+      summary: List supply start requests
+      operationId: listSupplyStarts
+      parameters:
+        - in: query
+          name: status
+          schema:
+            $ref: '#/components/schemas/SupplyStartStatus'
+          description: Filter by status
+          x-de: Status-Filter
+        - in: query
+          name: maloId
+          schema:
+            type: string
+          description: Filter by MaLo-ID
+          x-de: Filter nach MaLo-ID
+        - in: query
+          name: fromDate
+          schema:
+            type: string
+            format: date
+          description: Filter by requested supply start date (from)
+          x-de: Filter nach Lieferbeginn-Datum (von)
+        - in: query
+          name: toDate
+          schema:
+            type: string
+            format: date
+          description: Filter by requested supply start date (to)
+          x-de: Filter nach Lieferbeginn-Datum (bis)
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 50
+          description: Page size
+          x-de: Seitengröße
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          description: Page offset
+          x-de: Seitenoffset
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyStartList'
+
+  /supply-starts/{supplyStartId}:
+    get:
+      summary: Get a supply start request by ID
+      operationId: getSupplyStart
+      parameters:
+        - in: path
+          name: supplyStartId
+          required: true
+          schema:
+            type: string
+          description: Supply start request ID
+          x-de: Lieferbeginn-Anfrage-ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyStart'
+        '404':
+          description: Not found
+
+    patch:
+      summary: Update mutable fields of a supply start request
+      description: >
+        Update fields that are still changeable before submission/processing.
+        Typical use: add notes, correct identification details, etc.
+      operationId: patchSupplyStart
+      parameters:
+        - in: path
+          name: supplyStartId
+          required: true
+          schema:
+            type: string
+          description: Supply start request ID
+          x-de: Lieferbeginn-Anfrage-ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplyStartPatchRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyStart'
+        '400':
+          description: Validation error
+        '404':
+          description: Not found
+        '409':
+          description: Conflict (e.g., cannot modify in current status)
+
+  /supply-starts/{supplyStartId}/submit:
+    post:
+      summary: Submit the supply start request for processing
+      description: Transition from draft to submitted.
+      operationId: submitSupplyStart
+      parameters:
+        - in: path
+          name: supplyStartId
+          required: true
+          schema:
+            type: string
+          description: Supply start request ID
+          x-de: Lieferbeginn-Anfrage-ID
+      responses:
+        '202':
+          description: Accepted for processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyStart'
+        '404':
+          description: Not found
+        '409':
+          description: Conflict (e.g., already submitted)
+
+components:
+  schemas:
+    SupplyStartList:
+      type: object
+      required: [items, count]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplyStart'
+          description: List of supply start requests
+          x-de: Liste der Lieferbeginn-Anfragen
+        count:
+          type: integer
+          description: Total number of items (after filtering)
+          x-de: Gesamtanzahl (nach Filter)
+
+    SupplyStart:
+      type: object
+      required:
+        - supplyStartId
+        - status
+        - createdAt
+        - updatedAt
+        - header
+        - supplyStartDate
+        - transactionReason
+        - marketLocationIdentification
+        - balancing
+        - isHouseholdCustomer
+      properties:
+        supplyStartId:
+          type: string
+          description: Unique supply start request ID
+          x-de: Eindeutige Lieferbeginn-Anfrage-ID
+        status:
+          $ref: '#/components/schemas/SupplyStartStatus'
+        createdAt:
+          type: string
+          format: date-time
+          description: Resource creation timestamp
+          x-de: Erstellzeitpunkt
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          x-de: Letzte Änderung
+        header:
+          $ref: '#/components/schemas/MessageHeader'
+        supplyStartDate:
+          type: string
+          format: date
+          description: Requested supply start date (Anmeldedatum)
+          x-de: Gewünschtes Lieferbeginn-Datum (Anmeldedatum)
+        transactionReason:
+          $ref: '#/components/schemas/TransactionReason'
+        isHouseholdCustomer:
+          type: boolean
+          description: Whether the end customer is a household customer
+          x-de: Haushaltskunde (ja/nein)
+        marketLocationIdentification:
+          $ref: '#/components/schemas/MarketLocationIdentification'
+        balancing:
+          $ref: '#/components/schemas/BalancingData'
+        meterReadingCycle:
+          $ref: '#/components/schemas/MeterReadingCycle'
+        requestedStartDateForNewConnection:
+          type: string
+          format: date
+          nullable: true
+          description: Estimated supply start date for a new connection
+          x-de: Voraussichtliches Lieferbeginn-Datum bei Neuanlage
+        effectiveSupplyStartDate:
+          type: string
+          format: date
+          nullable: true
+          description: Confirmed/Effective supply start date (if known)
+          x-de: Bestätigtes/Wirkendes Lieferbeginn-Datum (falls bekannt)
+        rejectionReasons:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/RejectionReason'
+          description: Reasons if rejected
+          x-de: Ablehnungsgründe (falls abgelehnt)
+        notes:
+          type: string
+          nullable: true
+          description: Free-text notes
+          x-de: Freitext-Notizen
+
+    SupplyStartCreateRequest:
+      type: object
+      required:
+        - header
+        - supplyStartDate
+        - transactionReason
+        - marketLocationIdentification
+        - balancing
+        - isHouseholdCustomer
+      properties:
+        header:
+          $ref: '#/components/schemas/MessageHeader'
+        supplyStartDate:
+          type: string
+          format: date
+          description: Requested supply start date (Anmeldedatum)
+          x-de: Gewünschtes Lieferbeginn-Datum (Anmeldedatum)
+        transactionReason:
+          $ref: '#/components/schemas/TransactionReason'
+        isHouseholdCustomer:
+          type: boolean
+          description: Whether the end customer is a household customer
+          x-de: Haushaltskunde (ja/nein)
+        marketLocationIdentification:
+          $ref: '#/components/schemas/MarketLocationIdentification'
+        balancing:
+          $ref: '#/components/schemas/BalancingData'
+        meterReadingCycle:
+          $ref: '#/components/schemas/MeterReadingCycle'
+        requestedStartDateForNewConnection:
+          type: string
+          format: date
+          nullable: true
+          description: Estimated supply start date for a new connection
+          x-de: Voraussichtliches Lieferbeginn-Datum bei Neuanlage
+        notes:
+          type: string
+          nullable: true
+          description: Free-text notes
+          x-de: Freitext-Notizen
+
+    SupplyStartPatchRequest:
+      type: object
+      description: Mutable fields only
+      x-de: Nur änderbare Felder
+      properties:
+        supplyStartDate:
+          type: string
+          format: date
+          description: Requested supply start date (Anmeldedatum)
+          x-de: Gewünschtes Lieferbeginn-Datum (Anmeldedatum)
+        isHouseholdCustomer:
+          type: boolean
+          description: Whether the end customer is a household customer
+          x-de: Haushaltskunde (ja/nein)
+        marketLocationIdentification:
+          $ref: '#/components/schemas/MarketLocationIdentification'
+        balancing:
+          $ref: '#/components/schemas/BalancingData'
+        meterReadingCycle:
+          $ref: '#/components/schemas/MeterReadingCycle'
+        requestedStartDateForNewConnection:
+          type: string
+          format: date
+          nullable: true
+          description: Estimated supply start date for a new connection
+          x-de: Voraussichtliches Lieferbeginn-Datum bei Neuanlage
+        notes:
+          type: string
+          nullable: true
+          description: Free-text notes
+          x-de: Freitext-Notizen
+
+    SupplyStartStatus:
+      type: string
+      description: Current processing status
+      x-de: Aktueller Bearbeitungsstatus
+      enum:
+        - draft
+        - submitted
+        - accepted
+        - rejected
+        - cancelled
+
+    MessageHeader:
+      type: object
+      required:
+        - messageId
+        - createdAt
+        - senderMarketPartnerId
+        - receiverMarketPartnerId
+      properties:
+        messageId:
+          type: string
+          description: Unique message identifier
+          x-de: Eindeutige Nachrichten-ID
+        createdAt:
+          type: string
+          format: date-time
+          description: Message creation timestamp
+          x-de: Erstellzeitpunkt der Nachricht
+        senderMarketPartnerId:
+          type: string
+          description: Market partner ID of the sender (e.g., supplier)
+          x-de: Marktpartner-ID des Senders (z. B. Lieferant)
+        receiverMarketPartnerId:
+          type: string
+          description: Market partner ID of the receiver (e.g., DSO)
+          x-de: Marktpartner-ID des Empfängers (z. B. Netzbetreiber)
+        process:
+          type: string
+          nullable: true
+          description: Process name (e.g., Lieferbeginn)
+          x-de: Prozessname (z. B. Lieferbeginn)
+        version:
+          type: string
+          nullable: true
+          description: Message/process version
+          x-de: Nachrichten-/Prozessversion
+
+    TransactionReason:
+      type: string
+      description: Transaction reason for supply start
+      x-de: Transaktionsgrund für Lieferbeginn
+      enum:
+        - supplierChange
+        - moveInMoveOut
+        - newConnection
+        - resumptionAfterInterruption
+        - other
+
+    MarketLocationIdentification:
+      type: object
+      required:
+        - identificationMode
+      properties:
+        identificationMode:
+          type: string
+          description: How the market location is identified
+          x-de: Art der Identifikation der Marktlokation
+          enum:
+            - maloIdOnly
+            - multiAttribute
+        maloId:
+          type: string
+          nullable: true
+          description: Market location ID (MaLo-ID)
+          x-de: Marktlokations-ID (MaLo-ID)
+        meterNumber:
+          type: string
+          nullable: true
+          description: Meter number (Zählernummer)
+          x-de: Zählernummer
+        address:
+          $ref: '#/components/schemas/PostalAddress'
+        customer:
+          $ref: '#/components/schemas/CustomerReference'
+      allOf:
+        - if:
+            properties:
+              identificationMode:
+                const: maloIdOnly
+          then:
+            required: [maloId]
+        - if:
+            properties:
+              identificationMode:
+                const: multiAttribute
+          then:
+            required: [address]
+
+    PostalAddress:
+      type: object
+      required:
+        - street
+        - houseNumber
+        - postalCode
+        - city
+        - countryCode
+      properties:
+        street:
+          type: string
+          description: Street name
+          x-de: Straße
+        houseNumber:
+          type: string
+          description: House number
+          x-de: Hausnummer
+        postalCode:
+          type: string
+          description: Postal code
+          x-de: Postleitzahl
+        city:
+          type: string
+          description: City
+          x-de: Ort
+        countryCode:
+          type: string
+          minLength: 2
+          maxLength: 2
+          description: ISO 3166-1 alpha-2 country code
+          x-de: Ländercode (ISO 3166-1 alpha-2)
+
+    CustomerReference:
+      type: object
+      description: Customer reference used for identification (esp. new connection)
+      x-de: Kundenreferenz zur Identifikation (insb. Neuanlage)
+      properties:
+        customerType:
+          type: string
+          enum: [person, company]
+          description: Customer type
+          x-de: Kundentyp
+        nameOrCompany:
+          type: string
+          nullable: true
+          description: Person name or company name
+          x-de: Name der Person oder Firma
+
+    BalancingData:
+      type: object
+      required:
+        - balancingGroupId
+      properties:
+        balancingGroupId:
+          type: string
+          description: Balancing group assignment (Bilanzkreis)
+          x-de: Bilanzkreiszuordnung (Bilanzkreis-ID)
+        balancingGroupRole:
+          type: string
+          nullable: true
+          description: Optional role/context for balancing
+          x-de: Optionale Rolle/Kontext zur Bilanzierung
+        authorizationReference:
+          type: string
+          nullable: true
+          description: Reference to balancing authorization (if applicable)
+          x-de: Referenz der Zuordnungsermächtigung (falls vorhanden)
+
+    MeterReadingCycle:
+      type: object
+      nullable: true
+      description: Optional meter reading cycle differing from yearly
+      x-de: Optionaler Ableseturnus (abweichend von jährlich)
+      properties:
+        cycle:
+          type: string
+          enum: [yearly, semiAnnual, quarterly, monthly]
+          description: Meter reading cycle
+          x-de: Ableseturnus
+
+    RejectionReason:
+      type: object
+      required: [code]
+      properties:
+        code:
+          type: string
+          description: Machine-readable rejection code
+          x-de: Maschinenlesbarer Ablehnungscode
+        message:
+          type: string
+          nullable: true
+          description: Human-readable rejection message
+          x-de: Lesbare Ablehnungsbegründung
