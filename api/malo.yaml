@@ -153,15 +153,15 @@ paths:
         schema:
           type: string
         required: true
-      - in: header
-        name: X-Message-Id
-        description: TranskationsID, Lebensdauer über den kompletten Lieferantenwechsel
-        schema: &ref_0
-          type: string
+      - $ref: ''
+        in: header
       - in: header
         name: X-Request-Id
         description: Eindeutige Kennung für diesen einzelnen Request
-        schema: *ref_0
+        schema:
+          type: string
+      - $ref: ''
+        in: header
   /supply-starts/{supplyStartId}/submit:
     post:
       summary: Submit the supply start request for processing
