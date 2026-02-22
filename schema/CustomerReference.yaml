@@ -1,9 +1,16 @@
 type: object
+description: Customer reference used for identification (esp. new connection)
+x-de: Kundenreferenz zur Identifikation (insb. Neuanlage)
 properties:
-  field0:
+  customerType:
     type: string
-  field1:
-    type: number
-required:
-  - field0
-  - field1
+    enum:
+    - person
+    - company
+    description: Customer type
+    x-de: Kundentyp
+  nameOrCompany:
+    type: string
+    nullable: true
+    description: Person name or company name
+    x-de: Name der Person oder Firma
