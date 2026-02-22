@@ -20,7 +20,21 @@ properties:
     description: Meter number (Zählernummer)
     x-de: Zählernummer
   address:
-    $ref: ./PostalAddress.yaml
+    $ref: PostalAddress.yaml
   customer:
-    $ref: ./CustomerReference.yaml
-
+    $ref: CustomerReference.yaml
+allOf:
+  - if:
+      properties:
+        identificationMode:
+          const: maloIdOnly
+    then:
+      required:
+        - maloId
+  - if:
+      properties:
+        identificationMode:
+          const: multiAttribute
+    then:
+      required:
+        - address
