@@ -1,5 +1,4 @@
-maloId:    
-    type: string
-    nullable: true
-    description: Market location ID (MaLo-ID)
-    x-de: Marktlokations-ID (MaLo-ID)
+type: string
+nullable: true
+description: Market location ID (MaLo-ID)
+x-de: Marktlokations-ID (MaLo-ID)
