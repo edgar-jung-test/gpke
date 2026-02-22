@@ -170,7 +170,7 @@ paths:
 components:
   schemas:
     SupplyStartList:
-      $ref: '#/components/schemas/SupplyStartList'
+      $ref: ../schema/SupplyStartList.yaml
     SupplyStart:
       $ref: '#/components/schemas/SupplyStart'
     SupplyStartCreateRequest:
