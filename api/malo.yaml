@@ -152,11 +152,15 @@ paths:
       - $ref: ../header/X-Message-Id.yaml
       - in: header
         name: X-Request-Id
-        description: Eindeutige Kennung für diesen einzelnen Request
+        description: Eindeutige Kennung für diesen einzelnen Request für IdemPotenz
         schema:
           type: string
-      - $ref: ''
-        in: header
+      - $ref: ../header/X-Message-Id.yaml
+      - in: header
+        name: X-Message-Id
+        description: Kennung für die Transaktion Lieferbeginn
+        schema:
+          type: string
   /supply-starts/{supplyStartId}/submit:
     post:
       summary: Submit the supply start request for processing
