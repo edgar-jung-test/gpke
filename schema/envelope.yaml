@@ -1,9 +1,22 @@
 type: object
 properties:
-  field0:
+  process:
     type: string
-  field1:
-    type: number
+    description: Beschreibung des Prozesses
+  task:
+    type: string
+    description: Prozessschritt aus der AW PID
+  sender:
+    type: string
+    description: BDEW ID Sender
+  receiver:
+    type: string
+    description: BDEW ID Receiver
+  field_0:
+    type: string
 required:
-  - field0
-  - field1
+  - process
+  - task
+  - sender
+  - receiver
+  - field_0
