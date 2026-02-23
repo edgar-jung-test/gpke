@@ -128,7 +128,7 @@ paths:
               type: object
               properties:
                 SupplyStart:
-                  $ref: ../schema/MarketLocationIndentification.yaml
+                  $ref: ../schema/SupplyStart.yaml
                 MarketLocationIdentification:
                   $ref: ../schema/MarketLocationIndentification.yaml
               required:
