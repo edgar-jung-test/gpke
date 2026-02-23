@@ -89,7 +89,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SupplyStartList'
-  /malo/{maloId}/supplyStart:
+  /malo/{maloId}:
     get:
       summary: Get a supply start request by ID
       operationId: getSupplyStart
@@ -131,9 +131,20 @@ paths:
                   $ref: ../schema/SupplyStart.yaml
                 MarketLocationIdentification:
                   $ref: ../schema/MarketLocationIndentification.yaml
+                envelope:
+                  $ref: ../schema/envelope.yaml
+                data:
+                  type: object
+                  properties:
+                    SupplyStart:
+                      $ref: ../schema/SupplyStart.yaml
+                  required:
+                    - SupplyStart
               required:
                 - SupplyStart
                 - MarketLocationIdentification
+                - envelope
+                - data
       responses:
         '200':
           description: OK
