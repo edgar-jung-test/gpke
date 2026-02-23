@@ -6,6 +6,7 @@ properties:
   task:
     type: string
     description: Prozessschritt aus der AW PID
+    example: '55001'
   sender:
     type: string
     description: BDEW ID Sender
