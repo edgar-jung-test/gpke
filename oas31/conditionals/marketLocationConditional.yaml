@@ -1,0 +1,251 @@
+title: MarketLocationConditional
+description: |
+  Full market location schema combining multiple `if/then/else` layers.
+  This is the comprehensive conditional object for UTILMD market location
+  master data — it enforces all major AHB interdependencies in one schema.
+
+  **Enforced UTILMD AHB conditions:**
+  1. bundleType ZW6 → profile required, meteringLocations forbidden
+  2. bundleType ZW7 → meteringLocations required, profile forbidden
+  3. bundleType ZAP → dormancyReason + legalBasis required, supplier + meteringLocations forbidden
+  4. energyDirection GENERATION → eivActorId + subsidyCountryCode required; tranches allowed
+  5. energyDirection CONSUMPTION → balancingGroupCode required; eivActorId + tranches forbidden
+  6. voltageLevel E05/E04/E03 (MS/HS/HöS) → metered location mandatory (no SLP allowed)
+
+  **German:** Vollständiges Marktlokations-Schema mit mehrschichtigen bedingten Validierungen.
+  Kombiniert alle wesentlichen UTILMD AHB-Abhängigkeiten in einem Schema.
+
+x-i18n:
+  de:
+    title: Marktlokation vollständig (bedingt)
+    description: |
+      Kombiniertes bedingtes Schema für alle UTILMD AHB-Abhängigkeiten der MaLo.
+      ZW6/ZW7/ZAP × CONSUMPTION/GENERATION × Spannungsebene.
+
+type: object
+required:
+  - maLoId
+  - energyDirection
+  - bundleType
+  - voltageLevel
+
+properties:
+  maLoId:
+    type: string
+    pattern: '^[0-9]{11}$'
+    examples:
+      Residential:
+        summary: "Residential"
+        value: "51238696781"
+      Commercial:
+        summary: "Commercial"
+        value: "41111234567"
+      Generating:
+        summary: "Generating"
+        value: "62345678901"
+      Dormant:
+        summary: "Dormant"
+        value: "73456789012"
+      Industrial:
+        summary: "Industrial"
+        value: "84567890123"
+    x-examples-i18n:
+      de:
+        Residential: "Haushalt"
+        Commercial: "Gewerbe"
+        Generating: "Erzeugungsanlage"
+        Dormant: "Ruhende MaLo"
+        Industrial: "Industrie"
+
+  energyDirection:
+    type: string
+    enum: [CONSUMPTION, GENERATION]
+    examples:
+      Consumption:
+        summary: "Consumption"
+        value: "CONSUMPTION"
+      Generation:
+        summary: "Generation"
+        value: "GENERATION"
+    x-examples-i18n:
+      de:
+        Consumption: "Verbrauch"
+        Generation: "Erzeugung"
+
+  bundleType:
+    type: string
+    enum: [ZW6, ZW7, ZAP]
+    examples:
+      FlatRate:
+        summary: "FlatRate"
+        value: "ZW6"
+      Metered:
+        summary: "Metered"
+        value: "ZW7"
+      Dormant:
+        summary: "Dormant"
+        value: "ZAP"
+    x-examples-i18n:
+      de:
+        FlatRate: "Pauschale MaLo (SLP)"
+        Metered: "Gemessene MaLo"
+        Dormant: "Ruhende MaLo"
+
+  voltageLevel:
+    type: string
+    enum: [E03, E04, E05, E06]
+    description: |
+      Voltage level. E06=LV/NS, E05=MV/MS, E04=HV/HS, E03=EHV/HöS.
+      **German:** Spannungsebene. E06=NS, E05=MS, E04=HS, E03=HöS.
+    x-i18n:
+      de:
+        description: Spannungsebene. E06=NS, E05=MS, E04=HS, E03=HöS.
+    examples:
+      LowVoltage:
+        summary: "LowVoltage"
+        value: "E06"
+      MediumVoltage:
+        summary: "MediumVoltage"
+        value: "E05"
+      HighVoltage:
+        summary: "HighVoltage"
+        value: "E04"
+    x-examples-i18n:
+      de:
+        LowVoltage: "Niederspannung (NS)"
+        MediumVoltage: "Mittelspannung (MS)"
+        HighVoltage: "Hochspannung (HS)"
+
+  # Optional fields — their presence controlled by if/then/else below
+  profile:
+    type: object
+    properties:
+      profileCode: { type: string }
+      profileType:
+        type: string
+        enum: [SLP, SEP, TLP, TEP, RLM]
+
+  meteringLocations:
+    type: array
+    items:
+      type: object
+      required: [meLoId]
+      properties:
+        meLoId: { type: string }
+
+  supplier:
+    type: object
+    properties:
+      actorId: { type: string }
+
+  dormancyReason:
+    type: string
+
+  legalBasis:
+    type: string
+    enum: ["§20 Abs.1d EnWG", "§10c EEG"]
+
+  eivActorId:
+    type: object
+    properties:
+      id: { type: string }
+      codingScheme: { type: string }
+
+  balancingGroupCode:
+    type: string
+
+  subsidyCountryCode:
+    type: string
+    maxLength: 2
+
+  tranches:
+    type: array
+    items:
+      type: object
+      required: [trancheId, percentageShare]
+      properties:
+        trancheId: { type: string }
+        percentageShare:
+          type: integer
+          minimum: 1
+          maximum: 100
+
+# ── Layer 1: bundleType rules ──────────────────────────────────────────────
+if:
+  properties:
+    bundleType:
+      const: ZW6
+  required: [bundleType]
+then:
+  required: [profile, supplier]
+  properties:
+    meteringLocations: { maxItems: 0 }
+    dormancyReason: { maxLength: 0 }
+    legalBasis: { not: {} }
+else:
+  if:
+    properties:
+      bundleType:
+        const: ZW7
+    required: [bundleType]
+  then:
+    required: [meteringLocations]
+    properties:
+      meteringLocations: { minItems: 1 }
+      profile: { not: {} }
+      dormancyReason: { maxLength: 0 }
+      legalBasis: { not: {} }
+  else:
+    # ZAP – dormant
+    required: [dormancyReason, legalBasis]
+    properties:
+      supplier: { not: {} }
+      meteringLocations: { maxItems: 0 }
+      profile: { not: {} }
+
+# ── Layer 2: energyDirection rules ─────────────────────────────────────────
+allOf:
+  - if:
+      properties:
+        energyDirection:
+          const: GENERATION
+      required: [energyDirection]
+    then:
+      required: [eivActorId, subsidyCountryCode]
+      properties:
+        balancingGroupCode:
+          description: |
+            Optional for generating locations (Direktvermarktung may set it).
+            **German:** Optional bei erzeugenden Marktlokationen.
+          x-i18n:
+            de:
+              description: Optional bei Erzeugung (ggf. für Direktvermarktung).
+    else:
+      # CONSUMPTION
+      required: [balancingGroupCode]
+      properties:
+        eivActorId: { not: {} }
+        tranches: { maxItems: 0 }
+        subsidyCountryCode: { not: {} }
+
+  # ── Layer 3: MS/HS/HöS forces metered (no SLP) ─────────────────────────
+  - if:
+      properties:
+        voltageLevel:
+          enum: [E03, E04, E05]
+      required: [voltageLevel]
+    then:
+      description: |
+        **MS / HS / HöS (E05/E04/E03):**
+        Only metered locations (ZW7) are allowed at medium/high voltage.
+        Flat-rate (ZW6) and dormant (ZAP) are not applicable.
+        **German:** Bei MS/HS/HöS nur gemessene Marktlokationen (ZW7) erlaubt.
+      properties:
+        bundleType:
+          const: ZW7
+          description: |
+            Must be ZW7 for medium/high voltage connections.
+            **German:** Bei MS/HS/HöS muss der Lokationsbündeltyp ZW7 (gemessen) sein.
+          x-i18n:
+            de:
+              description: Bei MS/HS/HöS muss Lokationsbündeltyp ZW7 (gemessen) sein.

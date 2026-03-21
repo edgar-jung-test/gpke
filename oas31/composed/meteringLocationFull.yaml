@@ -1,0 +1,91 @@
+type: object
+title: MeteringLocationFull
+description: |
+  Full metering location API response object combining all master data for a single
+  metering location. Suitable for GET /metering-locations/{meLoId} responses.
+  Aggregates the metering location with its address, voltage level, assigned MSB,
+  and all installed metering devices (meters, gateways).
+  
+  **German:** Vollständiges Messlokations-API-Antwortobjekt für GET /metering-locations/{meLoId}.
+  Aggregiert die Messlokation mit Adresse, Spannungsebene, zugeordnetem MSB
+  und allen installierten Messgeräten (Zähler, Gateways).
+x-i18n:
+  de:
+    title: Messlokation (vollständig)
+    description: Vollständiges Stammdatenobjekt einer Messlokation mit allen Messgeräten.
+required:
+  - meLoId
+properties:
+  meLoId:
+    $ref: "../locations/meteringLocation/meteringLocationId.yaml"
+
+  address:
+    $ref: "../common/address.yaml"
+
+  voltageLevel:
+    $ref: "../common/voltageLevel.yaml"
+
+  assignedMSB:
+    description: |
+      The metering point operator (MSB) responsible for this metering location.
+      **German:** Zuständiger Messstellenbetreiber (MSB) dieser Messlokation.
+    x-i18n:
+      de:
+        description: Zuständiger Messstellenbetreiber (MSB).
+    # OAS3.1: nullable replaced by type union — check parent type
+    type: ["object", "null"]
+    type: object
+    properties:
+      actorId:
+        $ref: "../marketActors/marketActorId.yaml"
+      operatorType:
+        $ref: "../enumerations/meterOperatorType.yaml"
+      validity:
+        $ref: "../common/validityPeriod.yaml"
+
+  associatedMarketLocations:
+    type: array
+    description: |
+      Market location IDs (MaLo-ID) to which this metering location is assigned.
+      **German:** Marktlokations-IDs (MaLo-ID), denen diese Messlokation zugeordnet ist.
+    x-i18n:
+      de:
+        description: MaLo-IDs, denen diese Messlokation zugeordnet ist.
+    items:
+      $ref: "../locations/marketLocation/marketLocationId.yaml"
+
+  associatedGridLocations:
+    type: array
+    description: |
+      Grid location IDs (NeLo-ID) to which this metering location is assigned.
+      **German:** Netzlokations-IDs (NeLo-ID), denen diese Messlokation zugeordnet ist.
+    x-i18n:
+      de:
+        description: NeLo-IDs, denen diese Messlokation zugeordnet ist.
+    items:
+      $ref: "../locations/gridLocation/gridLocationId.yaml"
+
+  installedMeters:
+    type: array
+    description: |
+      Meters installed at this metering location.
+      **German:** An dieser Messlokation installierte Zähler.
+    x-i18n:
+      de:
+        description: An dieser Messlokation installierte Zähler.
+    items:
+      $ref: "../metering/devices/meter.yaml"
+
+  installedGateways:
+    type: array
+    description: |
+      Smart meter gateways connected to meters at this metering location.
+      **German:** Mit Zählern dieser Messlokation verbundene Smart-Meter-Gateways.
+    x-i18n:
+      de:
+        description: Mit den Zählern verbundene Smart-Meter-Gateways.
+    items:
+      $ref: "../metering/devices/gateway.yaml"
+
+  validity:
+    $ref: "../common/validityPeriod.yaml"

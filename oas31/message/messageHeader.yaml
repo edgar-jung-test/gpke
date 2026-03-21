@@ -1,0 +1,103 @@
+type: object
+title: MessageHeader
+description: |
+  UTILMD message header containing identification, routing and control information
+  for EDIFACT UTILMD interchange. Covers UNB (interchange header) and UNH (message header)
+  segments as well as BGM (beginning of message) and DTM (date/time).
+  
+  **German:** UTILMD-Nachrichtenheader mit Identifikations-, Routing- und Kontrollinformationen
+  für den EDIFACT-UTILMD-Austausch. Deckt UNB (Interchangeheader), UNH (Nachrichtenheader),
+  BGM (Nachrichtenbeginn) und DTM (Datum/Uhrzeit) ab.
+x-i18n:
+  de:
+    title: Nachrichtenheader
+    description: EDIFACT UTILMD Nachrichtenheader (UNB, UNH, BGM, DTM).
+x-edifact-mapping:
+  segments: "UNB, UNH, BGM, DTM"
+required:
+  - messageId
+  - messageType
+  - createdAt
+  - sender
+  - recipient
+properties:
+  messageId:
+    type: string
+    maxLength: 35
+    description: |
+      Unique message reference number identifying this UTILMD message.
+      Corresponds to EDIFACT UNH DE0062 (message reference number).
+      **German:** Eindeutige Nachrichten-Referenznummer dieser UTILMD-Nachricht.
+      Entspricht EDIFACT UNH DE0062.
+    x-i18n:
+      de:
+        description: Eindeutige Nachrichten-Referenznummer. EDIFACT UNH DE0062.
+    examples:
+      Sequential:
+        summary: "Sequential"
+        value: "MSG-2024-001234"
+      UUID:
+        summary: "UUID"
+        value: "MSG-2024-056789"
+      Reference:
+        summary: "Reference"
+        value: "UTL-2024-NB-001"
+    x-examples-i18n:
+      de:
+        Sequential: "Fortlaufende Nummer"
+        UUID: "UUID-Format"
+        Reference: "Referenz-Format"
+  messageType:
+    $ref: "../enumerations/messageType.yaml"
+  checkIdentifier:
+    $ref: "./checkIdentifier.yaml"
+  createdAt:
+    type: string
+    format: date-time
+    description: |
+      Date and time when the message was created (ISO 8601).
+      Corresponds to EDIFACT BGM DTM with qualifier 137.
+      **German:** Erstellungsdatum und -uhrzeit der Nachricht (ISO 8601).
+      EDIFACT BGM DTM Qualifier 137.
+    x-i18n:
+      de:
+        description: Erstellungszeitpunkt der Nachricht. EDIFACT DTM Qualifier 137.
+    examples:
+      Morning:
+        summary: "Morning"
+        value: "2024-10-01T08:00:00Z"
+      Afternoon:
+        summary: "Afternoon"
+        value: "2024-10-15T14:30:00Z"
+      EOD:
+        summary: "EOD"
+        value: "2024-12-31T23:00:00Z"
+    x-examples-i18n:
+      de:
+        Morning: "Morgendliche Erstellung"
+        Afternoon: "Nachmittägliche Erstellung"
+        EOD: "Jahresende"
+  sender:
+    $ref: "./messageSender.yaml"
+  recipient:
+    $ref: "./messageRecipient.yaml"
+  documentNumber:
+    type: ["string", "null"]
+    maxLength: 35
+    description: |
+      Document/message name code identifier from BGM segment.
+      **German:** Dokumenten-/Nachrichtenbezeichner aus dem BGM-Segment.
+    x-i18n:
+      de:
+        description: Dokumenten-/Nachrichtenbezeichner aus dem BGM-Segment.
+    examples:
+      UTILMD:
+        summary: "UTILMD"
+        value: "UTILMD"
+      UTILMD_Strom:
+        summary: "UTILMD_Strom"
+        value: "UTILMD Strom"
+    x-examples-i18n:
+      de:
+        UTILMD: "UTILMD-Nachricht"
+        UTILMD_Strom: "UTILMD Strom"

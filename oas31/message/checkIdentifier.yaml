@@ -1,0 +1,132 @@
+type: object
+title: CheckIdentifier
+description: |
+  Check identifier (Prüfidentifikator) – a numeric code identifying the specific
+  UTILMD business process (Anwendungsfall) and communication direction within the
+  BDEW market communication rules. Defined in UTILMD AHB.
+  Corresponds to EDIFACT SG6 RFF+Z13 (Prüfidentifikator).
+  
+  **German:** Prüfidentifikator – eine numerische Kennung, die den spezifischen
+  UTILMD-Anwendungsfall und die Kommunikationsrichtung innerhalb der BDEW-Markt-
+  kommunikationsregeln identifiziert. Definiert im UTILMD AHB.
+  Entspricht EDIFACT SG6 RFF+Z13 (Prüfidentifikator).
+x-i18n:
+  de:
+    title: Prüfidentifikator
+    description: |
+      Numerische Kennung des UTILMD-Anwendungsfalls und der Kommunikationsrichtung.
+      Definiert im UTILMD AHB. EDIFACT SG6 RFF+Z13.
+x-edifact-mapping:
+  segment: RFF (SG6)
+  de1153: "Z13 (Prüfidentifikator)"
+  de1154: "Prüfidentifikator-Wert (5-stellig)"
+required:
+  - value
+properties:
+  value:
+    type: string
+    pattern: '^\d{5}$'
+    description: |
+      5-digit numeric check identifier code as defined in the UTILMD AHB.
+      Examples: 55001 (supplier change LF→NB), 55002 (confirmation NB→LF),
+      55175 (location bundle structure change NB→LF), 55218 (billing data NB→LF).
+      **German:** 5-stelliger numerischer Prüfidentifikator gemäß UTILMD AHB.
+      Beispiele: 55001 (Lieferantenwechsel LF→NB), 55002 (Bestätigung NB→LF),
+      55175 (Lokationsbündelstruktur NB→LF), 55218 (Abrechnungsdaten NB→LF).
+    x-i18n:
+      de:
+        description: |
+          5-stelliger Prüfidentifikator gemäß UTILMD AHB.
+          Beispiele: 55001, 55002, 55077, 55078, 55175, 55218, 55220.
+    examples:
+      SupplierChange:
+        summary: "SupplierChange"
+        value: "55001"
+      SupplierChangeConfirm:
+        summary: "SupplierChangeConfirm"
+        value: "55002"
+      LocationBundleChange:
+        summary: "LocationBundleChange"
+        value: "55175"
+      MaLoDataChange:
+        summary: "MaLoDataChange"
+        value: "55616"
+      NeLoDataChange:
+        summary: "NeLoDataChange"
+        value: "55615"
+      MeLoDataChange:
+        summary: "MeLoDataChange"
+        value: "55620"
+      BillingData:
+        summary: "BillingData"
+        value: "55218"
+      GeneratingMaLoReg:
+        summary: "GeneratingMaLoReg"
+        value: "55077"
+    x-examples-i18n:
+      de:
+        SupplierChange: "Lieferantenwechsel"
+        SupplierChangeConfirm: "Lieferantenwechsel – Bestätigung NB an LF"
+        LocationBundleChange: "Änderung Lokationsbündelstruktur NB an LF"
+        MaLoDataChange: "Änderung Daten der MaLo"
+        NeLoDataChange: "Änderung Daten der NeLo"
+        MeLoDataChange: "Änderung Daten der MeLo"
+        BillingData: "Abrechnungsdaten Netznutzungsabrechnung"
+        GeneratingMaLoReg: "Anmeldung erzeugende MaLo LF an NB"
+  description:
+    type: ["string", "null"]
+    maxLength: 500
+    description: |
+      Human-readable description of the business process identified by this check identifier.
+      **German:** Lesbare Beschreibung des durch den Prüfidentifikator identifizierten Anwendungsfalls.
+    x-i18n:
+      de:
+        description: Lesbare Beschreibung des Anwendungsfalls zum Prüfidentifikator.
+    examples:
+      LFtoNB:
+        summary: "LFtoNB"
+        value: "Lieferantenwechsel – Anmeldung LF an NB"
+      NBtoLF:
+        summary: "NBtoLF"
+        value: "Lieferantenwechsel – Bestätigung NB an LF"
+      BundleChange:
+        summary: "BundleChange"
+        value: "Änderung Lokationsbündelstruktur NB an LF"
+    x-examples-i18n:
+      de:
+        LFtoNB: "Kommunikationsrichtung LF an NB"
+        NBtoLF: "Kommunikationsrichtung NB an LF"
+        BundleChange: "Änderung Lokationsbündelstruktur"
+  communicationDirection:
+    type: ["string", "null"]
+    description: |
+      Communication direction for this check identifier, e.g. 'LF→NB', 'NB→LF', 'NB→MSB'.
+      **German:** Kommunikationsrichtung für diesen Prüfidentifikator, z.B. 'LF→NB', 'NB→LF'.
+    x-i18n:
+      de:
+        description: Kommunikationsrichtung, z.B. 'LF→NB', 'NB→LF', 'NB→MSB'.
+    examples:
+      LFtoNB:
+        summary: "LFtoNB"
+        value: "LF→NB"
+      NBtoLF:
+        summary: "NBtoLF"
+        value: "NB→LF"
+      NBtoMSB:
+        summary: "NBtoMSB"
+        value: "NB→MSB"
+      MSBtoNB:
+        summary: "MSBtoNB"
+        value: "MSB→NB"
+      NBAtoNBN:
+        summary: "NBAtoNBN"
+        value: "NBA→NBN"
+    x-examples-i18n:
+      de:
+        LFtoNB: "Kommunikationsrichtung LF an NB"
+        NBtoLF: "Kommunikationsrichtung NB an LF"
+        NBtoMSB: "Kommunikationsrichtung NB an MSB"
+        MSBtoNB: "Kommunikationsrichtung MSB an NB"
+        NBAtoNBN: "Kommunikationsrichtung NBA an NBN"
+  label:
+    $ref: "../common/multilingualLabel.yaml"

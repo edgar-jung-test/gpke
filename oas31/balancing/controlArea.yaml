@@ -1,0 +1,141 @@
+type: object
+title: ControlArea
+description: |
+  Control area (Regelzone) – a defined area of the electricity transmission network
+  managed by a transmission system operator (ÜNB). The control area is responsible
+  for balancing electricity supply and demand and procuring balancing energy.
+  Balancing areas (Bilanzierungsgebiete) are subdivisions of control areas.
+  
+  **German:** Regelzone – ein definierter Bereich des Stromübertragungsnetzes, der von
+  einem Übertragungsnetzbetreiber (ÜNB) verwaltet wird. Die Regelzone ist verantwortlich
+  für den Ausgleich von Stromangebot und -nachfrage und die Beschaffung von Regelenergie.
+  Bilanzierungsgebiete sind Unterteilungen der Regelzone.
+x-i18n:
+  de:
+    title: Regelzone
+    description: |
+      Netzbereich des ÜNB für Ausgleich von Angebot und Nachfrage.
+      Regelzonen enthalten mehrere Bilanzierungsgebiete.
+required:
+  - code
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+    examples:
+      First:
+        summary: "First"
+        value: 1
+      Second:
+        summary: "Second"
+        value: 42
+      Third:
+        summary: "Third"
+        value: 1001
+    x-examples-i18n:
+      de:
+        First: "Erste Instanz"
+        Second: "Zweite Instanz"
+        Third: "Dritte Instanz"
+  code:
+    type: string
+    maxLength: 50
+    description: |
+      Unique EIC code or internal code of the control area.
+      **German:** Eindeutiger EIC-Code oder interner Code der Regelzone.
+    x-i18n:
+      de:
+        description: Eindeutiger EIC-Code oder interner Code der Regelzone.
+    examples:
+      FiftyHertz:
+        summary: "FiftyHertz"
+        value: "10YDE-VE-------2"
+      TenneT:
+        summary: "TenneT"
+        value: "10YDE-EON------1"
+      Amprion:
+        summary: "Amprion"
+        value: "10YDE-RWENET---I"
+      TransnetBW:
+        summary: "TransnetBW"
+        value: "10YDE-ENBW-----I"
+    x-examples-i18n:
+      de:
+        FiftyHertz: "50Hertz-Regelzone / -Bilanzierungsgebiet"
+        TenneT: "TenneT-Regelzone / -Bilanzierungsgebiet"
+        Amprion: "Amprion-Regelzone / -Bilanzierungsgebiet"
+        TransnetBW: "TransnetBW-Regelzone / -Bilanzierungsgebiet"
+  name:
+    type: ["string", "null"]
+    maxLength: 200
+    description: |
+      Name of the control area / transmission system operator.
+      **German:** Name der Regelzone / des Übertragungsnetzbetreibers.
+    x-i18n:
+      de:
+        description: Name der Regelzone oder des Übertragungsnetzbetreibers.
+    examples:
+      FiftyHertz:
+        summary: "FiftyHertz"
+        value: "50Hertz Transmission GmbH"
+      TenneT:
+        summary: "TenneT"
+        value: "TenneT TSO GmbH"
+      Amprion:
+        summary: "Amprion"
+        value: "Amprion GmbH"
+      TransnetBW:
+        summary: "TransnetBW"
+        value: "TransnetBW GmbH"
+    x-examples-i18n:
+      de:
+        FiftyHertz: "50Hertz-Regelzone / -Bilanzierungsgebiet"
+        TenneT: "TenneT-Regelzone / -Bilanzierungsgebiet"
+        Amprion: "Amprion-Regelzone / -Bilanzierungsgebiet"
+        TransnetBW: "TransnetBW-Regelzone / -Bilanzierungsgebiet"
+  responsibleActorId:
+    type: ["integer", "null"]
+    description: |
+      Reference to the responsible actor (ÜNB) who procures balancing energy.
+      **German:** Referenz auf den verantwortlichen Marktakteur (ÜNB) für die Regelenergieversorgung.
+    x-i18n:
+      de:
+        description: Referenz auf den ÜNB, der für die Regelenergiebeschaffung verantwortlich ist.
+    examples:
+      Responsible1:
+        summary: "Responsible1"
+        value: 50
+      Responsible2:
+        summary: "Responsible2"
+        value: 51
+    x-examples-i18n:
+      de:
+        Responsible1: "Responsible1"
+        Responsible2: "Responsible2"
+  financialActorId:
+    type: ["integer", "null"]
+    description: |
+      Reference to the financially responsible actor (e.g. BIKO – Bilanzkoordinator).
+      **German:** Referenz auf den finanziell verantwortlichen Marktakteur (z.B. BIKO).
+    x-i18n:
+      de:
+        description: Referenz auf den finanziell Verantwortlichen (z.B. BIKO).
+    examples:
+      Financial1:
+        summary: "Financial1"
+        value: 51
+      Financial2:
+        summary: "Financial2"
+        value: 52
+    x-examples-i18n:
+      de:
+        Financial1: "Financial1"
+        Financial2: "Financial2"
+  label:
+    $ref: "../common/multilingualLabel.yaml"

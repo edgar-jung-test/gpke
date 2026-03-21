@@ -1,0 +1,123 @@
+type: object
+title: ControlDevice
+description: |
+  Control device (Steuereinrichtung) – a device used to remotely switch or throttle
+  a controllable resource (e.g. ripple control receiver, radio-controlled switch).
+  Installed at a controllable resource and used by the grid operator (NB) or
+  feed-in manager (EIV). Mutually exclusive with ControlBox on a controllable resource.
+  
+  **German:** Steuereinrichtung – ein Gerät zur Fernsteuerung oder -drosselung einer
+  steuerbaren Ressource (z.B. Rundsteuerempfänger, Funkschalter).
+  An einer steuerbaren Ressource installiert und verwendet durch den Netzbetreiber (NB)
+  oder Einspeiseverantwortlichen (EIV). Schließt sich mit der Steuerbox aus.
+x-i18n:
+  de:
+    title: Steuereinrichtung
+    description: |
+      Gerät zur Fernsteuerung steuerbarer Ressourcen (z.B. Rundsteuerempfänger).
+      Verwendet durch NB oder EIV. Schließt sich mit Steuerbox aus.
+required:
+  - externalId
+  - controllableResourceId
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+    examples:
+      First:
+        summary: "First"
+        value: 1
+      Second:
+        summary: "Second"
+        value: 42
+      Third:
+        summary: "Third"
+        value: 1001
+    x-examples-i18n:
+      de:
+        First: "Erste Instanz"
+        Second: "Zweite Instanz"
+        Third: "Dritte Instanz"
+  externalId:
+    type: string
+    maxLength: 50
+    description: |
+      External identifier of the control device.
+      **German:** Externe Identifikationsnummer der Steuereinrichtung.
+    x-i18n:
+      de:
+        description: Externe Identifikationsnummer der Steuereinrichtung.
+    examples:
+      RSE1:
+        summary: "RSE1"
+        value: "SE-00042-001"
+      RSE2:
+        summary: "RSE2"
+        value: "SE-00042-002"
+      DIN:
+        summary: "DIN"
+        value: "SE-10001-001"
+    x-examples-i18n:
+      de:
+        RSE1: "Rundsteuerempfänger 1"
+        RSE2: "Rundsteuerempfänger 2"
+        DIN: "DIN-Steuereinrichtung"
+  controllableResourceId:
+    type: integer
+    description: |
+      Reference to the controllable resource this device controls.
+      **German:** Referenz auf die steuerbare Ressource, die dieses Gerät steuert.
+    x-i18n:
+      de:
+        description: Referenz auf die gesteuerte steuerbare Ressource.
+    examples:
+      SR1:
+        summary: "SR1"
+        value: 8001
+      SR2:
+        summary: "SR2"
+        value: 8002
+    x-examples-i18n:
+      de:
+        SR1: "Steuerbare Ressource 1"
+        SR2: "Steuerbare Ressource 2"
+  usedByNBActorId:
+    type: ["integer", "null"]
+    description: |
+      Reference to the grid operator (NB) using this control device.
+      **German:** Referenz auf den Netzbetreiber (NB), der diese Steuereinrichtung verwendet.
+    x-i18n:
+      de:
+        description: Referenz auf den Netzbetreiber (NB), der die Steuereinrichtung nutzt.
+    examples:
+      example1:
+        summary: "Example1"
+        value: 42
+    x-examples-i18n:
+      de:
+        example1: "example1"
+  usedByEIVActorId:
+    type: ["integer", "null"]
+    description: |
+      Reference to the feed-in manager (EIV) using this control device.
+      **German:** Referenz auf den Einspeiseverantwortlichen (EIV), der diese Steuereinrichtung verwendet.
+    x-i18n:
+      de:
+        description: Referenz auf den Einspeiseverantwortlichen (EIV), der die Steuereinrichtung nutzt.
+    examples:
+      example1:
+        summary: "Example1"
+        value: 55
+    x-examples-i18n:
+      de:
+        example1: "example1"
+  validity:
+    $ref: "../../common/validityPeriod.yaml"
+  label:
+    $ref: "../../common/multilingualLabel.yaml"

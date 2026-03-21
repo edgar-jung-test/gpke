@@ -1,0 +1,260 @@
+title: TransactionWithStatus
+description: |
+  UTILMD transaction with conditional status validation.
+
+  **UTILMD AHB Rule (BGM DE1001 / SG4 STS DE9012):**
+  - `E03` (Änderungsmeldung / change notification): status response must
+    contain `periodId` referencing the Zeitraum-ID from SG6 RFF+Z49/Z53.
+    AHB conditions [301], [557], [2011], [914], [937].
+  - `E01` (Original) / `E02` (Replacement): status is optional,
+    no periodId required.
+
+  Additionally, a rejected transaction (statusCode=E03) must always include
+  a `rejectionCode` (Prüfschritt / EBD reference).
+
+  **German:** UTILMD-Vorgang mit bedingter Statusvalidierung.
+  Bei BGM E03 (Änderungsmeldung) muss die Statusantwort eine Zeitraum-ID enthalten.
+  Bei Ablehnung (statusCode=E03) ist der Ablehnungsgrundcode Pflicht.
+
+x-i18n:
+  de:
+    title: Vorgang mit bedingter Statusvalidierung
+    description: |
+      Bedingtes Schema: BGM E03 erfordert Zeitraum-ID im Status.
+      Ablehnung (E03) erfordert Ablehnungsgrundcode (EBD-Referenz).
+
+x-edifact-mapping:
+  segment: BGM (DE1001) + STS (SG4)
+  conditions:
+    "[301]": "Wenn BGM+E03 (Änderungsmeldung) vorhanden"
+    "[914]": "Format: Möglicher Wert > 0"
+    "[937]": "Format: keine Nachkommastelle"
+    "[2011]": "SG genau einmal je Zeitraum-ID aus SG6 RFF+Z49/Z53"
+
+type: object
+required:
+  - transactionId
+  - messageType
+  - transactionReason
+
+properties:
+  transactionId:
+    type: string
+    maxLength: 35
+    description: |
+      Transaction reference number (Vorgangsnummer).
+      **German:** Vorgangsnummer innerhalb der Nachricht.
+    x-i18n:
+      de:
+        description: Vorgangsnummer innerhalb der Nachricht.
+    examples:
+      VG1:
+        summary: "VG1"
+        value: "VG-2024-00001"
+      VG2:
+        summary: "VG2"
+        value: "VG-2024-00002"
+      LargeNum:
+        summary: "LargeNum"
+        value: "VG-2024-09999"
+    x-examples-i18n:
+      de:
+        VG1: "Vorgang 1"
+        VG2: "Vorgang 2"
+        LargeNum: "Hohe Vorgangsnummer"
+
+  messageType:
+    type: string
+    enum: [E01, E02, E03]
+    description: |
+      Message type from BGM DE1001.
+      - E01: Original message
+      - E02: Replacement message
+      - E03: Change notification (Änderungsmeldung)
+      **German:** Nachrichtentyp aus BGM DE1001.
+    x-i18n:
+      de:
+        description: Nachrichtentyp. E01=Original, E02=Ersatz, E03=Änderungsmeldung.
+    examples:
+      Original:
+        summary: "Original"
+        value: "E01"
+      Replacement:
+        summary: "Replacement"
+        value: "E02"
+      ChangeNotice:
+        summary: "ChangeNotice"
+        value: "E03"
+    x-examples-i18n:
+      de:
+        Original: "Originalnachricht"
+        Replacement: "Ersatznachricht"
+        ChangeNotice: "Änderungsmeldung"
+
+  transactionReason:
+    type: string
+    description: |
+      Transaction reason / supplement code (Transaktionsgrundcode).
+      **German:** Transaktionsgrundcode (z.B. ZA1, ZW6, ZW7).
+    x-i18n:
+      de:
+        description: Transaktionsgrundcode (z.B. ZA1, ZW6, ZW7).
+    examples:
+      SupplierChange:
+        summary: "SupplierChange"
+        value: "ZA1"
+      MeteredLocation:
+        summary: "MeteredLocation"
+        value: "ZW7"
+      FlatRate:
+        summary: "FlatRate"
+        value: "ZW6"
+    x-examples-i18n:
+      de:
+        SupplierChange: "Lieferantenwechsel"
+        MeteredLocation: "Gemessene Marktlokation"
+        FlatRate: "Pauschale Marktlokation"
+
+  status:
+    type: object
+    description: |
+      Transaction status (Vorgangsstatus). Required for change notifications (E03).
+      **German:** Vorgangsstatus. Pflicht bei Änderungsmeldungen (E03).
+    x-i18n:
+      de:
+        description: Vorgangsstatus. Pflicht bei Änderungsmeldungen (BGM E03).
+    properties:
+      statusCode:
+        type: string
+        enum: [E01, E02, E03]
+        description: |
+          Status code: E01=confirmed, E02=partially confirmed, E03=rejected.
+          **German:** Statuscode: E01=Bestätigung, E02=Teilbestätigung, E03=Ablehnung.
+        x-i18n:
+          de:
+            description: Statuscode. E01=Bestätigung, E02=Teilbestätigung, E03=Ablehnung.
+        examples:
+          Confirmation:
+            summary: "Confirmation"
+            value: "E01"
+          PartialConfirmation:
+            summary: "PartialConfirmation"
+            value: "E02"
+          Rejection:
+            summary: "Rejection"
+            value: "E03"
+        x-examples-i18n:
+          de:
+            Confirmation: "Bestätigung"
+            PartialConfirmation: "Teilbestätigung"
+            Rejection: "Ablehnung"
+      periodId:
+        type: integer
+        minimum: 1
+        description: |
+          Period ID referencing the Zeitraum-ID from SG6 RFF+Z49/Z53.
+          Must be a positive integer without decimal places (AHB [914][937]).
+          Required when messageType is E03 (AHB condition [301]).
+          **German:** Zeitraum-ID aus SG6 RFF+Z49/Z53. Positive ganze Zahl
+          ohne Dezimalstellen (AHB [914][937]). Pflicht bei BGM E03 (AHB [301]).
+        x-i18n:
+          de:
+            description: Zeitraum-ID (SG6 RFF+Z49/Z53). Positive ganze Zahl. Pflicht bei E03.
+        examples:
+          First:
+            summary: "First"
+            value: 1
+          Second:
+            summary: "Second"
+            value: 2
+          Third:
+            summary: "Third"
+            value: 3
+        x-examples-i18n:
+          de:
+            First: "Erste Zeitraum-ID"
+            Second: "Zweite Zeitraum-ID"
+            Third: "Dritte Zeitraum-ID"
+      rejectionCode:
+        type: string
+        description: |
+          Rejection reason code (Prüfschritt / EBD reference).
+          Required when statusCode is E03 (rejection).
+          **German:** Ablehnungsgrundcode (Prüfschritt / EBD-Referenz).
+          Pflicht wenn statusCode=E03 (Ablehnung).
+        x-i18n:
+          de:
+            description: Ablehnungsgrundcode (EBD-Referenz). Pflicht bei statusCode=E03.
+        examples:
+          EBD_E0610:
+            summary: "EBD_E0610"
+            value: "E_0610"
+          EBD_E0602:
+            summary: "EBD_E0602"
+            value: "E_0602"
+          EBD_E0505:
+            summary: "EBD_E0505"
+            value: "E_0505"
+        x-examples-i18n:
+          de:
+            EBD_E0610: "Prüfschritt E_0610"
+            EBD_E0602: "Prüfschritt E_0602"
+            EBD_E0505: "Prüfschritt E_0505"
+
+# ── Conditional 1: E03 (Änderungsmeldung) requires status with periodId ────
+
+if:
+  properties:
+    messageType:
+      const: E03
+  required: [messageType]
+
+then:
+  description: |
+    **E03 (Änderungsmeldung):**
+    `status` is required and must contain a `periodId`.
+    AHB condition [301]: periodId > 0, no decimals ([914][937]).
+  required:
+    - status
+  properties:
+    status:
+      required:
+        - statusCode
+        - periodId
+      # ── Nested conditional: E03 rejection requires rejectionCode ─────────
+      if:
+        properties:
+          statusCode:
+            const: E03
+        required: [statusCode]
+      then:
+        description: |
+          **statusCode E03 (Ablehnung):**
+          `rejectionCode` is required.
+          **German:** Bei Ablehnung (E03) ist der Ablehnungsgrundcode Pflicht.
+        required:
+          - rejectionCode
+      else:
+        description: |
+          **statusCode E01/E02:**
+          `rejectionCode` must not be present.
+          **German:** Bei Bestätigung/Teilbestätigung kein Ablehnungsgrundcode.
+        properties:
+          rejectionCode:
+            not: {}
+
+else:
+  description: |
+    **E01 / E02 (Original / Ersatznachricht):**
+    `status` is not required. If present, periodId is not required.
+  properties:
+    status:
+      properties:
+        periodId:
+          not: {}
+          description: |
+            Not required for non-change-notification messages.
+            **German:** Nicht erforderlich bei Originalnachrichten (E01/E02).
+          x-i18n:
+            de:
+              description: Nicht erforderlich bei E01/E02.

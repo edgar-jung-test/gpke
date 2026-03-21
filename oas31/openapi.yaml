@@ -1,0 +1,249 @@
+openapi: "3.1.0"
+info:
+  title: BDEW UTILMD Electricity Market API
+  description: |
+    OpenAPI 3.1 schema for the BDEW UTILMD (Utility Master Data) electricity market 
+    communication standard. Based on the UTILMD Anwendungshandbuch (AHB) Strom Version 2.1,
+    published by BDEW (Bundesverband der Energie- und Wasserwirtschaft e.V.).
+    
+    This API covers market processes for electricity including:
+    - Market location (Marktlokation / MaLo) management
+    - Grid location (Netzlokation / NeLo) management  
+    - Metering location (Messlokation / MeLo) management
+    - Market actor and role assignment
+    - Metering device management
+    - Location bundle structures
+    - Message communication (EDIFACT UTILMD)
+    
+    **German:** API für die BDEW UTILMD Marktkommunikation Strom gemäß
+    Anwendungshandbuch Version 2.1 (Stand: 11.12.2025).
+    
+    OpenAPI 3.1 nutzt JSON Schema 2020-12 mit `if/then/else` für bedingte
+    Validierungen gemäß UTILMD AHB-Bedingungsregeln.
+  version: "2.1.0"
+  contact:
+    name: BDEW
+    url: https://www.bdew-mako.de
+  license:
+    name: BDEW
+    url: https://www.bdew-mako.de
+
+servers:
+  - url: https://api.example.com/utilmd/v2
+    description: Production server
+
+tags:
+  - name: market-actors
+    description: Market participants and their roles / Marktakteure und Rollen
+  - name: market-locations
+    description: Market locations (MaLo) / Marktlokationen
+  - name: grid-locations
+    description: Grid locations (NeLo) / Netzlokationen
+  - name: metering-locations
+    description: Metering locations (MeLo) / Messlokationen
+  - name: tranches
+    description: Tranches / Tranchen
+  - name: metering-devices
+    description: Metering devices / Messeinrichtungen
+  - name: location-bundles
+    description: Location bundle structures / Lokationsbündelstrukturen
+  - name: messages
+    description: UTILMD messages / UTILMD-Nachrichten
+  - name: balancing
+    description: Balancing areas and zones / Bilanzierungsgebiete und -kreise
+
+paths:
+  /market-locations:
+    $ref: "./paths/marketLocations.yaml"
+  /grid-locations:
+    $ref: "./paths/gridLocations.yaml"
+  /metering-locations:
+    $ref: "./paths/meteringLocations.yaml"
+  /market-actors:
+    $ref: "./paths/marketActors.yaml"
+  /messages:
+    $ref: "./paths/messages.yaml"
+
+components:
+  schemas:
+    # Common
+    multilingualLabel:
+      $ref: "./common/multilingualLabel.yaml"
+    validityPeriod:
+      $ref: "./common/validityPeriod.yaml"
+    address:
+      $ref: "./common/address.yaml"
+    obisCode:
+      $ref: "./common/obisCode.yaml"
+    voltageLevel:
+      $ref: "./common/voltageLevel.yaml"
+    product:
+      $ref: "./common/product.yaml"
+    errorResponse:
+      $ref: "./common/errorResponse.yaml"
+    pagedResponse:
+      $ref: "./common/pagedResponse.yaml"
+
+    # Enumerations
+    marketRoleCode:
+      $ref: "./enumerations/marketRoleCode.yaml"
+    transactionReason:
+      $ref: "./enumerations/transactionReason.yaml"
+    meteringPointType:
+      $ref: "./enumerations/meteringPointType.yaml"
+    meterOperatorType:
+      $ref: "./enumerations/meterOperatorType.yaml"
+    energyDirection:
+      $ref: "./enumerations/energyDirection.yaml"
+    locationBundleType:
+      $ref: "./enumerations/locationBundleType.yaml"
+    profileType:
+      $ref: "./enumerations/profileType.yaml"
+    messageType:
+      $ref: "./enumerations/messageType.yaml"
+
+    # Market Actors
+    marketActor:
+      $ref: "./marketActors/marketActor.yaml"
+    marketActorRole:
+      $ref: "./marketActors/marketActorRole.yaml"
+    marketActorId:
+      $ref: "./marketActors/marketActorId.yaml"
+    communicationContact:
+      $ref: "./marketActors/communicationContact.yaml"
+
+    # Locations – Market Location
+    marketLocationId:
+      $ref: "./locations/marketLocation/marketLocationId.yaml"
+    marketLocation:
+      $ref: "./locations/marketLocation/marketLocation.yaml"
+    marketLocationStatus:
+      $ref: "./locations/marketLocation/marketLocationStatus.yaml"
+    marketLocationProfile:
+      $ref: "./locations/marketLocation/marketLocationProfile.yaml"
+    dormantMarketLocation:
+      $ref: "./locations/marketLocation/dormantMarketLocation.yaml"
+
+    # Locations – Grid Location
+    gridLocationId:
+      $ref: "./locations/gridLocation/gridLocationId.yaml"
+    gridLocation:
+      $ref: "./locations/gridLocation/gridLocation.yaml"
+
+    # Locations – Metering Location
+    meteringLocationId:
+      $ref: "./locations/meteringLocation/meteringLocationId.yaml"
+    meteringLocation:
+      $ref: "./locations/meteringLocation/meteringLocation.yaml"
+
+    # Locations – Tranche
+    trancheId:
+      $ref: "./locations/tranche/trancheId.yaml"
+    tranche:
+      $ref: "./locations/tranche/tranche.yaml"
+
+    # Metering Devices
+    meterNumber:
+      $ref: "./metering/devices/meterNumber.yaml"
+    meter:
+      $ref: "./metering/devices/meter.yaml"
+    gateway:
+      $ref: "./metering/devices/gateway.yaml"
+    technicalResource:
+      $ref: "./metering/devices/technicalResource.yaml"
+    controllableResource:
+      $ref: "./metering/devices/controllableResource.yaml"
+    controlDevice:
+      $ref: "./metering/devices/controlDevice.yaml"
+    controlBox:
+      $ref: "./metering/devices/controlBox.yaml"
+    volumeConverter:
+      $ref: "./metering/devices/volumeConverter.yaml"
+    communicationDevice:
+      $ref: "./metering/devices/communicationDevice.yaml"
+    transformerDevice:
+      $ref: "./metering/devices/transformerDevice.yaml"
+    tariffDevice:
+      $ref: "./metering/devices/tariffDevice.yaml"
+
+    # Metering Registers
+    meterRegister:
+      $ref: "./metering/registers/meterRegister.yaml"
+    gatewayRegister:
+      $ref: "./metering/registers/gatewayRegister.yaml"
+
+    # Balancing
+    controlArea:
+      $ref: "./balancing/controlArea.yaml"
+    balancingArea:
+      $ref: "./balancing/balancingArea.yaml"
+    balancingGroup:
+      $ref: "./balancing/balancingGroup.yaml"
+    marketArea:
+      $ref: "./balancing/marketArea.yaml"
+    gridAccount:
+      $ref: "./balancing/gridAccount.yaml"
+
+    # Message
+    messageHeader:
+      $ref: "./message/messageHeader.yaml"
+    messageSender:
+      $ref: "./message/messageSender.yaml"
+    messageRecipient:
+      $ref: "./message/messageRecipient.yaml"
+    messageTransaction:
+      $ref: "./message/messageTransaction.yaml"
+    transactionStatus:
+      $ref: "./message/transactionStatus.yaml"
+    usagePeriod:
+      $ref: "./message/usagePeriod.yaml"
+    checkIdentifier:
+      $ref: "./message/checkIdentifier.yaml"
+
+    # Composed Objects (ready-to-use API response objects)
+    locationBundle:
+      $ref: "./composed/locationBundle.yaml"
+    utilmdMessage:
+      $ref: "./composed/utilmdMessage.yaml"
+    marketLocationFull:
+      $ref: "./composed/marketLocationFull.yaml"
+    gridLocationFull:
+      $ref: "./composed/gridLocationFull.yaml"
+    meteringLocationFull:
+      $ref: "./composed/meteringLocationFull.yaml"
+    meterFull:
+      $ref: "./composed/meterFull.yaml"
+    marketActorFull:
+      $ref: "./composed/marketActorFull.yaml"
+
+
+    # Conditional schemas (if/then/else – OAS 3.1 only)
+    locationBundleConditional:
+      $ref: "./conditionals/locationBundle.yaml"
+    meteringPointOperatorAssignment:
+      $ref: "./conditionals/meteringPointOperatorAssignment.yaml"
+    controllableResourceWithControl:
+      $ref: "./conditionals/controllableResourceWithControl.yaml"
+    communicationChannel:
+      $ref: "./conditionals/communicationChannel.yaml"
+    meterInstallationPoint:
+      $ref: "./conditionals/meterInstallationPoint.yaml"
+    generatingMarketLocation:
+      $ref: "./conditionals/generatingMarketLocation.yaml"
+    transactionWithStatus:
+      $ref: "./conditionals/transactionWithStatus.yaml"
+    controlChannelDescription:
+      $ref: "./conditionals/controlChannelDescription.yaml"
+    usagePeriodWithReference:
+      $ref: "./conditionals/usagePeriodWithReference.yaml"
+    marketLocationConditional:
+      $ref: "./conditionals/marketLocationConditional.yaml"
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - BearerAuth: []
