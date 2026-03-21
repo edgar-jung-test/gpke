@@ -1,0 +1,99 @@
+type: object
+title: MarketActor
+description: |
+  A market participant (Marktakteur / Marktpartner) in the German electricity market.
+  Market actors take on one or more market roles and are identified by their MP-ID.
+  Corresponds to the NAD segment (party identification) in EDIFACT UTILMD messages.
+  
+  **German:** Marktakteur (Marktpartner) im deutschen Strommarkt. Marktakteure nehmen
+  eine oder mehrere Marktrollen ein und werden über ihre MP-ID identifiziert.
+  Entspricht dem NAD-Segment (Partei-Identifikation) in EDIFACT-UTILMD-Nachrichten.
+  Siehe BDEW Rollenmodell Strom und UTILMD AHB.
+x-i18n:
+  de:
+    title: Marktakteur / Marktpartner
+    description: Marktpartner im deutschen Strommarkt mit MP-ID und Marktrollen. EDIFACT NAD-Segment.
+x-edifact-mapping:
+  segment: NAD
+  de3035: "role qualifier (LF, NB, MSB, ...)"
+required:
+  - id
+  - name
+properties:
+  id:
+    type: integer
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+    readOnly: true
+    example: 42
+  externalId:
+    $ref: "../market-actors/market-actor-id.yaml"
+  name:
+    type: string
+    maxLength: 200
+    description: |
+      Full legal name of the market participant.
+      Corresponds to EDIFACT NAD DE3036 (party name).
+      **German:** Vollständiger rechtlicher Name des Marktpartners.
+      Entspricht EDIFACT NAD DE3036 (Parteiname).
+    x-i18n:
+      de:
+        description: Vollständiger Name des Marktpartners. EDIFACT NAD DE3036.
+    example: "Stadtwerke Musterstadt GmbH"
+  isNaturalPerson:
+    type: boolean
+    default: false
+    description: |
+      Indicates whether the market actor is a natural person (vs. legal entity).
+      **German:** Gibt an, ob der Marktakteur eine natürliche Person ist (vs. juristische Person).
+    x-i18n:
+      de:
+        description: Gibt an, ob der Marktakteur eine natürliche Person ist.
+    example: false
+  email:
+    type: string
+    format: email
+    maxLength: 200
+    nullable: true
+    description: |
+      Electronic mail address of the market participant.
+      Corresponds to EDIFACT COM DE3148 with DE3155=EM.
+      **German:** E-Mail-Adresse des Marktpartners. EDIFACT COM DE3148 mit DE3155=EM.
+    x-i18n:
+      de:
+        description: E-Mail-Adresse des Marktpartners. EDIFACT COM DE3148, DE3155=EM.
+    example: "kontakt@stadtwerke-musterstadt.de"
+  phone:
+    type: string
+    maxLength: 50
+    nullable: true
+    description: |
+      Telephone number of the market participant. Must start with '+' followed by digits only.
+      Corresponds to EDIFACT COM DE3148 with DE3155=TE.
+      **German:** Telefonnummer des Marktpartners. Beginnt mit '+', danach nur Ziffern.
+      EDIFACT COM DE3148, DE3155=TE.
+    x-i18n:
+      de:
+        description: Telefonnummer des Marktpartners. Format +49... EDIFACT COM DE3148, DE3155=TE.
+    pattern: '^\+[0-9]+$'
+    example: "+4930123456789"
+  address:
+    $ref: "../common/address.yaml"
+  roles:
+    type: array
+    description: |
+      Market roles assigned to this actor with validity periods.
+      **German:** Dem Marktakteur zugeordnete Marktrollen mit Gültigkeitszeiträumen.
+    x-i18n:
+      de:
+        description: Dem Marktakteur zugeordnete Marktrollen mit Gültigkeitszeiträumen.
+    items:
+      $ref: "../market-actors/market-actor-role.yaml"
+  validity:
+    $ref: "../common/validity-period.yaml"
+  label:
+    $ref: "../common/multilingual-label.yaml"

@@ -1,0 +1,94 @@
+type: object
+title: GridLocationFull
+description: |
+  Full grid location API response object combining all master data for a single
+  grid location. Suitable for GET /grid-locations/{neLoId} responses.
+  Aggregates the grid location with its address, voltage level, assigned MSB,
+  associated metering locations, products and OBIS codes.
+  
+  **German:** Vollständiges Netzlokations-API-Antwortobjekt für GET /grid-locations/{neLoId}.
+  Aggregiert die Netzlokation mit Adresse, Spannungsebene, zugeordnetem MSB,
+  Messlokationen, Produkten und OBIS-Kennzahlen.
+x-i18n:
+  de:
+    title: Netzlokation (vollständig)
+    description: Vollständiges Stammdatenobjekt einer Netzlokation für API-Antworten.
+required:
+  - neLoId
+properties:
+  neLoId:
+    $ref: "../locations/grid-location/grid-location-id.yaml"
+
+  address:
+    $ref: "../common/address.yaml"
+
+  voltageLevel:
+    $ref: "../common/voltage-level.yaml"
+
+  hasControlChannel:
+    type: boolean
+    nullable: true
+    description: |
+      Whether a control channel (e.g. ripple control receiver) is present.
+      **German:** Ob ein Steuerkanal (z.B. Rundsteuerempfänger) vorhanden ist.
+    x-i18n:
+      de:
+        description: Gibt an, ob ein Steuerkanal vorhanden ist.
+
+  assignedMSB:
+    description: |
+      The metering point operator (MSB) assigned to this grid location.
+      **German:** Zugeordneter Messstellenbetreiber (MSB) mit Typ.
+    x-i18n:
+      de:
+        description: Zugeordneter Messstellenbetreiber (MSB) mit Typ.
+    nullable: true
+    type: object
+    properties:
+      actorId:
+        $ref: "../market-actors/market-actor-id.yaml"
+      operatorType:
+        $ref: "../enumerations/meter-operator-type.yaml"
+      validity:
+        $ref: "../common/validity-period.yaml"
+
+  associatedMeteringLocations:
+    type: array
+    description: |
+      Metering locations (MeLo) associated with this grid location.
+      **German:** Mit dieser Netzlokation verknüpfte Messlokationen (MeLo).
+    x-i18n:
+      de:
+        description: Mit dieser Netzlokation verknüpfte Messlokationen (MeLo).
+    items:
+      $ref: "../locations/metering-location/metering-location-id.yaml"
+
+  products:
+    type: array
+    description: |
+      Products (configuration products) assigned to this grid location.
+      **German:** Der Netzlokation zugeordnete Konfigurationsprodukte.
+    x-i18n:
+      de:
+        description: Zugeordnete Konfigurationsprodukte.
+    items:
+      allOf:
+        - $ref: "../common/product.yaml"
+        - type: object
+          properties:
+            validity:
+              $ref: "../common/validity-period.yaml"
+
+  obisCodes:
+    type: array
+    description: |
+      OBIS codes assigned to this grid location.
+      **German:** Der Netzlokation zugeordnete OBIS-Kennzahlen.
+    x-i18n:
+      de:
+        description: Zugeordnete OBIS-Kennzahlen.
+    items:
+      $ref: "../common/obis-code.yaml"
+
+  validity:
+    $ref: "../common/validity-period.yaml"

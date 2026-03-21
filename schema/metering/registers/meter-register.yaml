@@ -1,0 +1,56 @@
+type: object
+title: MeterRegister
+description: |
+  Register of a meter (Zählerregister) – an individual measurement register within a meter
+  identified by a register code and an OBIS code. A meter can have multiple registers,
+  e.g. for different tariff periods (HT/NT) or energy directions (import/export).
+  
+  **German:** Zählerregister – ein einzelnes Messregister innerhalb eines Zählers,
+  das durch einen Register-Code und eine OBIS-Kennzahl identifiziert wird.
+  Ein Zähler kann mehrere Register haben, z.B. für verschiedene Tarifzeiten (HT/NT)
+  oder Energieflussrichtungen (Bezug/Einspeisung).
+x-i18n:
+  de:
+    title: Zählerregister
+    description: |
+      Einzelnes Messregister eines Zählers mit Register-Code und OBIS-Kennzahl.
+      Mehrere Register pro Zähler möglich (z.B. HT/NT, Bezug/Einspeisung).
+required:
+  - meterId
+  - registerCode
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+    example: 15001
+  meterId:
+    type: integer
+    description: |
+      Reference to the meter this register belongs to.
+      **German:** Referenz auf den Zähler, zu dem dieses Register gehört.
+    x-i18n:
+      de:
+        description: Referenz auf den zugehörigen Zähler.
+    example: 5001
+  registerCode:
+    type: string
+    maxLength: 50
+    description: |
+      Register code identifying the specific register within the meter.
+      **German:** Register-Code zur Identifikation des spezifischen Registers innerhalb des Zählers.
+    x-i18n:
+      de:
+        description: Register-Code zur Identifikation des Registers innerhalb des Zählers.
+    example: "HT"
+  obisCode:
+    $ref: "../../common/obis-code.yaml"
+  validity:
+    $ref: "../../common/validity-period.yaml"
+  label:
+    $ref: "../../common/multilingual-label.yaml"

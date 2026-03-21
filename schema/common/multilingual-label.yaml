@@ -1,0 +1,32 @@
+type: object
+title: MultilingualLabel
+description: |
+  A multilingual label containing field names and descriptions in multiple languages.
+  English is the primary identifier language; German is the authoritative description language.
+  
+  **German:** Mehrsprachige Bezeichnung mit Feldbeschreibungen in verschiedenen Sprachen.
+  Englisch dient als primäre Bezeichnersprache; Deutsch ist die führende Beschreibungssprache
+  gemäß BDEW UTILMD-Standard.
+x-i18n:
+  de:
+    title: Mehrsprachige Bezeichnung
+    description: Mehrsprachige Bezeichnung mit Feldbeschreibungen in verschiedenen Sprachen.
+required:
+  - en
+properties:
+  en:
+    type: string
+    description: Field label or value in English / Feldbezeichner oder Wert auf Englisch
+    x-i18n:
+      de:
+        description: Feldbezeichner oder Wert auf Englisch
+    example: "Market Location"
+  de:
+    type: string
+    description: |
+      Field label or value in German (authoritative).
+      **German:** Feldbezeichner oder Wert auf Deutsch (führend/maßgeblich).
+    x-i18n:
+      de:
+        description: Feldbezeichner oder Wert auf Deutsch (maßgeblich)
+    example: "Marktlokation"

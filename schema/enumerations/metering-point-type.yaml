@@ -1,0 +1,50 @@
+type: string
+title: MeteringPointType
+description: |
+  Type of metering point classification defining how a market location's consumption
+  or generation is determined. Corresponds to EDIFACT SG8 SEQ DE1229.
+  
+  **German:** Art der Messstellenklassifikation, die bestimmt, wie der Verbrauch oder
+  die Erzeugung einer Marktlokation ermittelt wird. Entspricht EDIFACT SG8 SEQ DE1229.
+x-i18n:
+  de:
+    title: Messstellenart / Lokationstyp
+    description: Klassifikation der Marktlokation nach Messart. EDIFACT SG8 SEQ DE1229.
+x-edifact-mapping:
+  segment: SEQ
+  de1229: "Z01 (Daten der Marktlokation), Z98 (informative Daten)"
+enum:
+  - Z01
+  - Z02
+  - Z06
+  - Z07
+  - Z08
+  - Z09
+  - Z10
+  - Z98
+x-enum-descriptions:
+  Z01:
+    en: "Market location data"
+    de: "Daten der Marktlokation"
+  Z02:
+    en: "Grid location data"
+    de: "Daten der Netzlokation"
+  Z06:
+    en: "Metering location data"
+    de: "Daten der Messlokation"
+  Z07:
+    en: "Technical resource data"
+    de: "Daten der technischen Ressource"
+  Z08:
+    en: "Controllable resource data"
+    de: "Daten der steuerbaren Ressource"
+  Z09:
+    en: "Tranche data"
+    de: "Daten der Tranche"
+  Z10:
+    en: "Control device / control box data"
+    de: "Daten der Steuereinrichtung / Steuerbox"
+  Z98:
+    en: "Informative market location data"
+    de: "Informative Daten der Marktlokation"
+example: "Z01"

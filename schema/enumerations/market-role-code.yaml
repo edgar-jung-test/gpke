@@ -1,0 +1,91 @@
+type: string
+title: MarketRoleCode
+description: |
+  BDEW market role code identifying the function of a market actor in the electricity market.
+  Based on BDEW code list for market roles (Marktrollencodes).
+  
+  **German:** BDEW-Marktrollencode zur Identifikation der Funktion eines Marktakteurs
+  im Strommarkt. Basierend auf der BDEW-Codeliste der Marktrollen.
+x-i18n:
+  de:
+    title: Marktrollencode
+    description: BDEW-Marktrollencode gemäß BDEW-Codeliste der Marktrollen.
+x-edifact-mapping:
+  segment: NAD
+  qualifier: "3035 (party function code qualifier)"
+  codeList: "BDEW Marktrollen"
+enum:
+  - NB
+  - LF
+  - MSB
+  - BKV
+  - BIKO
+  - UeNB
+  - UNB
+  - ESA
+  - DP
+  - MGV
+  - BTR
+  - EIV
+  - EOG
+  - RB
+  - NBA
+  - NBN
+  - MR
+  - MS
+x-enum-descriptions:
+  NB:
+    en: "Grid operator (Netzbetreiber)"
+    de: "Netzbetreiber – Betreiber des Stromverteilungsnetzes"
+  LF:
+    en: "Supplier (Lieferant)"
+    de: "Lieferant – Stromlieferant der Marktlokation"
+  MSB:
+    en: "Metering point operator (Messstellenbetreiber)"
+    de: "Messstellenbetreiber – Betreiber der Messstelle"
+  BKV:
+    en: "Balance responsible party (Bilanzkreisverantwortlicher)"
+    de: "Bilanzkreisverantwortlicher – Verantwortlicher für den Bilanzkreis"
+  BIKO:
+    en: "Balancing coordinator (Bilanzkoordinator)"
+    de: "Bilanzkoordinator – Koordinator der Bilanzierung"
+  UeNB:
+    en: "Transmission system operator (Übertragungsnetzbetreiber)"
+    de: "Übertragungsnetzbetreiber – Betreiber des Übertragungsnetzes"
+  UNB:
+    en: "Distribution network operator (Umspannnetzbetreiber)"
+    de: "Umspannnetzbetreiber"
+  ESA:
+    en: "Central market entity / clearinghouse (Entsprechende Stelle/Abwicklung)"
+    de: "Entsprechende Stelle/Abwicklung"
+  DP:
+    en: "Data provider"
+    de: "Datenprovider"
+  MGV:
+    en: "Market area manager (Marktgebietsverantwortlicher)"
+    de: "Marktgebietsverantwortlicher – Verantwortlicher für das Marktgebiet"
+  BTR:
+    en: "Operator of technical resource (Betreiber einer technischen Ressource)"
+    de: "Betreiber einer technischen Ressource"
+  EIV:
+    en: "Feed-in manager (Einspeiseverantwortlicher)"
+    de: "Einspeiseverantwortlicher – Verantwortlicher für die Einspeisung"
+  EOG:
+    en: "Generation/consumption unit operator (Erzeugungs-/Verbrauchsanlagenanlagenbetreiber)"
+    de: "Anlagenbetreiber Erzeugung/Verbrauch (EOG)"
+  RB:
+    en: "Grid access coordinator (Regulierungsbehörde/Regelungsbehörde)"
+    de: "Regulierungsbehörde"
+  NBA:
+    en: "Previous grid operator (NetzbetreiberAlt)"
+    de: "Netzbetreiber alt – bisheriger Netzbetreiber beim NBWechsel"
+  NBN:
+    en: "New grid operator (NetzbetreiberNeu)"
+    de: "Netzbetreiber neu – neuer Netzbetreiber beim NBWechsel"
+  MR:
+    en: "Message recipient (Nachrichtenempfänger)"
+    de: "Nachrichtenempfänger"
+  MS:
+    en: "Message sender (Nachrichtensender)"
+    de: "Nachrichtensender"
+example: "NB"

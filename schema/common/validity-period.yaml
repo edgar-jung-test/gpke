@@ -1,0 +1,38 @@
+type: object
+title: ValidityPeriod
+description: |
+  Defines the temporal validity of a data record with start and optional end date.
+  Used throughout UTILMD to qualify time-variant master data.
+  
+  **German:** Definiert den zeitlichen Gültigkeitsbereich eines Datensatzes mit
+  Start- und optionalem Enddatum. Wird in der UTILMD zur Qualifizierung zeitvarianter
+  Stammdaten verwendet (z.B. DTM Segmente in EDIFACT).
+x-i18n:
+  de:
+    title: Gültigkeitszeitraum
+    description: Definiert den zeitlichen Gültigkeitsbereich eines Datensatzes mit Start- und optionalem Enddatum.
+x-edifact-mapping:
+  segment: DTM
+  qualifier: "163 (valid from) / 164 (valid to)"
+properties:
+  validFrom:
+    type: string
+    format: date-time
+    description: |
+      Start of validity period (inclusive). Format: ISO 8601 date-time.
+      **German:** Beginn des Gültigkeitszeitraums (einschließlich). Format: ISO 8601 Datum-Zeit.
+    x-i18n:
+      de:
+        description: Beginn des Gültigkeitszeitraums (einschließlich). Format ISO 8601.
+    example: "2024-10-01T00:00:00Z"
+  validTo:
+    type: string
+    format: date-time
+    nullable: true
+    description: |
+      End of validity period (exclusive). Null means open-ended / indefinite.
+      **German:** Ende des Gültigkeitszeitraums (ausschließlich). Null bedeutet unbegrenzt gültig.
+    x-i18n:
+      de:
+        description: Ende des Gültigkeitszeitraums (ausschließlich). Null bedeutet unbegrenzt.
+    example: "2025-09-30T23:59:59Z"

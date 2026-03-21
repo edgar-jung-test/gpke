@@ -1,0 +1,62 @@
+type: object
+title: VolumeConverter
+description: |
+  Volume converter (Mengenumwerter) – an auxiliary measurement device attached to a
+  meter that converts measured gas or fluid volumes to standard conditions (temperature,
+  pressure). In the electricity context, it refers to compensation devices adjusting
+  raw metered values. Operated by the metering point operator (MSB).
+  
+  **German:** Mengenumwerter – ein am Zähler angebrachtes Hilfsgerät, das gemessene
+  Mengen auf Normalbedingungen umrechnet. Im Stromkontext bezieht sich dies auf
+  Kompensationsgeräte für Messwerte. Betrieben durch den MSB.
+x-i18n:
+  de:
+    title: Mengenumwerter
+    description: Hilfsgerät zur Mengenumrechnung auf Normalbedingungen. Betrieben durch MSB.
+required:
+  - deviceNumber
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+    example: 11001
+  deviceNumber:
+    type: string
+    maxLength: 80
+    description: |
+      Unique device number of the volume converter assigned by the MSB.
+      **German:** Eindeutige Gerätenummer des Mengenumwerters, vergeben durch den MSB.
+    x-i18n:
+      de:
+        description: Eindeutige Gerätenummer des Mengenumwerters, vergeben durch den MSB.
+    example: "MU-1234567890"
+  meterId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the meter this volume converter is attached to.
+      **German:** Referenz auf den Zähler, an dem dieser Mengenumwerter angebracht ist.
+    x-i18n:
+      de:
+        description: Referenz auf den zugehörigen Zähler.
+    example: 5001
+  msbActorId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the MSB operating this volume converter.
+      **German:** Referenz auf den MSB, der diesen Mengenumwerter betreibt.
+    x-i18n:
+      de:
+        description: Referenz auf den betreibenden MSB.
+    example: 42
+  validity:
+    $ref: "../../common/validity-period.yaml"
+  label:
+    $ref: "../../common/multilingual-label.yaml"

@@ -1,0 +1,55 @@
+type: object
+title: GatewayRegister
+description: |
+  Register of a smart meter gateway (SMGW-Register / Gateway-Register) – a logical
+  measurement channel within a smart meter gateway identified by a register code and
+  an OBIS code. The gateway can process and store data from multiple meters and registers.
+  
+  **German:** SMGW-Register / Gateway-Register – ein logischer Messkanal innerhalb eines
+  Smart-Meter-Gateways, identifiziert durch einen Register-Code und eine OBIS-Kennzahl.
+  Das Gateway kann Daten von mehreren Zählern und Registern verarbeiten und speichern.
+x-i18n:
+  de:
+    title: Gateway-Register (SMGW-Register)
+    description: |
+      Logischer Messkanal eines Smart-Meter-Gateways mit Register-Code und OBIS-Kennzahl.
+      Das SMGW kann Daten mehrerer Zähler und Register verarbeiten.
+required:
+  - gatewayId
+  - registerCode
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+    example: 16001
+  gatewayId:
+    type: integer
+    description: |
+      Reference to the gateway this register belongs to.
+      **German:** Referenz auf das Gateway, zu dem dieses Register gehört.
+    x-i18n:
+      de:
+        description: Referenz auf das zugehörige Gateway.
+    example: 6001
+  registerCode:
+    type: string
+    maxLength: 50
+    description: |
+      Register code identifying the specific logical channel within the gateway.
+      **German:** Register-Code zur Identifikation des spezifischen logischen Kanals innerhalb des Gateways.
+    x-i18n:
+      de:
+        description: Register-Code zur Identifikation des logischen Kanals innerhalb des Gateways.
+    example: "1-1:1.8.0"
+  obisCode:
+    $ref: "../../common/obis-code.yaml"
+  validity:
+    $ref: "../../common/validity-period.yaml"
+  label:
+    $ref: "../../common/multilingual-label.yaml"

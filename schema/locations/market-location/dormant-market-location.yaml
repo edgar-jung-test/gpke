@@ -1,0 +1,56 @@
+type: object
+title: DormantMarketLocation
+description: |
+  A dormant market location (ruhende Marktlokation) is a special state for market
+  locations without active supply, such as vacant premises or customer installations
+  under § 20 Abs. 1d EnWG or § 10c EEG. The grid operator creates and manages dormant
+  market locations. Corresponds to EDIFACT SG4 STS with supplement ZAP.
+  
+  **German:** Eine ruhende Marktlokation ist ein besonderer Zustand für Marktlokationen
+  ohne aktive Versorgung, z.B. bei Leerstand oder Kundenanlagen gemäß § 20 Abs. 1d EnWG
+  bzw. § 10c EEG. Der Netzbetreiber legt ruhende Marktlokationen an und verwaltet sie.
+  Entspricht EDIFACT SG4 STS mit Ergänzung ZAP.
+  Siehe UTILMD AHB Strom, Kapitel 5.5 „Ruhende Marktlokation".
+x-i18n:
+  de:
+    title: Ruhende Marktlokation
+    description: |
+      Marktlokation ohne aktive Versorgung (Leerstand, Kundenanlage §20 Abs.1d EnWG / §10c EEG).
+      EDIFACT SG4 STS mit Ergänzung ZAP.
+x-edifact-mapping:
+  segment: STS
+  supplement: "ZAP (ruhende Marktlokation)"
+  notes: "See UTILMD AHB chapter 5.5"
+required:
+  - maLoId
+properties:
+  maLoId:
+    $ref: "./market-location-id.yaml"
+  dormancyReason:
+    type: string
+    maxLength: 200
+    nullable: true
+    description: |
+      Reason for dormancy, e.g. vacancy, customer installation, minor consumption.
+      **German:** Grund für die Ruhephase, z.B. Leerstand, Kundenanlage, geringfügige Verbräuche.
+    x-i18n:
+      de:
+        description: Grund für die Ruhephase, z.B. Leerstand, Kundenanlage, geringfügige Verbräuche.
+    example: "Leerstand"
+  legalBasis:
+    type: string
+    nullable: true
+    description: |
+      Legal basis for the dormant status (e.g. § 20 Abs. 1d EnWG or § 10c EEG).
+      **German:** Rechtsgrundlage für den Ruhestatus (z.B. § 20 Abs. 1d EnWG oder § 10c EEG).
+    x-i18n:
+      de:
+        description: Rechtsgrundlage für den Ruhestatus (§ 20 Abs. 1d EnWG oder § 10c EEG).
+    enum:
+      - "§20 Abs.1d EnWG"
+      - "§10c EEG"
+    example: "§20 Abs.1d EnWG"
+  validity:
+    $ref: "../../common/validity-period.yaml"
+  label:
+    $ref: "../../common/multilingual-label.yaml"
