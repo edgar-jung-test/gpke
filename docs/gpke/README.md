@@ -48,10 +48,12 @@ Open with any modern browser. Dark mode is automatically supported.
 
 Ursprüngliche grafische Darstellung des Lieferantenwechsel-Prozesses im Draw.io-Format.
 Enthält die Swimlane-Darstellung mit BPMN-Elementen. Darüber hinuas haben wir eine 
-interaktive [lieferbeginn-sequenz](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke/lieferbeginn-sequenz.html) zur Verfügung gestellt
+interaktive <a href="https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke/lieferbeginn-sequenz.html" target="_blank" rel="noopener noreferrer">Lieferbeginn</a> zur Verfügung gestellt
 
 Original graphical representation of the supplier change process in Draw.io format.
-Contains the swimlane view with BPMN elements. Check out interactiv [supplier-change](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke/lieferbeginn-sequenz.html)
+Contains the swimlane view with BPMN elements. Check out the interactive <a href="https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke/lieferbeginn-sequenz.html" target="_blank" rel="noopener noreferrer">supplier-change</a>.
+
+
 
 Öffnen mit / Open with: [app.diagrams.net](https://app.diagrams.net) oder Draw.io Desktop.
 
