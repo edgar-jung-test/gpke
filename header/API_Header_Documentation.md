@@ -93,47 +93,7 @@ Die EDI@Energy API verwendet drei Header-Kategorien:
 
 ---
 
-## 2. Korrekturen / Corrections
-
-### English
-
-The following corrections were applied to the names proposed in the presentation:
-
-| Presentation (wrong) | Corrected | Reason |
-|---|---|---|
-| `X-Request-Id` | **`X-Request-ID`** | Acronyms (ID, API) are written in uppercase by HTTP convention |
-| `X-Message-Id` | **`X-Message-ID`** | Same rule |
-| `Idempotency-ID` | **`Idempotency-Key`** | RFC 8694 / Stripe standard. The example in the presentation already showed the correct name. |
-| `Etag:` | **`ETag`** | Canonical IANA spelling. No colon in the header name. |
-| `X-Api-Spec-Version` | **`X-API-Spec-Version`** | Acronym API in uppercase |
-| `X-Api-Spec-Ref` | **`X-API-Spec-Ref`** | Acronym API in uppercase |
-| `X-Api-Spec-Id` | **`X-API-Spec-ID`** | Both acronyms API and ID in uppercase |
-
-Additionally: `Location` and `Retry-After` are **response-only** headers (RFC 9110).
-The presentation positioned them as general headers — they must be defined as response
-headers in OpenAPI, not as request parameters.
-
-### Deutsch
-
-Folgende Korrekturen wurden gegenüber der Präsentation vorgenommen:
-
-| Vorlage (falsch) | Korrigiert | Begründung |
-|---|---|---|
-| `X-Request-Id` | **`X-Request-ID`** | Akronyme (ID, API) werden per HTTP-Konvention großgeschrieben |
-| `X-Message-Id` | **`X-Message-ID`** | Gleiche Regel |
-| `Idempotency-ID` | **`Idempotency-Key`** | RFC 8694 / Stripe-Standard. Das Beispiel in der Präsentation zeigte bereits den korrekten Namen. |
-| `Etag:` | **`ETag`** | Kanonische IANA-Schreibweise. Kein Doppelpunkt im Header-Namen. |
-| `X-Api-Spec-Version` | **`X-API-Spec-Version`** | Akronym API großschreiben |
-| `X-Api-Spec-Ref` | **`X-API-Spec-Ref`** | Akronym API großschreiben |
-| `X-Api-Spec-Id` | **`X-API-Spec-ID`** | Akronyme API und ID großschreiben |
-
-Zusätzlich: `Location` und `Retry-After` sind **ausschließlich Response-Header** (RFC 9110).
-Die Präsentation ordnete sie allgemeinen Headern zu — in OpenAPI müssen sie als
-Response-Header definiert werden, nicht als Request-Parameter.
-
----
-
-## 3. Gruppe 1: Allgemeine Header / General Headers
+## 2. Gruppe 1: Allgemeine Header / General Headers
 
 ---
 
@@ -874,7 +834,7 @@ Er verhindert aggressive Retry-Stürme, die einen sich erholenden Server überla
 Beide Formate sind laut RFC 9110 gültig:
 1. **HTTP-date:** `Tue, 24 Feb 2026 10:00:00 GMT` — absoluter Zeitpunkt
 2. **Delay-Sekunden:** `120` — relative Sekunden ab jetzt
-## 4. Gruppe 2: State-Machine Header
+## 5. Gruppe 2: State-Machine Header
 
 The state-machine headers implement optimistic concurrency control for long-running
 transactions. They ensure that state transitions only occur when the resource is in
@@ -1086,7 +1046,7 @@ schlägt die Stornierung fehl (`412`), wenn die Transaktion inzwischen `complete
 
 ---
 
-## 5. Gruppe 3: Version-Control Header
+## 4. Gruppe 3: Version-Control Header
 
 Version-control headers provide transparency about which versions of which systems
 are involved in processing a request. They enable automated compatibility testing,
@@ -1476,7 +1436,7 @@ oder den Hub identifiziert). Diese Unterscheidung ist wichtig in Schichtarchitek
 
 ---
 
-## 6. Verwendungsmuster / Usage Patterns
+## 5. Verwendungsmuster / Usage Patterns
 
 ### Pattern 1: Synchroner Request mit Idempotenz / Synchronous Request with Idempotency
 
@@ -1640,7 +1600,7 @@ Content-Type: application/json
 
 ---
 
-## 7. OpenAPI 3.0 Einbindung / OpenAPI 3.0 Integration
+## 6. OpenAPI 3.0 Einbindung / OpenAPI 3.0 Integration
 
 ### English — How to reference headers in an API spec
 
@@ -1705,7 +1665,7 @@ Beide Beispiele → Siehe English-Abschnitt oben.
 
 ---
 
-## 8. Normative Quellen / Normative References
+## 7. Normative Quellen / Normative References
 
 | Standard | Anwendung / Application |
 |---|---|
