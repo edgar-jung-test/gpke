@@ -1,75 +1,70 @@
-openapi: "3.0.3"
+openapi: 3.0.3
 info:
   title: GPKE Supply Start (Lieferbeginn) REST API
   version: 1.0.0
   description: >
-    REST API for the GPKE use-case "Lieferbeginn" (supply start / supplier change),
-    covering all 7 process steps of SD: Lieferbeginn (GPKE Teil 2, p. 31 ff.).
-    Business data corresponds to EDIFACT UTILMD messages exchanged between market participants.
+    REST API for the GPKE use-case "Lieferbeginn" (supply start / supplier
+    change), covering all 7 process steps of SD: Lieferbeginn (GPKE Teil 2, p.
+    31 ff.). Business data corresponds to EDIFACT UTILMD messages exchanged
+    between market participants.
 
-    **German:** REST API für den GPKE-Use-Case „Lieferbeginn" (Lieferantenwechsel).
-    Deckt alle 7 Prozessschritte des SD: Lieferbeginn (GPKE Teil 2, S. 31 ff.) ab.
-    Die Geschäftsdaten entsprechen den EDIFACT-UTILMD-Nachrichten der Marktkommunikation.
+    **German:** REST API für den GPKE-Use-Case „Lieferbeginn"
+    (Lieferantenwechsel). Deckt alle 7 Prozessschritte des SD: Lieferbeginn
+    (GPKE Teil 2, S. 31 ff.) ab. Die Geschäftsdaten entsprechen den
+    EDIFACT-UTILMD-Nachrichten der Marktkommunikation.
   contact:
     name: BDEW
     url: https://www.bdew-mako.de
   license:
     name: BDEW
     url: https://www.bdew-mako.de
-
 servers:
-  - url: https://api.example.com
+  - url: https://api.makohub.com
     description: Production server / Produktionsserver
-
 tags:
   - name: registrations
     description: >
-      Registration requests: new supplier (LFN) → grid operator (NB).
-      Steps 1, 2, 5. Prüf-IDs 55001, 55077, 55002, 55003, 55078, 55080.
-      **German:** Anmeldungen: neuer Lieferant (LFN) → Netzbetreiber (NB).
-      Schritte 1, 2, 5.
+      Registration requests: new supplier (LFN) → grid operator (NB). Steps 1,
+      2, 5. Prüf-IDs 55001, 55077, 55002, 55003, 55078, 55080. **German:**
+      Anmeldungen: neuer Lieferant (LFN) → Netzbetreiber (NB). Schritte 1, 2, 5.
   - name: deregistrationRequests
     description: >
-      Deregistration requests between NB and previous supplier (LFA).
-      Steps 3, 4. Prüf-IDs 55010, 55011, 55012.
-      **German:** Abmeldeanfragen zwischen Netzbetreiber (NB) und altem Lieferanten (LFA).
-      Schritte 3, 4.
+      Deregistration requests between NB and previous supplier (LFA). Steps 3,
+      4. Prüf-IDs 55010, 55011, 55012. **German:** Abmeldeanfragen zwischen
+      Netzbetreiber (NB) und altem Lieferanten (LFA). Schritte 3, 4.
   - name: assignments
     description: >
-      Assignment termination and cancellation notifications.
-      Steps 6, 7. Prüf-IDs 55037, 55038.
-      **German:** Zuordnungsbeendigungen und -aufhebungen. Schritte 6, 7.
-
+      Assignment termination and cancellation notifications. Steps 6, 7.
+      Prüf-IDs 55037, 55038. **German:** Zuordnungsbeendigungen und
+      -aufhebungen. Schritte 6, 7.
 paths:
-
-  # ── Step 1 + list: registrations ──────────────────────────────────────────
   /market-locations/{marketLocationId}/registrations:
     post:
       summary: Submit a registration request (Anmeldung) – Prüf-ID 55001 / 55077
       description: >
-        **Step 1 – Registration (Anmeldung).**
-        The new supplier (LFN) registers a market location with the grid operator (NB).
+        **Step 1 – Registration (Anmeldung).** The new supplier (LFN) registers
+        a market location with the grid operator (NB).
 
-        Lead times (working days before supply start):
-        Case 1 (MaLo-ID only): ≥ 7 WT. Case 2 (address / attributes): ≥ 10 WT.
+        Lead times (working days before supply start): Case 1 (MaLo-ID only): ≥
+        7 WT. Case 2 (address / attributes): ≥ 10 WT.
 
-        **German:** **Schritt 1 – Anmeldung.**
-        Der neue Lieferant (LFN) meldet eine Marktlokation beim Netzbetreiber (NB) an.
-        Vorlauffristen: Fall 1 (nur MaLo-ID) ≥ 7 WT, Fall 2 (Adresse / Attribute) ≥ 10 WT.
+        **German:** **Schritt 1 – Anmeldung.** Der neue Lieferant (LFN) meldet
+        eine Marktlokation beim Netzbetreiber (NB) an. Vorlauffristen: Fall 1
+        (nur MaLo-ID) ≥ 7 WT, Fall 2 (Adresse / Attribute) ≥ 10 WT.
       operationId: createRegistration
       tags:
         - registrations
       parameters:
-        - $ref: "#/components/parameters/marketLocationId"
-        - $ref: "../header/headers/xRequestId.yaml"
-        - $ref: "../header/headers/idempotencyKey.yaml"
-        - $ref: "../header/headers/xMessageId.yaml"
+        - $ref: '#/components/parameters/marketLocationId'
+        - $ref: ../header/headers/xRequestId.yaml
+        - $ref: ../header/headers/idempotencyKey.yaml
+        - $ref: ../header/headers/xMessageId.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SupplyStartCreateRequest"
+              $ref: '#/components/schemas/SupplyStartCreateRequest'
             examples:
               supplierChangeFall1:
                 summary: >
@@ -77,133 +72,135 @@ paths:
                   Lieferantenwechsel – Fall 1, nur MaLo-ID
                 value:
                   header:
-                    messageId: "MSG-2025-001234"
-                    messageType: "E01"
+                    messageId: MSG-2025-001234
+                    messageType: E01
                     checkIdentifier:
-                      value: "55001"
-                      communicationDirection: "LF→NB"
-                    createdAt: "2025-03-15T08:00:00Z"
+                      value: '55001'
+                      communicationDirection: LF→NB
+                    createdAt: '2025-03-15T08:00:00Z'
                     sender:
                       actorId:
-                        id: "9900987654321"
-                        codingScheme: "293"
-                      marketRole: "LF"
+                        id: '9900987654321'
+                        codingScheme: '293'
+                      marketRole: LF
                     recipient:
                       actorId:
-                        id: "9904132000002"
-                        codingScheme: "293"
-                      marketRole: "NB"
-                  supplyStartDate: "2025-04-01"
-                  transactionReason: "ZA1"
+                        id: '9904132000002'
+                        codingScheme: '293'
+                      marketRole: NB
+                  supplyStartDate: '2025-04-01'
+                  transactionReason: ZA1
                   isHouseholdCustomer: true
                   marketLocationIdentification:
-                    identificationMode: "maloIdOnly"
-                    maLoId: "51238696781"
-                  energyDirection: "CONSUMPTION"
+                    identificationMode: maloIdOnly
+                    maLoId: '51238696781'
+                  energyDirection: CONSUMPTION
                   balancing:
-                    balancingGroupId: "11XVSEW------5S"
-                    authorizationReference: "ZE-2025-00042"
+                    balancingGroupId: 11XVSEW------5S
+                    authorizationReference: ZE-2025-00042
               newConnectionFall2:
                 summary: >
-                  New connection – case 2, address (Prüf-ID 55001) /
-                  Neuanlage – Fall 2, Adresse
+                  New connection – case 2, address (Prüf-ID 55001) / Neuanlage –
+                  Fall 2, Adresse
                 value:
                   header:
-                    messageId: "MSG-2025-001235"
-                    messageType: "E01"
+                    messageId: MSG-2025-001235
+                    messageType: E01
                     checkIdentifier:
-                      value: "55001"
-                      communicationDirection: "LF→NB"
-                    createdAt: "2025-03-15T09:15:00Z"
+                      value: '55001'
+                      communicationDirection: LF→NB
+                    createdAt: '2025-03-15T09:15:00Z'
                     sender:
                       actorId:
-                        id: "9900987654321"
-                        codingScheme: "293"
-                      marketRole: "LF"
+                        id: '9900987654321'
+                        codingScheme: '293'
+                      marketRole: LF
                     recipient:
                       actorId:
-                        id: "9904132000002"
-                        codingScheme: "293"
-                      marketRole: "NB"
-                  supplyStartDate: "2025-05-01"
-                  requestedStartDateForNewConnection: "2025-05-01"
-                  transactionReason: "ZA2"
+                        id: '9904132000002'
+                        codingScheme: '293'
+                      marketRole: NB
+                  supplyStartDate: '2025-05-01'
+                  requestedStartDateForNewConnection: '2025-05-01'
+                  transactionReason: ZA2
                   isHouseholdCustomer: false
                   marketLocationIdentification:
-                    identificationMode: "multiAttribute"
+                    identificationMode: multiAttribute
                     address:
-                      street: "Industriestraße 14b"
-                      city: "Berlin"
-                      postalCode: "10115"
-                      countryCode: "DE"
-                  energyDirection: "CONSUMPTION"
+                      street: Industriestraße 14b
+                      city: Berlin
+                      postalCode: '10115'
+                      countryCode: DE
+                  energyDirection: CONSUMPTION
                   balancing:
-                    balancingGroupId: "11XVSEW------5S"
-                  meterReadingCycle: "monthly"
+                    balancingGroupId: 11XVSEW------5S
+                  meterReadingCycle: monthly
       responses:
-        "201":
+        '201':
           description: >
-            Registration created successfully. Returns the created SupplyStart resource.
-            **German:** Anmeldung erfolgreich erstellt. Gibt die erstellte Ressource zurück.
+            Registration created successfully. Returns the created SupplyStart
+            resource. **German:** Anmeldung erfolgreich erstellt. Gibt die
+            erstellte Ressource zurück.
           headers:
             Location:
-              $ref: "../header/openapi.yaml#/components/headers/location"
+              $ref: ../header/openapi.yaml#/components/headers/location
             X-Message-ID:
-              $ref: "../header/openapi.yaml#/components/headers/xMessageId"
+              $ref: ../header/openapi.yaml#/components/headers/xMessageId
             ETag:
-              $ref: "../header/openapi.yaml#/components/headers/eTag"
+              $ref: ../header/openapi.yaml#/components/headers/eTag
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SupplyStart"
-        "400":
+                $ref: '#/components/schemas/SupplyStart'
+        '400':
           description: >
-            Validation error – e.g. invalid date format, lead time not met, missing required field.
-            **German:** Validierungsfehler – z.B. ungültiges Datum, Vorlaufzeit nicht eingehalten,
-            fehlendes Pflichtfeld.
+            Validation error – e.g. invalid date format, lead time not met,
+            missing required field. **German:** Validierungsfehler – z.B.
+            ungültiges Datum, Vorlaufzeit nicht eingehalten, fehlendes
+            Pflichtfeld.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "409":
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
           description: >
-            Conflict – another registration is already in progress for this market location.
-            **German:** Konflikt – für diese Marktlokation läuft bereits eine Anmeldung.
+            Conflict – another registration is already in progress for this
+            market location. **German:** Konflikt – für diese Marktlokation
+            läuft bereits eine Anmeldung.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
+                $ref: '#/components/schemas/ErrorResponse'
     get:
       summary: List registration requests / Anmeldungen auflisten
       operationId: listRegistrations
       tags:
         - registrations
       parameters:
-        - $ref: "#/components/parameters/marketLocationId"
+        - $ref: '#/components/parameters/marketLocationId'
         - name: status
           in: query
           schema:
-            $ref: "#/components/schemas/SupplyStartStatus"
+            $ref: '#/components/schemas/SupplyStartStatus'
           description: >
-            Filter by processing status.
-            **German:** Filter nach Bearbeitungsstatus.
+            Filter by processing status. **German:** Filter nach
+            Bearbeitungsstatus.
         - name: fromDate
           in: query
           schema:
             type: string
             format: date
           description: >
-            Filter: supply start date ≥ this value (ISO 8601).
-            **German:** Filter: Lieferbeginn-Datum ≥ diesem Wert (ISO 8601).
+            Filter: supply start date ≥ this value (ISO 8601). **German:**
+            Filter: Lieferbeginn-Datum ≥ diesem Wert (ISO 8601).
         - name: toDate
           in: query
           schema:
             type: string
             format: date
           description: >
-            Filter: supply start date ≤ this value (ISO 8601).
-            **German:** Filter: Lieferbeginn-Datum ≤ diesem Wert (ISO 8601).
+            Filter: supply start date ≤ this value (ISO 8601). **German:**
+            Filter: Lieferbeginn-Datum ≤ diesem Wert (ISO 8601).
         - name: limit
           in: query
           schema:
@@ -212,278 +209,277 @@ paths:
             maximum: 500
             default: 50
           description: >
-            Page size (number of results per page).
-            **German:** Seitengröße (Anzahl Ergebnisse pro Seite).
+            Page size (number of results per page). **German:** Seitengröße
+            (Anzahl Ergebnisse pro Seite).
         - name: offset
           in: query
           schema:
             type: integer
             minimum: 0
             default: 0
-          description: >
-            Page offset (zero-based).
-            **German:** Seitenoffset (nullbasiert).
+          description: |
+            Page offset (zero-based). **German:** Seitenoffset (nullbasiert).
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SupplyStartList"
-
-  # ── Step 2 + 5: single registration ────────────────────────────────────────
+                $ref: '#/components/schemas/SupplyStartList'
   /market-locations/{marketLocationId}/registrations/{supplyStartId}:
     parameters:
-      - $ref: "#/components/parameters/marketLocationId"
-      - $ref: "#/components/parameters/supplyStartId"
-
+      - $ref: '#/components/parameters/marketLocationId'
+      - $ref: '#/components/parameters/supplyStartId'
     get:
       summary: Get a registration request / Anmeldung abrufen
       description: >
-        Returns the full current state of a registration, including any NB response
-        data (step 5 confirmation / rejection) and existing-assignment information (step 2).
-        **German:** Gibt den vollständigen aktuellen Stand einer Anmeldung zurück, einschließlich
-        der NB-Antwort (Schritt 5) und Informationen zur bestehenden Zuordnung (Schritt 2).
+        Returns the full current state of a registration, including any NB
+        response data (step 5 confirmation / rejection) and existing-assignment
+        information (step 2). **German:** Gibt den vollständigen aktuellen Stand
+        einer Anmeldung zurück, einschließlich der NB-Antwort (Schritt 5) und
+        Informationen zur bestehenden Zuordnung (Schritt 2).
       operationId: getRegistration
       tags:
         - registrations
       parameters:
-        - $ref: "../header/headers/xRequestId.yaml"
+        - $ref: ../header/headers/xRequestId.yaml
       responses:
-        "200":
+        '200':
           description: OK
           headers:
             ETag:
-              $ref: "../header/openapi.yaml#/components/headers/eTag"
+              $ref: ../header/openapi.yaml#/components/headers/eTag
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SupplyStart"
-        "404":
-          description: >
-            Registration not found.
-            **German:** Anmeldung nicht gefunden.
+                $ref: '#/components/schemas/SupplyStart'
+        '404':
+          description: |
+            Registration not found. **German:** Anmeldung nicht gefunden.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
+                $ref: '#/components/schemas/ErrorResponse'
     patch:
-      summary: Update mutable fields of a registration / Anmeldung teilweise aktualisieren
+      summary: >-
+        Update mutable fields of a registration / Anmeldung teilweise
+        aktualisieren
       description: >
-        Updates changeable fields of a registration while it is still in status `draft`.
-        Once submitted to the NB the registration is immutable.
-        **German:** Aktualisiert änderbare Felder einer Anmeldung, solange diese den Status
-        `draft` hat. Nach Einreichung beim NB ist die Anmeldung unveränderlich.
+        Updates changeable fields of a registration while it is still in status
+        `draft`. Once submitted to the NB the registration is immutable.
+        **German:** Aktualisiert änderbare Felder einer Anmeldung, solange diese
+        den Status `draft` hat. Nach Einreichung beim NB ist die Anmeldung
+        unveränderlich.
       operationId: patchRegistration
       tags:
         - registrations
       parameters:
-        - $ref: "../header/headers/xRequestId.yaml"
-        - $ref: "../header/headers/idempotencyKey.yaml"
-        - $ref: "../header/headers/ifMatch.yaml"
+        - $ref: ../header/headers/xRequestId.yaml
+        - $ref: ../header/headers/idempotencyKey.yaml
+        - $ref: ../header/headers/ifMatch.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SupplyStartPatchRequest"
+              $ref: '#/components/schemas/SupplyStartPatchRequest'
       responses:
-        "200":
-          description: >
-            Updated successfully.
-            **German:** Erfolgreich aktualisiert.
+        '200':
+          description: |
+            Updated successfully. **German:** Erfolgreich aktualisiert.
           headers:
             ETag:
-              $ref: "../header/openapi.yaml#/components/headers/eTag"
+              $ref: ../header/openapi.yaml#/components/headers/eTag
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SupplyStart"
-        "400":
+                $ref: '#/components/schemas/SupplyStart'
+        '400':
           description: Validation error / Validierungsfehler.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "404":
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
           description: Not found / Nicht gefunden.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "409":
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
           description: >
-            Conflict – registration cannot be modified in current status (not draft).
-            **German:** Konflikt – Anmeldung kann im aktuellen Status nicht geändert werden.
+            Conflict – registration cannot be modified in current status (not
+            draft). **German:** Konflikt – Anmeldung kann im aktuellen Status
+            nicht geändert werden.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "412":
+                $ref: '#/components/schemas/ErrorResponse'
+        '412':
           description: >
-            Precondition failed – ETag mismatch (state has changed since last read).
-            **German:** Precondition Failed – ETag stimmt nicht überein (Zustand hat sich geändert).
+            Precondition failed – ETag mismatch (state has changed since last
+            read). **German:** Precondition Failed – ETag stimmt nicht überein
+            (Zustand hat sich geändert).
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-  # ── Step 5: NB responds to registration ────────────────────────────────────
+                $ref: '#/components/schemas/ErrorResponse'
   /market-locations/{marketLocationId}/registrations/{supplyStartId}/response:
     post:
       summary: NB responds to a registration – Prüf-ID 55002 / 55003 / 55078 / 55080
       description: >
-        **Step 5 – Response (Antwort auf Anmeldung).**
-        The grid operator (NB) confirms or rejects the supplier's registration.
+        **Step 5 – Response (Antwort auf Anmeldung).** The grid operator (NB)
+        confirms or rejects the supplier's registration.
 
-        Deadlines (working days from receipt of registration):
-        Case 1: by end of 5th WT. Case 2: by end of 8th WT.
+        Deadlines (working days from receipt of registration): Case 1: by end of
+        5th WT. Case 2: by end of 8th WT.
 
-        **German:** **Schritt 5 – Antwort auf Anmeldung.**
-        Der Netzbetreiber (NB) bestätigt oder lehnt die Anmeldung ab.
+        **German:** **Schritt 5 – Antwort auf Anmeldung.** Der Netzbetreiber
+        (NB) bestätigt oder lehnt die Anmeldung ab.
 
-        Fristen ab Eingang der Anmeldung: Fall 1 bis Ende des 5. WT, Fall 2 bis Ende des 8. WT.
+        Fristen ab Eingang der Anmeldung: Fall 1 bis Ende des 5. WT, Fall 2 bis
+        Ende des 8. WT.
       operationId: respondToRegistration
       tags:
         - registrations
       parameters:
-        - $ref: "#/components/parameters/marketLocationId"
-        - $ref: "#/components/parameters/supplyStartId"
-        - $ref: "../header/headers/xRequestId.yaml"
-        - $ref: "../header/headers/xMessageId.yaml"
-        - $ref: "../header/headers/idempotencyKey.yaml"
+        - $ref: '#/components/parameters/marketLocationId'
+        - $ref: '#/components/parameters/supplyStartId'
+        - $ref: ../header/headers/xRequestId.yaml
+        - $ref: ../header/headers/xMessageId.yaml
+        - $ref: ../header/headers/idempotencyKey.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RegistrationResponseRequest"
+              $ref: '#/components/schemas/RegistrationResponseRequest'
             examples:
               confirmation:
                 summary: >
-                  NB confirms registration (Prüf-ID 55002) /
-                  NB bestätigt Anmeldung
+                  NB confirms registration (Prüf-ID 55002) / NB bestätigt
+                  Anmeldung
                 value:
                   header:
-                    messageId: "MSG-2025-001300"
-                    messageType: "E04"
+                    messageId: MSG-2025-001300
+                    messageType: E04
                     checkIdentifier:
-                      value: "55002"
-                      communicationDirection: "NB→LF"
-                    createdAt: "2025-03-18T09:00:00Z"
+                      value: '55002'
+                      communicationDirection: NB→LF
+                    createdAt: '2025-03-18T09:00:00Z'
                     sender:
                       actorId:
-                        id: "9904132000002"
-                        codingScheme: "293"
-                      marketRole: "NB"
+                        id: '9904132000002'
+                        codingScheme: '293'
+                      marketRole: NB
                     recipient:
                       actorId:
-                        id: "9900987654321"
-                        codingScheme: "293"
-                      marketRole: "LF"
+                        id: '9900987654321'
+                        codingScheme: '293'
+                      marketRole: LF
                   status:
-                    statusCode: "E01"
-                  effectiveSupplyStartDate: "2025-04-01"
-                  previousSupplierEndDate: "2025-03-31"
+                    statusCode: E01
+                  effectiveSupplyStartDate: '2025-04-01'
+                  previousSupplierEndDate: '2025-03-31'
                   masterData:
                     voltageLevel:
-                      code: "NS"
-                      name: "Low voltage"
+                      code: NS
+                      name: Low voltage
                     currentMeteringPointOperatorId:
-                      id: "9901234567890"
-                      codingScheme: "293"
-                    supplyContractId: "NNV-2024-00123"
+                      id: '9901234567890'
+                      codingScheme: '293'
+                    supplyContractId: NNV-2024-00123
                     isInterruptible: false
               rejection:
                 summary: >
-                  NB rejects registration (Prüf-ID 55003) /
-                  NB lehnt Anmeldung ab
+                  NB rejects registration (Prüf-ID 55003) / NB lehnt Anmeldung
+                  ab
                 value:
                   header:
-                    messageId: "MSG-2025-001301"
-                    messageType: "E05"
+                    messageId: MSG-2025-001301
+                    messageType: E05
                     checkIdentifier:
-                      value: "55003"
-                      communicationDirection: "NB→LF"
-                    createdAt: "2025-03-18T09:30:00Z"
+                      value: '55003'
+                      communicationDirection: NB→LF
+                    createdAt: '2025-03-18T09:30:00Z'
                     sender:
                       actorId:
-                        id: "9904132000002"
-                        codingScheme: "293"
-                      marketRole: "NB"
+                        id: '9904132000002'
+                        codingScheme: '293'
+                      marketRole: NB
                     recipient:
                       actorId:
-                        id: "9900987654321"
-                        codingScheme: "293"
-                      marketRole: "LF"
+                        id: '9900987654321'
+                        codingScheme: '293'
+                      marketRole: LF
                   status:
-                    statusCode: "E03"
-                    rejectionCode: "E_0610"
+                    statusCode: E03
+                    rejectionCode: E_0610
                   rejectionReasons:
-                    - code: "E_0610"
-                      message: "Previous supplier objected to deregistration within deadline"
+                    - code: E_0610
+                      message: >-
+                        Previous supplier objected to deregistration within
+                        deadline
       responses:
-        "200":
+        '200':
           description: >
-            Response processed, registration updated.
-            **German:** Antwort verarbeitet, Anmeldung aktualisiert.
+            Response processed, registration updated. **German:** Antwort
+            verarbeitet, Anmeldung aktualisiert.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SupplyStart"
-        "400":
+                $ref: '#/components/schemas/SupplyStart'
+        '400':
           description: Validation error / Validierungsfehler.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "404":
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
           description: Registration not found / Anmeldung nicht gefunden.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "409":
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
           description: >
-            Conflict – registration already responded to.
-            **German:** Konflikt – Anmeldung wurde bereits beantwortet.
+            Conflict – registration already responded to. **German:** Konflikt –
+            Anmeldung wurde bereits beantwortet.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-  # ── Steps 3+4: deregistration requests ─────────────────────────────────────
+                $ref: '#/components/schemas/ErrorResponse'
   /market-locations/{marketLocationId}/deregistration-requests:
     post:
       summary: NB sends deregistration request to LFA – Prüf-ID 55010
       description: >
-        **Step 3 – Deregistration request (Abmeldeanfrage).**
-        Grid operator notifies previous supplier of new registration and asks whether
+        **Step 3 – Deregistration request (Abmeldeanfrage).** Grid operator
+        notifies previous supplier of new registration and asks whether
         deregistration will be confirmed.
 
-        Deadlines from receipt of registration:
-        Case 1: by end of 1st WT. Case 2: by end of 4th WT.
+        Deadlines from receipt of registration: Case 1: by end of 1st WT. Case
+        2: by end of 4th WT.
 
-        **German:** **Schritt 3 – Abmeldeanfrage.**
-        Netzbetreiber informiert alten Lieferanten über neue Anmeldung und fragt
-        ob die Abmeldung bestätigt wird.
+        **German:** **Schritt 3 – Abmeldeanfrage.** Netzbetreiber informiert
+        alten Lieferanten über neue Anmeldung und fragt ob die Abmeldung
+        bestätigt wird.
 
-        Fristen ab Eingang der Anmeldung: Fall 1 bis Ende des 1. WT, Fall 2 bis Ende des 4. WT.
+        Fristen ab Eingang der Anmeldung: Fall 1 bis Ende des 1. WT, Fall 2 bis
+        Ende des 4. WT.
       operationId: createDeregistrationRequest
       tags:
         - deregistrationRequests
       parameters:
-        - $ref: "#/components/parameters/marketLocationId"
-        - $ref: "../header/headers/xRequestId.yaml"
-        - $ref: "../header/headers/xMessageId.yaml"
-        - $ref: "../header/headers/idempotencyKey.yaml"
+        - $ref: '#/components/parameters/marketLocationId'
+        - $ref: ../header/headers/xRequestId.yaml
+        - $ref: ../header/headers/xMessageId.yaml
+        - $ref: ../header/headers/idempotencyKey.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DeregistrationRequestCreate"
+              $ref: '#/components/schemas/DeregistrationRequestCreate'
             examples:
               deregRequest:
                 summary: >
@@ -491,186 +487,184 @@ paths:
                   Abmeldeanfrage NB an LFA
                 value:
                   header:
-                    messageId: "MSG-2025-001240"
-                    messageType: "E01"
+                    messageId: MSG-2025-001240
+                    messageType: E01
                     checkIdentifier:
-                      value: "55010"
-                      communicationDirection: "NB→LF"
-                    createdAt: "2025-03-15T17:00:00Z"
+                      value: '55010'
+                      communicationDirection: NB→LF
+                    createdAt: '2025-03-15T17:00:00Z'
                     sender:
                       actorId:
-                        id: "9904132000002"
-                        codingScheme: "293"
-                      marketRole: "NB"
+                        id: '9904132000002'
+                        codingScheme: '293'
+                      marketRole: NB
                     recipient:
                       actorId:
-                        id: "9900111222333"
-                        codingScheme: "293"
-                      marketRole: "LF"
-                  supplyStartId: "SS-2025-00042"
+                        id: '9900111222333'
+                        codingScheme: '293'
+                      marketRole: LF
+                  supplyStartId: SS-2025-00042
                   newSupplierId:
-                    id: "9900987654321"
-                    codingScheme: "293"
-                  requestedSupplyStartDate: "2025-04-01"
+                    id: '9900987654321'
+                    codingScheme: '293'
+                  requestedSupplyStartDate: '2025-04-01'
       responses:
-        "201":
-          description: >
-            Deregistration request created.
-            **German:** Abmeldeanfrage erstellt.
+        '201':
+          description: |
+            Deregistration request created. **German:** Abmeldeanfrage erstellt.
           headers:
             Location:
-              $ref: "../header/openapi.yaml#/components/headers/location"
+              $ref: ../header/openapi.yaml#/components/headers/location
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DeregistrationRequest"
-        "400":
+                $ref: '#/components/schemas/DeregistrationRequest'
+        '400':
           description: Validation error / Validierungsfehler.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "409":
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
           description: >
-            Conflict – deregistration request already exists for this registration.
-            **German:** Konflikt – für diese Anmeldung existiert bereits eine Abmeldeanfrage.
+            Conflict – deregistration request already exists for this
+            registration. **German:** Konflikt – für diese Anmeldung existiert
+            bereits eine Abmeldeanfrage.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-  # ── Step 4: LFA responds ────────────────────────────────────────────────────
+                $ref: '#/components/schemas/ErrorResponse'
   /market-locations/{marketLocationId}/deregistration-requests/{deregistrationRequestId}/response:
     post:
       summary: LFA responds to deregistration request – Prüf-ID 55011 / 55012
       description: >
-        **Step 4 – Response to deregistration request (Beantwortung Abmeldeanfrage).**
-        Previous supplier confirms (case a or b) or objects to deregistration.
+        **Step 4 – Response to deregistration request (Beantwortung
+        Abmeldeanfrage).** Previous supplier confirms (case a or b) or objects
+        to deregistration.
 
         Deadline: by end of 3rd WT after receipt of deregistration request.
 
-        **German:** **Schritt 4 – Beantwortung der Abmeldeanfrage.**
-        Alter Lieferant bestätigt (Fall a oder b) oder widerspricht der Abmeldung.
+        **German:** **Schritt 4 – Beantwortung der Abmeldeanfrage.** Alter
+        Lieferant bestätigt (Fall a oder b) oder widerspricht der Abmeldung.
 
         Frist: bis Ende des 3. WT nach Eingang der Abmeldeanfrage.
       operationId: respondToDeregistrationRequest
       tags:
         - deregistrationRequests
       parameters:
-        - $ref: "#/components/parameters/marketLocationId"
-        - $ref: "#/components/parameters/deregistrationRequestId"
-        - $ref: "../header/headers/xRequestId.yaml"
-        - $ref: "../header/headers/xMessageId.yaml"
-        - $ref: "../header/headers/idempotencyKey.yaml"
+        - $ref: '#/components/parameters/marketLocationId'
+        - $ref: '#/components/parameters/deregistrationRequestId'
+        - $ref: ../header/headers/xRequestId.yaml
+        - $ref: ../header/headers/xMessageId.yaml
+        - $ref: ../header/headers/idempotencyKey.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DeregistrationResponseRequest"
+              $ref: '#/components/schemas/DeregistrationResponseRequest'
             examples:
               confirmCaseA:
                 summary: >
-                  LFA confirms – case a, day before supply start (Prüf-ID 55011) /
-                  LFA bestätigt – Fall a, Tag vor Anmeldedatum
+                  LFA confirms – case a, day before supply start (Prüf-ID 55011)
+                  / LFA bestätigt – Fall a, Tag vor Anmeldedatum
                 value:
                   header:
-                    messageId: "MSG-2025-001260"
-                    messageType: "E04"
+                    messageId: MSG-2025-001260
+                    messageType: E04
                     checkIdentifier:
-                      value: "55011"
-                      communicationDirection: "LF→NB"
-                    createdAt: "2025-03-18T08:00:00Z"
+                      value: '55011'
+                      communicationDirection: LF→NB
+                    createdAt: '2025-03-18T08:00:00Z'
                     sender:
                       actorId:
-                        id: "9900111222333"
-                        codingScheme: "293"
-                      marketRole: "LF"
+                        id: '9900111222333'
+                        codingScheme: '293'
+                      marketRole: LF
                     recipient:
                       actorId:
-                        id: "9904132000002"
-                        codingScheme: "293"
-                      marketRole: "NB"
+                        id: '9904132000002'
+                        codingScheme: '293'
+                      marketRole: NB
                   status:
-                    statusCode: "E01"
-                  deregistrationDate: "2025-03-31"
-                  deregistrationCase: "caseA"
+                    statusCode: E01
+                  deregistrationDate: '2025-03-31'
+                  deregistrationCase: caseA
               objection:
                 summary: >
-                  LFA objects to deregistration (Prüf-ID 55012) /
-                  LFA widerspricht der Abmeldung
+                  LFA objects to deregistration (Prüf-ID 55012) / LFA
+                  widerspricht der Abmeldung
                 value:
                   header:
-                    messageId: "MSG-2025-001261"
-                    messageType: "E05"
+                    messageId: MSG-2025-001261
+                    messageType: E05
                     checkIdentifier:
-                      value: "55012"
-                      communicationDirection: "LF→NB"
-                    createdAt: "2025-03-18T08:30:00Z"
+                      value: '55012'
+                      communicationDirection: LF→NB
+                    createdAt: '2025-03-18T08:30:00Z'
                     sender:
                       actorId:
-                        id: "9900111222333"
-                        codingScheme: "293"
-                      marketRole: "LF"
+                        id: '9900111222333'
+                        codingScheme: '293'
+                      marketRole: LF
                     recipient:
                       actorId:
-                        id: "9904132000002"
-                        codingScheme: "293"
-                      marketRole: "NB"
+                        id: '9904132000002'
+                        codingScheme: '293'
+                      marketRole: NB
                   status:
-                    statusCode: "E03"
-                    rejectionCode: "CONTRACT_ACTIVE"
+                    statusCode: E03
+                    rejectionCode: CONTRACT_ACTIVE
                   rejectionReasons:
-                    - code: "CONTRACT_ACTIVE"
-                      message: "Fixed-term contract runs until 2025-12-31"
+                    - code: CONTRACT_ACTIVE
+                      message: Fixed-term contract runs until 2025-12-31
       responses:
-        "200":
+        '200':
           description: Response processed / Antwort verarbeitet.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DeregistrationRequest"
-        "400":
+                $ref: '#/components/schemas/DeregistrationRequest'
+        '400':
           description: Validation error / Validierungsfehler.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "404":
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
           description: Deregistration request not found / Abmeldeanfrage nicht gefunden.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-  # ── Step 6: assignment termination ─────────────────────────────────────────
+                $ref: '#/components/schemas/ErrorResponse'
   /market-locations/{marketLocationId}/assignment-terminations:
     post:
       summary: NB notifies LFA of assignment termination – Prüf-ID 55037
       description: >
-        **Step 6 – Assignment termination (Beendigung der Zuordnung).**
-        Grid operator informs previous supplier that its assignment has been terminated.
+        **Step 6 – Assignment termination (Beendigung der Zuordnung).** Grid
+        operator informs previous supplier that its assignment has been
+        terminated.
 
         Deadline: same calendar day as step 5 confirmation.
 
-        **German:** **Schritt 6 – Beendigung der Zuordnung.**
-        Netzbetreiber informiert alten Lieferanten über die Beendigung seiner Zuordnung.
+        **German:** **Schritt 6 – Beendigung der Zuordnung.** Netzbetreiber
+        informiert alten Lieferanten über die Beendigung seiner Zuordnung.
 
         Frist: am selben Kalendertag wie Schritt 5 (Bestätigung).
       operationId: notifyAssignmentTermination
       tags:
         - assignments
       parameters:
-        - $ref: "#/components/parameters/marketLocationId"
-        - $ref: "../header/headers/xRequestId.yaml"
-        - $ref: "../header/headers/xMessageId.yaml"
-        - $ref: "../header/headers/idempotencyKey.yaml"
+        - $ref: '#/components/parameters/marketLocationId'
+        - $ref: ../header/headers/xRequestId.yaml
+        - $ref: ../header/headers/xMessageId.yaml
+        - $ref: ../header/headers/idempotencyKey.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AssignmentTerminationCreate"
+              $ref: '#/components/schemas/AssignmentTerminationCreate'
             examples:
               termination:
                 summary: >
@@ -678,72 +672,72 @@ paths:
                   Zuordnungsbeendigung NB an LFA
                 value:
                   header:
-                    messageId: "MSG-2025-001310"
-                    messageType: "E01"
+                    messageId: MSG-2025-001310
+                    messageType: E01
                     checkIdentifier:
-                      value: "55037"
-                      communicationDirection: "NB→LF"
-                    createdAt: "2025-03-18T10:00:00Z"
+                      value: '55037'
+                      communicationDirection: NB→LF
+                    createdAt: '2025-03-18T10:00:00Z'
                     sender:
                       actorId:
-                        id: "9904132000002"
-                        codingScheme: "293"
-                      marketRole: "NB"
+                        id: '9904132000002'
+                        codingScheme: '293'
+                      marketRole: NB
                     recipient:
                       actorId:
-                        id: "9900111222333"
-                        codingScheme: "293"
-                      marketRole: "LF"
-                  assignmentEndDate: "2025-03-31"
-                  terminationReason: "supplierChange"
-                  supplyStartId: "SS-2025-00042"
+                        id: '9900111222333'
+                        codingScheme: '293'
+                      marketRole: LF
+                  assignmentEndDate: '2025-03-31'
+                  terminationReason: supplierChange
+                  supplyStartId: SS-2025-00042
                   newSupplierId:
-                    id: "9900987654321"
-                    codingScheme: "293"
+                    id: '9900987654321'
+                    codingScheme: '293'
       responses:
-        "201":
+        '201':
           description: Notification created / Mitteilung erstellt.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AssignmentTermination"
-        "400":
+                $ref: '#/components/schemas/AssignmentTermination'
+        '400':
           description: Validation error / Validierungsfehler.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-  # ── Step 7: assignment cancellation ────────────────────────────────────────
+                $ref: '#/components/schemas/ErrorResponse'
   /market-locations/{marketLocationId}/assignment-cancellations:
     post:
       summary: NB cancels future assignment of LFZ – Prüf-ID 55038
       description: >
-        **Step 7 – Cancellation of future assignment (Aufhebung zukünftiger Zuordnung).**
-        Grid operator informs future supplier (LFZ) that its future assignment has been
-        cancelled because the new supplier was registered first.
+        **Step 7 – Cancellation of future assignment (Aufhebung zukünftiger
+        Zuordnung).** Grid operator informs future supplier (LFZ) that its
+        future assignment has been cancelled because the new supplier was
+        registered first.
 
         Deadline: same calendar day as step 5 confirmation.
 
         **German:** **Schritt 7 – Aufhebung einer zukünftigen Zuordnung.**
-        Netzbetreiber informiert zukünftigen Lieferanten (LFZ) über die Aufhebung seiner
-        zukünftigen Zuordnung, da ein anderer Lieferant zuerst angemeldet wurde.
+        Netzbetreiber informiert zukünftigen Lieferanten (LFZ) über die
+        Aufhebung seiner zukünftigen Zuordnung, da ein anderer Lieferant zuerst
+        angemeldet wurde.
 
         Frist: am selben Kalendertag wie Schritt 5 (Bestätigung).
       operationId: notifyAssignmentCancellation
       tags:
         - assignments
       parameters:
-        - $ref: "#/components/parameters/marketLocationId"
-        - $ref: "../header/headers/xRequestId.yaml"
-        - $ref: "../header/headers/xMessageId.yaml"
-        - $ref: "../header/headers/idempotencyKey.yaml"
+        - $ref: '#/components/parameters/marketLocationId'
+        - $ref: ../header/headers/xRequestId.yaml
+        - $ref: ../header/headers/xMessageId.yaml
+        - $ref: ../header/headers/idempotencyKey.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AssignmentCancellationCreate"
+              $ref: '#/components/schemas/AssignmentCancellationCreate'
             examples:
               cancellation:
                 summary: >
@@ -751,169 +745,131 @@ paths:
                   Aufhebung zukünftiger Zuordnung NB an LFZ
                 value:
                   header:
-                    messageId: "MSG-2025-001315"
-                    messageType: "E01"
+                    messageId: MSG-2025-001315
+                    messageType: E01
                     checkIdentifier:
-                      value: "55038"
-                      communicationDirection: "NB→LF"
-                    createdAt: "2025-03-18T10:05:00Z"
+                      value: '55038'
+                      communicationDirection: NB→LF
+                    createdAt: '2025-03-18T10:05:00Z'
                     sender:
                       actorId:
-                        id: "9904132000002"
-                        codingScheme: "293"
-                      marketRole: "NB"
+                        id: '9904132000002'
+                        codingScheme: '293'
+                      marketRole: NB
                     recipient:
                       actorId:
-                        id: "9900555666777"
-                        codingScheme: "293"
-                      marketRole: "LF"
-                  cancelledAssignmentFrom: "2025-05-01"
-                  cancellationReason: "priorRegistration"
-                  supplyStartId: "SS-2025-00042"
+                        id: '9900555666777'
+                        codingScheme: '293'
+                      marketRole: LF
+                  cancelledAssignmentFrom: '2025-05-01'
+                  cancellationReason: priorRegistration
+                  supplyStartId: SS-2025-00042
                   newSupplierId:
-                    id: "9900987654321"
-                    codingScheme: "293"
+                    id: '9900987654321'
+                    codingScheme: '293'
       responses:
-        "201":
+        '201':
           description: Cancellation notification created / Aufhebungsmitteilung erstellt.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AssignmentCancellation"
-        "400":
+                $ref: '#/components/schemas/AssignmentCancellation'
+        '400':
           description: Validation error / Validierungsfehler.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-# ─────────────────────────────────────────────────────────────────────────────
+                $ref: '#/components/schemas/ErrorResponse'
 components:
-
-  # ── Parameters ────────────────────────────────────────────────────────────
   parameters:
-
     marketLocationId:
       name: marketLocationId
       in: path
       required: true
       description: >
-        Unique 11-digit market location ID (MaLo-ID).
-        Corresponds to EDIFACT SG5 LOC DE3225, qualifier Z16.
-        **German:** Eindeutige 11-stellige Marktlokations-ID (MaLo-ID).
-        EDIFACT SG5 LOC DE3225, Qualifier Z16.
+        Unique 11-digit market location ID (MaLo-ID). Corresponds to EDIFACT SG5
+        LOC DE3225, qualifier Z16. **German:** Eindeutige 11-stellige
+        Marktlokations-ID (MaLo-ID). EDIFACT SG5 LOC DE3225, Qualifier Z16.
       schema:
-        $ref: "../schema/locations/marketLocation/marketLocationId.yaml"
-
+        $ref: ../schema/locations/marketLocation/marketLocationId.yaml
     supplyStartId:
       name: supplyStartId
       in: path
       required: true
       description: >
-        Unique registration (supply start) request ID.
-        **German:** Eindeutige Anmeldungs-ID (Lieferbeginn-Anfrage).
+        Unique registration (supply start) request ID. **German:** Eindeutige
+        Anmeldungs-ID (Lieferbeginn-Anfrage).
       schema:
         type: string
         maxLength: 35
-        example: "SS-2025-00042"
-
+        example: SS-2025-00042
     deregistrationRequestId:
       name: deregistrationRequestId
       in: path
       required: true
       description: >
-        Unique deregistration request ID.
-        **German:** Eindeutige Abmeldeanfrage-ID.
+        Unique deregistration request ID. **German:** Eindeutige
+        Abmeldeanfrage-ID.
       schema:
         type: string
         maxLength: 35
-        example: "DR-2025-00007"
-
-  # ── Schema aliases (re-export from schema library) ────────────────────────
+        example: DR-2025-00007
   schemas:
-
-    # ── From schema library (direct $ref) ───────────────────────────────────
     MarketLocationId:
-      $ref: "../schema/locations/marketLocation/marketLocationId.yaml"
-
+      $ref: ../schema/locations/marketLocation/marketLocationId.yaml
     CheckIdentifier:
-      $ref: "../schema/message/checkIdentifier.yaml"
-
+      $ref: ../schema/message/checkIdentifier.yaml
     MessageHeader:
-      $ref: "../schema/message/messageHeader.yaml"
-
+      $ref: ../schema/message/messageHeader.yaml
     TransactionStatus:
-      $ref: "../schema/message/transactionStatus.yaml"
-
+      $ref: ../schema/message/transactionStatus.yaml
     TransactionReason:
-      $ref: "../schema/enumerations/transactionReason.yaml"
-
+      $ref: ../schema/enumerations/transactionReason.yaml
     EnergyDirection:
-      $ref: "../schema/enumerations/energyDirection.yaml"
-
+      $ref: ../schema/enumerations/energyDirection.yaml
     MarketRoleCode:
-      $ref: "../schema/enumerations/marketRoleCode.yaml"
-
+      $ref: ../schema/enumerations/marketRoleCode.yaml
     MarketActorId:
-      $ref: "../schema/marketActors/marketActorId.yaml"
-
+      $ref: ../schema/marketActors/marketActorId.yaml
     Address:
-      $ref: "../schema/common/address.yaml"
-
+      $ref: ../schema/common/address.yaml
     ValidityPeriod:
-      $ref: "../schema/common/validityPeriod.yaml"
-
+      $ref: ../schema/common/validityPeriod.yaml
     VoltageLevel:
-      $ref: "../schema/common/voltageLevel.yaml"
-
+      $ref: ../schema/common/voltageLevel.yaml
     ErrorResponse:
-      $ref: "../schema/common/errorResponse.yaml"
-
-    # ── New enumerations (schema/enumerations/) ──────────────────────────────
+      $ref: ../schema/common/errorResponse.yaml
     SupplyStartStatus:
-      $ref: "../schema/enumerations/supplyStartStatus.yaml"
-
+      $ref: ../schema/enumerations/supplyStartStatus.yaml
     IdentificationMode:
-      $ref: "../schema/enumerations/identificationMode.yaml"
-
+      $ref: ../schema/enumerations/identificationMode.yaml
     MeterReadingCycle:
-      $ref: "../schema/enumerations/meterReadingCycle.yaml"
-
+      $ref: ../schema/enumerations/meterReadingCycle.yaml
     TerminationReason:
-      $ref: "../schema/enumerations/terminationReason.yaml"
-
+      $ref: ../schema/enumerations/terminationReason.yaml
     DeregistrationCase:
-      $ref: "../schema/enumerations/deregistrationCase.yaml"
-
-    # ── New domain objects (schema/supplyStart/) ─────────────────────────────
+      $ref: ../schema/enumerations/deregistrationCase.yaml
     RejectionReason:
-      $ref: "../schema/supplyStart/rejectionReason.yaml"
-
+      $ref: ../schema/supplyStart/rejectionReason.yaml
     MarketLocationIdentification:
-      $ref: "../schema/supplyStart/marketLocationIdentification.yaml"
-
+      $ref: ../schema/supplyStart/marketLocationIdentification.yaml
     BalancingAssignment:
-      $ref: "../schema/supplyStart/balancingAssignment.yaml"
-
+      $ref: ../schema/supplyStart/balancingAssignment.yaml
     MasterDataResponse:
-      $ref: "../schema/supplyStart/masterDataResponse.yaml"
-
+      $ref: ../schema/supplyStart/masterDataResponse.yaml
     SupplyStart:
-      $ref: "../schema/supplyStart/supplyStart.yaml"
-
+      $ref: ../schema/supplyStart/supplyStart.yaml
     SupplyStartList:
-      $ref: "../schema/supplyStart/supplyStartList.yaml"
-
-    # ── Inline request bodies (only needed for API layer, not reused) ─────────
-
+      $ref: ../schema/supplyStart/supplyStartList.yaml
     SupplyStartCreateRequest:
       type: object
       title: SupplyStartCreateRequest
       description: >
-        Request body for submitting a new registration (Anmeldung) from LFN to NB.
-        Prüf-ID 55001 (consuming MaLo) or 55077 (generating MaLo).
-        **German:** Anfragekörper für die Anmeldung des neuen Lieferanten (LFN) beim
-        Netzbetreiber (NB). Prüf-ID 55001 (verbrauchende MaLo) oder 55077 (erzeugende MaLo).
+        Request body for submitting a new registration (Anmeldung) from LFN to
+        NB. Prüf-ID 55001 (consuming MaLo) or 55077 (generating MaLo).
+        **German:** Anfragekörper für die Anmeldung des neuen Lieferanten (LFN)
+        beim Netzbetreiber (NB). Prüf-ID 55001 (verbrauchende MaLo) oder 55077
+        (erzeugende MaLo).
       x-i18n:
         de:
           title: Anmeldung – Anfragekörper
@@ -928,86 +884,87 @@ components:
         - balancing
       properties:
         header:
-          $ref: "../schema/message/messageHeader.yaml"
+          $ref: ../schema/message/messageHeader.yaml
         supplyStartDate:
           type: string
           format: date
           description: >
             Requested supply start date (Anmeldedatum). ISO 8601 date.
-            Corresponds to EDIFACT SG4 DTM qualifier 92.
-            **German:** Gewünschtes Lieferbeginn-Datum (Anmeldedatum). ISO 8601-Datum.
-            EDIFACT SG4 DTM Qualifier 92.
+            Corresponds to EDIFACT SG4 DTM qualifier 92. **German:** Gewünschtes
+            Lieferbeginn-Datum (Anmeldedatum). ISO 8601-Datum. EDIFACT SG4 DTM
+            Qualifier 92.
           x-i18n:
             de:
               description: Gewünschtes Lieferbeginn-Datum. ISO 8601. EDIFACT SG4 DTM Q92.
           examples:
             QuarterStart:
-              summary: "QuarterStart"
-              value: "2025-04-01"
+              summary: QuarterStart
+              value: '2025-04-01'
             YearStart:
-              summary: "YearStart"
-              value: "2026-01-01"
+              summary: YearStart
+              value: '2026-01-01'
           x-examples-i18n:
             de:
-              QuarterStart: "Quartalsbeginn"
-              YearStart: "Jahresbeginn"
+              QuarterStart: Quartalsbeginn
+              YearStart: Jahresbeginn
         requestedStartDateForNewConnection:
           type: string
           format: date
           nullable: true
           description: >
-            Estimated supply start date for a new connection (Neuanlage), as communicated
-            by the customer. Only set when transactionReason = ZA2.
-            **German:** Voraussichtliches Lieferbeginn-Datum bei Neuanlage (ZA2), vom Kunden mitgeteilt.
+            Estimated supply start date for a new connection (Neuanlage), as
+            communicated by the customer. Only set when transactionReason = ZA2.
+            **German:** Voraussichtliches Lieferbeginn-Datum bei Neuanlage
+            (ZA2), vom Kunden mitgeteilt.
           x-i18n:
             de:
               description: Voraussichtliches Anmeldedatum bei Neuanlage (nur bei ZA2).
         transactionReason:
-          $ref: "../schema/enumerations/transactionReason.yaml"
+          $ref: ../schema/enumerations/transactionReason.yaml
         isHouseholdCustomer:
           type: boolean
           description: >
-            Whether the end customer is a household customer (Haushaltskunde, EnWG).
-            **German:** Haushaltskunde im Sinne des EnWG (ja/nein).
+            Whether the end customer is a household customer (Haushaltskunde,
+            EnWG). **German:** Haushaltskunde im Sinne des EnWG (ja/nein).
           x-i18n:
             de:
               description: Haushaltskunde im Sinne des EnWG (ja/nein).
           examples:
             Household:
-              summary: "Household"
+              summary: Household
               value: true
             Commercial:
-              summary: "Commercial"
+              summary: Commercial
               value: false
           x-examples-i18n:
             de:
-              Household: "Haushaltskunde"
-              Commercial: "Gewerbe-/Industriekunde"
+              Household: Haushaltskunde
+              Commercial: Gewerbe-/Industriekunde
         marketLocationIdentification:
-          $ref: "../schema/supplyStart/marketLocationIdentification.yaml"
+          $ref: ../schema/supplyStart/marketLocationIdentification.yaml
         energyDirection:
-          $ref: "../schema/enumerations/energyDirection.yaml"
+          $ref: ../schema/enumerations/energyDirection.yaml
         balancing:
-          $ref: "../schema/supplyStart/balancingAssignment.yaml"
+          $ref: ../schema/supplyStart/balancingAssignment.yaml
         meterReadingCycle:
-          $ref: "../schema/enumerations/meterReadingCycle.yaml"
+          $ref: ../schema/enumerations/meterReadingCycle.yaml
         notes:
           type: string
           maxLength: 500
           nullable: true
           description: >
-            Free-text notes for internal use. Not transmitted to the grid operator.
-            **German:** Freitext-Notizen für den internen Gebrauch. Werden nicht an den NB übermittelt.
+            Free-text notes for internal use. Not transmitted to the grid
+            operator. **German:** Freitext-Notizen für den internen Gebrauch.
+            Werden nicht an den NB übermittelt.
           x-i18n:
             de:
               description: Freitext-Notizen (intern, nicht an NB übermittelt).
-
     SupplyStartPatchRequest:
       type: object
       title: SupplyStartPatchRequest
       description: >
-        Mutable fields of a registration that can be updated while status = draft.
-        **German:** Änderbare Felder einer Anmeldung im Status draft.
+        Mutable fields of a registration that can be updated while status =
+        draft. **German:** Änderbare Felder einer Anmeldung im Status draft.
       x-i18n:
         de:
           title: Anmeldung-Patch-Anfrage
@@ -1017,112 +974,115 @@ components:
           type: string
           format: date
           description: >
-            Updated requested supply start date (ISO 8601).
-            **German:** Aktualisiertes gewünschtes Lieferbeginn-Datum (ISO 8601).
+            Updated requested supply start date (ISO 8601). **German:**
+            Aktualisiertes gewünschtes Lieferbeginn-Datum (ISO 8601).
           x-i18n:
             de:
               description: Aktualisiertes Lieferbeginn-Datum (ISO 8601).
         isHouseholdCustomer:
           type: boolean
           description: >
-            Updated household customer flag.
-            **German:** Aktualisiertes Haushaltskunden-Kennzeichen.
+            Updated household customer flag. **German:** Aktualisiertes
+            Haushaltskunden-Kennzeichen.
           x-i18n:
             de:
               description: Aktualisiertes Haushaltskunden-Kennzeichen.
         marketLocationIdentification:
-          $ref: "../schema/supplyStart/marketLocationIdentification.yaml"
+          $ref: ../schema/supplyStart/marketLocationIdentification.yaml
         balancing:
-          $ref: "../schema/supplyStart/balancingAssignment.yaml"
+          $ref: ../schema/supplyStart/balancingAssignment.yaml
         meterReadingCycle:
-          $ref: "../schema/enumerations/meterReadingCycle.yaml"
+          $ref: ../schema/enumerations/meterReadingCycle.yaml
         notes:
           type: string
           maxLength: 500
           nullable: true
-          description: >
-            Free-text notes.
-            **German:** Freitext-Notizen.
+          description: |
+            Free-text notes. **German:** Freitext-Notizen.
           x-i18n:
             de:
               description: Freitext-Notizen.
-
     RegistrationResponseRequest:
       type: object
       title: RegistrationResponseRequest
       description: >
         Request body for the grid operator (NB) response to a registration.
         Prüf-ID 55002 / 55078 (confirmation) or 55003 / 55080 (rejection).
-        **German:** Anfragekörper für die NB-Antwort auf eine Anmeldung.
-        Prüf-ID 55002 / 55078 (Bestätigung) oder 55003 / 55080 (Ablehnung).
+        **German:** Anfragekörper für die NB-Antwort auf eine Anmeldung. Prüf-ID
+        55002 / 55078 (Bestätigung) oder 55003 / 55080 (Ablehnung).
       x-i18n:
         de:
           title: Anmeldungsantwort NB – Anfragekörper
-          description: NB-Antwort (Bestätigung oder Ablehnung). Prüf-ID 55002/55078 oder 55003/55080.
+          description: >-
+            NB-Antwort (Bestätigung oder Ablehnung). Prüf-ID 55002/55078 oder
+            55003/55080.
       required:
         - header
         - status
       properties:
         header:
-          $ref: "../schema/message/messageHeader.yaml"
+          $ref: ../schema/message/messageHeader.yaml
         status:
-          $ref: "../schema/message/transactionStatus.yaml"
+          $ref: ../schema/message/transactionStatus.yaml
         effectiveSupplyStartDate:
           type: string
           format: date
           nullable: true
           description: >
-            Confirmed effective supply start date (set only on confirmation, statusCode = E01).
-            **German:** Bestätigtes wirksames Lieferbeginn-Datum (nur bei Bestätigung, statusCode = E01).
+            Confirmed effective supply start date (set only on confirmation,
+            statusCode = E01). **German:** Bestätigtes wirksames
+            Lieferbeginn-Datum (nur bei Bestätigung, statusCode = E01).
           x-i18n:
             de:
-              description: Bestätigtes wirksames Lieferbeginn-Datum (nur bei statusCode = E01).
+              description: >-
+                Bestätigtes wirksames Lieferbeginn-Datum (nur bei statusCode =
+                E01).
           examples:
             Confirmed:
-              summary: "Confirmed"
-              value: "2025-04-01"
+              summary: Confirmed
+              value: '2025-04-01'
           x-examples-i18n:
             de:
-              Confirmed: "Bestätigter Lieferbeginn"
+              Confirmed: Bestätigter Lieferbeginn
         previousSupplierEndDate:
           type: string
           format: date
           nullable: true
           description: >
-            End date of the previous supplier's assignment (set only on confirmation).
-            **German:** Enddatum der Zuordnung des alten Lieferanten (nur bei Bestätigung gesetzt).
+            End date of the previous supplier's assignment (set only on
+            confirmation). **German:** Enddatum der Zuordnung des alten
+            Lieferanten (nur bei Bestätigung gesetzt).
           x-i18n:
             de:
               description: Enddatum der LFA-Zuordnung (nur bei Bestätigung).
           examples:
             EndDate:
-              summary: "EndDate"
-              value: "2025-03-31"
+              summary: EndDate
+              value: '2025-03-31'
           x-examples-i18n:
             de:
-              EndDate: "Enddatum LFA-Zuordnung"
+              EndDate: Enddatum LFA-Zuordnung
         masterData:
-          $ref: "../schema/supplyStart/masterDataResponse.yaml"
+          $ref: ../schema/supplyStart/masterDataResponse.yaml
         rejectionReasons:
           type: array
           nullable: true
           items:
-            $ref: "../schema/supplyStart/rejectionReason.yaml"
+            $ref: ../schema/supplyStart/rejectionReason.yaml
           description: >
             Rejection reasons (set only on rejection, statusCode = E03).
             **German:** Ablehnungsgründe (nur bei Ablehnung, statusCode = E03).
           x-i18n:
             de:
               description: Ablehnungsgründe (nur bei statusCode = E03).
-
     DeregistrationRequestCreate:
       type: object
       title: DeregistrationRequestCreate
       description: >
-        Request body for the grid operator (NB) to notify the previous supplier (LFA)
-        of the new registration and inquire about deregistration. Prüf-ID 55010.
-        **German:** Anfragekörper für die Abmeldeanfrage des Netzbetreibers (NB)
-        an den alten Lieferanten (LFA). Prüf-ID 55010.
+        Request body for the grid operator (NB) to notify the previous supplier
+        (LFA) of the new registration and inquire about deregistration. Prüf-ID
+        55010. **German:** Anfragekörper für die Abmeldeanfrage des
+        Netzbetreibers (NB) an den alten Lieferanten (LFA). Prüf-ID 55010.
       x-i18n:
         de:
           title: Abmeldeanfrage – Anfragekörper
@@ -1134,48 +1094,50 @@ components:
         - requestedSupplyStartDate
       properties:
         header:
-          $ref: "../schema/message/messageHeader.yaml"
+          $ref: ../schema/message/messageHeader.yaml
         supplyStartId:
           type: string
           maxLength: 35
           description: >
-            ID of the originating registration request that triggered this deregistration inquiry.
-            **German:** ID der auslösenden Anmeldung, die diese Abmeldeanfrage verursacht hat.
+            ID of the originating registration request that triggered this
+            deregistration inquiry. **German:** ID der auslösenden Anmeldung,
+            die diese Abmeldeanfrage verursacht hat.
           x-i18n:
             de:
               description: ID der auslösenden Anmeldung.
           examples:
             Reg1:
-              summary: "Reg1"
-              value: "SS-2025-00042"
+              summary: Reg1
+              value: SS-2025-00042
           x-examples-i18n:
             de:
-              Reg1: "Auslösende Anmeldung"
+              Reg1: Auslösende Anmeldung
         newSupplierId:
-          $ref: "../schema/marketActors/marketActorId.yaml"
+          $ref: ../schema/marketActors/marketActorId.yaml
         requestedSupplyStartDate:
           type: string
           format: date
           description: >
             The supply start date requested by the new supplier (LFN).
-            **German:** Das vom neuen Lieferanten (LFN) gewünschte Lieferbeginn-Datum.
+            **German:** Das vom neuen Lieferanten (LFN) gewünschte
+            Lieferbeginn-Datum.
           x-i18n:
             de:
               description: Vom LFN gewünschtes Lieferbeginn-Datum.
           examples:
             Q2Start:
-              summary: "Q2Start"
-              value: "2025-04-01"
+              summary: Q2Start
+              value: '2025-04-01'
           x-examples-i18n:
             de:
-              Q2Start: "Quartalsbeginn Q2 2025"
-
+              Q2Start: Quartalsbeginn Q2 2025
     DeregistrationRequest:
       type: object
       title: DeregistrationRequest
       description: >
         Full representation of a deregistration request and its response state.
-        **German:** Vollständige Darstellung einer Abmeldeanfrage und ihres Antwortstatus.
+        **German:** Vollständige Darstellung einer Abmeldeanfrage und ihres
+        Antwortstatus.
       x-i18n:
         de:
           title: Abmeldeanfrage (vollständig)
@@ -1191,24 +1153,25 @@ components:
           maxLength: 35
           readOnly: true
           description: >
-            Unique deregistration request ID.
-            **German:** Eindeutige Abmeldeanfrage-ID.
+            Unique deregistration request ID. **German:** Eindeutige
+            Abmeldeanfrage-ID.
           x-i18n:
             de:
               description: Eindeutige Abmeldeanfrage-ID.
           examples:
             DR1:
-              summary: "DR1"
-              value: "DR-2025-00007"
+              summary: DR1
+              value: DR-2025-00007
           x-examples-i18n:
             de:
-              DR1: "Abmeldeanfrage Beispiel"
+              DR1: Abmeldeanfrage Beispiel
         supplyStartId:
           type: string
           maxLength: 35
           description: >
             ID of the registration that triggered this deregistration request.
-            **German:** ID der Anmeldung, die diese Abmeldeanfrage ausgelöst hat.
+            **German:** ID der Anmeldung, die diese Abmeldeanfrage ausgelöst
+            hat.
           x-i18n:
             de:
               description: ID der auslösenden Anmeldung.
@@ -1227,28 +1190,28 @@ components:
             - expired
           x-enum-descriptions:
             pending:
-              en: "Awaiting response from previous supplier (LFA)"
-              de: "Warte auf Antwort des alten Lieferanten (LFA)"
+              en: Awaiting response from previous supplier (LFA)
+              de: Warte auf Antwort des alten Lieferanten (LFA)
             confirmed:
-              en: "LFA confirmed deregistration (Prüf-ID 55011)"
-              de: "LFA hat die Abmeldung bestätigt (Prüf-ID 55011)"
+              en: LFA confirmed deregistration (Prüf-ID 55011)
+              de: LFA hat die Abmeldung bestätigt (Prüf-ID 55011)
             objected:
-              en: "LFA objected to deregistration (Prüf-ID 55012)"
-              de: "LFA hat der Abmeldung widersprochen (Prüf-ID 55012)"
+              en: LFA objected to deregistration (Prüf-ID 55012)
+              de: LFA hat der Abmeldung widersprochen (Prüf-ID 55012)
             expired:
-              en: "Response deadline passed without answer from LFA"
-              de: "Antwortfrist abgelaufen ohne Rückmeldung des LFA"
+              en: Response deadline passed without answer from LFA
+              de: Antwortfrist abgelaufen ohne Rückmeldung des LFA
           examples:
             Pending:
-              summary: "Pending"
-              value: "pending"
+              summary: Pending
+              value: pending
             Confirmed:
-              summary: "Confirmed"
-              value: "confirmed"
+              summary: Confirmed
+              value: confirmed
           x-examples-i18n:
             de:
-              Pending: "Ausstehend"
-              Confirmed: "Bestätigt"
+              Pending: Ausstehend
+              Confirmed: Bestätigt
         createdAt:
           type: string
           format: date-time
@@ -1265,36 +1228,40 @@ components:
           nullable: true
           readOnly: true
           description: >
-            Confirmed deregistration end date (set after LFA confirmation, deregistrationStatus = confirmed).
-            **German:** Bestätigtes Abmeldedatum (nach LFA-Bestätigung gesetzt).
+            Confirmed deregistration end date (set after LFA confirmation,
+            deregistrationStatus = confirmed). **German:** Bestätigtes
+            Abmeldedatum (nach LFA-Bestätigung gesetzt).
           x-i18n:
             de:
-              description: Bestätigtes Abmeldedatum (nur bei deregistrationStatus = confirmed).
+              description: >-
+                Bestätigtes Abmeldedatum (nur bei deregistrationStatus =
+                confirmed).
         deregistrationCase:
-          $ref: "../schema/enumerations/deregistrationCase.yaml"
+          $ref: ../schema/enumerations/deregistrationCase.yaml
         rejectionReasons:
           type: array
           nullable: true
           readOnly: true
           items:
-            $ref: "../schema/supplyStart/rejectionReason.yaml"
+            $ref: ../schema/supplyStart/rejectionReason.yaml
           description: >
             LFA's objection reasons (only when deregistrationStatus = objected).
-            **German:** Widerspruchsgründe des LFA (nur bei deregistrationStatus = objected).
+            **German:** Widerspruchsgründe des LFA (nur bei deregistrationStatus
+            = objected).
           x-i18n:
             de:
               description: Widerspruchsgründe des LFA.
         label:
-          $ref: "../schema/common/multilingualLabel.yaml"
-
+          $ref: ../schema/common/multilingualLabel.yaml
     DeregistrationResponseRequest:
       type: object
       title: DeregistrationResponseRequest
       description: >
-        Request body for the previous supplier (LFA) response to a deregistration request.
-        Prüf-ID 55011 (confirmation) or 55012 (objection).
-        **German:** Anfragekörper für die Antwort des alten Lieferanten (LFA) auf eine
-        Abmeldeanfrage. Prüf-ID 55011 (Bestätigung) oder 55012 (Widerspruch).
+        Request body for the previous supplier (LFA) response to a
+        deregistration request. Prüf-ID 55011 (confirmation) or 55012
+        (objection). **German:** Anfragekörper für die Antwort des alten
+        Lieferanten (LFA) auf eine Abmeldeanfrage. Prüf-ID 55011 (Bestätigung)
+        oder 55012 (Widerspruch).
       x-i18n:
         de:
           title: Antwort auf Abmeldeanfrage – Anfragekörper
@@ -1304,53 +1271,55 @@ components:
         - status
       properties:
         header:
-          $ref: "../schema/message/messageHeader.yaml"
+          $ref: ../schema/message/messageHeader.yaml
         status:
-          $ref: "../schema/message/transactionStatus.yaml"
+          $ref: ../schema/message/transactionStatus.yaml
         deregistrationDate:
           type: string
           format: date
           nullable: true
           description: >
-            Confirmed deregistration end date. Case a: day before supply start date.
-            Case b: an earlier date. Null on objection (statusCode = E03).
-            **German:** Bestätigtes Abmeldedatum. Fall a: Tag vor dem Anmeldedatum.
-            Fall b: ein früheres Datum. Null bei Widerspruch (statusCode = E03).
+            Confirmed deregistration end date. Case a: day before supply start
+            date. Case b: an earlier date. Null on objection (statusCode = E03).
+            **German:** Bestätigtes Abmeldedatum. Fall a: Tag vor dem
+            Anmeldedatum. Fall b: ein früheres Datum. Null bei Widerspruch
+            (statusCode = E03).
           x-i18n:
             de:
-              description: Bestätigtes Abmeldedatum. Fall a oder Fall b. Null bei Widerspruch.
+              description: >-
+                Bestätigtes Abmeldedatum. Fall a oder Fall b. Null bei
+                Widerspruch.
           examples:
             CaseA:
-              summary: "CaseA"
-              value: "2025-03-31"
+              summary: CaseA
+              value: '2025-03-31'
             CaseB:
-              summary: "CaseB"
-              value: "2025-02-28"
+              summary: CaseB
+              value: '2025-02-28'
           x-examples-i18n:
             de:
-              CaseA: "Fall a – Tag vor Anmeldedatum"
-              CaseB: "Fall b – früheres Datum"
+              CaseA: Fall a – Tag vor Anmeldedatum
+              CaseB: Fall b – früheres Datum
         deregistrationCase:
-          $ref: "../schema/enumerations/deregistrationCase.yaml"
+          $ref: ../schema/enumerations/deregistrationCase.yaml
         rejectionReasons:
           type: array
           nullable: true
           items:
-            $ref: "../schema/supplyStart/rejectionReason.yaml"
+            $ref: ../schema/supplyStart/rejectionReason.yaml
           description: >
-            Objection reasons (only on objection, statusCode = E03).
-            **German:** Widerspruchsgründe (nur bei statusCode = E03).
+            Objection reasons (only on objection, statusCode = E03). **German:**
+            Widerspruchsgründe (nur bei statusCode = E03).
           x-i18n:
             de:
               description: Widerspruchsgründe (nur bei statusCode = E03).
-
     AssignmentTerminationCreate:
       type: object
       title: AssignmentTerminationCreate
       description: >
-        Request body for the NB notification to LFA about assignment termination. Prüf-ID 55037.
-        **German:** Anfragekörper für die Mitteilung des NB an den LFA über
-        die Zuordnungsbeendigung. Prüf-ID 55037.
+        Request body for the NB notification to LFA about assignment
+        termination. Prüf-ID 55037. **German:** Anfragekörper für die Mitteilung
+        des NB an den LFA über die Zuordnungsbeendigung. Prüf-ID 55037.
       x-i18n:
         de:
           title: Zuordnungsbeendigung – Anfragekörper
@@ -1363,59 +1332,62 @@ components:
         - newSupplierId
       properties:
         header:
-          $ref: "../schema/message/messageHeader.yaml"
+          $ref: ../schema/message/messageHeader.yaml
         assignmentEndDate:
           type: string
           format: date
           description: >
-            Date on which the previous supplier's (LFA) assignment at this market location ends.
-            **German:** Datum, zu dem die Zuordnung des alten Lieferanten (LFA)
-            an dieser Marktlokation endet.
+            Date on which the previous supplier's (LFA) assignment at this
+            market location ends. **German:** Datum, zu dem die Zuordnung des
+            alten Lieferanten (LFA) an dieser Marktlokation endet.
           x-i18n:
             de:
               description: Enddatum der LFA-Zuordnung an dieser Marktlokation.
           examples:
             MarchEnd:
-              summary: "MarchEnd"
-              value: "2025-03-31"
+              summary: MarchEnd
+              value: '2025-03-31'
             JuneEnd:
-              summary: "JuneEnd"
-              value: "2025-06-30"
+              summary: JuneEnd
+              value: '2025-06-30'
           x-examples-i18n:
             de:
-              MarchEnd: "Monatsende März 2025"
-              JuneEnd: "Monatsende Juni 2025"
+              MarchEnd: Monatsende März 2025
+              JuneEnd: Monatsende Juni 2025
         terminationReason:
-          $ref: "../schema/enumerations/terminationReason.yaml"
+          $ref: ../schema/enumerations/terminationReason.yaml
         supplyStartId:
           type: string
           maxLength: 35
           description: >
             ID of the registration that caused this assignment termination.
-            **German:** ID der Anmeldung, die diese Zuordnungsbeendigung ausgelöst hat.
+            **German:** ID der Anmeldung, die diese Zuordnungsbeendigung
+            ausgelöst hat.
           x-i18n:
             de:
               description: ID der auslösenden Anmeldung.
           examples:
             SS1:
-              summary: "SS1"
-              value: "SS-2025-00042"
+              summary: SS1
+              value: SS-2025-00042
           x-examples-i18n:
             de:
-              SS1: "Auslösende Anmeldung"
+              SS1: Auslösende Anmeldung
         newSupplierId:
-          $ref: "../schema/marketActors/marketActorId.yaml"
-
+          $ref: ../schema/marketActors/marketActorId.yaml
     AssignmentTermination:
       type: object
       title: AssignmentTermination
       description: >
-        Record of an assignment termination notification sent by NB to LFA. Prüf-ID 55037.
-        **German:** Datensatz einer Zuordnungsbeendigungsmitteilung des NB an den LFA. Prüf-ID 55037.
+        Record of an assignment termination notification sent by NB to LFA.
+        Prüf-ID 55037. **German:** Datensatz einer
+        Zuordnungsbeendigungsmitteilung des NB an den LFA. Prüf-ID 55037.
       x-i18n:
         de:
           title: Zuordnungsbeendigung (vollständig)
-          description: Datensatz der Zuordnungsbeendigungsmitteilung NB → LFA. Prüf-ID 55037.
+          description: >-
+            Datensatz der Zuordnungsbeendigungsmitteilung NB → LFA. Prüf-ID
+            55037.
       required:
         - terminationId
         - createdAt
@@ -1427,25 +1399,25 @@ components:
           maxLength: 35
           readOnly: true
           description: >
-            Unique assignment termination notification ID.
-            **German:** Eindeutige ID der Zuordnungsbeendigungsmitteilung.
+            Unique assignment termination notification ID. **German:**
+            Eindeutige ID der Zuordnungsbeendigungsmitteilung.
           x-i18n:
             de:
               description: Eindeutige ID der Zuordnungsbeendigungsmitteilung.
           examples:
             AT1:
-              summary: "AT1"
-              value: "AT-2025-00003"
+              summary: AT1
+              value: AT-2025-00003
           x-examples-i18n:
             de:
-              AT1: "Zuordnungsbeendigung Beispiel"
+              AT1: Zuordnungsbeendigung Beispiel
         createdAt:
           type: string
           format: date-time
           readOnly: true
           description: >
-            Timestamp when the notification was created (ISO 8601).
-            **German:** Erstellungszeitpunkt der Mitteilung (ISO 8601).
+            Timestamp when the notification was created (ISO 8601). **German:**
+            Erstellungszeitpunkt der Mitteilung (ISO 8601).
           x-i18n:
             de:
               description: Erstellungszeitpunkt der Mitteilung (ISO 8601).
@@ -1453,28 +1425,29 @@ components:
           type: string
           format: date
           description: >
-            Date on which the previous supplier's assignment ends.
-            **German:** Enddatum der Zuordnung des alten Lieferanten.
+            Date on which the previous supplier's assignment ends. **German:**
+            Enddatum der Zuordnung des alten Lieferanten.
           x-i18n:
             de:
               description: Enddatum der LFA-Zuordnung.
         terminationReason:
-          $ref: "../schema/enumerations/terminationReason.yaml"
+          $ref: ../schema/enumerations/terminationReason.yaml
         label:
-          $ref: "../schema/common/multilingualLabel.yaml"
-
+          $ref: ../schema/common/multilingualLabel.yaml
     AssignmentCancellationCreate:
       type: object
       title: AssignmentCancellationCreate
       description: >
-        Request body for the NB notification to LFZ about cancellation of its future assignment.
-        Prüf-ID 55038.
-        **German:** Anfragekörper für die Mitteilung des NB an den LFZ über
-        die Aufhebung seiner zukünftigen Zuordnung. Prüf-ID 55038.
+        Request body for the NB notification to LFZ about cancellation of its
+        future assignment. Prüf-ID 55038. **German:** Anfragekörper für die
+        Mitteilung des NB an den LFZ über die Aufhebung seiner zukünftigen
+        Zuordnung. Prüf-ID 55038.
       x-i18n:
         de:
           title: Zuordnungsaufhebung – Anfragekörper
-          description: Mitteilung NB an LFZ über Aufhebung zukünftiger Zuordnung. Prüf-ID 55038.
+          description: >-
+            Mitteilung NB an LFZ über Aufhebung zukünftiger Zuordnung. Prüf-ID
+            55038.
       required:
         - header
         - cancelledAssignmentFrom
@@ -1483,29 +1456,30 @@ components:
         - newSupplierId
       properties:
         header:
-          $ref: "../schema/message/messageHeader.yaml"
+          $ref: ../schema/message/messageHeader.yaml
         cancelledAssignmentFrom:
           type: string
           format: date
           description: >
             Date from which the future supplier's (LFZ) assignment is cancelled.
-            **German:** Datum, ab dem die zukünftige Zuordnung des LFZ aufgehoben wird.
+            **German:** Datum, ab dem die zukünftige Zuordnung des LFZ
+            aufgehoben wird.
           x-i18n:
             de:
               description: Datum ab dem die LFZ-Zuordnung aufgehoben wird.
           examples:
             MayStart:
-              summary: "MayStart"
-              value: "2025-05-01"
+              summary: MayStart
+              value: '2025-05-01'
             JulyStart:
-              summary: "JulyStart"
-              value: "2025-07-01"
+              summary: JulyStart
+              value: '2025-07-01'
           x-examples-i18n:
             de:
-              MayStart: "Beginn Mai 2025"
-              JulyStart: "Beginn Juli 2025"
+              MayStart: Beginn Mai 2025
+              JulyStart: Beginn Juli 2025
         cancellationReason:
-          $ref: "../schema/enumerations/terminationReason.yaml"
+          $ref: ../schema/enumerations/terminationReason.yaml
         supplyStartId:
           type: string
           maxLength: 35
@@ -1517,24 +1491,26 @@ components:
               description: ID der auslösenden Anmeldung.
           examples:
             SS1:
-              summary: "SS1"
-              value: "SS-2025-00042"
+              summary: SS1
+              value: SS-2025-00042
           x-examples-i18n:
             de:
-              SS1: "Auslösende Anmeldung"
+              SS1: Auslösende Anmeldung
         newSupplierId:
-          $ref: "../schema/marketActors/marketActorId.yaml"
-
+          $ref: ../schema/marketActors/marketActorId.yaml
     AssignmentCancellation:
       type: object
       title: AssignmentCancellation
       description: >
-        Record of an assignment cancellation notification sent by NB to LFZ. Prüf-ID 55038.
-        **German:** Datensatz einer Zuordnungsaufhebungsmitteilung des NB an den LFZ. Prüf-ID 55038.
+        Record of an assignment cancellation notification sent by NB to LFZ.
+        Prüf-ID 55038. **German:** Datensatz einer
+        Zuordnungsaufhebungsmitteilung des NB an den LFZ. Prüf-ID 55038.
       x-i18n:
         de:
           title: Zuordnungsaufhebung (vollständig)
-          description: Datensatz der Zuordnungsaufhebungsmitteilung NB → LFZ. Prüf-ID 55038.
+          description: >-
+            Datensatz der Zuordnungsaufhebungsmitteilung NB → LFZ. Prüf-ID
+            55038.
       required:
         - cancellationId
         - createdAt
@@ -1546,25 +1522,25 @@ components:
           maxLength: 35
           readOnly: true
           description: >
-            Unique assignment cancellation notification ID.
-            **German:** Eindeutige ID der Zuordnungsaufhebungsmitteilung.
+            Unique assignment cancellation notification ID. **German:**
+            Eindeutige ID der Zuordnungsaufhebungsmitteilung.
           x-i18n:
             de:
               description: Eindeutige ID der Zuordnungsaufhebungsmitteilung.
           examples:
             AC1:
-              summary: "AC1"
-              value: "AC-2025-00001"
+              summary: AC1
+              value: AC-2025-00001
           x-examples-i18n:
             de:
-              AC1: "Zuordnungsaufhebung Beispiel"
+              AC1: Zuordnungsaufhebung Beispiel
         createdAt:
           type: string
           format: date-time
           readOnly: true
           description: >
-            Timestamp when the notification was created (ISO 8601).
-            **German:** Erstellungszeitpunkt der Mitteilung (ISO 8601).
+            Timestamp when the notification was created (ISO 8601). **German:**
+            Erstellungszeitpunkt der Mitteilung (ISO 8601).
           x-i18n:
             de:
               description: Erstellungszeitpunkt (ISO 8601).
@@ -1573,21 +1549,19 @@ components:
           format: date
           description: >
             Date from which the future assignment of LFZ is cancelled.
-            **German:** Datum ab dem die zukünftige Zuordnung des LFZ aufgehoben ist.
+            **German:** Datum ab dem die zukünftige Zuordnung des LFZ aufgehoben
+            ist.
           x-i18n:
             de:
               description: Datum der Aufhebung der LFZ-Zuordnung.
         cancellationReason:
-          $ref: "../schema/enumerations/terminationReason.yaml"
+          $ref: ../schema/enumerations/terminationReason.yaml
         label:
-          $ref: "../schema/common/multilingualLabel.yaml"
-
-  # ── Security ───────────────────────────────────────────────────────────────
+          $ref: ../schema/common/multilingualLabel.yaml
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-
 security:
   - bearerAuth: []
