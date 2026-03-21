@@ -2,21 +2,23 @@ openapi: "3.0.3"
 info:
   title: BDEW UTILMD Electricity Market API
   description: |
-    OpenAPI 3.0 schema for the BDEW UTILMD (Utility Master Data) electricity market 
+    OpenAPI 3.0 schema for the BDEW UTILMD (Utility Master Data) electricity market
     communication standard. Based on the UTILMD Anwendungshandbuch (AHB) Strom Version 2.1,
     published by BDEW (Bundesverband der Energie- und Wasserwirtschaft e.V.).
-    
+
     This API covers market processes for electricity including:
     - Market location (Marktlokation / MaLo) management
-    - Grid location (Netzlokation / NeLo) management  
+    - Grid location (Netzlokation / NeLo) management
     - Metering location (Messlokation / MeLo) management
     - Market actor and role assignment
     - Metering device management
     - Location bundle structures
     - Message communication (EDIFACT UTILMD)
-    
+    - Supply start / supplier change (GPKE Lieferbeginn)
+
     **German:** API für die BDEW UTILMD Marktkommunikation Strom gemäß
-    Anwendungshandbuch Version 2.1 (Stand: 11.12.2025).
+    Anwendungshandbuch Version 2.1 (Stand: 11.12.2025) sowie den GPKE-Prozess
+    Lieferbeginn (GPKE Teil 2).
   version: "2.1.0"
   contact:
     name: BDEW
@@ -48,6 +50,8 @@ tags:
     description: UTILMD messages / UTILMD-Nachrichten
   - name: balancing
     description: Balancing areas and zones / Bilanzierungsgebiete und -kreise
+  - name: supplyStart
+    description: Supply start / supplier change (GPKE Lieferbeginn) / Lieferbeginn (Lieferantenwechsel)
 
 paths:
   /marketLocations:
@@ -63,7 +67,8 @@ paths:
 
 components:
   schemas:
-    # Common
+
+    # ── Common ────────────────────────────────────────────────────────────────
     multilingualLabel:
       $ref: "./common/multilingualLabel.yaml"
     validityPeriod:
@@ -81,7 +86,8 @@ components:
     pagedResponse:
       $ref: "./common/pagedResponse.yaml"
 
-    # Enumerations
+    # ── Enumerations ──────────────────────────────────────────────────────────
+    # UTILMD / general
     marketRoleCode:
       $ref: "./enumerations/marketRoleCode.yaml"
     transactionReason:
@@ -98,8 +104,19 @@ components:
       $ref: "./enumerations/profileType.yaml"
     messageType:
       $ref: "./enumerations/messageType.yaml"
+    # GPKE Lieferbeginn
+    supplyStartStatus:
+      $ref: "./enumerations/supplyStartStatus.yaml"
+    identificationMode:
+      $ref: "./enumerations/identificationMode.yaml"
+    meterReadingCycle:
+      $ref: "./enumerations/meterReadingCycle.yaml"
+    terminationReason:
+      $ref: "./enumerations/terminationReason.yaml"
+    deregistrationCase:
+      $ref: "./enumerations/deregistrationCase.yaml"
 
-    # Market Actors
+    # ── Market Actors ─────────────────────────────────────────────────────────
     marketActor:
       $ref: "./marketActors/marketActor.yaml"
     marketActorRole:
@@ -109,7 +126,7 @@ components:
     communicationContact:
       $ref: "./marketActors/communicationContact.yaml"
 
-    # Locations – Market Location
+    # ── Locations – Market Location ───────────────────────────────────────────
     marketLocationId:
       $ref: "./locations/marketLocation/marketLocationId.yaml"
     marketLocation:
@@ -121,25 +138,25 @@ components:
     dormantMarketLocation:
       $ref: "./locations/marketLocation/dormantMarketLocation.yaml"
 
-    # Locations – Grid Location
+    # ── Locations – Grid Location ─────────────────────────────────────────────
     gridLocationId:
       $ref: "./locations/gridLocation/gridLocationId.yaml"
     gridLocation:
       $ref: "./locations/gridLocation/gridLocation.yaml"
 
-    # Locations – Metering Location
+    # ── Locations – Metering Location ─────────────────────────────────────────
     meteringLocationId:
       $ref: "./locations/meteringLocation/meteringLocationId.yaml"
     meteringLocation:
       $ref: "./locations/meteringLocation/meteringLocation.yaml"
 
-    # Locations – Tranche
+    # ── Locations – Tranche ───────────────────────────────────────────────────
     trancheId:
       $ref: "./locations/tranche/trancheId.yaml"
     tranche:
       $ref: "./locations/tranche/tranche.yaml"
 
-    # Metering Devices
+    # ── Metering Devices ──────────────────────────────────────────────────────
     meterNumber:
       $ref: "./metering/devices/meterNumber.yaml"
     meter:
@@ -163,13 +180,13 @@ components:
     tariffDevice:
       $ref: "./metering/devices/tariffDevice.yaml"
 
-    # Metering Registers
+    # ── Metering Registers ────────────────────────────────────────────────────
     meterRegister:
       $ref: "./metering/registers/meterRegister.yaml"
     gatewayRegister:
       $ref: "./metering/registers/gatewayRegister.yaml"
 
-    # Balancing
+    # ── Balancing ─────────────────────────────────────────────────────────────
     controlArea:
       $ref: "./balancing/controlArea.yaml"
     balancingArea:
@@ -181,7 +198,7 @@ components:
     gridAccount:
       $ref: "./balancing/gridAccount.yaml"
 
-    # Message
+    # ── Message ───────────────────────────────────────────────────────────────
     messageHeader:
       $ref: "./message/messageHeader.yaml"
     messageSender:
@@ -197,7 +214,21 @@ components:
     checkIdentifier:
       $ref: "./message/checkIdentifier.yaml"
 
-    # Composed Objects (ready-to-use API response objects)
+    # ── Supply Start / GPKE Lieferbeginn ──────────────────────────────────────
+    balancingAssignment:
+      $ref: "./supplyStart/balancingAssignment.yaml"
+    marketLocationIdentification:
+      $ref: "./supplyStart/marketLocationIdentification.yaml"
+    masterDataResponse:
+      $ref: "./supplyStart/masterDataResponse.yaml"
+    rejectionReason:
+      $ref: "./supplyStart/rejectionReason.yaml"
+    supplyStart:
+      $ref: "./supplyStart/supplyStart.yaml"
+    supplyStartList:
+      $ref: "./supplyStart/supplyStartList.yaml"
+
+    # ── Composed Objects (ready-to-use API response objects) ──────────────────
     locationBundle:
       $ref: "./composed/locationBundle.yaml"
     utilmdMessage:
