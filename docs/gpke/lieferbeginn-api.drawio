@@ -1,0 +1,584 @@
+<mxfile host="app.diagrams.net" version="29.3.6">
+  <diagram name="GPKE Lieferbeginn – Alle API-Endpunkte" id="gpke-lieferbeginn-full">
+    <mxGraphModel dx="2800" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- TITLE                                                           -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <mxCell id="title" value="GPKE SD: Lieferbeginn – REST API Übersicht / API Overview" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;"
+          vertex="1">
+          <mxGeometry x="20" y="20" width="1600" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- OUTER SWIMLANE: process container                              -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <mxCell id="outer" value="" parent="1"
+          style="swimlane;html=1;childLayout=stackLayout;resizeParent=1;resizeParentMax=0;startSize=0;horizontal=0;horizontalStack=1;whiteSpace=wrap;"
+          vertex="1">
+          <mxGeometry x="20" y="70" width="1614" height="1050" as="geometry" />
+        </mxCell>
+
+        <!-- ─────────────────────────────────────────────────────────────── -->
+        <!-- SWIMLANE: LFNeu (new supplier)                                  -->
+        <!-- ─────────────────────────────────────────────────────────────── -->
+        <mxCell id="lane-lfn" value="LFNeu&#xa;(Neuer Lieferant)" parent="outer"
+          style="swimlane;html=1;startSize=30;fontSize=12;fontStyle=1;"
+          vertex="1">
+          <mxGeometry height="1050" width="380" x="0" as="geometry">
+            <mxRectangle height="1050" width="40" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- LFN: Start event -->
+        <mxCell id="lfn-start" value="Neuer&#xa;Liefervertrag" parent="lane-lfn"
+          style="points=[[0.145,0.145,0],[0.5,0,0],[0.855,0.145,0],[1,0.5,0],[0.855,0.855,0],[0.5,1,0],[0.145,0.855,0],[0,0.5,0]];shape=mxgraph.bpmn.event;html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;align=center;perimeter=ellipsePerimeter;outlineConnect=0;aspect=fixed;outline=standard;symbol=general;fontSize=10;"
+          vertex="1">
+          <mxGeometry x="50" y="55" width="50" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- LFN: Wait for confirmation (step 5) -->
+        <mxCell id="lfn-wait-confirm" value="Warte auf&#xa;Antwort NB" parent="lane-lfn"
+          style="points=[[0.145,0.145,0],[0.5,0,0],[0.855,0.145,0],[1,0.5,0],[0.855,0.855,0],[0.5,1,0],[0.145,0.855,0],[0,0.5,0]];shape=mxgraph.bpmn.event;html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;align=center;perimeter=ellipsePerimeter;outlineConnect=0;aspect=fixed;outline=boundInt;symbol=timer;fontSize=10;"
+          vertex="1">
+          <mxGeometry x="50" y="430" width="50" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- LFN: End event (accepted) -->
+        <mxCell id="lfn-end-ok" value="Bestätigt" parent="lane-lfn"
+          style="points=[[0.145,0.145,0],[0.5,0,0],[0.855,0.145,0],[1,0.5,0],[0.855,0.855,0],[0.5,1,0],[0.145,0.855,0],[0,0.5,0]];shape=mxgraph.bpmn.event;html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;align=center;perimeter=ellipsePerimeter;outlineConnect=0;aspect=fixed;outline=end;symbol=terminate;fontSize=10;"
+          vertex="1">
+          <mxGeometry x="50" y="620" width="50" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- LFN: End event (rejected) -->
+        <mxCell id="lfn-end-err" value="Abgelehnt" parent="lane-lfn"
+          style="points=[[0.145,0.145,0],[0.5,0,0],[0.855,0.145,0],[1,0.5,0],[0.855,0.855,0],[0.5,1,0],[0.145,0.855,0],[0,0.5,0]];shape=mxgraph.bpmn.event;html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;align=center;perimeter=ellipsePerimeter;outlineConnect=0;aspect=fixed;outline=end;symbol=errorEnd;fillColor=#ff0000;strokeColor=#AE4132;fontSize=10;"
+          vertex="1">
+          <mxGeometry x="230" y="620" width="50" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- LFN: status polling box -->
+        <mxCell id="lfn-poll" value="GET Status" parent="lane-lfn"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;"
+          vertex="1">
+          <mxGeometry x="150" y="440" width="100" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- LFN: flow start → wait -->
+        <mxCell id="lfn-e1" edge="1" parent="lane-lfn" source="lfn-start" target="lfn-wait-confirm"
+          style="endArrow=classic;html=1;rounded=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- LFN: flow wait → end-ok (arrow comes back from NB, see cross-lane) -->
+        <mxCell id="lfn-e2" edge="1" parent="lane-lfn" source="lfn-wait-confirm" target="lfn-end-ok"
+          style="endArrow=classic;html=1;rounded=0;strokeColor=#00aa00;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ─────────────────────────────────────────────────────────────── -->
+        <!-- SWIMLANE: NB (grid operator)                                    -->
+        <!-- ─────────────────────────────────────────────────────────────── -->
+        <mxCell id="lane-nb" value="NB&#xa;(Netzbetreiber)" parent="outer"
+          style="swimlane;html=1;startSize=30;fontSize=12;fontStyle=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;"
+          vertex="1">
+          <mxGeometry height="1050" width="470" x="380" as="geometry">
+            <mxRectangle height="1050" width="40" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- NB: Registration task box (step 1) -->
+        <mxCell id="nb-reg" value="" parent="lane-nb"
+          style="rounded=1;whiteSpace=wrap;html=1;container=1;collapsible=0;absoluteArcSize=1;arcSize=20;childLayout=stackLayout;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;strokeWidth=3;strokeColor=#0050ef;"
+          vertex="1">
+          <mxGeometry x="155" y="40" width="160" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-reg-pi" value="PI 55001 / 55077" parent="nb-reg"
+          style="whiteSpace=wrap;connectable=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=10;part=1;"
+          vertex="1">
+          <mxGeometry height="25" width="160" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-reg-task" value="createRegistration&#xa;POST" parent="nb-reg"
+          style="shape=mxgraph.bpmn.task2;arcSize=0;part=1;taskMarker=abstract;connectable=0;whiteSpace=wrap;html=1;fontSize=11;"
+          vertex="1">
+          <mxGeometry height="60" width="160" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-reg-path" value="/market-locations/{id}/registrations" parent="nb-reg"
+          style="whiteSpace=wrap;connectable=0;html=1;fillColor=#C0C0C0;fontSize=9;part=1;"
+          vertex="1">
+          <mxGeometry height="45" width="160" y="85" as="geometry" />
+        </mxCell>
+
+        <!-- NB: list registrations box -->
+        <mxCell id="nb-list" value="" parent="lane-nb"
+          style="rounded=1;whiteSpace=wrap;html=1;container=1;collapsible=0;absoluteArcSize=1;arcSize=20;childLayout=stackLayout;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;strokeWidth=2;strokeColor=#6c8ebf;"
+          vertex="1">
+          <mxGeometry x="10" y="200" width="150" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-list-pi" value="listRegistrations&#xa;GET" parent="nb-list"
+          style="whiteSpace=wrap;connectable=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;part=1;"
+          vertex="1">
+          <mxGeometry height="30" width="150" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-list-path" value="/market-locations/{id}/registrations" parent="nb-list"
+          style="whiteSpace=wrap;connectable=0;html=1;fillColor=#f5f5f5;fontSize=9;part=1;"
+          vertex="1">
+          <mxGeometry height="45" width="150" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-list-note" value="(optional / polling)" parent="nb-list"
+          style="whiteSpace=wrap;connectable=0;html=1;fillColor=#C0C0C0;fontSize=9;part=1;"
+          vertex="1">
+          <mxGeometry height="30" width="150" y="75" as="geometry" />
+        </mxCell>
+
+        <!-- NB: get single registration box (step 2) -->
+        <mxCell id="nb-get" value="" parent="lane-nb"
+          style="rounded=1;whiteSpace=wrap;html=1;container=1;collapsible=0;absoluteArcSize=1;arcSize=20;childLayout=stackLayout;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;strokeWidth=2;strokeColor=#6c8ebf;"
+          vertex="1">
+          <mxGeometry x="170" y="200" width="150" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-get-pi" value="getRegistration&#xa;GET" parent="nb-get"
+          style="whiteSpace=wrap;connectable=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;part=1;"
+          vertex="1">
+          <mxGeometry height="30" width="150" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-get-path" value="/market-locations/{id}/registrations/{regId}" parent="nb-get"
+          style="whiteSpace=wrap;connectable=0;html=1;fillColor=#f5f5f5;fontSize=9;part=1;"
+          vertex="1">
+          <mxGeometry height="45" width="150" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-get-note" value="(2) Existierende Zuordnung" parent="nb-get"
+          style="whiteSpace=wrap;connectable=0;html=1;fillColor=#C0C0C0;fontSize=9;part=1;"
+          vertex="1">
+          <mxGeometry height="30" width="150" y="75" as="geometry" />
+        </mxCell>
+
+        <!-- NB: patch registration box -->
+        <mxCell id="nb-patch" value="" parent="lane-nb"
+          style="rounded=1;whiteSpace=wrap;html=1;container=1;collapsible=0;absoluteArcSize=1;arcSize=20;childLayout=stackLayout;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;strokeWidth=2;strokeColor=#d6b656;"
+          vertex="1">
+          <mxGeometry x="10" y="330" width="150" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-patch-pi" value="patchRegistration&#xa;PATCH" parent="nb-patch"
+          style="whiteSpace=wrap;connectable=0;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;part=1;"
+          vertex="1">
+          <mxGeometry height="30" width="150" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-patch-path" value="/market-locations/{id}/registrations/{regId}" parent="nb-patch"
+          style="whiteSpace=wrap;connectable=0;html=1;fillColor=#f5f5f5;fontSize=9;part=1;"
+          vertex="1">
+          <mxGeometry height="45" width="150" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-patch-note" value="(nur Status draft)" parent="nb-patch"
+          style="whiteSpace=wrap;connectable=0;html=1;fillColor=#C0C0C0;fontSize=9;part=1;"
+          vertex="1">
+          <mxGeometry height="30" width="150" y="75" as="geometry" />
+        </mxCell>
+
+        <!-- NB: deregistration request box (step 3) -->
+        <mxCell id="nb-dereg" value="" parent="lane-nb"
+          style="rounded=1;whiteSpace=wrap;html=1;container=1;collapsible=0;absoluteArcSize=1;arcSize=20;childLayout=stackLayout;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;strokeWidth=3;strokeColor=#0050ef;"
+          vertex="1">
+          <mxGeometry x="155" y="460" width="160" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-dereg-pi" value="PI 55010" parent="nb-dereg"
+          style="whiteSpace=wrap;connectable=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=10;part=1;"
+          vertex="1">
+          <mxGeometry height="25" width="160" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-dereg-task" value="createDeregistrationRequest&#xa;POST" parent="nb-dereg"
+          style="shape=mxgraph.bpmn.task2;arcSize=0;part=1;taskMarker=abstract;connectable=0;whiteSpace=wrap;html=1;fontSize=10;"
+          vertex="1">
+          <mxGeometry height="60" width="160" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-dereg-path" value="/market-locations/{id}/deregistration-requests" parent="nb-dereg"
+          style="whiteSpace=wrap;connectable=0;html=1;fillColor=#C0C0C0;fontSize=9;part=1;"
+          vertex="1">
+          <mxGeometry height="45" width="160" y="85" as="geometry" />
+        </mxCell>
+
+        <!-- NB: respond to registration box (step 5) -->
+        <mxCell id="nb-respond" value="" parent="lane-nb"
+          style="rounded=1;whiteSpace=wrap;html=1;container=1;collapsible=0;absoluteArcSize=1;arcSize=20;childLayout=stackLayout;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;strokeWidth=3;strokeColor=#0050ef;"
+          vertex="1">
+          <mxGeometry x="155" y="640" width="160" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-respond-pi" value="PI 55002 / 55003&#xa;55078 / 55080" parent="nb-respond"
+          style="whiteSpace=wrap;connectable=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=10;part=1;"
+          vertex="1">
+          <mxGeometry height="25" width="160" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-respond-task" value="respondToRegistration&#xa;POST" parent="nb-respond"
+          style="shape=mxgraph.bpmn.task2;arcSize=0;part=1;taskMarker=abstract;connectable=0;whiteSpace=wrap;html=1;fontSize=10;"
+          vertex="1">
+          <mxGeometry height="60" width="160" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-respond-path" value="/market-locations/{id}/registrations/{regId}/response" parent="nb-respond"
+          style="whiteSpace=wrap;connectable=0;html=1;fillColor=#C0C0C0;fontSize=9;part=1;"
+          vertex="1">
+          <mxGeometry height="45" width="160" y="85" as="geometry" />
+        </mxCell>
+
+        <!-- NB: assign termination box (step 6) -->
+        <mxCell id="nb-term" value="" parent="lane-nb"
+          style="rounded=1;whiteSpace=wrap;html=1;container=1;collapsible=0;absoluteArcSize=1;arcSize=20;childLayout=stackLayout;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;strokeWidth=3;strokeColor=#0050ef;"
+          vertex="1">
+          <mxGeometry x="10" y="820" width="160" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-term-pi" value="PI 55037" parent="nb-term"
+          style="whiteSpace=wrap;connectable=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=10;part=1;"
+          vertex="1">
+          <mxGeometry height="25" width="160" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-term-task" value="notifyAssignmentTermination&#xa;POST" parent="nb-term"
+          style="shape=mxgraph.bpmn.task2;arcSize=0;part=1;taskMarker=abstract;connectable=0;whiteSpace=wrap;html=1;fontSize=10;"
+          vertex="1">
+          <mxGeometry height="60" width="160" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-term-path" value="/market-locations/{id}/assignment-terminations" parent="nb-term"
+          style="whiteSpace=wrap;connectable=0;html=1;fillColor=#C0C0C0;fontSize=9;part=1;"
+          vertex="1">
+          <mxGeometry height="45" width="160" y="85" as="geometry" />
+        </mxCell>
+
+        <!-- NB: assign cancellation box (step 7) -->
+        <mxCell id="nb-cancel" value="" parent="lane-nb"
+          style="rounded=1;whiteSpace=wrap;html=1;container=1;collapsible=0;absoluteArcSize=1;arcSize=20;childLayout=stackLayout;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;strokeWidth=3;strokeColor=#0050ef;"
+          vertex="1">
+          <mxGeometry x="290" y="820" width="160" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-cancel-pi" value="PI 55038" parent="nb-cancel"
+          style="whiteSpace=wrap;connectable=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=10;part=1;"
+          vertex="1">
+          <mxGeometry height="25" width="160" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-cancel-task" value="notifyAssignmentCancellation&#xa;POST" parent="nb-cancel"
+          style="shape=mxgraph.bpmn.task2;arcSize=0;part=1;taskMarker=abstract;connectable=0;whiteSpace=wrap;html=1;fontSize=10;"
+          vertex="1">
+          <mxGeometry height="60" width="160" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="nb-cancel-path" value="/market-locations/{id}/assignment-cancellations" parent="nb-cancel"
+          style="whiteSpace=wrap;connectable=0;html=1;fillColor=#C0C0C0;fontSize=9;part=1;"
+          vertex="1">
+          <mxGeometry height="45" width="160" y="85" as="geometry" />
+        </mxCell>
+
+        <!-- ─────────────────────────────────────────────────────────────── -->
+        <!-- SWIMLANE: LFAlt (previous supplier)                             -->
+        <!-- ─────────────────────────────────────────────────────────────── -->
+        <mxCell id="lane-lfa" value="LFAlt&#xa;(Alter Lieferant)" parent="outer"
+          style="swimlane;html=1;startSize=30;fontSize=12;fontStyle=1;"
+          vertex="1">
+          <mxGeometry height="1050" width="380" x="850" as="geometry">
+            <mxRectangle height="1050" width="40" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- LFA: contract check task -->
+        <mxCell id="lfa-check" value="Vertragsprüfung" parent="lane-lfa"
+          style="points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];shape=mxgraph.bpmn.task2;whiteSpace=wrap;html=1;fontSize=11;"
+          vertex="1">
+          <mxGeometry x="130" y="470" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- LFA: respond to deregistration request (step 4) -->
+        <mxCell id="lfa-respond" value="" parent="lane-lfa"
+          style="rounded=1;whiteSpace=wrap;html=1;container=1;collapsible=0;absoluteArcSize=1;arcSize=20;childLayout=stackLayout;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;strokeWidth=3;strokeColor=#0050ef;"
+          vertex="1">
+          <mxGeometry x="110" y="580" width="170" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="lfa-respond-pi" value="PI 55011 / 55012" parent="lfa-respond"
+          style="whiteSpace=wrap;connectable=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=10;part=1;"
+          vertex="1">
+          <mxGeometry height="25" width="170" as="geometry" />
+        </mxCell>
+        <mxCell id="lfa-respond-task" value="respondToDeregistrationRequest&#xa;POST" parent="lfa-respond"
+          style="shape=mxgraph.bpmn.task2;arcSize=0;part=1;taskMarker=abstract;connectable=0;whiteSpace=wrap;html=1;fontSize=10;"
+          vertex="1">
+          <mxGeometry height="60" width="170" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="lfa-respond-path" value="/market-locations/{id}/deregistration-requests/{drId}/response" parent="lfa-respond"
+          style="whiteSpace=wrap;connectable=0;html=1;fillColor=#C0C0C0;fontSize=9;part=1;"
+          vertex="1">
+          <mxGeometry height="45" width="170" y="85" as="geometry" />
+        </mxCell>
+
+        <!-- LFA: end event (assignment ended) -->
+        <mxCell id="lfa-end" value="Zuordnung&#xa;beendet" parent="lane-lfa"
+          style="points=[[0.145,0.145,0],[0.5,0,0],[0.855,0.145,0],[1,0.5,0],[0.855,0.855,0],[0.5,1,0],[0.145,0.855,0],[0,0.5,0]];shape=mxgraph.bpmn.event;html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;align=center;perimeter=ellipsePerimeter;outlineConnect=0;aspect=fixed;outline=end;symbol=terminate;fontSize=10;"
+          vertex="1">
+          <mxGeometry x="155" y="870" width="50" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ─────────────────────────────────────────────────────────────── -->
+        <!-- SWIMLANE: LFZ (future supplier)                                 -->
+        <!-- ─────────────────────────────────────────────────────────────── -->
+        <mxCell id="lane-lfz" value="LFZ&#xa;(Zukünftiger Lieferant)" parent="outer"
+          style="swimlane;html=1;startSize=30;fontSize=12;fontStyle=1;fillColor=#f8cecc;strokeColor=#b85450;"
+          vertex="1">
+          <mxGeometry height="1050" width="384" x="1230" as="geometry">
+            <mxRectangle height="1050" width="40" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- LFZ: future assignment cancelled (step 7) -->
+        <mxCell id="lfz-cancel-event" value="Zukünftige&#xa;Zuordnung&#xa;aufgehoben" parent="lane-lfz"
+          style="points=[[0.145,0.145,0],[0.5,0,0],[0.855,0.145,0],[1,0.5,0],[0.855,0.855,0],[0.5,1,0],[0.145,0.855,0],[0,0.5,0]];shape=mxgraph.bpmn.event;html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;align=center;perimeter=ellipsePerimeter;outlineConnect=0;aspect=fixed;outline=end;symbol=terminate;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;"
+          vertex="1">
+          <mxGeometry x="160" y="870" width="50" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- CROSS-LANE ARROWS                                               -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+
+        <!-- (1) LFN → NB: createRegistration POST -->
+        <mxCell id="arr-1" edge="1" parent="1" source="lfn-start" target="nb-reg"
+          style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#0050ef;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="350" y="80" />
+              <mxPoint x="350" y="73" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arr-1-label" value="(1) Anmeldung&#xa;POST  /market-locations/{id}/registrations" parent="1" connectable="0"
+          style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;fontSize=10;fontStyle=1;"
+          vertex="1" edge="0">
+          <mxGeometry x="430" y="50" width="250" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- (1a) NB → LFN: 202 Accepted response -->
+        <mxCell id="arr-1r" edge="1" parent="1" source="nb-reg" target="lfn-wait-confirm"
+          style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#00aa00;dashed=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="395" y="138" />
+              <mxPoint x="350" y="138" />
+              <mxPoint x="350" y="455" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arr-1r-label" value="HTTP 202 Accepted" parent="1" connectable="0"
+          style="edgeLabel;html=1;align=left;verticalAlign=middle;resizable=0;fontSize=9;fontColor=#00aa00;"
+          vertex="1" edge="0">
+          <mxGeometry x="280" y="200" width="130" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- (2) NB → LFN: GET existing assignment info -->
+        <mxCell id="arr-2" edge="1" parent="1" source="nb-get" target="lfn-wait-confirm"
+          style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#6c8ebf;dashed=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="395" y="253" />
+              <mxPoint x="350" y="253" />
+              <mxPoint x="350" y="443" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arr-2-label" value="(2) Existierende Zuordnung&#xa;GET …/registrations/{regId}" parent="1" connectable="0"
+          style="edgeLabel;html=1;align=left;verticalAlign=middle;resizable=0;fontSize=9;fontColor=#6c8ebf;"
+          vertex="1" edge="0">
+          <mxGeometry x="270" y="260" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- (3) NB → LFA: createDeregistrationRequest POST -->
+        <mxCell id="arr-3" edge="1" parent="1" source="nb-dereg" target="lfa-check"
+          style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#0050ef;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-3-label" value="(3) Abmeldeanfrage&#xa;POST  /market-locations/{id}/deregistration-requests" parent="1" connectable="0"
+          style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;fontSize=10;fontStyle=1;"
+          vertex="1" edge="0">
+          <mxGeometry x="900" y="470" width="280" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- (4) LFA → NB: respondToDeregistrationRequest POST -->
+        <mxCell id="arr-4" edge="1" parent="1" source="lfa-respond" target="nb-dereg"
+          style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#0050ef;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="870" y="675" />
+              <mxPoint x="840" y="675" />
+              <mxPoint x="840" y="590" />
+              <mxPoint x="830" y="590" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arr-4-label" value="(4) Beantwortung Abmeldeanfrage&#xa;POST  …/deregistration-requests/{drId}/response" parent="1" connectable="0"
+          style="edgeLabel;html=1;align=center;verticalAlign=top;resizable=0;fontSize=10;fontStyle=1;"
+          vertex="1" edge="0">
+          <mxGeometry x="870" y="600" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- LFA check → LFA respond (internal) -->
+        <mxCell id="arr-lfa-int" edge="1" parent="1" source="lfa-check" target="lfa-respond"
+          style="endArrow=classic;html=1;rounded=0;strokeWidth=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- (5) NB → LFN: respondToRegistration POST (confirmation or rejection) -->
+        <mxCell id="arr-5ok" edge="1" parent="1" source="nb-respond" target="lfn-end-ok"
+          style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#00aa00;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="395" y="672" />
+              <mxPoint x="350" y="672" />
+              <mxPoint x="350" y="645" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arr-5ok-label" value="(5a) Bestätigung PI 55002/55078&#xa;POST …/registrations/{regId}/response" parent="1" connectable="0"
+          style="edgeLabel;html=1;align=left;verticalAlign=middle;resizable=0;fontSize=9;fontColor=#00aa00;"
+          vertex="1" edge="0">
+          <mxGeometry x="270" y="640" width="230" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arr-5err" edge="1" parent="1" source="nb-respond" target="lfn-end-err"
+          style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#AE4132;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="360" y="705" />
+              <mxPoint x="360" y="645" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arr-5err-label" value="(5b) Ablehnung PI 55003/55080" parent="1" connectable="0"
+          style="edgeLabel;html=1;align=left;verticalAlign=middle;resizable=0;fontSize=9;fontColor=#AE4132;"
+          vertex="1" edge="0">
+          <mxGeometry x="270" y="710" width="200" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- nb-dereg → nb-respond (NB internal flow after deregistration confirmed) -->
+        <mxCell id="arr-nb-int" edge="1" parent="1" source="nb-dereg" target="nb-respond"
+          style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#666666;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-nb-int-label" value="Abmeldung bestätigt" parent="1" connectable="0"
+          style="edgeLabel;html=1;align=left;verticalAlign=middle;resizable=0;fontSize=9;"
+          vertex="1" edge="0">
+          <mxGeometry x="565" y="600" width="130" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- nb-respond → nb-term (step 6, same day) -->
+        <mxCell id="arr-nb-term" edge="1" parent="1" source="nb-respond" target="nb-term"
+          style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#666666;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="555" y="800" />
+              <mxPoint x="470" y="800" />
+              <mxPoint x="470" y="820" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- nb-respond → nb-cancel (step 7, same day, if LFZ exists) -->
+        <mxCell id="arr-nb-cancel" edge="1" parent="1" source="nb-respond" target="nb-cancel"
+          style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#b85450;dashed=1;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="715" y="800" />
+              <mxPoint x="750" y="800" />
+              <mxPoint x="750" y="820" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arr-nb-cancel-label" value="(nur wenn LFZ vorhanden)" parent="1" connectable="0"
+          style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;fontSize=9;fontColor=#b85450;"
+          vertex="1" edge="0">
+          <mxGeometry x="690" y="795" width="160" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- (6) NB → LFA: notifyAssignmentTermination POST -->
+        <mxCell id="arr-6" edge="1" parent="1" source="nb-term" target="lfa-end"
+          style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#0050ef;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-6-label" value="(6) Zuordnungsbeendigung  PI 55037&#xa;POST  /market-locations/{id}/assignment-terminations" parent="1" connectable="0"
+          style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;fontSize=10;fontStyle=1;"
+          vertex="1" edge="0">
+          <mxGeometry x="900" y="845" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- (7) NB → LFZ: notifyAssignmentCancellation POST -->
+        <mxCell id="arr-7" edge="1" parent="1" source="nb-cancel" target="lfz-cancel-event"
+          style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#b85450;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-7-label" value="(7) Zuordnungsaufhebung  PI 55038&#xa;POST  /market-locations/{id}/assignment-cancellations" parent="1" connectable="0"
+          style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;fontSize=10;fontStyle=1;fontColor=#b85450;"
+          vertex="1" edge="0">
+          <mxGeometry x="1300" y="845" width="310" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- LEGEND                                                          -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <mxCell id="legend-title" value="Legende / Legend" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontStyle=1;"
+          vertex="1">
+          <mxGeometry x="40" y="1140" width="160" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg-pi" value="" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;"
+          vertex="1">
+          <mxGeometry x="40" y="1165" width="60" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-pi-txt" value="PI = Prüfidentifikator (Check Identifier)" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;"
+          vertex="1">
+          <mxGeometry x="110" y="1165" width="280" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg-post" value="" parent="1"
+          style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#0050ef;"
+          edge="1">
+          <mxGeometry x="40" y="1202" width="60" height="10" as="geometry">
+            <mxPoint x="40" y="1202" as="sourcePoint" />
+            <mxPoint x="100" y="1202" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="leg-post-txt" value="Fachlicher API-Call (POST / PATCH)" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;"
+          vertex="1">
+          <mxGeometry x="110" y="1192" width="230" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg-resp" value="" parent="1"
+          style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#00aa00;dashed=1;"
+          edge="1">
+          <mxGeometry x="40" y="1222" width="60" height="10" as="geometry">
+            <mxPoint x="40" y="1222" as="sourcePoint" />
+            <mxPoint x="100" y="1222" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="leg-resp-txt" value="HTTP 202 / Bestätigung" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;"
+          vertex="1">
+          <mxGeometry x="110" y="1212" width="230" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg-opt" value="" parent="1"
+          style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#b85450;dashed=1;"
+          edge="1">
+          <mxGeometry x="40" y="1242" width="60" height="10" as="geometry">
+            <mxPoint x="40" y="1242" as="sourcePoint" />
+            <mxPoint x="100" y="1242" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="leg-opt-txt" value="Optional (nur wenn LFZ vorhanden)" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;"
+          vertex="1">
+          <mxGeometry x="110" y="1232" width="230" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
