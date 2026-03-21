@@ -1,0 +1,64 @@
+type: object
+title: UtilmdMessage
+description: |
+  Complete UTILMD message (Nachricht) as exchanged between market participants in the
+  German electricity market. Represents the full EDIFACT UTILMD interchange including
+  header, sender, recipient and all contained transactions.
+  
+  This is the top-level composed API object for sending and receiving UTILMD messages
+  via REST. Each message contains one or more transactions (Vorgänge), each of which
+  references one market location and carries master data or billing data changes.
+  
+  **German:** Vollständige UTILMD-Nachricht, wie sie zwischen Marktpartnern im deutschen
+  Strommarkt ausgetauscht wird. Repräsentiert den vollständigen EDIFACT-UTILMD-Interchange
+  mit Header, Sender, Empfänger und allen enthaltenen Vorgängen.
+  
+  Dies ist das übergeordnete zusammengesetzte API-Objekt für das Senden und Empfangen
+  von UTILMD-Nachrichten via REST. Jede Nachricht enthält einen oder mehrere Vorgänge,
+  von denen jeder eine Marktlokation referenziert und Stamm- oder Abrechnungsdaten trägt.
+x-i18n:
+  de:
+    title: UTILMD-Nachricht (vollständig)
+    description: |
+      Vollständige UTILMD-Nachricht mit Header, Sender, Empfänger und Vorgängen.
+      Übergeordnetes API-Objekt für REST-basierte UTILMD-Kommunikation.
+x-edifact-mapping:
+  format: "EDIFACT UTILMD S2.1"
+  interchange: "UNB/UNZ"
+  message: "UNH/UNT"
+  segments: "BGM, DTM, NAD, CTA, COM, IDE, STS, LOC, RFF, SEQ, CCI, CAV, PIA"
+required:
+  - header
+  - transactions
+properties:
+  header:
+    $ref: "../message/messageHeader.yaml"
+
+  transactions:
+    type: array
+    minItems: 1
+    description: |
+      List of transactions (Vorgänge) contained in this message. Each transaction
+      covers one market location and one business process instance.
+      **German:** Liste der Vorgänge in dieser Nachricht. Jeder Vorgang deckt eine
+      Marktlokation und einen Geschäftsvorfallinstanz ab.
+    x-i18n:
+      de:
+        description: |
+          Liste der Vorgänge (SG4 IDE) dieser UTILMD-Nachricht.
+          Jeder Vorgang bezieht sich auf eine Marktlokation.
+    items:
+      $ref: "../message/messageTransaction.yaml"
+
+  locationBundles:
+    type: array
+    description: |
+      Location bundle data associated with the transactions in this message.
+      Populated in full master data exchange scenarios (Stammdaten).
+      **German:** Lokationsbündeldaten zu den Vorgängen dieser Nachricht.
+      Befüllt bei vollständigem Stammdatenaustausch.
+    x-i18n:
+      de:
+        description: Lokationsbündeldaten zu den Vorgängen (Stammdaten).
+    items:
+      $ref: "./locationBundle.yaml"

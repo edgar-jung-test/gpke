@@ -1,0 +1,31 @@
+type: string
+title: MeterNumber
+description: |
+  Device number / meter number (Gerätenummer / Zählernummer) uniquely identifying
+  a meter within the metering infrastructure. Assigned by the metering point operator (MSB).
+  Corresponds to the meter serial number used in EDIFACT device identification.
+  
+  **German:** Gerätenummer / Zählernummer zur eindeutigen Identifikation eines Zählers
+  innerhalb der Messinfrastruktur. Vergeben durch den Messstellenbetreiber (MSB).
+  Entspricht der Gerätenummer in der EDIFACT-Geräteidentifikation.
+x-i18n:
+  de:
+    title: Gerätenummer / Zählernummer
+    description: Eindeutige Zählernummer, vergeben durch den MSB.
+x-edifact-mapping:
+  segment: EQD / SEQ
+  notes: "Equipment identifier in metering device segments"
+maxLength: 80
+examples:
+  ModernMeter:
+    summary: "ModernMeter"
+    value: "1ESY1234567890"
+  LegacyFerrarisType:
+    summary: "LegacyFerrarisType"
+    value: "EHZ0012345678"
+  SmartMeter:
+    summary: "SmartMeter"
+    value: "SML9876543210"
+  EDL21Meter:
+    summary: "EDL21Meter"
+    value: "1EMH0001234567"

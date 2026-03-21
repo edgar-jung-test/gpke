@@ -1,0 +1,97 @@
+type: object
+title: MeterFull
+description: |
+  Full meter API response object combining all data for a single meter including
+  its registers, attached auxiliary devices (communication device, transformer,
+  tariff device, volume converter), and its associated gateway.
+  Suitable for metering device detail endpoints.
+  
+  **German:** Vollständiges Zähler-API-Antwortobjekt mit allen Registern und
+  angebrachten Hilfsgeräten (Kommunikationseinrichtung, Wandler, Tarifeinrichtung,
+  Mengenumwerter) sowie dem verbundenen Gateway.
+x-i18n:
+  de:
+    title: Zähler (vollständig)
+    description: Vollständiges Zähler-Objekt mit Registern und allen Hilfsgeräten.
+required:
+  - deviceNumber
+properties:
+  deviceNumber:
+    $ref: "../metering/devices/meterNumber.yaml"
+
+  meteringLocationId:
+    $ref: "../locations/meteringLocation/meteringLocationId.yaml"
+
+  msbActorId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the MSB operating this meter.
+      **German:** Referenz auf den betreibenden MSB.
+    x-i18n:
+      de:
+        description: Referenz auf den betreibenden MSB.
+
+  registers:
+    type: array
+    description: |
+      Measurement registers of this meter.
+      **German:** Messregister dieses Zählers.
+    x-i18n:
+      de:
+        description: Messregister dieses Zählers.
+    items:
+      $ref: "../metering/registers/meterRegister.yaml"
+
+  gateway:
+    description: |
+      Smart meter gateway connected to this meter, if any.
+      **German:** Mit diesem Zähler verbundenes Smart-Meter-Gateway, falls vorhanden.
+    x-i18n:
+      de:
+        description: Verbundenes Smart-Meter-Gateway, falls vorhanden.
+    nullable: true
+    $ref: "../metering/devices/gateway.yaml"
+
+  communicationDevice:
+    description: |
+      Communication device attached to this meter, if any.
+      **German:** An diesem Zähler angebrachte Kommunikationseinrichtung, falls vorhanden.
+    x-i18n:
+      de:
+        description: Angebrachte Kommunikationseinrichtung, falls vorhanden.
+    nullable: true
+    $ref: "../metering/devices/communicationDevice.yaml"
+
+  transformerDevice:
+    description: |
+      Transformer device connected to this meter, if any.
+      **German:** An diesem Zähler angebrachte Wandlereinrichtung, falls vorhanden.
+    x-i18n:
+      de:
+        description: Angebrachte Wandlereinrichtung (Strom-/Spannungswandler), falls vorhanden.
+    nullable: true
+    $ref: "../metering/devices/transformerDevice.yaml"
+
+  tariffDevice:
+    description: |
+      Tariff device connected to this meter, if any.
+      **German:** An diesem Zähler angebrachte Tarifeinrichtung (HT/NT), falls vorhanden.
+    x-i18n:
+      de:
+        description: Angebrachte Tarifeinrichtung (HT/NT), falls vorhanden.
+    nullable: true
+    $ref: "../metering/devices/tariffDevice.yaml"
+
+  volumeConverter:
+    description: |
+      Volume converter attached to this meter, if any.
+      **German:** An diesem Zähler angebrachter Mengenumwerter, falls vorhanden.
+    x-i18n:
+      de:
+        description: Angebrachter Mengenumwerter, falls vorhanden.
+    nullable: true
+    $ref: "../metering/devices/volumeConverter.yaml"
+
+  validity:
+    $ref: "../common/validityPeriod.yaml"
