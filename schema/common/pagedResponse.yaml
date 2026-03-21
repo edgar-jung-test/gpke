@@ -1,0 +1,97 @@
+type: object
+title: PagedResponse
+description: |
+  Generic paged (paginated) response wrapper for list endpoints.
+  **German:** Generische paginierte Antworthülle für Listenendpunkte.
+x-i18n:
+  de:
+    title: Paginierte Antwort
+    description: Generische paginierte Antworthülle für Listenendpunkte.
+required:
+  - items
+  - totalCount
+  - page
+  - pageSize
+properties:
+  items:
+    type: array
+    description: |
+      The list of result items for the current page.
+      **German:** Liste der Ergebnisobjekte der aktuellen Seite.
+    x-i18n:
+      de:
+        description: Liste der Ergebnisobjekte der aktuellen Seite.
+    items:
+      type: object
+  totalCount:
+    type: integer
+    description: |
+      Total number of items across all pages.
+      **German:** Gesamtanzahl der Einträge über alle Seiten.
+    x-i18n:
+      de:
+        description: Gesamtanzahl der Einträge über alle Seiten.
+    examples:
+      Small:
+        summary: "Small"
+        value: 150
+      Medium:
+        summary: "Medium"
+        value: 1500
+      Large:
+        summary: "Large"
+        value: 42000
+    x-examples-i18n:
+      de:
+        Small: "Klein"
+        Medium: "Mittel"
+        Large: "Groß"
+  page:
+    type: integer
+    minimum: 1
+    description: |
+      Current page number (1-based).
+      **German:** Aktuelle Seitennummer (beginnend bei 1).
+    x-i18n:
+      de:
+        description: Aktuelle Seitennummer (beginnend bei 1).
+    examples:
+      FirstPage:
+        summary: "FirstPage"
+        value: 1
+      SecondPage:
+        summary: "SecondPage"
+        value: 2
+      TenthPage:
+        summary: "TenthPage"
+        value: 10
+    x-examples-i18n:
+      de:
+        FirstPage: "Erste Seite"
+        SecondPage: "Zweite Seite"
+        TenthPage: "Zehnte Seite"
+  pageSize:
+    type: integer
+    minimum: 1
+    maximum: 1000
+    description: |
+      Number of items per page.
+      **German:** Anzahl der Einträge pro Seite.
+    x-i18n:
+      de:
+        description: Anzahl der Einträge pro Seite.
+    examples:
+      Default:
+        summary: "Default"
+        value: 50
+      Small:
+        summary: "Small"
+        value: 10
+      Large:
+        summary: "Large"
+        value: 200
+    x-examples-i18n:
+      de:
+        Default: "Standardwert"
+        Small: "Klein"
+        Large: "Groß"

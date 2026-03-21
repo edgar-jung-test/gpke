@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/26158109/README.md)
 # BDEW UTILMD Electricity Market – OpenAPI 3.0 Schema
 
 **Version:** 2.1.0  

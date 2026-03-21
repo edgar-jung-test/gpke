@@ -1,0 +1,110 @@
+type: object
+title: VolumeConverter
+description: |
+  Volume converter (Mengenumwerter) – an auxiliary measurement device attached to a
+  meter that converts measured gas or fluid volumes to standard conditions (temperature,
+  pressure). In the electricity context, it refers to compensation devices adjusting
+  raw metered values. Operated by the metering point operator (MSB).
+  
+  **German:** Mengenumwerter – ein am Zähler angebrachtes Hilfsgerät, das gemessene
+  Mengen auf Normalbedingungen umrechnet. Im Stromkontext bezieht sich dies auf
+  Kompensationsgeräte für Messwerte. Betrieben durch den MSB.
+x-i18n:
+  de:
+    title: Mengenumwerter
+    description: Hilfsgerät zur Mengenumrechnung auf Normalbedingungen. Betrieben durch MSB.
+required:
+  - deviceNumber
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+    examples:
+      First:
+        summary: "First"
+        value: 1
+      Second:
+        summary: "Second"
+        value: 42
+      Third:
+        summary: "Third"
+        value: 1001
+    x-examples-i18n:
+      de:
+        First: "Erste Instanz"
+        Second: "Zweite Instanz"
+        Third: "Dritte Instanz"
+  deviceNumber:
+    type: string
+    maxLength: 80
+    description: |
+      Unique device number of the volume converter assigned by the MSB.
+      **German:** Eindeutige Gerätenummer des Mengenumwerters, vergeben durch den MSB.
+    x-i18n:
+      de:
+        description: Eindeutige Gerätenummer des Mengenumwerters, vergeben durch den MSB.
+    examples:
+      Unit1:
+        summary: "Unit1"
+        value: "MU-1234567890"
+      Unit2:
+        summary: "Unit2"
+        value: "MU-0987654321"
+    x-examples-i18n:
+      de:
+        Unit1: "Mengenumwerter 1"
+        Unit2: "Mengenumwerter 2"
+  meterId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the meter this volume converter is attached to.
+      **German:** Referenz auf den Zähler, an dem dieser Mengenumwerter angebracht ist.
+    x-i18n:
+      de:
+        description: Referenz auf den zugehörigen Zähler.
+    examples:
+      Meter1:
+        summary: "Meter1"
+        value: 5001
+      Meter2:
+        summary: "Meter2"
+        value: 5002
+    x-examples-i18n:
+      de:
+        Meter1: "Meter1"
+        Meter2: "Meter2"
+  msbActorId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the MSB operating this volume converter.
+      **German:** Referenz auf den MSB, der diesen Mengenumwerter betreibt.
+    x-i18n:
+      de:
+        description: Referenz auf den betreibenden MSB.
+    examples:
+      BasicMSB:
+        summary: "BasicMSB"
+        value: 42
+      CompetitiveMSB:
+        summary: "CompetitiveMSB"
+        value: 55
+      DefaultMSB:
+        summary: "DefaultMSB"
+        value: 99
+    x-examples-i18n:
+      de:
+        BasicMSB: "Grundzuständiger MSB (gMSB)"
+        CompetitiveMSB: "Wettbewerblicher MSB (wMSB)"
+        DefaultMSB: "Auffangmessstellenbetreiber"
+  validity:
+    $ref: "../../common/validityPeriod.yaml"
+  label:
+    $ref: "../../common/multilingualLabel.yaml"

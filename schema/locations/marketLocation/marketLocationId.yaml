@@ -1,0 +1,47 @@
+type: string
+title: MarketLocationId
+description: |
+  Unique identifier of a market location (Marktlokations-ID / MaLo-ID).
+  The MaLo-ID is an 11-digit numeric code assigned by the grid operator to identify
+  a market location unambiguously within the German electricity market.
+  Corresponds to EDIFACT SG5 LOC DE3225 with qualifier Z16 (Marktlokation).
+  
+  **German:** Eindeutige Marktlokations-ID (MaLo-ID). Die MaLo-ID ist ein 11-stelliger
+  numerischer Code, der vom Netzbetreiber vergeben wird und eine Marktlokation im
+  deutschen Strommarkt eindeutig identifiziert.
+  Entspricht EDIFACT SG5 LOC DE3225 mit Qualifier Z16 (Marktlokation).
+x-i18n:
+  de:
+    title: Marktlokations-ID (MaLo-ID)
+    description: 11-stellige numerische MaLo-ID, vergeben vom Netzbetreiber. EDIFACT SG5 LOC DE3225, Z16.
+x-edifact-mapping:
+  segment: LOC
+  de3227: "Z16 (Marktlokation)"
+  de3225: "ID der Marktlokation"
+  format: "[0-9]{11}"
+pattern: '^[0-9]{11}$'
+maxLength: 11
+minLength: 11
+examples:
+  Residential:
+    summary: "Residential"
+    value: "51238696781"
+  Commercial:
+    summary: "Commercial"
+    value: "41111234567"
+  Generating:
+    summary: "Generating"
+    value: "62345678901"
+  Dormant:
+    summary: "Dormant"
+    value: "73456789012"
+  Industrial:
+    summary: "Industrial"
+    value: "84567890123"
+x-examples-i18n:
+  de:
+    Residential: "Haushalt"
+    Commercial: "Gewerbe"
+    Generating: "Erzeugungsanlage"
+    Dormant: "Ruhend"
+    Industrial: "Industrie"

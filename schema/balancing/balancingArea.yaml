@@ -1,0 +1,120 @@
+type: object
+title: BalancingArea
+description: |
+  Balancing area (Bilanzierungsgebiet) – a geographic subdivision of a control area
+  (Regelzone) used for settlement and billing of electricity. Market locations are
+  assigned to a balancing area, which in turn is part of a control area managed by a
+  transmission system operator (ÜNB).
+  
+  **German:** Bilanzierungsgebiet – ein geografischer Teilbereich einer Regelzone,
+  der für die Abrechnung und Bilanzierung von Strom verwendet wird. Marktlokationen
+  werden einem Bilanzierungsgebiet zugeordnet, das wiederum Teil einer vom ÜNB
+  verwalteten Regelzone ist.
+x-i18n:
+  de:
+    title: Bilanzierungsgebiet
+    description: |
+      Geografischer Teilbereich einer Regelzone für Abrechnung und Bilanzierung.
+      MaLos werden einem Bilanzierungsgebiet zugeordnet.
+required:
+  - code
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+    examples:
+      First:
+        summary: "First"
+        value: 1
+      Second:
+        summary: "Second"
+        value: 42
+      Third:
+        summary: "Third"
+        value: 1001
+    x-examples-i18n:
+      de:
+        First: "Erste Instanz"
+        Second: "Zweite Instanz"
+        Third: "Dritte Instanz"
+  code:
+    type: string
+    maxLength: 50
+    description: |
+      Unique EIC code of the balancing area.
+      **German:** Eindeutiger EIC-Code des Bilanzierungsgebiets.
+    x-i18n:
+      de:
+        description: Eindeutiger EIC-Code des Bilanzierungsgebiets.
+    examples:
+      TenneT:
+        summary: "TenneT"
+        value: "11YE-VE-------U"
+      FiftyHertz:
+        summary: "FiftyHertz"
+        value: "11YDE-50HZ----O"
+      Amprion:
+        summary: "Amprion"
+        value: "11YDE-AMPRION-P"
+      TransnetBW:
+        summary: "TransnetBW"
+        value: "11YDE-TNBW----Q"
+    x-examples-i18n:
+      de:
+        TenneT: "TenneT-Regelzone / -Bilanzierungsgebiet"
+        FiftyHertz: "50Hertz-Regelzone / -Bilanzierungsgebiet"
+        Amprion: "Amprion-Regelzone / -Bilanzierungsgebiet"
+        TransnetBW: "TransnetBW-Regelzone / -Bilanzierungsgebiet"
+  name:
+    type: string
+    maxLength: 200
+    nullable: true
+    description: |
+      Name of the balancing area.
+      **German:** Name des Bilanzierungsgebiets.
+    x-i18n:
+      de:
+        description: Name des Bilanzierungsgebiets.
+    examples:
+      TenneT:
+        summary: "TenneT"
+        value: "Bilanzierungsgebiet TenneT"
+      FiftyHertz:
+        summary: "FiftyHertz"
+        value: "Bilanzierungsgebiet 50Hertz"
+      Amprion:
+        summary: "Amprion"
+        value: "Bilanzierungsgebiet Amprion"
+    x-examples-i18n:
+      de:
+        TenneT: "TenneT-Regelzone / -Bilanzierungsgebiet"
+        FiftyHertz: "50Hertz-Regelzone / -Bilanzierungsgebiet"
+        Amprion: "Amprion-Regelzone / -Bilanzierungsgebiet"
+  controlAreaId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the control area (Regelzone) this balancing area belongs to.
+      **German:** Referenz auf die Regelzone, zu der dieses Bilanzierungsgebiet gehört.
+    x-i18n:
+      de:
+        description: Referenz auf die übergeordnete Regelzone.
+    examples:
+      CA1:
+        summary: "CA1"
+        value: 17001
+      CA2:
+        summary: "CA2"
+        value: 17002
+    x-examples-i18n:
+      de:
+        CA1: "CA1"
+        CA2: "CA2"
+  label:
+    $ref: "../common/multilingualLabel.yaml"

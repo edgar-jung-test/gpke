@@ -1,0 +1,169 @@
+type: object
+title: MarketActor
+description: |
+  A market participant (Marktakteur / Marktpartner) in the German electricity market.
+  Market actors take on one or more market roles and are identified by their MP-ID.
+  Corresponds to the NAD segment (party identification) in EDIFACT UTILMD messages.
+  
+  **German:** Marktakteur (Marktpartner) im deutschen Strommarkt. Marktakteure nehmen
+  eine oder mehrere Marktrollen ein und werden über ihre MP-ID identifiziert.
+  Entspricht dem NAD-Segment (Partei-Identifikation) in EDIFACT-UTILMD-Nachrichten.
+  Siehe BDEW Rollenmodell Strom und UTILMD AHB.
+x-i18n:
+  de:
+    title: Marktakteur / Marktpartner
+    description: Marktpartner im deutschen Strommarkt mit MP-ID und Marktrollen. EDIFACT NAD-Segment.
+x-edifact-mapping:
+  segment: NAD
+  de3035: "role qualifier (LF, NB, MSB, ...)"
+required:
+  - id
+  - name
+properties:
+  id:
+    type: integer
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+    readOnly: true
+    examples:
+      First:
+        summary: "First"
+        value: 1
+      Second:
+        summary: "Second"
+        value: 42
+      Third:
+        summary: "Third"
+        value: 1001
+    x-examples-i18n:
+      de:
+        First: "Erste Instanz"
+        Second: "Zweite Instanz"
+        Third: "Dritte Instanz"
+  externalId:
+    $ref: "../marketActors/marketActorId.yaml"
+  name:
+    type: string
+    maxLength: 200
+    description: |
+      Full legal name of the market participant.
+      Corresponds to EDIFACT NAD DE3036 (party name).
+      **German:** Vollständiger rechtlicher Name des Marktpartners.
+      Entspricht EDIFACT NAD DE3036 (Parteiname).
+    x-i18n:
+      de:
+        description: Vollständiger Name des Marktpartners. EDIFACT NAD DE3036.
+    examples:
+      GridOperator:
+        summary: "GridOperator"
+        value: "Stadtwerke Musterstadt GmbH"
+      RegionalSupplier:
+        summary: "RegionalSupplier"
+        value: "Energieversorgung Nord AG"
+      MSBCompany:
+        summary: "MSBCompany"
+        value: "Messtechnik GmbH & Co. KG"
+      TransmissionOp:
+        summary: "TransmissionOp"
+        value: "50Hertz Transmission GmbH"
+    x-examples-i18n:
+      de:
+        GridOperator: "Netzbetreiber"
+        RegionalSupplier: "Regionaler Energieversorger"
+        MSBCompany: "Messstellenbetreiber GmbH"
+        TransmissionOp: "Übertragungsnetzbetreiber"
+  isNaturalPerson:
+    type: boolean
+    default: false
+    description: |
+      Indicates whether the market actor is a natural person (vs. legal entity).
+      **German:** Gibt an, ob der Marktakteur eine natürliche Person ist (vs. juristische Person).
+    x-i18n:
+      de:
+        description: Gibt an, ob der Marktakteur eine natürliche Person ist.
+    examples:
+      LegalEntity:
+        summary: "LegalEntity"
+        value: false
+      Person:
+        summary: "Person"
+        value: true
+    x-examples-i18n:
+      de:
+        LegalEntity: "LegalEntity"
+        Person: "Person"
+  email:
+    type: string
+    format: email
+    maxLength: 200
+    nullable: true
+    description: |
+      Electronic mail address of the market participant.
+      Corresponds to EDIFACT COM DE3148 with DE3155=EM.
+      **German:** E-Mail-Adresse des Marktpartners. EDIFACT COM DE3148 mit DE3155=EM.
+    x-i18n:
+      de:
+        description: E-Mail-Adresse des Marktpartners. EDIFACT COM DE3148, DE3155=EM.
+    examples:
+      Generic:
+        summary: "Generic"
+        value: "kontakt@stadtwerke-musterstadt.de"
+      Billing:
+        summary: "Billing"
+        value: "abrechnung@energieversorger.de"
+      Technical:
+        summary: "Technical"
+        value: "technik@netzbetreiber.de"
+    x-examples-i18n:
+      de:
+        Generic: "Generic"
+        Billing: "Billing"
+        Technical: "Technical"
+  phone:
+    type: string
+    maxLength: 50
+    nullable: true
+    description: |
+      Telephone number of the market participant. Must start with '+' followed by digits only.
+      Corresponds to EDIFACT COM DE3148 with DE3155=TE.
+      **German:** Telefonnummer des Marktpartners. Beginnt mit '+', danach nur Ziffern.
+      EDIFACT COM DE3148, DE3155=TE.
+    x-i18n:
+      de:
+        description: Telefonnummer des Marktpartners. Format +49... EDIFACT COM DE3148, DE3155=TE.
+    pattern: '^\+[0-9]+$'
+    examples:
+      Landline:
+        summary: "Landline"
+        value: "+4930123456789"
+      Hotline:
+        summary: "Hotline"
+        value: "+498001234567"
+      Mobile:
+        summary: "Mobile"
+        value: "+491701234567"
+    x-examples-i18n:
+      de:
+        Landline: "Festnetz"
+        Hotline: "Hotline"
+        Mobile: "Mobilfunk"
+  address:
+    $ref: "../common/address.yaml"
+  roles:
+    type: array
+    description: |
+      Market roles assigned to this actor with validity periods.
+      **German:** Dem Marktakteur zugeordnete Marktrollen mit Gültigkeitszeiträumen.
+    x-i18n:
+      de:
+        description: Dem Marktakteur zugeordnete Marktrollen mit Gültigkeitszeiträumen.
+    items:
+      $ref: "../marketActors/marketActorRole.yaml"
+  validity:
+    $ref: "../common/validityPeriod.yaml"
+  label:
+    $ref: "../common/multilingualLabel.yaml"

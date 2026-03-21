@@ -1,0 +1,27 @@
+type: object
+title: MessageSender
+description: |
+  Sending party of a UTILMD message. Corresponds to EDIFACT SG2 NAD with qualifier MS (message sender).
+  Contains the market participant ID (MP-ID) and coding scheme of the sender.
+  
+  **German:** Sendende Partei einer UTILMD-Nachricht. Entspricht EDIFACT SG2 NAD mit Qualifier MS
+  (Nachrichtensender). Enthält MP-ID und Codesystem des Senders.
+x-i18n:
+  de:
+    title: Nachrichtensender
+    description: Sendende Partei der UTILMD-Nachricht mit MP-ID. EDIFACT SG2 NAD, Qualifier MS.
+x-edifact-mapping:
+  segment: NAD (SG2)
+  de3035: "MS (message sender)"
+required:
+  - actorId
+  - marketRole
+properties:
+  actorId:
+    $ref: "../marketActors/marketActorId.yaml"
+  marketRole:
+    $ref: "../enumerations/marketRoleCode.yaml"
+  contact:
+    $ref: "../marketActors/communicationContact.yaml"
+  label:
+    $ref: "../common/multilingualLabel.yaml"

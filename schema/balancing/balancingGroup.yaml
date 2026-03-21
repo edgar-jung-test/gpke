@@ -1,0 +1,140 @@
+type: object
+title: BalancingGroup
+description: |
+  Balancing group (Bilanzkreis) – a logical accounting unit within a balancing area
+  managed by a balance responsible party (BKV – Bilanzkreisverantwortlicher).
+  Market locations are assigned to a balancing group for settlement and balancing energy
+  settlement purposes. Each balancing group is identified by an EIC code.
+  
+  **German:** Bilanzkreis – eine logische Abrechnungseinheit innerhalb eines
+  Bilanzierungsgebiets, die von einem Bilanzkreisverantwortlichen (BKV) bewirtschaftet wird.
+  Marktlokationen werden einem Bilanzkreis zur Abrechnung und Ausgleichsenergieabrechnung
+  zugeordnet. Jeder Bilanzkreis wird durch einen EIC-Code identifiziert.
+x-i18n:
+  de:
+    title: Bilanzkreis
+    description: |
+      Logische Abrechnungseinheit im Bilanzierungsgebiet, bewirtschaftet durch BKV.
+      MaLos werden einem Bilanzkreis zugeordnet. Identifiziert durch EIC-Code.
+required:
+  - code
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+    examples:
+      First:
+        summary: "First"
+        value: 1
+      Second:
+        summary: "Second"
+        value: 42
+      Third:
+        summary: "Third"
+        value: 1001
+    x-examples-i18n:
+      de:
+        First: "Erste Instanz"
+        Second: "Zweite Instanz"
+        Third: "Dritte Instanz"
+  code:
+    type: string
+    maxLength: 50
+    description: |
+      Unique EIC code of the balancing group.
+      **German:** Eindeutiger EIC-Code des Bilanzkreises.
+    x-i18n:
+      de:
+        description: Eindeutiger EIC-Code des Bilanzkreises.
+    examples:
+      SupplierA:
+        summary: "SupplierA"
+        value: "11XBKV-MUSTER-K"
+      SupplierB:
+        summary: "SupplierB"
+        value: "11XBKV-ENERGY-L"
+      DirectMkt:
+        summary: "DirectMkt"
+        value: "11XBKV-DIREKT-M"
+      Fallback:
+        summary: "Fallback"
+        value: "11XBKV-AUFFANG-N"
+    x-examples-i18n:
+      de:
+        SupplierA: "Lieferant A"
+        SupplierB: "Lieferant B"
+        DirectMkt: "Direktvermarktung"
+        Fallback: "Auffangbilanzkreis"
+  name:
+    type: string
+    maxLength: 200
+    nullable: true
+    description: |
+      Name of the balancing group.
+      **German:** Name des Bilanzkreises.
+    x-i18n:
+      de:
+        description: Name des Bilanzkreises.
+    examples:
+      SupplierA:
+        summary: "SupplierA"
+        value: "Bilanzkreis Musterlieferant"
+      SupplierB:
+        summary: "SupplierB"
+        value: "Bilanzkreis Energieversorger Nord"
+      DirectMkt:
+        summary: "DirectMkt"
+        value: "Bilanzkreis Direktvermarktung"
+    x-examples-i18n:
+      de:
+        SupplierA: "Lieferant A"
+        SupplierB: "Lieferant B"
+        DirectMkt: "Direktvermarktung"
+  balancingAreaId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the balancing area (Bilanzierungsgebiet) this balancing group belongs to.
+      **German:** Referenz auf das Bilanzierungsgebiet, zu dem dieser Bilanzkreis gehört.
+    x-i18n:
+      de:
+        description: Referenz auf das übergeordnete Bilanzierungsgebiet.
+    examples:
+      BA1:
+        summary: "BA1"
+        value: 18001
+      BA2:
+        summary: "BA2"
+        value: 18002
+    x-examples-i18n:
+      de:
+        BA1: "BA1"
+        BA2: "BA2"
+  managedByActorId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the balance responsible party (BKV) who manages this balancing group.
+      **German:** Referenz auf den Bilanzkreisverantwortlichen (BKV), der diesen Bilanzkreis bewirtschaftet.
+    x-i18n:
+      de:
+        description: Referenz auf den Bilanzkreisverantwortlichen (BKV).
+    examples:
+      BKV1:
+        summary: "BKV1"
+        value: 60
+      BKV2:
+        summary: "BKV2"
+        value: 61
+    x-examples-i18n:
+      de:
+        BKV1: "BKV1"
+        BKV2: "BKV2"
+  label:
+    $ref: "../common/multilingualLabel.yaml"

@@ -1,0 +1,87 @@
+type: object
+title: MarketActorFull
+description: |
+  Full market actor API response object combining identity, address, roles,
+  and communication contacts for a single market participant.
+  Suitable for GET /market-actors/{id} responses.
+  
+  **German:** Vollständiges Marktakteur-API-Antwortobjekt mit Identität, Adresse,
+  Marktrollen und Kommunikationsverbindungen für einen Marktpartner.
+x-i18n:
+  de:
+    title: Marktakteur (vollständig)
+    description: Vollständiges Marktakteur-Objekt mit Rollen und Kontaktdaten.
+required:
+  - name
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+
+  externalId:
+    $ref: "../marketActors/marketActorId.yaml"
+
+  name:
+    type: string
+    maxLength: 200
+    description: |
+      Full legal name of the market participant.
+      **German:** Vollständiger rechtlicher Name des Marktpartners.
+    x-i18n:
+      de:
+        description: Vollständiger rechtlicher Name des Marktpartners.
+    examples:
+      Company:
+        summary: "Company"
+        value: "Stadtwerke Musterstadt GmbH"
+      Short:
+        summary: "Short"
+        value: "Energienetz AG"
+    x-examples-i18n:
+      de:
+        Company: "Company"
+        Short: "Kurzform"
+
+  isNaturalPerson:
+    type: boolean
+    default: false
+    description: |
+      Whether the actor is a natural person.
+      **German:** Gibt an, ob der Marktakteur eine natürliche Person ist.
+    x-i18n:
+      de:
+        description: Gibt an, ob der Marktakteur eine natürliche Person ist.
+
+  address:
+    $ref: "../common/address.yaml"
+
+  roles:
+    type: array
+    description: |
+      All market roles assigned to this actor, with validity periods.
+      **German:** Alle dem Marktakteur zugeordneten Marktrollen mit Gültigkeitszeiträumen.
+    x-i18n:
+      de:
+        description: Alle zugeordneten Marktrollen mit Gültigkeitszeiträumen.
+    items:
+      $ref: "../marketActors/marketActorRole.yaml"
+
+  contacts:
+    type: array
+    description: |
+      Communication contacts (contact persons, email, phone, fax) for this actor.
+      **German:** Kommunikationsverbindungen (Ansprechpartner, E-Mail, Telefon, Fax) des Akteurs.
+    x-i18n:
+      de:
+        description: Kommunikationsverbindungen und Ansprechpartner des Marktakteurs.
+    items:
+      $ref: "../marketActors/communicationContact.yaml"
+
+  validity:
+    $ref: "../common/validityPeriod.yaml"

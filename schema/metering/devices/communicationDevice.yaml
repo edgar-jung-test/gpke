@@ -1,0 +1,115 @@
+type: object
+title: CommunicationDevice
+description: |
+  Communication device (Kommunikationseinrichtung) – a device attached to a meter
+  enabling data transmission of metered values (e.g. modem, PLC adapter, M-Bus interface).
+  Operated by the metering point operator (MSB). Distinct from the smart meter gateway (SMGW).
+  
+  **German:** Kommunikationseinrichtung – ein am Zähler angebrachtes Gerät zur
+  Übertragung von Messdaten (z.B. Modem, PLC-Adapter, M-Bus-Schnittstelle).
+  Betrieben durch den Messstellenbetreiber (MSB). Vom Smart-Meter-Gateway (SMGW) zu unterscheiden.
+x-i18n:
+  de:
+    title: Kommunikationseinrichtung
+    description: |
+      Gerät zur Messdatenübertragung am Zähler (z.B. Modem, PLC-Adapter).
+      Betrieben durch MSB. Nicht zu verwechseln mit dem SMGW.
+required:
+  - deviceNumber
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+    examples:
+      First:
+        summary: "First"
+        value: 1
+      Second:
+        summary: "Second"
+        value: 42
+      Third:
+        summary: "Third"
+        value: 1001
+    x-examples-i18n:
+      de:
+        First: "Erste Instanz"
+        Second: "Zweite Instanz"
+        Third: "Dritte Instanz"
+  deviceNumber:
+    type: string
+    maxLength: 80
+    description: |
+      Unique device number of the communication device.
+      **German:** Eindeutige Gerätenummer der Kommunikationseinrichtung.
+    x-i18n:
+      de:
+        description: Eindeutige Gerätenummer der Kommunikationseinrichtung.
+    examples:
+      Modem:
+        summary: "Modem"
+        value: "KE-9876543210"
+      PLC:
+        summary: "PLC"
+        value: "KE-1122334455"
+      MBus:
+        summary: "MBus"
+        value: "KE-5566778899"
+    x-examples-i18n:
+      de:
+        Modem: "Modem"
+        PLC: "PLC-Adapter"
+        MBus: "M-Bus-Schnittstelle"
+  meterId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the meter this communication device is attached to.
+      **German:** Referenz auf den Zähler, an dem diese Kommunikationseinrichtung angebracht ist.
+    x-i18n:
+      de:
+        description: Referenz auf den zugehörigen Zähler.
+    examples:
+      Meter1:
+        summary: "Meter1"
+        value: 5001
+      Meter2:
+        summary: "Meter2"
+        value: 5002
+    x-examples-i18n:
+      de:
+        Meter1: "Meter1"
+        Meter2: "Meter2"
+  msbActorId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the MSB operating this communication device.
+      **German:** Referenz auf den MSB, der diese Kommunikationseinrichtung betreibt.
+    x-i18n:
+      de:
+        description: Referenz auf den betreibenden MSB.
+    examples:
+      BasicMSB:
+        summary: "BasicMSB"
+        value: 42
+      CompetitiveMSB:
+        summary: "CompetitiveMSB"
+        value: 55
+      DefaultMSB:
+        summary: "DefaultMSB"
+        value: 99
+    x-examples-i18n:
+      de:
+        BasicMSB: "Grundzuständiger MSB (gMSB)"
+        CompetitiveMSB: "Wettbewerblicher MSB (wMSB)"
+        DefaultMSB: "Auffangmessstellenbetreiber"
+  validity:
+    $ref: "../../common/validityPeriod.yaml"
+  label:
+    $ref: "../../common/multilingualLabel.yaml"

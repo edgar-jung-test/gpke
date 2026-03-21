@@ -1,0 +1,138 @@
+type: object
+title: Meter
+description: |
+  Electricity meter (Zähler) installed at a metering location or grid coupling point.
+  A meter records energy consumption or generation values and can be connected to a
+  smart meter gateway (SMGW). Operated by the metering point operator (MSB).
+  One meter belongs to exactly one metering location OR one grid coupling point (not both).
+  
+  **German:** Stromzähler (Zähler) an einer Messlokation oder einem Netzkopplungspunkt.
+  Ein Zähler erfasst Energieverbrauchs- oder -erzeugungswerte und kann mit einem
+  Smart-Meter-Gateway (SMGW) verbunden sein. Betrieben durch den Messstellenbetreiber (MSB).
+  Ein Zähler gehört zu genau einer Messlokation ODER einem Netzkopplungspunkt (nicht beides).
+x-i18n:
+  de:
+    title: Zähler
+    description: |
+      Stromzähler an einer Messlokation oder einem Netzkopplungspunkt.
+      Betrieben vom MSB. Entweder MeLo oder NKP, nicht beides.
+x-edifact-mapping:
+  segment: EQD
+  notes: "Equipment detail for metering device"
+required:
+  - deviceNumber
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+    examples:
+      First:
+        summary: "First"
+        value: 1
+      Second:
+        summary: "Second"
+        value: 42
+      Third:
+        summary: "Third"
+        value: 1001
+    x-examples-i18n:
+      de:
+        First: "Erste Instanz"
+        Second: "Zweite Instanz"
+        Third: "Dritte Instanz"
+  deviceNumber:
+    $ref: "./meterNumber.yaml"
+  meteringLocationId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the metering location where this meter is installed.
+      Mutually exclusive with gridCouplingPointId.
+      **German:** Referenz auf die Messlokation, an der dieser Zähler installiert ist.
+      Schließt sich gegenseitig mit gridCouplingPointId aus.
+    x-i18n:
+      de:
+        description: Referenz auf die Messlokation des Zählers. Exklusiv mit Netzkopplungspunkt.
+    examples:
+      Example1:
+        summary: "Example1"
+        value: 3001
+      Example2:
+        summary: "Example2"
+        value: 3042
+    x-examples-i18n:
+      de:
+        Example1: "Beispiel 1"
+        Example2: "Beispiel 2"
+  gridCouplingPointId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the grid coupling point where this meter is installed.
+      Mutually exclusive with meteringLocationId.
+      **German:** Referenz auf den Netzkopplungspunkt, an dem dieser Zähler installiert ist.
+      Schließt sich gegenseitig mit meteringLocationId aus.
+    x-i18n:
+      de:
+        description: Referenz auf den Netzkopplungspunkt des Zählers. Exklusiv mit MeLo.
+    examples:
+      NKP1:
+        summary: "NKP1"
+        value: 8001
+      NKP2:
+        summary: "NKP2"
+        value: 8002
+    x-examples-i18n:
+      de:
+        NKP1: "NKP1"
+        NKP2: "NKP2"
+  msbActorId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the metering point operator (MSB) who operates this meter.
+      **German:** Referenz auf den Messstellenbetreiber (MSB), der diesen Zähler betreibt.
+    x-i18n:
+      de:
+        description: Referenz auf den Messstellenbetreiber (MSB) dieses Zählers.
+    examples:
+      BasicMSB:
+        summary: "BasicMSB"
+        value: 42
+      CompetitiveMSB:
+        summary: "CompetitiveMSB"
+        value: 55
+    x-examples-i18n:
+      de:
+        BasicMSB: "Grundzuständiger MSB (gMSB)"
+        CompetitiveMSB: "Wettbewerblicher MSB (wMSB)"
+  gatewayId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the smart meter gateway (SMGW) connected to this meter, if applicable.
+      **German:** Referenz auf das Smart-Meter-Gateway (SMGW), das mit diesem Zähler verbunden ist.
+    x-i18n:
+      de:
+        description: Referenz auf das verbundene Smart-Meter-Gateway (SMGW), falls vorhanden.
+    examples:
+      GW1:
+        summary: "GW1"
+        value: 6001
+      GW2:
+        summary: "GW2"
+        value: 6002
+    x-examples-i18n:
+      de:
+        GW1: "GW1"
+        GW2: "GW2"
+  validity:
+    $ref: "../../common/validityPeriod.yaml"
+  label:
+    $ref: "../../common/multilingualLabel.yaml"
