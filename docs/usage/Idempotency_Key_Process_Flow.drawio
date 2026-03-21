@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0" version="29.6.4" pages="2">
   <diagram id="page1" name="Retry Process">
-    <mxGraphModel dx="1658" dy="1060" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -78,7 +78,7 @@
         <mxCell id="122" edge="1" parent="1" source="119" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="121" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="123" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.ellipsePerimeter;symbol=terminate;fillColor=#f8cecc;strokeColor=#c62828;fontColor=#c62828;fontSize=8;fontStyle=1;" value="✗ TCP Timeout 30s" vertex="1">
+        <mxCell id="123" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.ellipsePerimeter;symbol=terminate;fillColor=#f8cecc;strokeColor=#c62828;fontColor=#c62828;fontSize=8;fontStyle=1;" value="✗ TCP &#xa;Timeout 30s" vertex="1">
           <mxGeometry height="46" width="46" x="248" y="254" as="geometry" />
         </mxCell>
         <mxCell id="124" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#fff3e0;strokeColor=#e65100;fontColor=#bf360c;fontSize=9;align=center;verticalAlign=middle;" value="Backoff: 2s  |  Key ✦ UNCHANGED  |  X-Request-ID: NEW ✶" vertex="1">
@@ -258,7 +258,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="page2" name="Header Differentiation">
-    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2003" dy="1281" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -392,88 +392,87 @@
           <mxGeometry height="20" width="340" x="790" y="52" as="geometry" />
         </mxCell>
         <mxCell id="212" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.ellipsePerimeter;symbol=general;fillColor=#ffffff;strokeColor=#27ae60;fontColor=#27ae60;fontSize=8;fontStyle=1;" value="Request received" vertex="1">
-          <mxGeometry height="36" width="36" x="1002" y="80" as="geometry" />
+          <mxGeometry height="36" width="36" x="1078" y="65" as="geometry" />
         </mxCell>
-        <mxCell id="213" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rhombusPerimeter;symbol=exclusiveGw;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#7d4e00;fontSize=8;fontStyle=1;align=center;" value="Idempotency- Key present?" vertex="1">
-          <mxGeometry height="64" width="64" x="988" y="150" as="geometry" />
+        <mxCell id="213" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rhombusPerimeter;symbol=exclusiveGw;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#7d4e00;fontSize=8;fontStyle=1;align=center;" value="Idempotency- &#xa;Key present?" vertex="1">
+          <mxGeometry height="64" width="64" x="1068" y="150" as="geometry" />
         </mxCell>
-        <mxCell id="214" edge="1" parent="1" source="212" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#555555;fontColor=#555555;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="213" value="">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="214" edge="1" parent="1" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0.339;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#555555;fontColor=#555555;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;entryPerimeter=0;" target="213" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1100" y="98" as="sourcePoint" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="215" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#fff3e0;strokeColor=#e65100;fontColor=#bf360c;fontSize=9;align=center;verticalAlign=middle;" value="⚠ No Idempotency-Key! Process normally (no dedup guarantee)" vertex="1">
           <mxGeometry height="54" width="148" x="820" y="155" as="geometry" />
         </mxCell>
-        <mxCell id="216" edge="1" parent="1" source="213" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#e65100;fontColor=#e65100;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="215" value="NO">
+        <mxCell id="216" edge="1" parent="1" source="213" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#e65100;fontColor=#e65100;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="215" value="NO">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="217" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rhombusPerimeter;symbol=exclusiveGw;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#7d4e00;fontSize=8;fontStyle=1;align=center;" value="Key in Cache?" vertex="1">
-          <mxGeometry height="64" width="64" x="988" y="245" as="geometry" />
+        <mxCell id="217" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rhombusPerimeter;symbol=exclusiveGw;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#7d4e00;fontSize=8;fontStyle=1;align=center;" value="Key in&#xa; Cache?" vertex="1">
+          <mxGeometry height="64" width="64" x="1068" y="245" as="geometry" />
         </mxCell>
-        <mxCell id="218" edge="1" parent="1" source="213" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#555555;fontColor=#555555;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="217" value="YES">
+        <mxCell id="218" edge="1" parent="1" source="213" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.487;exitY=0.732;exitDx=0;exitDy=0;entryX=0.5;entryY=0.313;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#555555;fontColor=#555555;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;exitPerimeter=0;entryPerimeter=0;" target="217" value="YES">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="219" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rhombusPerimeter;symbol=exclusiveGw;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#7d4e00;fontSize=8;fontStyle=1;align=center;" value="Status?" vertex="1">
-          <mxGeometry height="64" width="64" x="988" y="335" as="geometry" />
+          <mxGeometry height="64" width="64" x="1068" y="335" as="geometry" />
         </mxCell>
-        <mxCell id="220" edge="1" parent="1" source="217" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#555555;fontColor=#555555;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="219" value="YES">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="220" edge="1" parent="1" source="217" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.505;exitY=0.646;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#555555;fontColor=#555555;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;exitPerimeter=0;" value="YES">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1100" y="360" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="221" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=9;align=center;verticalAlign=middle;" value="✓ Return cached response Idempotency-Key-Status: replayed" vertex="1">
-          <mxGeometry height="56" width="156" x="942" y="435" as="geometry" />
+          <mxGeometry height="56" width="156" x="1022" y="435" as="geometry" />
         </mxCell>
-        <mxCell id="222" edge="1" parent="1" source="219" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="221" value="COMPLETED">
+        <mxCell id="222" edge="1" parent="1" source="219" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=0.661;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;exitPerimeter=0;" target="221" value="COMPLETED">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="223" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#fce4e4;strokeColor=#c62828;fontColor=#b71c1c;fontSize=9;align=center;verticalAlign=middle;" value="409 Conflict idempotency_key_in_use Retry later" vertex="1">
-          <mxGeometry height="52" width="152" x="1100" y="325" as="geometry" />
+          <mxGeometry height="52" width="152" x="1240" y="341" as="geometry" />
         </mxCell>
-        <mxCell id="224" edge="1" parent="1" source="219" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#c62828;fontColor=#c62828;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="223" value="IN_PROGRESS">
+        <mxCell id="224" edge="1" parent="1" source="219" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.661;exitY=0.5;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#c62828;fontColor=#c62828;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;exitPerimeter=0;" target="223" value="IN_PROGRESS">
           <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1052" y="367" />
-              <mxPoint x="1176" y="367" />
-            </Array>
+            <Array as="points" />
+            <mxPoint x="1300" y="410" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="225" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=9;align=center;verticalAlign=middle;" value="Lock key (IN_PROGRESS) Process request" vertex="1">
-          <mxGeometry height="50" width="148" x="810" y="250" as="geometry" />
+          <mxGeometry height="50" width="148" x="821" y="251" as="geometry" />
         </mxCell>
-        <mxCell id="226" edge="1" parent="1" source="217" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#555555;fontColor=#555555;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="225" value="NO">
+        <mxCell id="226" edge="1" parent="1" source="217" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.359;exitY=0.49;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#555555;fontColor=#555555;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;exitPerimeter=0;" target="225" value="NO">
           <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="988" y="277" />
-              <mxPoint x="884" y="277" />
-            </Array>
+            <Array as="points" />
           </mxGeometry>
         </mxCell>
         <mxCell id="227" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rectanglePerimeter;symbol=dataStore;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;fontColor=#4a148c;fontSize=9;align=center;" value="Write to cache Status=COMPLETED, TTL=24h" vertex="1">
-          <mxGeometry height="50" width="148" x="810" y="335" as="geometry" />
+          <mxGeometry height="50" width="148" x="821" y="335" as="geometry" />
         </mxCell>
-        <mxCell id="228" edge="1" parent="1" source="225" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#6a1b9a;fontColor=#6a1b9a;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="227" value="write">
+        <mxCell id="228" edge="1" parent="1" source="225" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.498;entryY=0.027;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#6a1b9a;fontColor=#6a1b9a;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;entryPerimeter=0;" target="227" value="write">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="229" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#dae8fc;strokeColor=#1565c0;fontColor=#0d47a1;fontSize=9;align=center;verticalAlign=middle;" value="Send response to client" vertex="1">
-          <mxGeometry height="40" width="148" x="810" y="425" as="geometry" />
+          <mxGeometry height="40" width="148" x="820" y="427" as="geometry" />
         </mxCell>
-        <mxCell id="230" edge="1" parent="1" source="227" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1565c0;fontColor=#1565c0;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="229" value="">
+        <mxCell id="230" edge="1" parent="1" source="227" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.495;exitY=0.973;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1565c0;fontColor=#1565c0;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;exitPerimeter=0;" target="229" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="231" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.ellipsePerimeter;symbol=terminate;fillColor=#27ae60;strokeColor=#1e8449;fontColor=#ffffff;fontSize=8;fontStyle=1;" value="End" vertex="1">
-          <mxGeometry height="36" width="36" x="1002" y="520" as="geometry" />
+          <mxGeometry height="36" width="36" x="1082" y="520" as="geometry" />
         </mxCell>
-        <mxCell id="232" edge="1" parent="1" source="221" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="231" value="">
+        <mxCell id="232" edge="1" parent="1" source="221" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.489;entryY=0.045;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;entryPerimeter=0;" target="231" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="233" edge="1" parent="1" source="229" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1565c0;fontColor=#1565c0;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="231" value="">
+        <mxCell id="233" edge="1" parent="1" source="229" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1565c0;fontColor=#1565c0;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;entryX=0.037;entryY=0.561;entryDx=0;entryDy=0;entryPerimeter=0;" target="231" value="">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="884" y="445" />
-              <mxPoint x="884" y="538" />
+              <mxPoint x="894" y="540" />
             </Array>
+            <mxPoint x="1080" y="540" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="234" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4e4;strokeColor=#c62828;fontColor=#b71c1c;fontSize=9;align=left;spacingLeft=8;" value="⚠  Error responses (4xx) are also cached!    For a corrected request: use a NEW Idempotency-Key!" vertex="1">
-          <mxGeometry height="36" width="400" x="790" y="570" as="geometry" />
+          <mxGeometry height="36" width="360" x="820" y="570" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
