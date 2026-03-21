@@ -1,224 +1,485 @@
-<mxfile host="app.diagrams.net" version="21.6.5" type="device">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0" version="29.6.4" pages="2">
   <diagram id="page1" name="Retry Process">
-    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="801" dy="512" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
       <root>
-    <mxCell id="0"/>
-    <mxCell id="1" parent="0"/>
-    <mxCell id="101" value="Idempotency-Key – Retry Process with 4 Attempts" style="text;html=1;fontSize=15;fontStyle=1;align=center;strokeColor=none;fillColor=none;" vertex="1" parent="1"><mxGeometry x="20" y="20" width="1600" height="30" as="geometry"/></mxCell>
-    <mxCell id="102" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#1565c0;opacity=30;" vertex="1" parent="1"><mxGeometry x="20" y="60" width="1600" height="170" as="geometry"/></mxCell>
-    <mxCell id="103" value="CLIENT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#1565c0;fontColor=#0d47a1;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="20" y="60" width="32" height="170" as="geometry"/></mxCell>
-    <mxCell id="104" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff8e1;strokeColor=#f9a825;opacity=30;" vertex="1" parent="1"><mxGeometry x="20" y="230" width="1600" height="120" as="geometry"/></mxCell>
-    <mxCell id="105" value="NETWORK" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff8e1;strokeColor=#f9a825;fontColor=#e65100;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="20" y="230" width="32" height="120" as="geometry"/></mxCell>
-    <mxCell id="106" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;opacity=30;" vertex="1" parent="1"><mxGeometry x="20" y="350" width="1600" height="200" as="geometry"/></mxCell>
-    <mxCell id="107" value="SERVER" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="20" y="350" width="32" height="200" as="geometry"/></mxCell>
-    <mxCell id="108" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;opacity=30;" vertex="1" parent="1"><mxGeometry x="20" y="550" width="1600" height="110" as="geometry"/></mxCell>
-    <mxCell id="109" value="IDEMPOTENCY
-CACHE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;fontColor=#4a148c;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="20" y="550" width="32" height="110" as="geometry"/></mxCell>
-    <mxCell id="110" value="" style="endArrow=none;html=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="460" y="60" as="sourcePoint"/><mxPoint x="460" y="660" as="targetPoint"/></mxGeometry></mxCell>
-    <mxCell id="111" value="" style="endArrow=none;html=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="720" y="60" as="sourcePoint"/><mxPoint x="720" y="660" as="targetPoint"/></mxGeometry></mxCell>
-    <mxCell id="112" value="" style="endArrow=none;html=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1000" y="60" as="sourcePoint"/><mxPoint x="1000" y="660" as="targetPoint"/></mxGeometry></mxCell>
-    <mxCell id="113" value="" style="endArrow=none;html=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1300" y="60" as="sourcePoint"/><mxPoint x="1300" y="660" as="targetPoint"/></mxGeometry></mxCell>
-    <mxCell id="114" value="Attempt 1  |  ✗ Timeout" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4e4;strokeColor=#c62828;fontColor=#b71c1c;fontSize=9;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="175" y="63" width="270" height="26" as="geometry"/></mxCell>
-    <mxCell id="115" value="Attempt 2  |  ✗ 503 Unavailable" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4e4;strokeColor=#c62828;fontColor=#b71c1c;fontSize=9;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="465" y="63" width="245" height="26" as="geometry"/></mxCell>
-    <mxCell id="116" value="Attempt 3  |  ✗ Response Lost  ⚠" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#e65100;fontColor=#bf360c;fontSize=9;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="735" y="63" width="255" height="26" as="geometry"/></mxCell>
-    <mxCell id="117" value="Attempt 4  |  ✓ Cache Hit" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=9;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="1020" y="63" width="270" height="26" as="geometry"/></mxCell>
-    <mxCell id="118" value="Start" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.ellipsePerimeter;symbol=general;fillColor=#ffffff;strokeColor=#27ae60;fontColor=#27ae60;fontSize=8;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="55" y="120" width="36" height="36" as="geometry"/></mxCell>
-    <mxCell id="119" value="Generate UUID v4
-Idempotency-Key
-2f6d3f3d-..." style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=9;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="100" y="107" width="140" height="62" as="geometry"/></mxCell>
-    <mxCell id="120" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="118" target="119" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="121" value="POST /messages
-Idempotency-Key: 2f6d3f3d-... ✦
-X-Message-ID:   3e6d3f3d-... ✦
-X-Request-ID:   7c9b3a2e-... ✶" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#dae8fc;strokeColor=#1565c0;fontColor=#0d47a1;fontSize=9;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="250" y="102" width="200" height="74" as="geometry"/></mxCell>
-    <mxCell id="122" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="119" target="121" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="123" value="✗ TCP
-Timeout
-30s" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.ellipsePerimeter;symbol=terminate;fillColor=#f8cecc;strokeColor=#c62828;fontColor=#c62828;fontSize=8;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="305" y="252" width="46" height="46" as="geometry"/></mxCell>
-    <mxCell id="124" value="Backoff: 2s  |  Key ✦ UNCHANGED  |  X-Request-ID: NEW ✶" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#fff3e0;strokeColor=#e65100;fontColor=#bf360c;fontSize=9;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="248" y="185" width="210" height="22" as="geometry"/></mxCell>
-    <mxCell id="125" value="send →" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1565c0;fontColor=#1565c0;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="121" target="123" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="126" value="✗ no response" style="rounded=0;orthogonalLoop=1;jettySize=auto;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#c62828;fontColor=#c62828;fontSize=8;endArrow=open;endFill=0;dashed=1;strokeWidth=2;" edge="1" source="123" target="124" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="127" value="POST /messages  (Retry 1)
-Idempotency-Key: 2f6d3f3d-... ✦
-X-Message-ID:   3e6d3f3d-... ✦
-X-Request-ID:   b2c4e6f8-... ✶" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#dae8fc;strokeColor=#1565c0;fontColor=#0d47a1;fontSize=9;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="475" y="102" width="215" height="74" as="geometry"/></mxCell>
-    <mxCell id="128" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#e65100;fontColor=#e65100;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="124" target="127" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="129" value="✗ 503
-Unavailable
-Retry-After:10" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.ellipsePerimeter;symbol=terminate;fillColor=#f8cecc;strokeColor=#c62828;fontColor=#c62828;fontSize=8;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="558" y="250" width="50" height="50" as="geometry"/></mxCell>
-    <mxCell id="130" value="Backoff: 10s (Retry-After)  |  Key ✦ UNCHANGED" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#fff3e0;strokeColor=#e65100;fontColor=#bf360c;fontSize=9;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="473" y="185" width="215" height="22" as="geometry"/></mxCell>
-    <mxCell id="131" value="send →" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1565c0;fontColor=#1565c0;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="127" target="129" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="132" value="503 ✗" style="rounded=0;orthogonalLoop=1;jettySize=auto;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#c62828;fontColor=#c62828;fontSize=8;endArrow=open;endFill=0;dashed=1;strokeWidth=2;" edge="1" source="129" target="130" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="133" value="POST /messages  (Retry 2)
-Idempotency-Key: 2f6d3f3d-... ✦
-X-Message-ID:   3e6d3f3d-... ✦
-X-Request-ID:   c3d5f7a9-... ✶" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#dae8fc;strokeColor=#1565c0;fontColor=#0d47a1;fontSize=9;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="726" y="102" width="225" height="74" as="geometry"/></mxCell>
-    <mxCell id="134" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#e65100;fontColor=#e65100;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="130" target="133" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="135" value="→ reaches server" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#fff8e1;strokeColor=#f9a825;fontColor=#e65100;fontSize=9;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="780" y="253" width="115" height="32" as="geometry"/></mxCell>
-    <mxCell id="136" value="✗ RESPONSE
-LOST!" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.ellipsePerimeter;symbol=terminate;fillColor=#f8cecc;strokeColor=#c62828;fontColor=#c62828;fontSize=8;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="940" y="248" width="52" height="52" as="geometry"/></mxCell>
-    <mxCell id="137" value="Key in
-Cache?" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rhombusPerimeter;symbol=exclusiveGw;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#7d4e00;fontSize=8;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="820" y="374" width="58" height="58" as="geometry"/></mxCell>
-    <mxCell id="138" value="PROCESS
-Supplier change
-TX-2026-004711
-Status: IN_PROGRESS" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=9;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="790" y="440" width="170" height="68" as="geometry"/></mxCell>
-    <mxCell id="139" value="WRITE
-Key=2f6d3f3d-...
-Status=COMPLETED
-TTL=24h" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rectanglePerimeter;symbol=dataStore;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;fontColor=#4a148c;fontSize=9;align=center;" vertex="1" parent="1"><mxGeometry x="800" y="568" width="150" height="68" as="geometry"/></mxCell>
-    <mxCell id="140" value="⚠ CRITICAL: Backoff 20s  |  Key ✦ UNCHANGED  |  Server already processed!" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#fce4e4;strokeColor=#b71c1c;fontColor=#b71c1c;fontSize=9;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="723" y="185" width="235" height="22" as="geometry"/></mxCell>
-    <mxCell id="141" value="send →" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1565c0;fontColor=#1565c0;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="133" target="135" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="142" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#f9a825;fontColor=#f9a825;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="135" target="137" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="143" value="NO" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="137" target="138" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="144" value="write" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#6a1b9a;fontColor=#6a1b9a;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="138" target="139" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="145" value="202 sending..." style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="138" target="136" parent="1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="875" y="474"/><mxPoint x="966" y="474"/><mxPoint x="966" y="274"/></Array></mxGeometry></mxCell>
-    <mxCell id="146" value="✗ no response" style="rounded=0;orthogonalLoop=1;jettySize=auto;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#b71c1c;fontColor=#b71c1c;fontSize=8;endArrow=open;endFill=0;dashed=1;strokeWidth=2;" edge="1" source="136" target="140" parent="1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="966" y="248"/><mxPoint x="966" y="196"/><mxPoint x="958" y="196"/></Array></mxGeometry></mxCell>
-    <mxCell id="147" value="POST /messages  (Retry 3)
-Idempotency-Key: 2f6d3f3d-... ✦
-X-Message-ID:   3e6d3f3d-... ✦
-X-Request-ID:   d4e6f8b0-... ✶" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#dae8fc;strokeColor=#1565c0;fontColor=#0d47a1;fontSize=9;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="1010" y="102" width="225" height="74" as="geometry"/></mxCell>
-    <mxCell id="148" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#b71c1c;fontColor=#b71c1c;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="140" target="147" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="149" value="→ reaches server" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#fff8e1;strokeColor=#f9a825;fontColor=#e65100;fontSize=9;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="1060" y="253" width="115" height="32" as="geometry"/></mxCell>
-    <mxCell id="150" value="✓ 202 Accepted
-(replayed)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=9;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="1330" y="252" width="130" height="40" as="geometry"/></mxCell>
-    <mxCell id="151" value="Key in
-Cache?" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rhombusPerimeter;symbol=exclusiveGw;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#7d4e00;fontSize=8;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="1100" y="374" width="58" height="58" as="geometry"/></mxCell>
-    <mxCell id="152" value="✓ CACHE HIT
-Return cached response
-(no re-processing!)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=9;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="1075" y="445" width="170" height="62" as="geometry"/></mxCell>
-    <mxCell id="153" value="READ
-Key=2f6d3f3d-...
-Status=COMPLETED
-Response=202, TX-2026-004711" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rectanglePerimeter;symbol=dataStore;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;fontColor=#4a148c;fontSize=9;align=center;" vertex="1" parent="1"><mxGeometry x="1080" y="568" width="170" height="68" as="geometry"/></mxCell>
-    <mxCell id="154" value="✓ SUCCESS
-202 Accepted
-TX-2026-004711
-Idempotency-Key-Status: replayed" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=9;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="1310" y="100" width="190" height="78" as="geometry"/></mxCell>
-    <mxCell id="155" value="End
-1× TX" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.ellipsePerimeter;symbol=terminate;fillColor=#27ae60;strokeColor=#1e8449;fontColor=#ffffff;fontSize=8;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="1558" y="123" width="36" height="36" as="geometry"/></mxCell>
-    <mxCell id="156" value="send →" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1565c0;fontColor=#1565c0;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="147" target="149" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="157" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#f9a825;fontColor=#f9a825;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="149" target="151" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="158" value="YES ✓" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="151" target="152" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="159" value="read" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#6a1b9a;fontColor=#6a1b9a;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="151" target="153" parent="1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1129" y="432"/><mxPoint x="1129" y="568"/></Array></mxGeometry></mxCell>
-    <mxCell id="160" value="202 (cached)" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="152" target="150" parent="1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1160" y="476"/><mxPoint x="1160" y="510"/><mxPoint x="1395" y="510"/><mxPoint x="1395" y="292"/></Array></mxGeometry></mxCell>
-    <mxCell id="161" value="✓ 202 Accepted" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="150" target="154" parent="1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1395" y="252"/><mxPoint x="1395" y="178"/></Array></mxGeometry></mxCell>
-    <mxCell id="162" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="154" target="155" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="163" value="" style="rounded=1;fillColor=#fafafa;strokeColor=#cccccc;" vertex="1" parent="1"><mxGeometry x="20" y="675" width="1600" height="80" as="geometry"/></mxCell>
-    <mxCell id="164" value="LEGEND" style="text;html=1;strokeColor=none;fillColor=none;fontSize=11;fontStyle=1;fontColor=#333333;align=left;" vertex="1" parent="1"><mxGeometry x="30" y="680" width="1560" height="18" as="geometry"/></mxCell>
-    <mxCell id="165" value="✦  Idempotency-Key &amp; X-Message-ID — IDENTICAL across ALL retries (same on every attempt)" style="text;html=1;strokeColor=none;fillColor=none;fontSize=9;fontStyle=0;fontColor=#2e7d32;align=left;" vertex="1" parent="1"><mxGeometry x="30" y="700" width="770" height="16" as="geometry"/></mxCell>
-    <mxCell id="166" value="✶  X-Request-ID &amp; traceparent — NEW per retry (unique per attempt, for log correlation only)" style="text;html=1;strokeColor=none;fillColor=none;fontSize=9;fontStyle=0;fontColor=#1565c0;align=left;" vertex="1" parent="1"><mxGeometry x="30" y="718" width="770" height="16" as="geometry"/></mxCell>
-    <mxCell id="167" value="⚠  Attempt 3 is the critical scenario: Server processes &amp; caches, response lost — without Idempotency-Key = DUPLICATE!" style="text;html=1;strokeColor=none;fillColor=none;fontSize=9;fontStyle=1;fontColor=#b71c1c;align=left;" vertex="1" parent="1"><mxGeometry x="820" y="700" width="790" height="16" as="geometry"/></mxCell>
-    <mxCell id="168" value="✓  Result: exactly 1 × TX-2026-004711 created — despite 4 attempts" style="text;html=1;strokeColor=none;fillColor=none;fontSize=9;fontStyle=1;fontColor=#2e7d32;align=left;" vertex="1" parent="1"><mxGeometry x="820" y="718" width="790" height="16" as="geometry"/></mxCell>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="101" parent="1" style="text;html=1;fontSize=15;fontStyle=1;align=center;strokeColor=none;fillColor=none;" value="Idempotency-Key – Retry Process with 4 Attempts" vertex="1">
+          <mxGeometry height="30" width="1600" x="20" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="102" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#1565c0;opacity=30;" value="" vertex="1">
+          <mxGeometry height="170" width="1600" x="20" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="103" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#1565c0;fontColor=#0d47a1;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;textDirection=vertical-rl;" value="CLIENT" vertex="1">
+          <mxGeometry height="170" width="32" x="20" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="104" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff8e1;strokeColor=#f9a825;opacity=30;" value="" vertex="1">
+          <mxGeometry height="120" width="1600" x="20" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="105" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff8e1;strokeColor=#f9a825;fontColor=#e65100;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;textDirection=vertical-rl;" value="NETWORK" vertex="1">
+          <mxGeometry height="120" width="32" x="20" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="106" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;opacity=30;" value="" vertex="1">
+          <mxGeometry height="200" width="1600" x="20" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="107" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;textDirection=vertical-lr;" value="SERVER" vertex="1">
+          <mxGeometry height="200" width="32" x="20" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="108" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;opacity=30;" value="" vertex="1">
+          <mxGeometry height="110" width="1600" x="20" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="109" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;fontColor=#4a148c;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;textDirection=vertical-rl;" value="IDEMPOTENCY CACHE" vertex="1">
+          <mxGeometry height="110" width="32" x="20" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="110" edge="1" parent="1" style="endArrow=none;html=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="460" y="60" as="sourcePoint" />
+            <mxPoint x="460" y="660" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="111" edge="1" parent="1" style="endArrow=none;html=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="720" y="60" as="sourcePoint" />
+            <mxPoint x="720" y="660" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="112" edge="1" parent="1" style="endArrow=none;html=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1000" y="60" as="sourcePoint" />
+            <mxPoint x="1000" y="660" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="113" edge="1" parent="1" style="endArrow=none;html=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1300" y="60" as="sourcePoint" />
+            <mxPoint x="1300" y="660" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="114" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4e4;strokeColor=#c62828;fontColor=#b71c1c;fontSize=9;fontStyle=1;align=center;" value="Attempt 1  |  ✗ Timeout" vertex="1">
+          <mxGeometry height="26" width="270" x="120" y="63" as="geometry" />
+        </mxCell>
+        <mxCell id="115" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4e4;strokeColor=#c62828;fontColor=#b71c1c;fontSize=9;fontStyle=1;align=center;" value="Attempt 2  |  ✗ 503 Unavailable" vertex="1">
+          <mxGeometry height="26" width="245" x="465" y="63" as="geometry" />
+        </mxCell>
+        <mxCell id="116" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#e65100;fontColor=#bf360c;fontSize=9;fontStyle=1;align=center;" value="Attempt 3  |  ✗ Response Lost  ⚠" vertex="1">
+          <mxGeometry height="26" width="255" x="735" y="63" as="geometry" />
+        </mxCell>
+        <mxCell id="117" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=9;fontStyle=1;align=center;" value="Attempt 4  |  ✓ Cache Hit" vertex="1">
+          <mxGeometry height="26" width="270" x="1020" y="63" as="geometry" />
+        </mxCell>
+        <mxCell id="118" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.ellipsePerimeter;symbol=general;fillColor=#ffffff;strokeColor=#27ae60;fontColor=#27ae60;fontSize=8;fontStyle=1;labelPosition=center;verticalLabelPosition=middle;align=center;verticalAlign=middle;" value="Start" vertex="1">
+          <mxGeometry height="36" width="36" x="55" y="119" as="geometry" />
+        </mxCell>
+        <mxCell id="119" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=9;align=center;verticalAlign=middle;" value="Generate UUID v4 Idempotency-Key 2f6d3f3d-..." vertex="1">
+          <mxGeometry height="62" width="80" x="119" y="107" as="geometry" />
+        </mxCell>
+        <mxCell id="120" edge="1" parent="1" source="118" style="rounded=0;orthogonalLoop=1;jettySize=auto;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;exitX=1.039;exitY=0.55;exitDx=0;exitDy=0;exitPerimeter=0;" target="119" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="90" y="140" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="121" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#dae8fc;strokeColor=#1565c0;fontColor=#0d47a1;fontSize=9;align=center;verticalAlign=middle;" value="POST /messages Idempotency-Key: 2f6d3f3d-... ✦ X-Message-ID:   3e6d3f3d-... ✦ X-Request-ID:   7c9b3a2e-... ✶" vertex="1">
+          <mxGeometry height="58" width="180" x="248" y="109" as="geometry" />
+        </mxCell>
+        <mxCell id="122" edge="1" parent="1" source="119" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="121" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="123" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.ellipsePerimeter;symbol=terminate;fillColor=#f8cecc;strokeColor=#c62828;fontColor=#c62828;fontSize=8;fontStyle=1;" value="✗ TCP Timeout 30s" vertex="1">
+          <mxGeometry height="46" width="46" x="248" y="254" as="geometry" />
+        </mxCell>
+        <mxCell id="124" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#fff3e0;strokeColor=#e65100;fontColor=#bf360c;fontSize=9;align=center;verticalAlign=middle;" value="Backoff: 2s  |  Key ✦ UNCHANGED  |  X-Request-ID: NEW ✶" vertex="1">
+          <mxGeometry height="22" width="182" x="248" y="176" as="geometry" />
+        </mxCell>
+        <mxCell id="125" edge="1" parent="1" source="121" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1565c0;fontColor=#1565c0;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;entryX=0.497;entryY=0.05;entryDx=0;entryDy=0;entryPerimeter=0;" target="123" value="send →">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="270" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="126" edge="1" parent="1" source="123" style="rounded=0;orthogonalLoop=1;jettySize=auto;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#c62828;fontColor=#c62828;fontSize=8;endArrow=open;endFill=0;dashed=1;strokeWidth=2;entryX=0.75;entryY=1;entryDx=0;entryDy=0;exitX=0.991;exitY=0.491;exitDx=0;exitDy=0;exitPerimeter=0;" target="124" value="✗ no response">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="127" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#dae8fc;strokeColor=#1565c0;fontColor=#0d47a1;fontSize=9;align=center;verticalAlign=middle;" value="POST /messages  (Retry 1) Idempotency-Key: 2f6d3f3d-... ✦ X-Message-ID:   3e6d3f3d-... ✦ X-Request-ID:   b2c4e6f8-... ✶" vertex="1">
+          <mxGeometry height="74" width="195" x="477" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="128" edge="1" parent="1" source="124" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#e65100;fontColor=#e65100;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="127" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="129" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.ellipsePerimeter;symbol=terminate;fillColor=#f8cecc;strokeColor=#c62828;fontColor=#c62828;fontSize=8;fontStyle=1;" value="✗ 503 Unavailable &#xa;Retry-After:10" vertex="1">
+          <mxGeometry height="50" width="50" x="510" y="254" as="geometry" />
+        </mxCell>
+        <mxCell id="130" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#fff3e0;strokeColor=#e65100;fontColor=#bf360c;fontSize=9;align=center;verticalAlign=middle;" value="Backoff: 10s (Retry-After)  |  Key ✦ UNCHANGED" vertex="1">
+          <mxGeometry height="22" width="190" x="480" y="185" as="geometry" />
+        </mxCell>
+        <mxCell id="131" edge="1" parent="1" source="127" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.493;entryY=0.04;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1565c0;fontColor=#1565c0;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;entryPerimeter=0;" target="129" value="send →">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="132" edge="1" parent="1" style="rounded=0;orthogonalLoop=1;jettySize=auto;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#c62828;fontColor=#c62828;fontSize=8;endArrow=open;endFill=0;dashed=1;strokeWidth=2;exitX=0.965;exitY=0.522;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.795;entryY=1.146;entryDx=0;entryDy=0;entryPerimeter=0;" value="503 ✗">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="622.75" y="276.79" />
+            </Array>
+            <mxPoint x="550" y="276.89000000000004" as="sourcePoint" />
+            <mxPoint x="622.8" y="207.00199999999998" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="133" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#dae8fc;strokeColor=#1565c0;fontColor=#0d47a1;fontSize=9;align=center;verticalAlign=middle;" value="POST /messages  (Retry 2) Idempotency-Key: 2f6d3f3d-... ✦ X-Message-ID:   3e6d3f3d-... ✦ X-Request-ID:   c3d5f7a9-... ✶" vertex="1">
+          <mxGeometry height="74" width="225" x="726" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="134" edge="1" parent="1" source="130" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#e65100;fontColor=#e65100;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="133" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="135" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#fff8e1;strokeColor=#f9a825;fontColor=#e65100;fontSize=9;align=center;verticalAlign=middle;" value="→ reaches server" vertex="1">
+          <mxGeometry height="32" width="115" x="780" y="253" as="geometry" />
+        </mxCell>
+        <mxCell id="136" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.ellipsePerimeter;symbol=terminate;fillColor=#f8cecc;strokeColor=#c62828;fontColor=#c62828;fontSize=8;fontStyle=1;" value="✗ RESPONSE LOST!" vertex="1">
+          <mxGeometry height="52" width="52" x="940" y="248" as="geometry" />
+        </mxCell>
+        <mxCell id="137" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rhombusPerimeter;symbol=exclusiveGw;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#7d4e00;fontSize=8;fontStyle=1;align=center;" value="Key in Cache?" vertex="1">
+          <mxGeometry height="58" width="58" x="820" y="374" as="geometry" />
+        </mxCell>
+        <mxCell id="138" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=9;align=center;verticalAlign=middle;" value="PROCESS Supplier change TX-2026-004711 Status: IN_PROGRESS" vertex="1">
+          <mxGeometry height="68" width="170" x="790" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="139" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rectanglePerimeter;symbol=dataStore;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;fontColor=#4a148c;fontSize=9;align=center;" value="WRITE Key=2f6d3f3d-... Status=COMPLETED TTL=24h" vertex="1">
+          <mxGeometry height="68" width="150" x="800" y="568" as="geometry" />
+        </mxCell>
+        <mxCell id="140" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#fce4e4;strokeColor=#b71c1c;fontColor=#b71c1c;fontSize=9;fontStyle=1;align=center;" value="⚠ CRITICAL: Backoff 20s  |  Key ✦ UNCHANGED  |  Server already processed!" vertex="1">
+          <mxGeometry height="22" width="235" x="723" y="185" as="geometry" />
+        </mxCell>
+        <mxCell id="141" edge="1" parent="1" source="133" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1565c0;fontColor=#1565c0;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="135" value="send →">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="142" edge="1" parent="1" source="135" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#f9a825;fontColor=#f9a825;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="137" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="143" edge="1" parent="1" source="137" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="138" value="NO">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="144" edge="1" parent="1" source="138" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#6a1b9a;fontColor=#6a1b9a;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="139" value="write">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="145" edge="1" parent="1" source="138" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="136" value="202 sending...">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="875" y="474" />
+              <mxPoint x="966" y="474" />
+              <mxPoint x="966" y="274" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="146" edge="1" parent="1" source="136" style="rounded=0;orthogonalLoop=1;jettySize=auto;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#b71c1c;fontColor=#b71c1c;fontSize=8;endArrow=open;endFill=0;dashed=1;strokeWidth=2;" target="140" value="✗ no response">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="966" y="248" />
+              <mxPoint x="966" y="196" />
+              <mxPoint x="958" y="196" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="147" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#dae8fc;strokeColor=#1565c0;fontColor=#0d47a1;fontSize=9;align=center;verticalAlign=middle;" value="POST /messages  (Retry 3) Idempotency-Key: 2f6d3f3d-... ✦ X-Message-ID:   3e6d3f3d-... ✦ X-Request-ID:   d4e6f8b0-... ✶" vertex="1">
+          <mxGeometry height="74" width="225" x="1010" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="148" edge="1" parent="1" source="140" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#b71c1c;fontColor=#b71c1c;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="147" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="149" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#fff8e1;strokeColor=#f9a825;fontColor=#e65100;fontSize=9;align=center;verticalAlign=middle;" value="→ reaches server" vertex="1">
+          <mxGeometry height="32" width="115" x="1060" y="253" as="geometry" />
+        </mxCell>
+        <mxCell id="150" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=9;align=center;verticalAlign=middle;" value="✓ 202 Accepted (replayed)" vertex="1">
+          <mxGeometry height="40" width="130" x="1330" y="252" as="geometry" />
+        </mxCell>
+        <mxCell id="151" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rhombusPerimeter;symbol=exclusiveGw;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#7d4e00;fontSize=8;fontStyle=1;align=center;" value="Key in Cache?" vertex="1">
+          <mxGeometry height="58" width="58" x="1100" y="374" as="geometry" />
+        </mxCell>
+        <mxCell id="152" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=9;align=center;verticalAlign=middle;" value="✓ CACHE HIT Return cached response (no re-processing!)" vertex="1">
+          <mxGeometry height="62" width="170" x="1075" y="445" as="geometry" />
+        </mxCell>
+        <mxCell id="153" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rectanglePerimeter;symbol=dataStore;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;fontColor=#4a148c;fontSize=9;align=center;" value="READ Key=2f6d3f3d-... Status=COMPLETED Response=202, TX-2026-004711" vertex="1">
+          <mxGeometry height="68" width="170" x="1080" y="568" as="geometry" />
+        </mxCell>
+        <mxCell id="154" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=9;align=center;verticalAlign=middle;" value="✓ SUCCESS 202 Accepted TX-2026-004711 Idempotency-Key-Status: replayed" vertex="1">
+          <mxGeometry height="78" width="190" x="1310" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="155" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.ellipsePerimeter;symbol=terminate;fillColor=#27ae60;strokeColor=#1e8449;fontColor=#ffffff;fontSize=8;fontStyle=1;" value="End 1× TX" vertex="1">
+          <mxGeometry height="36" width="36" x="1558" y="123" as="geometry" />
+        </mxCell>
+        <mxCell id="156" edge="1" parent="1" source="147" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1565c0;fontColor=#1565c0;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="149" value="send →">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="157" edge="1" parent="1" source="149" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#f9a825;fontColor=#f9a825;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="151" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="158" edge="1" parent="1" source="151" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="152" value="YES ✓">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="159" edge="1" parent="1" source="151" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#6a1b9a;fontColor=#6a1b9a;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="153" value="read">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1129" y="432" />
+              <mxPoint x="1129" y="568" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="160" edge="1" parent="1" source="152" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="150" value="202 (cached)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1160" y="476" />
+              <mxPoint x="1160" y="510" />
+              <mxPoint x="1395" y="510" />
+              <mxPoint x="1395" y="292" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="161" edge="1" parent="1" source="150" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="154" value="✓ 202 Accepted">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1395" y="252" />
+              <mxPoint x="1395" y="178" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="162" edge="1" parent="1" source="154" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="155" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="163" parent="1" style="rounded=1;fillColor=#fafafa;strokeColor=#cccccc;" value="" vertex="1">
+          <mxGeometry height="80" width="1600" x="20" y="675" as="geometry" />
+        </mxCell>
+        <mxCell id="164" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=11;fontStyle=1;fontColor=#333333;align=left;" value="LEGEND" vertex="1">
+          <mxGeometry height="18" width="1560" x="30" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="165" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=9;fontStyle=0;fontColor=#2e7d32;align=left;" value="✦  Idempotency-Key &amp; X-Message-ID — IDENTICAL across ALL retries (same on every attempt)" vertex="1">
+          <mxGeometry height="16" width="770" x="30" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="166" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=9;fontStyle=0;fontColor=#1565c0;align=left;" value="✶  X-Request-ID &amp; traceparent — NEW per retry (unique per attempt, for log correlation only)" vertex="1">
+          <mxGeometry height="16" width="770" x="30" y="718" as="geometry" />
+        </mxCell>
+        <mxCell id="167" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=9;fontStyle=1;fontColor=#b71c1c;align=left;" value="⚠  Attempt 3 is the critical scenario: Server processes &amp; caches, response lost — without Idempotency-Key = DUPLICATE!" vertex="1">
+          <mxGeometry height="16" width="790" x="820" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="168" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=9;fontStyle=1;fontColor=#2e7d32;align=left;" value="✓  Result: exactly 1 × TX-2026-004711 created — despite 4 attempts" vertex="1">
+          <mxGeometry height="16" width="790" x="820" y="718" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
   <diagram id="page2" name="Header Differentiation">
-    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
       <root>
-    <mxCell id="0"/>
-    <mxCell id="1" parent="0"/>
-    <mxCell id="169" value="Idempotency-Key — Header Differentiation &amp; Server Decision Logic" style="text;html=1;fontSize=14;fontStyle=1;align=center;strokeColor=none;fillColor=none;" vertex="1" parent="1"><mxGeometry x="20" y="15" width="1600" height="28" as="geometry"/></mxCell>
-    <mxCell id="170" value="Header Comparison" style="text;html=1;fontSize=12;fontStyle=1;strokeColor=none;fillColor=none;align=left;" vertex="1" parent="1"><mxGeometry x="20" y="52" width="320" height="20" as="geometry"/></mxCell>
-    <mxCell id="171" value="Header" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1a237e;fontColor=#ffffff;strokeColor=#283593;fontSize=10;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="20" y="76" width="150" height="36" as="geometry"/></mxCell>
-    <mxCell id="172" value="Scope" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1a237e;fontColor=#ffffff;strokeColor=#283593;fontSize=10;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="170" y="76" width="120" height="36" as="geometry"/></mxCell>
-    <mxCell id="173" value="Lifetime" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1a237e;fontColor=#ffffff;strokeColor=#283593;fontSize=10;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="290" y="76" width="110" height="36" as="geometry"/></mxCell>
-    <mxCell id="174" value="On Retry" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1a237e;fontColor=#ffffff;strokeColor=#283593;fontSize=10;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="400" y="76" width="100" height="36" as="geometry"/></mxCell>
-    <mxCell id="175" value="Server Action" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1a237e;fontColor=#ffffff;strokeColor=#283593;fontSize=10;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="500" y="76" width="140" height="36" as="geometry"/></mxCell>
-    <mxCell id="176" value="Analogy" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1a237e;fontColor=#ffffff;strokeColor=#283593;fontSize=10;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="640" y="76" width="110" height="36" as="geometry"/></mxCell>
-    <mxCell id="177" value="Idempotency-Key" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=9;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="20" y="112" width="150" height="52" as="geometry"/></mxCell>
-    <mxCell id="178" value="One logical
-operation" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#2e7d32;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" vertex="1" parent="1"><mxGeometry x="170" y="112" width="120" height="52" as="geometry"/></mxCell>
-    <mxCell id="179" value="Until TTL expires
-(24h recommended)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#2e7d32;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" vertex="1" parent="1"><mxGeometry x="290" y="112" width="110" height="52" as="geometry"/></mxCell>
-    <mxCell id="180" value="✦ IDENTICAL
-every retry" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#2e7d32;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" vertex="1" parent="1"><mxGeometry x="400" y="112" width="100" height="52" as="geometry"/></mxCell>
-    <mxCell id="181" value="Deduplicates:
-returns cached
-response" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#2e7d32;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" vertex="1" parent="1"><mxGeometry x="500" y="112" width="140" height="52" as="geometry"/></mxCell>
-    <mxCell id="182" value="Cheque number
-(prevents double
-payment)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#2e7d32;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" vertex="1" parent="1"><mxGeometry x="640" y="112" width="110" height="52" as="geometry"/></mxCell>
-    <mxCell id="183" value="X-Message-ID" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff8e1;strokeColor=#f57f17;fontColor=#e65100;fontSize=9;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="20" y="164" width="150" height="52" as="geometry"/></mxCell>
-    <mxCell id="184" value="Entire business
-process" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f57f17;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" vertex="1" parent="1"><mxGeometry x="170" y="164" width="120" height="52" as="geometry"/></mxCell>
-    <mxCell id="185" value="Entire process
-(days/weeks)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f57f17;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" vertex="1" parent="1"><mxGeometry x="290" y="164" width="110" height="52" as="geometry"/></mxCell>
-    <mxCell id="186" value="✦ IDENTICAL
-every retry" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f57f17;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" vertex="1" parent="1"><mxGeometry x="400" y="164" width="100" height="52" as="geometry"/></mxCell>
-    <mxCell id="187" value="Correlates logs
-no deduplication" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f57f17;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" vertex="1" parent="1"><mxGeometry x="500" y="164" width="140" height="52" as="geometry"/></mxCell>
-    <mxCell id="188" value="Contract number
-(per project)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f57f17;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" vertex="1" parent="1"><mxGeometry x="640" y="164" width="110" height="52" as="geometry"/></mxCell>
-    <mxCell id="189" value="X-Request-ID" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;fontColor=#0d47a1;fontSize=9;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="20" y="216" width="150" height="52" as="geometry"/></mxCell>
-    <mxCell id="190" value="One HTTP
-request/response" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1565c0;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" vertex="1" parent="1"><mxGeometry x="170" y="216" width="120" height="52" as="geometry"/></mxCell>
-    <mxCell id="191" value="One request
-(seconds)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1565c0;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" vertex="1" parent="1"><mxGeometry x="290" y="216" width="110" height="52" as="geometry"/></mxCell>
-    <mxCell id="192" value="✶ NEW per
-retry" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1565c0;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" vertex="1" parent="1"><mxGeometry x="400" y="216" width="100" height="52" as="geometry"/></mxCell>
-    <mxCell id="193" value="Logging and
-echo only" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1565c0;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" vertex="1" parent="1"><mxGeometry x="500" y="216" width="140" height="52" as="geometry"/></mxCell>
-    <mxCell id="194" value="Parcel tracking
-number" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1565c0;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" vertex="1" parent="1"><mxGeometry x="640" y="216" width="110" height="52" as="geometry"/></mxCell>
-    <mxCell id="195" value="traceparent" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#880e4f;fontColor=#4a0072;fontSize=9;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="20" y="268" width="150" height="52" as="geometry"/></mxCell>
-    <mxCell id="196" value="One HTTP span
-(distributed)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#880e4f;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" vertex="1" parent="1"><mxGeometry x="170" y="268" width="120" height="52" as="geometry"/></mxCell>
-    <mxCell id="197" value="One span
-(milliseconds)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#880e4f;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" vertex="1" parent="1"><mxGeometry x="290" y="268" width="110" height="52" as="geometry"/></mxCell>
-    <mxCell id="198" value="✶ NEW per
-retry" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#880e4f;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" vertex="1" parent="1"><mxGeometry x="400" y="268" width="100" height="52" as="geometry"/></mxCell>
-    <mxCell id="199" value="Propagated to all
-backend systems" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#880e4f;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" vertex="1" parent="1"><mxGeometry x="500" y="268" width="140" height="52" as="geometry"/></mxCell>
-    <mxCell id="200" value="GPS signal
-(real-time loc.)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#880e4f;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" vertex="1" parent="1"><mxGeometry x="640" y="268" width="110" height="52" as="geometry"/></mxCell>
-    <mxCell id="201" value="💡  Only Idempotency-Key has ACTIVE server-side deduplication — the other headers are purely observational!" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#e65100;fontColor=#bf360c;fontSize=9;align=left;spacingLeft=8;" vertex="1" parent="1"><mxGeometry x="20" y="328" width="730" height="36" as="geometry"/></mxCell>
-    <mxCell id="202" value="Client Implementation Rules" style="text;html=1;fontSize=11;fontStyle=1;strokeColor=none;fillColor=none;" vertex="1" parent="1"><mxGeometry x="20" y="374" width="400" height="20" as="geometry"/></mxCell>
-    <mxCell id="203" value="1.  Generate UUID v4 BEFORE the 1st attempt — NOT before each retry" style="text;html=1;fontSize=9;fontColor=#2e7d32;strokeColor=none;fillColor=none;align=left;" vertex="1" parent="1"><mxGeometry x="20" y="396" width="730" height="17" as="geometry"/></mxCell>
-    <mxCell id="204" value="2.  Keep key IDENTICAL across ALL retries of the same operation" style="text;html=1;fontSize=9;fontColor=#2e7d32;strokeColor=none;fillColor=none;align=left;" vertex="1" parent="1"><mxGeometry x="20" y="414" width="730" height="17" as="geometry"/></mxCell>
-    <mxCell id="205" value="3.  NEVER reuse key across different operations" style="text;html=1;fontSize=9;fontColor=#c62828;strokeColor=none;fillColor=none;align=left;" vertex="1" parent="1"><mxGeometry x="20" y="432" width="730" height="17" as="geometry"/></mxCell>
-    <mxCell id="206" value="4.  Generate a NEW key when correcting the request body" style="text;html=1;fontSize=9;fontColor=#c62828;strokeColor=none;fillColor=none;align=left;" vertex="1" parent="1"><mxGeometry x="20" y="450" width="730" height="17" as="geometry"/></mxCell>
-    <mxCell id="207" value="5.  Implement exponential backoff with jitter: 2s → 4s → 8s → 16s (max. 5–10 attempts)" style="text;html=1;fontSize=9;fontColor=#1565c0;strokeColor=none;fillColor=none;align=left;" vertex="1" parent="1"><mxGeometry x="20" y="468" width="730" height="17" as="geometry"/></mxCell>
-    <mxCell id="208" value="6.  Always respect Retry-After response header (503 / 429)" style="text;html=1;fontSize=9;fontColor=#1565c0;strokeColor=none;fillColor=none;align=left;" vertex="1" parent="1"><mxGeometry x="20" y="486" width="730" height="17" as="geometry"/></mxCell>
-    <mxCell id="209" value="7.  409 Conflict = key IN_PROGRESS: wait, do NOT generate a new key" style="text;html=1;fontSize=9;fontColor=#7b1fa2;strokeColor=none;fillColor=none;align=left;" vertex="1" parent="1"><mxGeometry x="20" y="504" width="730" height="17" as="geometry"/></mxCell>
-    <mxCell id="210" value="8.  Accept Idempotency-Key-Status: replayed as the authoritative response" style="text;html=1;fontSize=9;fontColor=#7b1fa2;strokeColor=none;fillColor=none;align=left;" vertex="1" parent="1"><mxGeometry x="20" y="522" width="730" height="17" as="geometry"/></mxCell>
-    <mxCell id="211" value="Server Decision Logic" style="text;html=1;fontSize=12;fontStyle=1;strokeColor=none;fillColor=none;align=left;" vertex="1" parent="1"><mxGeometry x="790" y="52" width="340" height="20" as="geometry"/></mxCell>
-    <mxCell id="212" value="Request
-received" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.ellipsePerimeter;symbol=general;fillColor=#ffffff;strokeColor=#27ae60;fontColor=#27ae60;fontSize=8;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="1002" y="80" width="36" height="36" as="geometry"/></mxCell>
-    <mxCell id="213" value="Idempotency-
-Key present?" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rhombusPerimeter;symbol=exclusiveGw;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#7d4e00;fontSize=8;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="988" y="150" width="64" height="64" as="geometry"/></mxCell>
-    <mxCell id="214" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#555555;fontColor=#555555;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="212" target="213" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="215" value="⚠ No Idempotency-Key!
-Process normally
-(no dedup guarantee)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#fff3e0;strokeColor=#e65100;fontColor=#bf360c;fontSize=9;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="820" y="155" width="148" height="54" as="geometry"/></mxCell>
-    <mxCell id="216" value="NO" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#e65100;fontColor=#e65100;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="213" target="215" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="217" value="Key in
-Cache?" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rhombusPerimeter;symbol=exclusiveGw;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#7d4e00;fontSize=8;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="988" y="245" width="64" height="64" as="geometry"/></mxCell>
-    <mxCell id="218" value="YES" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#555555;fontColor=#555555;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="213" target="217" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="219" value="Status?" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rhombusPerimeter;symbol=exclusiveGw;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#7d4e00;fontSize=8;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="988" y="335" width="64" height="64" as="geometry"/></mxCell>
-    <mxCell id="220" value="YES" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#555555;fontColor=#555555;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="217" target="219" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="221" value="✓ Return cached response
-Idempotency-Key-Status:
-replayed" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=9;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="942" y="435" width="156" height="56" as="geometry"/></mxCell>
-    <mxCell id="222" value="COMPLETED" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="219" target="221" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="223" value="409 Conflict
-idempotency_key_in_use
-Retry later" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#fce4e4;strokeColor=#c62828;fontColor=#b71c1c;fontSize=9;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="1100" y="325" width="152" height="52" as="geometry"/></mxCell>
-    <mxCell id="224" value="IN_PROGRESS" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#c62828;fontColor=#c62828;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="219" target="223" parent="1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1052" y="367"/><mxPoint x="1176" y="367"/></Array></mxGeometry></mxCell>
-    <mxCell id="225" value="Lock key (IN_PROGRESS)
-Process request" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=9;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="810" y="250" width="148" height="50" as="geometry"/></mxCell>
-    <mxCell id="226" value="NO" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#555555;fontColor=#555555;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="217" target="225" parent="1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="988" y="277"/><mxPoint x="884" y="277"/></Array></mxGeometry></mxCell>
-    <mxCell id="227" value="Write to cache
-Status=COMPLETED, TTL=24h" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rectanglePerimeter;symbol=dataStore;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;fontColor=#4a148c;fontSize=9;align=center;" vertex="1" parent="1"><mxGeometry x="810" y="335" width="148" height="50" as="geometry"/></mxCell>
-    <mxCell id="228" value="write" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#6a1b9a;fontColor=#6a1b9a;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="225" target="227" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="229" value="Send response
-to client" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#dae8fc;strokeColor=#1565c0;fontColor=#0d47a1;fontSize=9;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="810" y="425" width="148" height="40" as="geometry"/></mxCell>
-    <mxCell id="230" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1565c0;fontColor=#1565c0;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="227" target="229" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="231" value="End" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.ellipsePerimeter;symbol=terminate;fillColor=#27ae60;strokeColor=#1e8449;fontColor=#ffffff;fontSize=8;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="1002" y="520" width="36" height="36" as="geometry"/></mxCell>
-    <mxCell id="232" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="221" target="231" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-    <mxCell id="233" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1565c0;fontColor=#1565c0;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" edge="1" source="229" target="231" parent="1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="884" y="445"/><mxPoint x="884" y="538"/></Array></mxGeometry></mxCell>
-    <mxCell id="234" value="⚠  Error responses (4xx) are also cached!
-   For a corrected request: use a NEW Idempotency-Key!" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4e4;strokeColor=#c62828;fontColor=#b71c1c;fontSize=9;align=left;spacingLeft=8;" vertex="1" parent="1"><mxGeometry x="790" y="570" width="400" height="36" as="geometry"/></mxCell>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="169" parent="1" style="text;html=1;fontSize=14;fontStyle=1;align=center;strokeColor=none;fillColor=none;" value="Idempotency-Key — Header Differentiation &amp; Server Decision Logic" vertex="1">
+          <mxGeometry height="28" width="1600" x="20" y="15" as="geometry" />
+        </mxCell>
+        <mxCell id="170" parent="1" style="text;html=1;fontSize=12;fontStyle=1;strokeColor=none;fillColor=none;align=left;" value="Header Comparison" vertex="1">
+          <mxGeometry height="20" width="320" x="20" y="52" as="geometry" />
+        </mxCell>
+        <mxCell id="171" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1a237e;fontColor=#ffffff;strokeColor=#283593;fontSize=10;fontStyle=1;align=center;" value="Header" vertex="1">
+          <mxGeometry height="36" width="150" x="20" y="76" as="geometry" />
+        </mxCell>
+        <mxCell id="172" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1a237e;fontColor=#ffffff;strokeColor=#283593;fontSize=10;fontStyle=1;align=center;" value="Scope" vertex="1">
+          <mxGeometry height="36" width="120" x="170" y="76" as="geometry" />
+        </mxCell>
+        <mxCell id="173" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1a237e;fontColor=#ffffff;strokeColor=#283593;fontSize=10;fontStyle=1;align=center;" value="Lifetime" vertex="1">
+          <mxGeometry height="36" width="110" x="290" y="76" as="geometry" />
+        </mxCell>
+        <mxCell id="174" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1a237e;fontColor=#ffffff;strokeColor=#283593;fontSize=10;fontStyle=1;align=center;" value="On Retry" vertex="1">
+          <mxGeometry height="36" width="100" x="400" y="76" as="geometry" />
+        </mxCell>
+        <mxCell id="175" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1a237e;fontColor=#ffffff;strokeColor=#283593;fontSize=10;fontStyle=1;align=center;" value="Server Action" vertex="1">
+          <mxGeometry height="36" width="140" x="500" y="76" as="geometry" />
+        </mxCell>
+        <mxCell id="176" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1a237e;fontColor=#ffffff;strokeColor=#283593;fontSize=10;fontStyle=1;align=center;" value="Analogy" vertex="1">
+          <mxGeometry height="36" width="110" x="640" y="76" as="geometry" />
+        </mxCell>
+        <mxCell id="177" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=9;fontStyle=1;align=center;" value="Idempotency-Key" vertex="1">
+          <mxGeometry height="52" width="150" x="20" y="112" as="geometry" />
+        </mxCell>
+        <mxCell id="178" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#2e7d32;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" value="One logical operation" vertex="1">
+          <mxGeometry height="52" width="120" x="170" y="112" as="geometry" />
+        </mxCell>
+        <mxCell id="179" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#2e7d32;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" value="Until TTL expires (24h recommended)" vertex="1">
+          <mxGeometry height="52" width="110" x="290" y="112" as="geometry" />
+        </mxCell>
+        <mxCell id="180" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#2e7d32;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" value="✦ IDENTICAL every retry" vertex="1">
+          <mxGeometry height="52" width="100" x="400" y="112" as="geometry" />
+        </mxCell>
+        <mxCell id="181" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#2e7d32;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" value="Deduplicates: returns cached response" vertex="1">
+          <mxGeometry height="52" width="140" x="500" y="112" as="geometry" />
+        </mxCell>
+        <mxCell id="182" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#2e7d32;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" value="Cheque number (prevents double payment)" vertex="1">
+          <mxGeometry height="52" width="110" x="640" y="112" as="geometry" />
+        </mxCell>
+        <mxCell id="183" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff8e1;strokeColor=#f57f17;fontColor=#e65100;fontSize=9;fontStyle=1;align=center;" value="X-Message-ID" vertex="1">
+          <mxGeometry height="52" width="150" x="20" y="164" as="geometry" />
+        </mxCell>
+        <mxCell id="184" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f57f17;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" value="Entire business process" vertex="1">
+          <mxGeometry height="52" width="120" x="170" y="164" as="geometry" />
+        </mxCell>
+        <mxCell id="185" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f57f17;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" value="Entire process (days/weeks)" vertex="1">
+          <mxGeometry height="52" width="110" x="290" y="164" as="geometry" />
+        </mxCell>
+        <mxCell id="186" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f57f17;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" value="✦ IDENTICAL every retry" vertex="1">
+          <mxGeometry height="52" width="100" x="400" y="164" as="geometry" />
+        </mxCell>
+        <mxCell id="187" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f57f17;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" value="Correlates logs no deduplication" vertex="1">
+          <mxGeometry height="52" width="140" x="500" y="164" as="geometry" />
+        </mxCell>
+        <mxCell id="188" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f57f17;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" value="Contract number (per project)" vertex="1">
+          <mxGeometry height="52" width="110" x="640" y="164" as="geometry" />
+        </mxCell>
+        <mxCell id="189" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;fontColor=#0d47a1;fontSize=9;fontStyle=1;align=center;" value="X-Request-ID" vertex="1">
+          <mxGeometry height="52" width="150" x="20" y="216" as="geometry" />
+        </mxCell>
+        <mxCell id="190" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1565c0;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" value="One HTTP request/response" vertex="1">
+          <mxGeometry height="52" width="120" x="170" y="216" as="geometry" />
+        </mxCell>
+        <mxCell id="191" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1565c0;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" value="One request (seconds)" vertex="1">
+          <mxGeometry height="52" width="110" x="290" y="216" as="geometry" />
+        </mxCell>
+        <mxCell id="192" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1565c0;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" value="✶ NEW per retry" vertex="1">
+          <mxGeometry height="52" width="100" x="400" y="216" as="geometry" />
+        </mxCell>
+        <mxCell id="193" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1565c0;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" value="Logging and echo only" vertex="1">
+          <mxGeometry height="52" width="140" x="500" y="216" as="geometry" />
+        </mxCell>
+        <mxCell id="194" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1565c0;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" value="Parcel tracking number" vertex="1">
+          <mxGeometry height="52" width="110" x="640" y="216" as="geometry" />
+        </mxCell>
+        <mxCell id="195" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#880e4f;fontColor=#4a0072;fontSize=9;fontStyle=1;align=center;" value="traceparent" vertex="1">
+          <mxGeometry height="52" width="150" x="20" y="268" as="geometry" />
+        </mxCell>
+        <mxCell id="196" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#880e4f;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" value="One HTTP span (distributed)" vertex="1">
+          <mxGeometry height="52" width="120" x="170" y="268" as="geometry" />
+        </mxCell>
+        <mxCell id="197" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#880e4f;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" value="One span (milliseconds)" vertex="1">
+          <mxGeometry height="52" width="110" x="290" y="268" as="geometry" />
+        </mxCell>
+        <mxCell id="198" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#880e4f;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" value="✶ NEW per retry" vertex="1">
+          <mxGeometry height="52" width="100" x="400" y="268" as="geometry" />
+        </mxCell>
+        <mxCell id="199" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#880e4f;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" value="Propagated to all backend systems" vertex="1">
+          <mxGeometry height="52" width="140" x="500" y="268" as="geometry" />
+        </mxCell>
+        <mxCell id="200" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#880e4f;fontColor=#333333;fontSize=9;fontStyle=0;align=center;" value="GPS signal (real-time loc.)" vertex="1">
+          <mxGeometry height="52" width="110" x="640" y="268" as="geometry" />
+        </mxCell>
+        <mxCell id="201" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#e65100;fontColor=#bf360c;fontSize=9;align=left;spacingLeft=8;" value="💡  Only Idempotency-Key has ACTIVE server-side deduplication — the other headers are purely observational!" vertex="1">
+          <mxGeometry height="36" width="730" x="20" y="328" as="geometry" />
+        </mxCell>
+        <mxCell id="202" parent="1" style="text;html=1;fontSize=11;fontStyle=1;strokeColor=none;fillColor=none;" value="Client Implementation Rules" vertex="1">
+          <mxGeometry height="20" width="400" x="20" y="374" as="geometry" />
+        </mxCell>
+        <mxCell id="203" parent="1" style="text;html=1;fontSize=9;fontColor=#2e7d32;strokeColor=none;fillColor=none;align=left;" value="1.  Generate UUID v4 BEFORE the 1st attempt — NOT before each retry" vertex="1">
+          <mxGeometry height="17" width="730" x="20" y="396" as="geometry" />
+        </mxCell>
+        <mxCell id="204" parent="1" style="text;html=1;fontSize=9;fontColor=#2e7d32;strokeColor=none;fillColor=none;align=left;" value="2.  Keep key IDENTICAL across ALL retries of the same operation" vertex="1">
+          <mxGeometry height="17" width="730" x="20" y="414" as="geometry" />
+        </mxCell>
+        <mxCell id="205" parent="1" style="text;html=1;fontSize=9;fontColor=#c62828;strokeColor=none;fillColor=none;align=left;" value="3.  NEVER reuse key across different operations" vertex="1">
+          <mxGeometry height="17" width="730" x="20" y="432" as="geometry" />
+        </mxCell>
+        <mxCell id="206" parent="1" style="text;html=1;fontSize=9;fontColor=#c62828;strokeColor=none;fillColor=none;align=left;" value="4.  Generate a NEW key when correcting the request body" vertex="1">
+          <mxGeometry height="17" width="730" x="20" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="207" parent="1" style="text;html=1;fontSize=9;fontColor=#1565c0;strokeColor=none;fillColor=none;align=left;" value="5.  Implement exponential backoff with jitter: 2s → 4s → 8s → 16s (max. 5–10 attempts)" vertex="1">
+          <mxGeometry height="17" width="730" x="20" y="468" as="geometry" />
+        </mxCell>
+        <mxCell id="208" parent="1" style="text;html=1;fontSize=9;fontColor=#1565c0;strokeColor=none;fillColor=none;align=left;" value="6.  Always respect Retry-After response header (503 / 429)" vertex="1">
+          <mxGeometry height="17" width="730" x="20" y="486" as="geometry" />
+        </mxCell>
+        <mxCell id="209" parent="1" style="text;html=1;fontSize=9;fontColor=#7b1fa2;strokeColor=none;fillColor=none;align=left;" value="7.  409 Conflict = key IN_PROGRESS: wait, do NOT generate a new key" vertex="1">
+          <mxGeometry height="17" width="730" x="20" y="504" as="geometry" />
+        </mxCell>
+        <mxCell id="210" parent="1" style="text;html=1;fontSize=9;fontColor=#7b1fa2;strokeColor=none;fillColor=none;align=left;" value="8.  Accept Idempotency-Key-Status: replayed as the authoritative response" vertex="1">
+          <mxGeometry height="17" width="730" x="20" y="522" as="geometry" />
+        </mxCell>
+        <mxCell id="211" parent="1" style="text;html=1;fontSize=12;fontStyle=1;strokeColor=none;fillColor=none;align=left;" value="Server Decision Logic" vertex="1">
+          <mxGeometry height="20" width="340" x="790" y="52" as="geometry" />
+        </mxCell>
+        <mxCell id="212" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.ellipsePerimeter;symbol=general;fillColor=#ffffff;strokeColor=#27ae60;fontColor=#27ae60;fontSize=8;fontStyle=1;" value="Request received" vertex="1">
+          <mxGeometry height="36" width="36" x="1002" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="213" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rhombusPerimeter;symbol=exclusiveGw;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#7d4e00;fontSize=8;fontStyle=1;align=center;" value="Idempotency- Key present?" vertex="1">
+          <mxGeometry height="64" width="64" x="988" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="214" edge="1" parent="1" source="212" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#555555;fontColor=#555555;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="213" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="215" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#fff3e0;strokeColor=#e65100;fontColor=#bf360c;fontSize=9;align=center;verticalAlign=middle;" value="⚠ No Idempotency-Key! Process normally (no dedup guarantee)" vertex="1">
+          <mxGeometry height="54" width="148" x="820" y="155" as="geometry" />
+        </mxCell>
+        <mxCell id="216" edge="1" parent="1" source="213" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#e65100;fontColor=#e65100;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="215" value="NO">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="217" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rhombusPerimeter;symbol=exclusiveGw;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#7d4e00;fontSize=8;fontStyle=1;align=center;" value="Key in Cache?" vertex="1">
+          <mxGeometry height="64" width="64" x="988" y="245" as="geometry" />
+        </mxCell>
+        <mxCell id="218" edge="1" parent="1" source="213" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#555555;fontColor=#555555;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="217" value="YES">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="219" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rhombusPerimeter;symbol=exclusiveGw;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#7d4e00;fontSize=8;fontStyle=1;align=center;" value="Status?" vertex="1">
+          <mxGeometry height="64" width="64" x="988" y="335" as="geometry" />
+        </mxCell>
+        <mxCell id="220" edge="1" parent="1" source="217" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#555555;fontColor=#555555;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="219" value="YES">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="221" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=9;align=center;verticalAlign=middle;" value="✓ Return cached response Idempotency-Key-Status: replayed" vertex="1">
+          <mxGeometry height="56" width="156" x="942" y="435" as="geometry" />
+        </mxCell>
+        <mxCell id="222" edge="1" parent="1" source="219" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="221" value="COMPLETED">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="223" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#fce4e4;strokeColor=#c62828;fontColor=#b71c1c;fontSize=9;align=center;verticalAlign=middle;" value="409 Conflict idempotency_key_in_use Retry later" vertex="1">
+          <mxGeometry height="52" width="152" x="1100" y="325" as="geometry" />
+        </mxCell>
+        <mxCell id="224" edge="1" parent="1" source="219" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#c62828;fontColor=#c62828;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="223" value="IN_PROGRESS">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1052" y="367" />
+              <mxPoint x="1176" y="367" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="225" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=9;align=center;verticalAlign=middle;" value="Lock key (IN_PROGRESS) Process request" vertex="1">
+          <mxGeometry height="50" width="148" x="810" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="226" edge="1" parent="1" source="217" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#555555;fontColor=#555555;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="225" value="NO">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="988" y="277" />
+              <mxPoint x="884" y="277" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="227" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rectanglePerimeter;symbol=dataStore;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;fontColor=#4a148c;fontSize=9;align=center;" value="Write to cache Status=COMPLETED, TTL=24h" vertex="1">
+          <mxGeometry height="50" width="148" x="810" y="335" as="geometry" />
+        </mxCell>
+        <mxCell id="228" edge="1" parent="1" source="225" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#6a1b9a;fontColor=#6a1b9a;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="227" value="write">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="229" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#dae8fc;strokeColor=#1565c0;fontColor=#0d47a1;fontSize=9;align=center;verticalAlign=middle;" value="Send response to client" vertex="1">
+          <mxGeometry height="40" width="148" x="810" y="425" as="geometry" />
+        </mxCell>
+        <mxCell id="230" edge="1" parent="1" source="227" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1565c0;fontColor=#1565c0;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="229" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="231" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.ellipsePerimeter;symbol=terminate;fillColor=#27ae60;strokeColor=#1e8449;fontColor=#ffffff;fontSize=8;fontStyle=1;" value="End" vertex="1">
+          <mxGeometry height="36" width="36" x="1002" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="232" edge="1" parent="1" source="221" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="231" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="233" edge="1" parent="1" source="229" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1565c0;fontColor=#1565c0;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="231" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="884" y="445" />
+              <mxPoint x="884" y="538" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="234" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4e4;strokeColor=#c62828;fontColor=#b71c1c;fontSize=9;align=left;spacingLeft=8;" value="⚠  Error responses (4xx) are also cached!    For a corrected request: use a NEW Idempotency-Key!" vertex="1">
+          <mxGeometry height="36" width="400" x="790" y="570" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
