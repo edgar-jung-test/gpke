@@ -49,7 +49,6 @@ LFAlt (LFA) and future supplier (LFZ).
 
 #### Prozessablauf / Process flow
 
-```
 LFNeu (LFN)              NB (Netzbetreiber)              LFAlt (LFA)           LFZ
      │                          │                              │                  │
      │──(1) POST registrations─▶│                              │                  │
@@ -63,7 +62,7 @@ LFNeu (LFN)              NB (Netzbetreiber)              LFAlt (LFA)           L
      │                          │                              │                  │
      │                          │──(6) POST assignment-term.──▶│                  │
      │                          │──(7) POST assignment-canc.───────────────────▶  │
-```
+
 
 #### Vorlauffristen / Lead times (Lieferantenwechsel)
 
