@@ -1,0 +1,234 @@
+type: object
+title: SupplyStart
+description: |
+  Full representation of a supply start (registration / Anmeldung) request,
+  including its current processing status, all submitted fields and any grid operator
+  response data (step 5 confirmation or rejection).
+  This is the primary resource returned by GET and POST /market-locations/{marketLocationId}/registrations.
+  **German:** Vollständige Darstellung einer Lieferbeginn-Anfrage (Anmeldung), einschließlich
+  des aktuellen Bearbeitungsstatus, aller eingereichten Felder und der Netzbetreiberantwort
+  (Schritt 5 – Bestätigung oder Ablehnung).
+  Primäre Ressource bei GET und POST /market-locations/{marketLocationId}/registrations.
+x-i18n:
+  de:
+    title: Lieferbeginn-Anfrage (vollständig)
+    description: |
+      Vollständige Darstellung einer Anmeldung inkl. Bearbeitungsstatus und NB-Antwort.
+      Primäres Ressourcenobjekt für GET und POST auf /market-locations/{marketLocationId}/registrations.
+required:
+  - supplyStartId
+  - status
+  - createdAt
+  - updatedAt
+  - header
+  - supplyStartDate
+  - transactionReason
+  - isHouseholdCustomer
+  - marketLocationIdentification
+  - energyDirection
+  - balancing
+properties:
+  supplyStartId:
+    type: string
+    maxLength: 35
+    readOnly: true
+    description: |
+      Unique supply start request identifier assigned by the server on creation.
+      **German:** Eindeutige, serverseitig bei Erstellung vergebene Lieferbeginn-Anfrage-ID.
+    x-i18n:
+      de:
+        description: Eindeutige serverseitig vergebene Lieferbeginn-Anfrage-ID.
+    examples:
+      Example1:
+        summary: "Example1"
+        value: "SS-2025-00042"
+      Example2:
+        summary: "Example2"
+        value: "SS-2025-00099"
+    x-examples-i18n:
+      de:
+        Example1: "Beispiel 1"
+        Example2: "Beispiel 2"
+  status:
+    $ref: "../enumerations/supplyStartStatus.yaml"
+  createdAt:
+    type: string
+    format: date-time
+    readOnly: true
+    description: |
+      Timestamp when this resource was created (ISO 8601).
+      **German:** Erstellungszeitpunkt dieser Ressource (ISO 8601).
+    x-i18n:
+      de:
+        description: Erstellungszeitpunkt der Ressource (ISO 8601).
+    examples:
+      Morning:
+        summary: "Morning"
+        value: "2025-03-15T08:00:00Z"
+      Afternoon:
+        summary: "Afternoon"
+        value: "2025-03-15T14:30:00Z"
+    x-examples-i18n:
+      de:
+        Morning: "Morgen"
+        Afternoon: "Nachmittag"
+  updatedAt:
+    type: string
+    format: date-time
+    readOnly: true
+    description: |
+      Timestamp of the last update to this resource (ISO 8601).
+      **German:** Zeitpunkt der letzten Aktualisierung dieser Ressource (ISO 8601).
+    x-i18n:
+      de:
+        description: Zeitpunkt der letzten Änderung (ISO 8601).
+    examples:
+      Updated:
+        summary: "Updated"
+        value: "2025-03-17T10:15:00Z"
+    x-examples-i18n:
+      de:
+        Updated: "Beispiel Aktualisierung"
+  header:
+    $ref: "../message/messageHeader.yaml"
+  supplyStartDate:
+    type: string
+    format: date
+    description: |
+      Requested supply start date (Lieferbeginn-Datum / Anmeldedatum). ISO 8601 date.
+      Corresponds to EDIFACT SG4 DTM qualifier 92.
+      **German:** Gewünschtes Lieferbeginn-Datum (Anmeldedatum). ISO 8601-Datum.
+      Entspricht EDIFACT SG4 DTM Qualifier 92.
+    x-i18n:
+      de:
+        description: Gewünschtes Lieferbeginn-Datum (Anmeldedatum). ISO 8601. EDIFACT SG4 DTM Q92.
+    examples:
+      QuarterStart:
+        summary: "QuarterStart"
+        value: "2025-04-01"
+      YearStart:
+        summary: "YearStart"
+        value: "2026-01-01"
+    x-examples-i18n:
+      de:
+        QuarterStart: "Quartalsbeginn"
+        YearStart: "Jahresbeginn"
+  requestedStartDateForNewConnection:
+    type: string
+    format: date
+    nullable: true
+    description: |
+      Estimated supply start date communicated by the customer for a new connection.
+      Only populated when transactionReason = ZA2 (new connection / Neuanlage).
+      **German:** Voraussichtliches Lieferbeginn-Datum bei Neuanlage, vom Kunden mitgeteilt.
+      Nur bei transactionReason = ZA2 (Neuanlage) zu befüllen.
+    x-i18n:
+      de:
+        description: Voraussichtliches Anmeldedatum bei Neuanlage (nur bei ZA2 = Neuanlage).
+    examples:
+      NewConnection:
+        summary: "NewConnection"
+        value: "2025-05-01"
+    x-examples-i18n:
+      de:
+        NewConnection: "Neuanlage Mai 2025"
+  effectiveSupplyStartDate:
+    type: string
+    format: date
+    nullable: true
+    readOnly: true
+    description: |
+      Confirmed effective supply start date set by the grid operator upon confirmation (Prüf-ID 55002).
+      Null until the registration is accepted.
+      **German:** Bestätigtes wirksames Lieferbeginn-Datum, gesetzt durch den Netzbetreiber bei
+      Bestätigung (Prüf-ID 55002). Null bis zur Bestätigung.
+    x-i18n:
+      de:
+        description: Bestätigtes wirksames Lieferbeginn-Datum (nach NB-Bestätigung, sonst null).
+    examples:
+      Confirmed:
+        summary: "Confirmed"
+        value: "2025-04-01"
+    x-examples-i18n:
+      de:
+        Confirmed: "Bestätigter Lieferbeginn"
+  transactionReason:
+    $ref: "../enumerations/transactionReason.yaml"
+  isHouseholdCustomer:
+    type: boolean
+    description: |
+      Whether the end customer at this market location is a household customer (Haushaltskunde)
+      within the meaning of the energy law (EnWG).
+      **German:** Gibt an, ob der Letztverbraucher an dieser Marktlokation ein Haushaltskunde
+      im Sinne des EnWG ist.
+    x-i18n:
+      de:
+        description: Haushaltskunde im Sinne des EnWG (ja/nein).
+    examples:
+      Household:
+        summary: "Household"
+        value: true
+      Commercial:
+        summary: "Commercial"
+        value: false
+    x-examples-i18n:
+      de:
+        Household: "Haushaltskunde"
+        Commercial: "Gewerbe-/Industriekunde"
+  marketLocationIdentification:
+    $ref: "./marketLocationIdentification.yaml"
+  energyDirection:
+    $ref: "../enumerations/energyDirection.yaml"
+  balancing:
+    $ref: "./balancingAssignment.yaml"
+  meterReadingCycle:
+    $ref: "../enumerations/meterReadingCycle.yaml"
+  masterData:
+    $ref: "./masterDataResponse.yaml"
+  previousSupplierEndDate:
+    type: string
+    format: date
+    nullable: true
+    readOnly: true
+    description: |
+      End date of the previous supplier's (LFA) assignment, as confirmed by the grid operator.
+      Set only when status = accepted.
+      **German:** Enddatum der Zuordnung des alten Lieferanten (LFA), wie vom Netzbetreiber
+      bestätigt. Nur bei status = accepted gesetzt.
+    x-i18n:
+      de:
+        description: Bestätigtes Enddatum der LFA-Zuordnung (nur bei status = accepted).
+    examples:
+      EndDate:
+        summary: "EndDate"
+        value: "2025-03-31"
+    x-examples-i18n:
+      de:
+        EndDate: "Enddatum LFA-Zuordnung"
+  rejectionReasons:
+    type: array
+    nullable: true
+    readOnly: true
+    items:
+      $ref: "./rejectionReason.yaml"
+    description: |
+      List of rejection reasons returned by the grid operator. Populated only when status = rejected.
+      **German:** Liste der Ablehnungsgründe des Netzbetreibers. Nur bei status = rejected befüllt.
+    x-i18n:
+      de:
+        description: Ablehnungsgründe des NB (nur bei status = rejected).
+  notes:
+    type: string
+    maxLength: 500
+    nullable: true
+    description: |
+      Free-text notes for internal use by the registering party. Not transmitted to the grid operator.
+      **German:** Freitext-Notizen für den internen Gebrauch der anmeldenden Partei.
+      Werden nicht an den Netzbetreiber übermittelt.
+    x-i18n:
+      de:
+        description: Freitext-Notizen (intern, nicht an NB übermittelt).
+  validity:
+    $ref: "../common/validityPeriod.yaml"
+  label:
+    $ref: "../common/multilingualLabel.yaml"

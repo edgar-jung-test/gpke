@@ -1,0 +1,44 @@
+type: string
+title: TerminationReason
+description: |
+  Reason for the termination or cancellation of a supplier assignment at a market location.
+  Used in assignment-termination notifications (step 6, Prüf-ID 55037) and
+  assignment-cancellation notifications (step 7, Prüf-ID 55038).
+  **German:** Grund für die Beendigung oder Aufhebung einer Lieferantenzuordnung
+  an einer Marktlokation. Verwendet in Zuordnungsbeendigungsmitteilungen (Schritt 6,
+  Prüf-ID 55037) und Zuordnungsaufhebungsmitteilungen (Schritt 7, Prüf-ID 55038).
+x-i18n:
+  de:
+    title: Beendigungs-/Aufhebungsgrund
+    description: |
+      Grund für die Beendigung (Schritt 6, Prüf-ID 55037) oder Aufhebung
+      (Schritt 7, Prüf-ID 55038) einer Lieferantenzuordnung.
+enum:
+  - supplierChange
+  - moveOut
+  - decommissioning
+  - priorRegistration
+x-enum-descriptions:
+  supplierChange:
+    en: "Supplier change – a new supplier has been registered for this market location"
+    de: "Lieferantenwechsel – ein neuer Lieferant hat sich für diese Marktlokation angemeldet"
+  moveOut:
+    en: "Customer move-out (Auszug) – the customer has left the premises"
+    de: "Auszug des Kunden – der Letztverbraucher hat die Entnahmestelle verlassen"
+  decommissioning:
+    en: "Market location has been decommissioned and removed from supply"
+    de: "Marktlokation wurde stillgelegt und aus der Versorgung genommen"
+  priorRegistration:
+    en: "Prior registration by another supplier – cancels an existing future assignment (step 7)"
+    de: "Frühere Anmeldung eines anderen Lieferanten – hebt eine bestehende Zukunftszuordnung auf (Schritt 7)"
+examples:
+  SupplierChange:
+    summary: "SupplierChange"
+    value: "supplierChange"
+  PriorRegistration:
+    summary: "PriorRegistration"
+    value: "priorRegistration"
+x-examples-i18n:
+  de:
+    SupplierChange: "Lieferantenwechsel"
+    PriorRegistration: "Frühere Anmeldung eines anderen Lieferanten"

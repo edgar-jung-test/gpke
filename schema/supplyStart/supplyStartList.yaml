@@ -1,0 +1,90 @@
+type: object
+title: SupplyStartList
+description: |
+  Paginated list of supply start requests for a given market location.
+  Returned by GET /market-locations/{marketLocationId}/registrations.
+  **German:** Seitenbasierte Liste von Lieferbeginn-Anfragen (Anmeldungen) für
+  eine Marktlokation. Zurückgegeben von GET /market-locations/{marketLocationId}/registrations.
+x-i18n:
+  de:
+    title: Liste Lieferbeginn-Anfragen (paginiert)
+    description: |
+      Seitenbasierte Liste von Anmeldungen für eine Marktlokation.
+      Antwort von GET /market-locations/{marketLocationId}/registrations.
+required:
+  - items
+  - totalCount
+  - page
+  - pageSize
+properties:
+  items:
+    type: array
+    items:
+      $ref: "./supplyStart.yaml"
+    description: |
+      List of supply start requests matching the filter criteria.
+      **German:** Liste der Anmeldungen, die den Filterkriterien entsprechen.
+    x-i18n:
+      de:
+        description: Liste der gefilterten Anmeldungen.
+  totalCount:
+    type: integer
+    minimum: 0
+    description: |
+      Total number of supply start requests matching the filter (before pagination).
+      **German:** Gesamtanzahl der Anmeldungen, die den Filterkriterien entsprechen (vor Paginierung).
+    x-i18n:
+      de:
+        description: Gesamtanzahl der Treffer vor Paginierung.
+    examples:
+      Small:
+        summary: "Small"
+        value: 3
+      Large:
+        summary: "Large"
+        value: 147
+    x-examples-i18n:
+      de:
+        Small: "Wenige Treffer"
+        Large: "Viele Treffer"
+  page:
+    type: integer
+    minimum: 0
+    description: |
+      Current page index (zero-based).
+      **German:** Aktueller Seitenindex (nullbasiert).
+    x-i18n:
+      de:
+        description: Aktueller Seitenindex (nullbasiert).
+    examples:
+      FirstPage:
+        summary: "FirstPage"
+        value: 0
+      SecondPage:
+        summary: "SecondPage"
+        value: 1
+    x-examples-i18n:
+      de:
+        FirstPage: "Erste Seite"
+        SecondPage: "Zweite Seite"
+  pageSize:
+    type: integer
+    minimum: 1
+    maximum: 500
+    description: |
+      Number of items per page (as requested via query parameter limit).
+      **German:** Anzahl der Einträge pro Seite (wie über Query-Parameter limit angefordert).
+    x-i18n:
+      de:
+        description: Einträge pro Seite (laut Query-Parameter limit).
+    examples:
+      Default:
+        summary: "Default"
+        value: 50
+      Large:
+        summary: "Large"
+        value: 200
+    x-examples-i18n:
+      de:
+        Default: "Standardseitengröße"
+        Large: "Große Seitengröße"

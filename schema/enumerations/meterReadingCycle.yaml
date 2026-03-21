@@ -1,0 +1,42 @@
+type: string
+title: MeterReadingCycle
+description: |
+  Requested meter reading cycle (Ableseturnus) when the new supplier wishes a reading
+  frequency other than the default (yearly). Specifies the cycle, not the exact reading date.
+  **German:** Gewünschter Ableseturnus, wenn der Lieferant einen vom Standard (jährlich)
+  abweichenden Ablesezyklus vorgibt. Gibt den Turnus an, nicht den genauen Ablesetermin.
+x-i18n:
+  de:
+    title: Ableseturnus
+    description: |
+      Ableseturnus (Ablesezyklus) abweichend vom Standard (jährlich).
+      Gibt den Zyklus an, nicht den konkreten Ablesetermin.
+enum:
+  - yearly
+  - semiAnnual
+  - quarterly
+  - monthly
+x-enum-descriptions:
+  yearly:
+    en: "Annual meter reading (default – no explicit request needed)"
+    de: "Jährliche Ablesung (Standard – kein expliziter Wunsch nötig)"
+  semiAnnual:
+    en: "Semi-annual meter reading (twice per year)"
+    de: "Halbjährliche Ablesung (zweimal pro Jahr)"
+  quarterly:
+    en: "Quarterly meter reading (four times per year)"
+    de: "Vierteljährliche Ablesung (viermal pro Jahr)"
+  monthly:
+    en: "Monthly meter reading (twelve times per year)"
+    de: "Monatliche Ablesung (zwölfmal pro Jahr)"
+examples:
+  Yearly:
+    summary: "Yearly"
+    value: "yearly"
+  Monthly:
+    summary: "Monthly"
+    value: "monthly"
+x-examples-i18n:
+  de:
+    Yearly: "Jährlich (Standard)"
+    Monthly: "Monatlich"

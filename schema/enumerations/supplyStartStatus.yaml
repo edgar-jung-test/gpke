@@ -1,0 +1,58 @@
+type: string
+title: SupplyStartStatus
+description: |
+  Current processing status of a supply start (registration / Anmeldung) request.
+  Lifecycle: draft → submitted → accepted / rejected → (cancelled).
+  **German:** Aktueller Bearbeitungsstatus einer Lieferbeginn-Anfrage (Anmeldung).
+  Lebenszyklus: draft → submitted → accepted / rejected → (cancelled).
+x-i18n:
+  de:
+    title: Bearbeitungsstatus Lieferbeginn
+    description: |
+      Bearbeitungsstatus einer Anmeldung im Prozess Lieferbeginn.
+      Lebenszyklus: draft → submitted → accepted / rejected → (cancelled).
+enum:
+  - draft
+  - submitted
+  - accepted
+  - rejected
+  - cancelled
+x-enum-descriptions:
+  draft:
+    en: "Draft – created locally, not yet transmitted to the grid operator"
+    de: "Entwurf – lokal erstellt, noch nicht an den Netzbetreiber übermittelt"
+  submitted:
+    en: "Submitted to the grid operator (NB), awaiting response (Prüf-ID 55001 / 55077 sent)"
+    de: "Beim Netzbetreiber eingereicht (Prüf-ID 55001 / 55077 gesendet), Antwort ausstehend"
+  accepted:
+    en: "Confirmed by the grid operator (Prüf-ID 55002 / 55078 received)"
+    de: "Vom Netzbetreiber bestätigt (Prüf-ID 55002 / 55078 empfangen)"
+  rejected:
+    en: "Rejected by the grid operator (Prüf-ID 55003 / 55080 received)"
+    de: "Vom Netzbetreiber abgelehnt (Prüf-ID 55003 / 55080 empfangen)"
+  cancelled:
+    en: "Cancelled by the registering supplier before grid operator processing"
+    de: "Vom anmeldenden Lieferanten vor der Bearbeitung durch den Netzbetreiber storniert"
+examples:
+  Draft:
+    summary: "Draft"
+    value: "draft"
+  Submitted:
+    summary: "Submitted"
+    value: "submitted"
+  Accepted:
+    summary: "Accepted"
+    value: "accepted"
+  Rejected:
+    summary: "Rejected"
+    value: "rejected"
+  Cancelled:
+    summary: "Cancelled"
+    value: "cancelled"
+x-examples-i18n:
+  de:
+    Draft: "Entwurf"
+    Submitted: "Eingereicht"
+    Accepted: "Bestätigt"
+    Rejected: "Abgelehnt"
+    Cancelled: "Storniert"

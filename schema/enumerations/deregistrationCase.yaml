@@ -1,0 +1,36 @@
+type: string
+title: DeregistrationCase
+description: |
+  Identifies which deregistration confirmation case the previous supplier (LFA) has chosen
+  when responding to a deregistration request (Abmeldeanfrage), as defined in GPKE step 4.
+  Applicable only when statusCode = E01 (confirmation).
+  **German:** Gibt an, welchen Abmeldefall der alte Lieferant (LFA) bei der Beantwortung
+  der Abmeldeanfrage gewählt hat, gemäß GPKE Schritt 4.
+  Nur bei statusCode = E01 (Bestätigung) relevant.
+x-i18n:
+  de:
+    title: Abmeldefall (LFA-Antwort)
+    description: |
+      Vom alten Lieferanten (LFA) gewählter Abmeldefall gemäß GPKE Schritt 4.
+      Nur bei Bestätigung (statusCode = E01) zu befüllen.
+enum:
+  - caseA
+  - caseB
+x-enum-descriptions:
+  caseA:
+    en: "Case a – deregistration confirmed for the day before the requested supply start date"
+    de: "Fall a – Abmeldung zum Tag vor dem gewünschten Anmeldedatum bestätigt"
+  caseB:
+    en: "Case b – deregistration confirmed at an earlier date (before the day prior to the requested supply start)"
+    de: "Fall b – Abmeldung zu einem noch früheren Datum bestätigt (vor dem Tag vor dem Anmeldedatum)"
+examples:
+  CaseA:
+    summary: "CaseA"
+    value: "caseA"
+  CaseB:
+    summary: "CaseB"
+    value: "caseB"
+x-examples-i18n:
+  de:
+    CaseA: "Fall a – Tag vor Anmeldedatum"
+    CaseB: "Fall b – noch früheres Datum"

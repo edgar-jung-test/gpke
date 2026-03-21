@@ -1,0 +1,73 @@
+type: object
+title: BalancingAssignment
+description: |
+  Balancing data submitted by the new supplier (LFN) when registering a market location.
+  Contains the balancing group (Bilanzkreis) EIC code and, if the supplier uses a
+  third-party balance responsible party (BKV), the reference to the balancing
+  authorization (Zuordnungsermächtigung) held at the grid operator.
+  Corresponds to EDIFACT SG4 / SG6 CAV / CCI segments (Bilanzkreiszuordnung).
+  **German:** Bilanzierungsdaten des neuen Lieferanten (LFN) bei der Anmeldung einer
+  Marktlokation. Enthält den EIC-Code des Bilanzkreises und, wenn der Lieferant einen
+  fremden BKV nutzt, die Referenz der beim Netzbetreiber hinterlegten
+  Zuordnungsermächtigung.
+  Entspricht EDIFACT SG4 / SG6 CAV / CCI-Segmenten (Bilanzkreiszuordnung).
+x-i18n:
+  de:
+    title: Bilanzierungszuordnung
+    description: |
+      Bilanzierungsdaten (Bilanzkreis-EIC, Zuordnungsermächtigung) des neuen Lieferanten
+      für die Anmeldung. EDIFACT SG4 / SG6 CAV / CCI.
+x-edifact-mapping:
+  segment: "CCI / CAV (SG6)"
+  notes: "Bilanzkreiszuordnung – balancing group and authorization reference"
+required:
+  - balancingGroupId
+properties:
+  balancingGroupId:
+    type: string
+    maxLength: 50
+    description: |
+      EIC code of the balancing group (Bilanzkreis) the market location is assigned to
+      by the new supplier. Format: 16-character EIC code.
+      **German:** EIC-Code des Bilanzkreises, dem die Marktlokation durch den neuen
+      Lieferanten zugeordnet wird. Format: 16-stelliger EIC-Code.
+    x-i18n:
+      de:
+        description: EIC-Code des Bilanzkreises der Marktlokation (16-stellig).
+    examples:
+      SupplierA:
+        summary: "SupplierA"
+        value: "11XVSEW------5S"
+      SupplierB:
+        summary: "SupplierB"
+        value: "11XENERGY----3T"
+    x-examples-i18n:
+      de:
+        SupplierA: "Bilanzkreis Lieferant A"
+        SupplierB: "Bilanzkreis Lieferant B"
+  authorizationReference:
+    type: string
+    maxLength: 35
+    nullable: true
+    description: |
+      Reference number of the balancing authorization (Zuordnungsermächtigung) held at
+      the grid operator. Required if the new supplier uses a third-party BKV.
+      **German:** Referenznummer der beim Netzbetreiber hinterlegten Zuordnungsermächtigung.
+      Erforderlich, wenn der Lieferant einen fremden BKV (Bilanzkreisverantwortlichen) nutzt.
+    x-i18n:
+      de:
+        description: |
+          Referenz der Zuordnungsermächtigung. Pflichtfeld bei Nutzung eines fremden BKV.
+    examples:
+      Auth1:
+        summary: "Auth1"
+        value: "ZE-2025-00042"
+      Auth2:
+        summary: "Auth2"
+        value: "ZE-2024-10099"
+    x-examples-i18n:
+      de:
+        Auth1: "Zuordnungsermächtigung Beispiel 1"
+        Auth2: "Zuordnungsermächtigung Beispiel 2"
+  label:
+    $ref: "../common/multilingualLabel.yaml"

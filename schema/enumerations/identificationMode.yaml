@@ -1,0 +1,41 @@
+type: string
+title: IdentificationMode
+description: |
+  Defines how the market location is identified in a registration (Anmeldung) request.
+  Corresponds to GPKE identification cases (Kapitel I.6):
+  - **maloIdOnly** (Fall 1): identification exclusively by MaLo-ID; lead time ≥ 7 working days.
+  - **multiAttribute** (Fall 2): identification by address and / or additional attributes;
+    lead time ≥ 10 working days.
+  **German:** Gibt an, wie die Marktlokation in der Anmeldung identifiziert wird.
+  Entspricht den GPKE-Identifikationsfällen (Kapitel I.6):
+  - **maloIdOnly** (Fall 1): Identifikation ausschließlich per MaLo-ID; Vorlauf ≥ 7 WT.
+  - **multiAttribute** (Fall 2): Identifikation per Adresse und / oder weiteren Merkmalen;
+    Vorlauf ≥ 10 WT.
+x-i18n:
+  de:
+    title: Identifikationsmodus (Identifikationsfall)
+    description: |
+      Art der Marktlokationsidentifikation gemäß GPKE Kapitel I.6.
+      Fall 1 (maloIdOnly): nur MaLo-ID, Vorlauf ≥ 7 WT.
+      Fall 2 (multiAttribute): Adresse / weitere Merkmale, Vorlauf ≥ 10 WT.
+enum:
+  - maloIdOnly
+  - multiAttribute
+x-enum-descriptions:
+  maloIdOnly:
+    en: "Identification by MaLo-ID only (GPKE case 1, minimum lead time 7 working days)"
+    de: "Identifikation nur per MaLo-ID (GPKE Fall 1, Mindestvorlauf 7 WT)"
+  multiAttribute:
+    en: "Identification by postal address and / or additional attributes (GPKE case 2, minimum lead time 10 working days)"
+    de: "Identifikation per Postanschrift und / oder weiterer Merkmale (GPKE Fall 2, Mindestvorlauf 10 WT)"
+examples:
+  MaloIdOnly:
+    summary: "MaloIdOnly"
+    value: "maloIdOnly"
+  MultiAttribute:
+    summary: "MultiAttribute"
+    value: "multiAttribute"
+x-examples-i18n:
+  de:
+    MaloIdOnly: "Nur MaLo-ID (Fall 1)"
+    MultiAttribute: "Adresse / weitere Merkmale (Fall 2)"

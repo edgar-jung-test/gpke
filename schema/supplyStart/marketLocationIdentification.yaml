@@ -1,0 +1,62 @@
+type: object
+title: MarketLocationIdentification
+description: |
+  Defines how the market location is identified in a registration (Anmeldung) request.
+  Corresponds to GPKE identification cases (Kapitel I.6, GPKE Teil 2):
+  - **Case 1 (maloIdOnly):** identification exclusively by 11-digit MaLo-ID.
+    Minimum lead time: 7 working days before supply start.
+  - **Case 2 (multiAttribute):** identification by postal address and / or additional
+    attributes (e.g. meter number) when the MaLo-ID is not known.
+    Minimum lead time: 10 working days before supply start.
+  Corresponds to EDIFACT SG5 LOC DE3225 Z16 (MaLo-ID) and SG8 attribute qualifiers.
+  **German:** Gibt an, wie die Marktlokation in der Anmeldung identifiziert wird.
+  Entspricht den GPKE-Identifikationsfällen (Kapitel I.6, GPKE Teil 2):
+  - **Fall 1 (maloIdOnly):** Identifikation ausschließlich per 11-stelliger MaLo-ID.
+    Mindestvorlauf: 7 Werktage vor Lieferbeginn.
+  - **Fall 2 (multiAttribute):** Identifikation per Postanschrift und / oder weiterer
+    Merkmale (z.B. Zählernummer), wenn die MaLo-ID nicht bekannt ist.
+    Mindestvorlauf: 10 Werktage vor Lieferbeginn.
+  Entspricht EDIFACT SG5 LOC DE3225 Z16 (MaLo-ID) und SG8-Attributqualifiern.
+x-i18n:
+  de:
+    title: Marktlokationsidentifikation (Identifikationsfall)
+    description: |
+      Identifikationsfall der Marktlokation gemäß GPKE Kapitel I.6.
+      Fall 1: MaLo-ID (≥7 WT Vorlauf). Fall 2: Adresse / weitere Merkmale (≥10 WT Vorlauf).
+      EDIFACT SG5 LOC DE3225 Z16 (MaLo-ID) und SG8-Attributqualifier.
+x-edifact-mapping:
+  case1:
+    segment: "LOC (SG5)"
+    de3227: "Z16 (Marktlokation)"
+    de3225: "MaLo-ID (11-stellig)"
+  case2:
+    segment: "SG8 attribute qualifiers"
+    notes: "Address attributes used when MaLo-ID not known"
+required:
+  - identificationMode
+properties:
+  identificationMode:
+    $ref: "../enumerations/identificationMode.yaml"
+  maLoId:
+    $ref: "../locations/marketLocation/marketLocationId.yaml"
+  meterNumber:
+    $ref: "../metering/devices/meterNumber.yaml"
+  address:
+    $ref: "../common/address.yaml"
+  label:
+    $ref: "../common/multilingualLabel.yaml"
+allOf:
+  - if:
+      properties:
+        identificationMode:
+          const: maloIdOnly
+    then:
+      required:
+        - maLoId
+  - if:
+      properties:
+        identificationMode:
+          const: multiAttribute
+    then:
+      required:
+        - address

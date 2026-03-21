@@ -1,0 +1,71 @@
+type: object
+title: RejectionReason
+description: |
+  A single rejection or objection reason returned by a market participant
+  (grid operator NB or previous supplier LFA) in a negative response.
+  Rejection codes may reference BDEW EBD check-step codes or business-defined values.
+  **German:** Einzelner Ablehnungs- oder Widerspruchsgrund eines Marktpartners
+  (Netzbetreiber NB oder alter Lieferant LFA) in einer negativen Antwort.
+  Ablehnungscodes können BDEW EBD-Prüfschrittreferenzen oder fachliche Codes sein.
+x-i18n:
+  de:
+    title: Ablehnungsgrund / Widerspruchsgrund
+    description: |
+      Einzelner Ablehnungsgrund (NB) oder Widerspruchsgrund (LFA) in einer negativen Antwort.
+      Codes können EBD-Prüfschrittreferenzen oder fachlich definierte Werte sein.
+required:
+  - code
+properties:
+  code:
+    type: string
+    maxLength: 35
+    description: |
+      Machine-readable rejection code. May be a BDEW EBD check-step reference
+      (e.g. E_0610) or a business-defined code (e.g. CONTRACT_ACTIVE).
+      Corresponds to EDIFACT STS DE9012 (code of check step / EBD reference).
+      **German:** Maschinenlesbarer Ablehnungscode. Kann ein BDEW-EBD-Prüfschrittverweis
+      (z.B. E_0610) oder ein fachlicher Code sein (z.B. CONTRACT_ACTIVE).
+      Entspricht EDIFACT STS DE9012 (Code des Prüfschritts / EBD-Referenz).
+    x-i18n:
+      de:
+        description: |
+          Maschinenlesbarer Ablehnungscode (EBD-Prüfschrittverweis oder fachlicher Code).
+          EDIFACT STS DE9012.
+    examples:
+      EBD_E0610:
+        summary: "EBD_E0610"
+        value: "E_0610"
+      EBD_E0602:
+        summary: "EBD_E0602"
+        value: "E_0602"
+      ContractActive:
+        summary: "ContractActive"
+        value: "CONTRACT_ACTIVE"
+    x-examples-i18n:
+      de:
+        EBD_E0610: "EBD-Prüfschritt E_0610"
+        EBD_E0602: "EBD-Prüfschritt E_0602"
+        ContractActive: "Vertrag noch aktiv"
+  message:
+    type: string
+    maxLength: 500
+    nullable: true
+    description: |
+      Human-readable rejection message in English describing why the request was rejected.
+      **German:** Lesbare Ablehnungsbegründung auf Englisch, die den Ablehnungsgrund erläutert.
+    x-i18n:
+      de:
+        description: Lesbare Ablehnungsbegründung auf Englisch.
+    examples:
+      PreviousSupplierObjected:
+        summary: "PreviousSupplierObjected"
+        value: "Previous supplier objected to deregistration"
+      ContractRunning:
+        summary: "ContractRunning"
+        value: "Contract runs until 2025-12-31 and cannot be terminated early"
+    x-examples-i18n:
+      de:
+        PreviousSupplierObjected: "Vorheriger Lieferant hat der Abmeldung widersprochen"
+        ContractRunning: "Vertrag läuft bis 31.12.2025 und kann nicht vorzeitig beendet werden"
+  label:
+    $ref: "../common/multilingualLabel.yaml"

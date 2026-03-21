@@ -1,0 +1,70 @@
+type: object
+title: MasterDataResponse
+description: |
+  Relevant master data of the market location transmitted by the grid operator (NB)
+  in a confirmation response (Prüf-ID 55002 / 55078).
+  Contains voltage level, interruptibility flag, supply contract reference and the
+  market partner ID of the current metering point operator (MSB).
+  **German:** Relevante Stammdaten der Marktlokation, die der Netzbetreiber (NB) in
+  der Bestätigungsantwort (Prüf-ID 55002 / 55078) übermittelt.
+  Enthält Spannungsebene, Unterbrechbarkeitskennzeichen, Netznutzungsvertragsreferenz
+  und die Marktpartner-ID des aktuellen Messstellenbetreibers (MSB).
+x-i18n:
+  de:
+    title: Stammdatenantwort (NB-Bestätigung)
+    description: |
+      Stammdaten der Marktlokation aus der Bestätigungsantwort des Netzbetreibers
+      (Prüf-ID 55002 / 55078). Enthält Spannungsebene, Unterbrechbarkeit,
+      Netznutzungsvertrag und MSB-Marktpartner-ID.
+properties:
+  voltageLevel:
+    $ref: "../common/voltageLevel.yaml"
+  currentMeteringPointOperatorId:
+    $ref: "../marketActors/marketActorId.yaml"
+  supplyContractId:
+    type: string
+    maxLength: 35
+    nullable: true
+    description: |
+      Reference identifier of the grid usage contract (Netznutzungsvertrag / NNV)
+      applicable for this market location.
+      **German:** Referenzkennung des Netznutzungsvertrags (NNV) für diese Marktlokation.
+    x-i18n:
+      de:
+        description: Referenzkennung des Netznutzungsvertrags (NNV) der Marktlokation.
+    examples:
+      NNV1:
+        summary: "NNV1"
+        value: "NNV-2024-00123"
+      NNV2:
+        summary: "NNV2"
+        value: "NNV-2025-00456"
+    x-examples-i18n:
+      de:
+        NNV1: "Netznutzungsvertrag Beispiel 1"
+        NNV2: "Netznutzungsvertrag Beispiel 2"
+  isInterruptible:
+    type: boolean
+    nullable: true
+    description: |
+      Indicates whether the consumption equipment at this market location is interruptible
+      (unterbrechbare Verbrauchseinrichtung, §14a EnWG).
+      **German:** Gibt an, ob die Verbrauchseinrichtungen an dieser Marktlokation
+      unterbrechbar sind (§14a EnWG, unterbrechbare Verbrauchseinrichtung).
+    x-i18n:
+      de:
+        description: |
+          Unterbrechbarkeit der Verbrauchseinrichtung gemäß §14a EnWG (ja/nein).
+    examples:
+      NotInterruptible:
+        summary: "NotInterruptible"
+        value: false
+      Interruptible:
+        summary: "Interruptible"
+        value: true
+    x-examples-i18n:
+      de:
+        NotInterruptible: "Nicht unterbrechbar"
+        Interruptible: "Unterbrechbar (§14a EnWG)"
+  label:
+    $ref: "../common/multilingualLabel.yaml"
