@@ -1,0 +1,38 @@
+name: X-Backend-Version
+in: header
+required: false
+description: |
+  **Response header.** Identifies the backend system that processed the request,
+  including its environment and version. Enables client-side logging, debugging,
+  audit trails, and optionally access restrictions for specific backend versions.
+  
+  Recommended format: `{system}_{environment}_{version}`
+  - `system`: backend system identifier (e.g. SAP, oracle, custom-service)
+  - `environment`: deployment stage (test, prod, staging, dev)
+  - `version`: SemVer or system-specific version string
+  
+  **German:** **Response-Header.** Verweis auf das verwendete Backendsystem.
+  Format: `<s>_<test|prod>_<Version>`. Dient der Nachvollziehbarkeit,
+  Logging, Debugging und ggf. der Sicherheit (Zulassen bestimmter Server-Systeme).
+  
+  **Bewertung:** ✅ Korrekt. Gebräuchliche Custom-Header-Konvention.
+schema:
+  type: string
+  pattern: '^[a-zA-Z0-9._-]+_[a-zA-Z0-9._-]+_[a-zA-Z0-9._-]+$'
+  maxLength: 100
+  description: |
+    Format: `{system}_{environment}_{version}`.
+    system: backend identifier; environment: test|prod|staging|dev; version: semver.
+  examples:
+    SapProd:
+      summary: "SAP backend in production"
+      value: "SAP_prod_19.2.7"
+    OracleTest:
+      summary: "Oracle backend in test"
+      value: "oracle_test_12.2.1"
+    CustomServiceProd:
+      summary: "Custom microservice in production"
+      value: "malo-service_prod_1.4.0"
+x-header-group: version-control
+x-direction: response
+x-rfc: "EDI@Energy Konvention"

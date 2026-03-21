@@ -1,0 +1,50 @@
+name: ETag
+in: header
+required: false
+description: |
+  **Response header only.** Entity tag representing the current state or version
+  of a resource. In the EDI@Energy state-machine context, the ETag carries the
+  current processing state of a long-running transaction (e.g. `state:running`).
+  
+  The client stores the ETag value and sends it back in `If-Match` on the next
+  request to implement optimistic concurrency control — the operation only
+  proceeds if the resource is still in the expected state.
+  
+  ETag values MUST be enclosed in double-quotes per RFC 9110.
+  Weak ETags are prefixed with `W/`.
+  
+  **German:** **Nur Response-Header.** In der EDI@Energy State-Machine liefert
+  der Server den aktuellen Verarbeitungsstatus einer Long-Running-Transaktion
+  als ETag-Wert (z.B. `"state:running"`). Der Client sendet diesen Wert im
+  nächsten Request im `If-Match`-Header zurück.
+  
+  **Korrekturen gegenüber Vorlage:**
+  - `Etag:` → **`ETag`** (kanonische IANA-Schreibweise; kein Doppelpunkt im Header-Namen).
+  - Wert muss in doppelten Anführungszeichen stehen: `"state:running"` nicht `„state:running"`.
+schema:
+  type: string
+  pattern: '^(W/)?"[^"]*"$'
+  description: |
+    Entity tag value in double quotes. Weak ETags prefixed with `W/`.
+    EDI@Energy state values: "state:pending", "state:running",
+    "state:completed", "state:failed", "state:cancelled".
+  examples:
+    StateRunning:
+      summary: "Transaction in running state"
+      value: '"state:running"'
+    StatePending:
+      summary: "Transaction pending"
+      value: '"state:pending"'
+    StateCompleted:
+      summary: "Transaction completed"
+      value: '"state:completed"'
+    StateFailed:
+      summary: "Transaction failed"
+      value: '"state:failed"'
+    WeakETag:
+      summary: "Weak ETag (version-based)"
+      value: 'W/"v2.4.1-abc123"'
+x-header-group: state-machine
+x-direction: response
+x-rfc: "RFC 9110 §8.8.3 (standard HTTP header)"
+x-oas-note: "Define under responses[x].headers. Pair with If-Match in requests."

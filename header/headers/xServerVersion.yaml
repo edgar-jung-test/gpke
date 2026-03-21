@@ -1,0 +1,32 @@
+name: X-Server-Version
+in: header
+required: false
+description: |
+  **Response header.** Version of the hub or server system responding to the
+  request. Used for debugging, automated interface testing, and compatibility
+  verification between client and server.
+  
+  **German:** **Response-Header.** Version des Hubs oder des gegenüberliegenden
+  Serversystems. Dient zum Debugging, automatischen Verproben der Schnittstelle
+  und zur Kompatibilitätsprüfung zwischen Client und Server.
+  
+  **Bewertung:** ✅ Korrekt. Gebräuchliche Custom-Header-Konvention.
+schema:
+  type: string
+  pattern: '^\d+\.\d+(\.\d+)?(-[a-zA-Z0-9.]+)?$'
+  description: |
+    Semantic versioning format (SemVer): MAJOR.MINOR.PATCH or MAJOR.MINOR.
+    Optional pre-release suffix: -alpha, -beta, -rc1, etc.
+  examples:
+    StableRelease:
+      summary: "Stable release version"
+      value: "2.4.21"
+    MinorVersion:
+      summary: "Minor version only"
+      value: "2.4"
+    PreRelease:
+      summary: "Release candidate"
+      value: "3.0.0-rc1"
+x-header-group: version-control
+x-direction: response
+x-rfc: "EDI@Energy Konvention"

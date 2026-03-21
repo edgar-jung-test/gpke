@@ -1,0 +1,51 @@
+name: Prefer
+in: header
+required: false
+description: |
+  Client preference hint sent to the server to influence processing behavior.
+  The server MAY honor the preference; if it does, it responds with
+  `Preference-Applied` echoing the applied value.
+  
+  Registered preference tokens (RFC 7240):
+  - `respond-async` – Client prefers asynchronous processing; server returns 202
+  - `return=minimal` – Return only a minimal response body
+  - `return=representation` – Return the full representation after PUT/POST
+  - `handling=strict` – Reject request if server cannot honor all preferences
+  - `handling=lenient` – Proceed even if some preferences cannot be honored
+  
+  EDI@Energy extension token:
+  - `dry-run` – Request should be processed as a test run without persisting data
+    (not an IANA-registered token; documented here as EDI@Energy extension)
+  
+  Multiple preferences can be combined:
+  `Prefer: respond-async, return=minimal`
+  
+  **German:** Client-Präferenzen, die das Server-Verhalten beeinflussen.
+  Der Server KANN die Präferenz berücksichtigen und antwortet dann mit
+  `Preference-Applied`. `dry-run` ist ein EDI@Energy-Extension-Token für Testläufe.
+  
+  **Hinweis:** `dry-run` ist kein IANA-registrierter Token. Er ist als
+  EDI@Energy-Extension zulässig, muss aber explizit dokumentiert werden.
+schema:
+  type: string
+  description: |
+    One or more preference tokens, comma-separated.
+    IANA tokens: respond-async, return=minimal, return=representation,
+    handling=strict, handling=lenient.
+    EDI@Energy extension: dry-run.
+  examples:
+    DryRun:
+      summary: "Test run without side effects"
+      value: "dry-run"
+    RespondAsync:
+      summary: "Prefer asynchronous processing"
+      value: "respond-async"
+    ReturnMinimal:
+      summary: "Return minimal response body"
+      value: "return=minimal"
+    AsyncMinimal:
+      summary: "Async + minimal response combined"
+      value: "respond-async, return=minimal"
+x-header-group: general
+x-direction: request
+x-rfc: "RFC 7240 (IANA-registered header)"

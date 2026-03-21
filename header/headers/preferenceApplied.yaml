@@ -1,0 +1,32 @@
+name: Preference-Applied
+in: header
+required: false
+description: |
+  **Response header only.** Echoes back the preference tokens from the `Prefer`
+  request header that the server actually honored. If the server ignores a
+  preference, it MUST NOT include that token here.
+  
+  The server SHOULD return this header whenever a `Prefer` header was received
+  and at least one preference was applied.
+  
+  **German:** **Nur Response-Header.** Wiederholt die `Prefer`-Tokens, die der
+  Server tatsächlich berücksichtigt hat. Tokens, die der Server ignoriert hat,
+  dürfen hier nicht erscheinen.
+  
+  **Bewertung:** ✅ Korrekt — standardisierter IANA-Header.
+schema:
+  type: string
+  description: Applied preference tokens, matching a subset of the Prefer request header.
+  examples:
+    DryRunApplied:
+      summary: "Server confirmed dry-run mode"
+      value: "dry-run"
+    AsyncApplied:
+      summary: "Server will process asynchronously"
+      value: "respond-async"
+    MinimalApplied:
+      summary: "Minimal response applied"
+      value: "return=minimal"
+x-header-group: general
+x-direction: response
+x-rfc: "RFC 7240 §3 (IANA-registered header)"

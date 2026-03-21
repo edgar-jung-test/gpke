@@ -1,0 +1,26 @@
+description: |
+  Reusable parameter group: all general request headers for EDI@Energy APIs.
+  Include individual headers from this group as needed per endpoint.
+  
+  **German:** Wiederverwendbare Parametergruppe: allgemeine Request-Header
+  für EDI@Energy APIs.
+
+parameters:
+
+  xRequestId:
+    $ref: "../headers/xRequestId.yaml"
+
+  xMessageId:
+    $ref: "../headers/xMessageId.yaml"
+
+  idempotencyKey:
+    $ref: "../headers/idempotencyKey.yaml"
+
+  traceparent:
+    $ref: "../headers/traceparent.yaml"
+
+  prefer:
+    $ref: "../headers/prefer.yaml"
+
+  xClientVersion:
+    $ref: "../headers/xClientVersion.yaml"

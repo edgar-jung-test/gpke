@@ -1,0 +1,38 @@
+name: Retry-After
+in: header
+required: false
+description: |
+  **Response header only.** Indicates the earliest time at which the client
+  should retry the request. Used with:
+  - `202 Accepted` – estimated completion time for an async operation
+  - `429 Too Many Requests` – rate limit reset time
+  - `503 Service Unavailable` – expected recovery time
+  
+  Value formats (both are valid per RFC 9110):
+  - HTTP-date: `Tue, 24 Feb 2026 10:00:00 GMT`
+  - Delay-seconds: `120` (number of seconds to wait)
+  
+  **German:** **Nur Response-Header.** Frühester Zeitpunkt, zu dem mit einem
+  Ergebnis gerechnet werden kann bzw. ein Retry sinnvoll ist. Wird bei
+  `202 Accepted`, `429 Too Many Requests` und `503 Service Unavailable` gesendet.
+  
+  **Hinweis RESTful:** `Retry-After` ist ausschließlich ein Response-Header
+  (RFC 9110 §10.2.4). Er darf nicht als Request-Header verwendet werden.
+schema:
+  type: string
+  description: |
+    Either an HTTP-date (RFC 7231 §7.1.1.1) or a non-negative integer (delay in seconds).
+  examples:
+    HttpDate:
+      summary: "Specific retry timestamp (HTTP-date format)"
+      value: "Tue, 24 Feb 2026 10:00:00 GMT"
+    DelaySeconds:
+      summary: "Retry after 120 seconds"
+      value: "120"
+    RateLimitReset:
+      summary: "Rate limit resets at specific time"
+      value: "Fri, 01 Jan 2027 00:00:00 GMT"
+x-header-group: general
+x-direction: response
+x-rfc: "RFC 9110 §10.2.4 (standard HTTP header)"
+x-oas-note: "Define under responses[x].headers, NOT under parameters[in: header]"

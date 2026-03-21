@@ -1,0 +1,167 @@
+openapi: "3.0.3"
+info:
+  title: EDI@Energy API – Header Usage Example
+  description: |
+    Demonstrates how to embed the reusable EDI@Energy headers from the
+    headers/ schema package into an actual API endpoint.
+    
+    All headers are $ref'd from the central headers/openapi.yaml.
+  version: "1.0.0"
+
+# ── Reference the header definitions ─────────────────────────────────────────
+# Adjust the path prefix depending on where your API spec lives relative to
+# the headers/ directory.
+# Inline $refs below assume headers/openapi.yaml is a sibling directory.
+
+paths:
+
+  # ── Example 1: Synchronous POST with idempotency ──────────────────────────
+  /marketLocations:
+    post:
+      summary: Create a market location (synchronous)
+      tags: [market-locations]
+      parameters:
+        # Tracing
+        - $ref: "./openapi.yaml#/components/parameters/xRequestId"
+        - $ref: "./openapi.yaml#/components/parameters/traceparent"
+        # Correlation
+        - $ref: "./openapi.yaml#/components/parameters/xMessageId"
+        # Idempotency
+        - $ref: "./openapi.yaml#/components/parameters/idempotencyKey"
+        # Client metadata
+        - $ref: "./openapi.yaml#/components/parameters/xClientVersion"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Market location created
+          headers:
+            Location:
+              $ref: "./openapi.yaml#/components/headers/location"
+            X-Message-ID:
+              $ref: "./openapi.yaml#/components/headers/xMessageId"
+            X-Server-Version:
+              $ref: "./openapi.yaml#/components/headers/xServerVersion"
+            X-API-Spec-Version:
+              $ref: "./openapi.yaml#/components/headers/xApiSpecVersion"
+            X-API-Spec-Ref:
+              $ref: "./openapi.yaml#/components/headers/xApiSpecRef"
+            X-API-Spec-ID:
+              $ref: "./openapi.yaml#/components/headers/xApiSpecId"
+            X-Backend-Version:
+              $ref: "./openapi.yaml#/components/headers/xBackendVersion"
+        '429':
+          description: Too many requests
+          headers:
+            Retry-After:
+              $ref: "./openapi.yaml#/components/headers/retryAfter"
+
+  # ── Example 2: Async POST with dry-run support ────────────────────────────
+  /messages:
+    post:
+      summary: Submit a UTILMD message (asynchronous)
+      tags: [messages]
+      parameters:
+        - $ref: "./openapi.yaml#/components/parameters/xRequestId"
+        - $ref: "./openapi.yaml#/components/parameters/traceparent"
+        - $ref: "./openapi.yaml#/components/parameters/xMessageId"
+        - $ref: "./openapi.yaml#/components/parameters/idempotencyKey"
+        # Dry-run / async preference
+        - $ref: "./openapi.yaml#/components/parameters/prefer"
+        - $ref: "./openapi.yaml#/components/parameters/xClientVersion"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '202':
+          description: |
+            Accepted for async processing.
+            Poll the Location URL for status.
+          headers:
+            Location:
+              $ref: "./openapi.yaml#/components/headers/location"
+            Retry-After:
+              $ref: "./openapi.yaml#/components/headers/retryAfter"
+            Preference-Applied:
+              $ref: "./openapi.yaml#/components/headers/preferenceApplied"
+            ETag:
+              $ref: "./openapi.yaml#/components/headers/eTag"
+            X-Message-ID:
+              $ref: "./openapi.yaml#/components/headers/xMessageId"
+            X-Server-Version:
+              $ref: "./openapi.yaml#/components/headers/xServerVersion"
+            X-API-Spec-Version:
+              $ref: "./openapi.yaml#/components/headers/xApiSpecVersion"
+
+  # ── Example 3: State-machine transition (If-Match / ETag) ─────────────────
+  /messages/{messageId}/state:
+    patch:
+      summary: Trigger state transition on a long-running message
+      tags: [messages]
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: "./openapi.yaml#/components/parameters/xRequestId"
+        - $ref: "./openapi.yaml#/components/parameters/traceparent"
+        - $ref: "./openapi.yaml#/components/parameters/xMessageId"
+        # State-machine: only proceed if in expected state
+        - $ref: "./openapi.yaml#/components/parameters/ifMatch"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                targetState:
+                  type: string
+                  enum: [cancelled]
+      responses:
+        '200':
+          description: State transition applied
+          headers:
+            ETag:
+              $ref: "./openapi.yaml#/components/headers/eTag"
+            X-Message-ID:
+              $ref: "./openapi.yaml#/components/headers/xMessageId"
+        '412':
+          description: |
+            Precondition failed — resource is no longer in the expected state.
+            Read the current ETag from a GET request before retrying.
+          headers:
+            ETag:
+              $ref: "./openapi.yaml#/components/headers/eTag"
+
+    get:
+      summary: Read current state of a long-running message
+      tags: [messages]
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: "./openapi.yaml#/components/parameters/xRequestId"
+        - $ref: "./openapi.yaml#/components/parameters/traceparent"
+      responses:
+        '200':
+          description: Current message state
+          headers:
+            ETag:
+              $ref: "./openapi.yaml#/components/headers/eTag"
+            X-Message-ID:
+              $ref: "./openapi.yaml#/components/headers/xMessageId"
+            X-Server-Version:
+              $ref: "./openapi.yaml#/components/headers/xServerVersion"
