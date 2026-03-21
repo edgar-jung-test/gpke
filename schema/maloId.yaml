@@ -1,4 +1,0 @@
-type: string
-nullable: true
-description: Market location ID (MaLo-ID)
-x-de: Marktlokations-ID (MaLo-ID)

@@ -1,9 +1,0 @@
-type: string
-description: Transaction reason for supply start
-x-de: Transaktionsgrund für Lieferbeginn
-enum:
-- supplierChange
-- moveInMoveOut
-- newConnection
-- resumptionAfterInterruption
-- other
