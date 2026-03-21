@@ -1,0 +1,64 @@
+openapi: "3.1.0"
+info:
+  title: BDEW UTILMD Electricity Market API – OpenAPI 3.1
+  description: |
+    OpenAPI **3.1** schema for BDEW UTILMD Strom 2.1.
+    
+    This version uses JSON Schema 2020-12 features available in OAS 3.1,
+    in particular `if/then/else` for conditional validation of interdependent
+    UTILMD fields as defined in the AHB (Anwendungshandbuch).
+    
+    **German:** OpenAPI 3.1 Schema für die BDEW UTILMD Strom-Marktkommunikation.
+    Nutzt `if/then/else` zur Abbildung bedingter Pflichtfelder gemäß AHB.
+  version: "2.1.0"
+  contact:
+    name: BDEW
+    url: https://www.bdew-mako.de
+
+components:
+  schemas:
+
+    # ── Referenced from all conditional schemas ────────────────────────────
+    marketActorId:
+      $ref: "../utilmd-openapi/marketActors/marketActorId.yaml"
+
+    validityPeriod:
+      $ref: "../utilmd-openapi/common/validityPeriod.yaml"
+
+    address:
+      $ref: "../utilmd-openapi/common/address.yaml"
+
+    voltageLevel:
+      $ref: "../utilmd-openapi/common/voltageLevel.yaml"
+
+    # ── Conditional schemas (if/then/else) ────────────────────────────────
+
+    locationBundle:
+      $ref: "./schemas/locationBundle.yaml"
+
+    meteringPointOperatorAssignment:
+      $ref: "./schemas/meteringPointOperatorAssignment.yaml"
+
+    controllableResourceWithControl:
+      $ref: "./schemas/controllableResourceWithControl.yaml"
+
+    communicationChannel:
+      $ref: "./schemas/communicationChannel.yaml"
+
+    meterInstallationPoint:
+      $ref: "./schemas/meterInstallationPoint.yaml"
+
+    generatingMarketLocation:
+      $ref: "./schemas/generatingMarketLocation.yaml"
+
+    transactionWithStatus:
+      $ref: "./schemas/transactionWithStatus.yaml"
+
+    marketLocationConditional:
+      $ref: "./schemas/marketLocationConditional.yaml"
+
+    controlChannelDescription:
+      $ref: "./schemas/controlChannelDescription.yaml"
+
+    usagePeriodWithReference:
+      $ref: "./schemas/usagePeriodWithReference.yaml"

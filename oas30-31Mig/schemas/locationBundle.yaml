@@ -1,0 +1,290 @@
+title: LocationBundle
+description: |
+  Location bundle (Lokationsbündel) with conditional validation based on the
+  bundle type (Lokationsbündeltyp).
+
+  **UTILMD AHB Rule (SG4 STS DE9013 / Transaktionsgrundergänzung):**
+  - `ZW6` – Flat-rate / SLP: requires `profile`, forbids `meteringLocations`
+  - `ZW7` – Metered / RLM: requires `meteringLocations`, forbids `profile`
+  - `ZAP` – Dormant: requires `dormancyReason` and `legalBasis`, 
+             forbids `supplier` and `meteringLocations`
+
+  **German:** Lokationsbündel mit bedingter Validierung anhand des
+  Lokationsbündeltyps (ZW6 = SLP, ZW7 = gemessen, ZAP = ruhend).
+  Regel: SG4 STS DE9013 Transaktionsgrundergänzung.
+
+x-i18n:
+  de:
+    title: Lokationsbündel (bedingt)
+    description: |
+      Bedingtes Schema: ZW6 erfordert Profil, ZW7 erfordert Messlokationen,
+      ZAP erfordert Rechtsgrundlage und verbietet aktive Versorgung.
+
+x-edifact-mapping:
+  segment: STS (SG4)
+  de9015: "7 (Transaktionsgrundergänzung)"
+  de9013: "ZW6 | ZW7 | ZAP"
+
+# ── Base properties (always required) ──────────────────────────────────────
+type: object
+required:
+  - maLoId
+  - bundleType
+  - gridLocations
+
+properties:
+  maLoId:
+    type: string
+    pattern: '^[0-9]{11}$'
+    description: |
+      Market location ID (11 digits).
+      **German:** Marktlokations-ID (11-stellig).
+    x-i18n:
+      de:
+        description: Marktlokations-ID (11-stellig).
+    examples:
+      Residential:
+        summary: "Residential"
+        value: "51238696781"
+      Commercial:
+        summary: "Commercial"
+        value: "41111234567"
+    x-examples-i18n:
+      de:
+        Residential: "Haushalt"
+        Commercial: "Gewerbe"
+
+  bundleType:
+    type: string
+    enum: [ZW6, ZW7, ZAP]
+    description: |
+      Location bundle type determining which fields are required or forbidden.
+      Corresponds to EDIFACT SG4 STS DE9013.
+      **German:** Lokationsbündeltyp – bestimmt Pflichtfelder. EDIFACT SG4 STS DE9013.
+    x-i18n:
+      de:
+        description: Lokationsbündeltyp. ZW6=SLP, ZW7=gemessen, ZAP=ruhend.
+    examples:
+      FlatRate:
+        summary: "FlatRate"
+        value: "ZW6"
+      Metered:
+        summary: "Metered"
+        value: "ZW7"
+      Dormant:
+        summary: "Dormant"
+        value: "ZAP"
+    x-examples-i18n:
+      de:
+        FlatRate: "Pauschale MaLo (SLP)"
+        Metered: "Gemessene MaLo"
+        Dormant: "Ruhende MaLo"
+
+  gridLocations:
+    type: array
+    minItems: 1
+    description: |
+      Grid locations (NeLo) upstream of this market location.
+      **German:** Vorgelagerte Netzlokationen (NeLo) dieser Marktlokation.
+    x-i18n:
+      de:
+        description: Vorgelagerte Netzlokationen (NeLo).
+    items:
+      type: object
+      required: [neLoId]
+      properties:
+        neLoId:
+          type: string
+          description: Grid location ID. **German:** Netzlokations-ID (NeLo-ID).
+          x-i18n:
+            de:
+              description: Netzlokations-ID (NeLo-ID).
+
+  supplier:
+    type: object
+    description: |
+      Assigned supplier (LF). Present for active locations only.
+      **German:** Zugeordneter Lieferant (LF). Nur bei aktiven Lokationen vorhanden.
+    x-i18n:
+      de:
+        description: Zugeordneter Lieferant (LF). Nur bei aktiven Lokationen.
+    properties:
+      actorId:
+        type: string
+        description: Market participant ID of the supplier.
+        x-i18n:
+          de:
+            description: MP-ID des Lieferanten.
+
+  profile:
+    type: object
+    description: |
+      Load profile (SLP/SEP). Required for flat-rate locations (ZW6), forbidden for others.
+      **German:** Lastprofil (SLP/SEP). Pflicht bei ZW6, verboten bei ZW7 und ZAP.
+    x-i18n:
+      de:
+        description: Lastprofil (SLP/SEP). Pflicht bei ZW6, verboten bei ZW7/ZAP.
+    properties:
+      profileCode:
+        type: string
+        examples:
+          Household:
+            summary: "Household"
+            value: "H0"
+          Commerce:
+            summary: "Commerce"
+            value: "G0"
+        x-examples-i18n:
+          de:
+            Household: "Haushalt (H0)"
+            Commerce: "Gewerbe (G0)"
+      profileType:
+        type: string
+        enum: [SLP, SEP, TLP, TEP, RLM]
+
+  meteringLocations:
+    type: array
+    description: |
+      Metering locations (MeLo). Required for metered locations (ZW7),
+      forbidden for flat-rate (ZW6) and dormant (ZAP) locations.
+      **German:** Messlokationen (MeLo). Pflicht bei ZW7, verboten bei ZW6 und ZAP.
+    x-i18n:
+      de:
+        description: Messlokationen (MeLo). Pflicht bei ZW7, verboten bei ZW6/ZAP.
+    items:
+      type: object
+      required: [meLoId]
+      properties:
+        meLoId:
+          type: string
+          description: Metering location ID. **German:** Messlokations-ID (MeLo-ID).
+          x-i18n:
+            de:
+              description: Messlokations-ID (MeLo-ID).
+
+  dormancyReason:
+    type: string
+    description: |
+      Reason for dormancy. Required when bundleType is ZAP.
+      **German:** Ruhestatus-Grund. Pflicht wenn Lokationsbündeltyp ZAP.
+    x-i18n:
+      de:
+        description: Ruhestatus-Grund. Pflicht bei ZAP.
+    examples:
+      Vacancy:
+        summary: "Vacancy"
+        value: "Leerstand"
+      CustomerInstallation:
+        summary: "CustomerInstallation"
+        value: "Kundenanlage gemäß § 20 Abs. 1d EnWG"
+    x-examples-i18n:
+      de:
+        Vacancy: "Leerstand"
+        CustomerInstallation: "Kundenanlage § 20 Abs. 1d EnWG"
+
+  legalBasis:
+    type: string
+    enum:
+      - "§20 Abs.1d EnWG"
+      - "§10c EEG"
+    description: |
+      Legal basis for dormancy. Required when bundleType is ZAP.
+      **German:** Rechtsgrundlage für den Ruhestatus. Pflicht wenn ZAP.
+    x-i18n:
+      de:
+        description: Rechtsgrundlage für Ruhestatus (ZAP). Pflicht.
+
+# ── Conditional rules using if/then/else ───────────────────────────────────
+
+if:
+  properties:
+    bundleType:
+      const: ZW6
+  required: [bundleType]
+
+then:
+  # ZW6 – Flat-rate / SLP location
+  description: |
+    **ZW6 (Pauschale MaLo / SLP):**
+    Profile is required. Metering locations must not be present.
+    Supplier must be assigned.
+  required:
+    - profile
+    - supplier
+  properties:
+    meteringLocations:
+      # Forbidden: flat-rate locations have no metering locations
+      maxItems: 0
+      description: |
+        Not allowed for flat-rate (ZW6) locations.
+        **German:** Nicht erlaubt bei pauschalen Marktlokationen (ZW6).
+      x-i18n:
+        de:
+          description: Nicht erlaubt bei ZW6 (Pauschale MaLo).
+    dormancyReason:
+      # Not applicable for active flat-rate location
+      maxLength: 0
+    legalBasis:
+      not: {}
+
+else:
+  if:
+    properties:
+      bundleType:
+        const: ZW7
+    required: [bundleType]
+
+  then:
+    # ZW7 – Metered / RLM location
+    description: |
+      **ZW7 (Gemessene MaLo / RLM):**
+      Metering locations are required. Profile must not be present.
+      Supplier must be assigned.
+    required:
+      - meteringLocations
+      - supplier
+    properties:
+      meteringLocations:
+        minItems: 1
+      profile:
+        not: {}
+        description: |
+          Not allowed for metered (ZW7) locations.
+          **German:** Nicht erlaubt bei gemessenen Marktlokationen (ZW7).
+        x-i18n:
+          de:
+            description: Nicht erlaubt bei ZW7 (Gemessene MaLo).
+      dormancyReason:
+        maxLength: 0
+      legalBasis:
+        not: {}
+
+  else:
+    # ZAP – Dormant market location (ruhende Marktlokation)
+    description: |
+      **ZAP (Ruhende MaLo):**
+      Dormancy reason and legal basis are required.
+      Supplier and metering locations must not be present.
+      Corresponds to UTILMD AHB chapter 5.5 §20 Abs.1d EnWG / §10c EEG.
+    required:
+      - dormancyReason
+      - legalBasis
+    properties:
+      supplier:
+        not: {}
+        description: |
+          Not allowed for dormant (ZAP) locations – no active supplier.
+          **German:** Nicht erlaubt bei ruhenden Marktlokationen (ZAP) – kein aktiver Lieferant.
+        x-i18n:
+          de:
+            description: Nicht erlaubt bei ZAP – keine aktive Versorgung.
+      meteringLocations:
+        maxItems: 0
+        description: |
+          Not allowed for dormant (ZAP) locations.
+          **German:** Nicht erlaubt bei ruhenden Marktlokationen (ZAP).
+        x-i18n:
+          de:
+            description: Nicht erlaubt bei ZAP (Ruhende MaLo).
+      profile:
+        not: {}

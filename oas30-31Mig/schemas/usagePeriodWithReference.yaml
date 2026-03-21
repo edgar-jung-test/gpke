@@ -1,0 +1,210 @@
+title: UsagePeriodWithReference
+description: |
+  Usage period (Verwendungszeitraum) with conditional field requirements
+  based on data availability.
+
+  **UTILMD AHB Rule (SG6 RFF+Z49 / Z53 / Z48 / Z55 / Z47 / Z54):**
+  - `Z49` – Valid data (Gültige Daten): `validFrom` required, `validTo` optional
+  - `Z53` – No data (Keine Daten): neither `validFrom` nor `validTo` required;
+    `noDataReason` should be provided
+  - `Z48` – Expected data (Erwartete Daten): `validFrom` required
+  - `Z55` – No data expected (Keine Daten erwartet): `noDataReason` required
+  - `Z47` – In-system data (Im System vorhandene Daten): both dates required
+  - `Z54` – No in-system data: `noDataReason` required
+
+  **German:** Verwendungszeitraum mit bedingten Pflichtfeldern je nach Datenstatus.
+  EDIFACT SG6 RFF+Z49/Z53/Z48/Z55/Z47/Z54.
+
+x-i18n:
+  de:
+    title: Verwendungszeitraum mit Datenverfügbarkeit (bedingt)
+    description: |
+      Bedingtes Schema: Z49 (gültige Daten) erfordert validFrom.
+      Z53 (keine Daten) erfordert noDataReason. EDIFACT SG6 RFF.
+
+x-edifact-mapping:
+  segment: RFF (SG6)
+  de1153: "Z49 | Z53 | Z48 | Z55 | Z47 | Z54"
+  de1154: "Zeitraum-ID (DE1156) – positive ganze Zahl"
+
+type: object
+required:
+  - periodId
+  - dataStatus
+
+properties:
+  periodId:
+    type: integer
+    minimum: 1
+    description: |
+      Period ID (Zeitraum-ID). Positive integer, no decimal places (AHB [914][937]).
+      **German:** Zeitraum-ID. Positive ganze Zahl ohne Dezimalstellen (AHB [914][937]).
+    x-i18n:
+      de:
+        description: Zeitraum-ID. Positive ganze Zahl ohne Dezimalstellen (AHB [914][937]).
+    examples:
+      First:
+        summary: "First"
+        value: 1
+      Second:
+        summary: "Second"
+        value: 2
+      Third:
+        summary: "Third"
+        value: 3
+      Fourth:
+        summary: "Fourth"
+        value: 4
+    x-examples-i18n:
+      de:
+        First: "Erste Zeitraum-ID"
+        Second: "Zweite Zeitraum-ID"
+        Third: "Dritte Zeitraum-ID"
+        Fourth: "Vierte Zeitraum-ID"
+
+  dataStatus:
+    type: string
+    enum: [Z49, Z53, Z48, Z55, Z47, Z54]
+    description: |
+      Data availability status code (EDIFACT SG6 RFF DE1153).
+      - Z49: Valid data present (Gültige Daten)
+      - Z53: No data (Keine Daten)
+      - Z48: Expected data (Erwartete Daten)
+      - Z55: No data expected (Keine Daten erwartet)
+      - Z47: In-system data present (Im System vorhandene Daten)
+      - Z54: No in-system data (Im System keine Daten vorhanden)
+      **German:** Datenverfügbarkeitsstatus. EDIFACT SG6 RFF DE1153.
+    x-i18n:
+      de:
+        description: |
+          Datenverfügbarkeitsstatus. Z49=gültige Daten, Z53=keine Daten,
+          Z48=erwartete Daten, Z55=keine Daten erwartet,
+          Z47=im System vorhanden, Z54=im System nicht vorhanden.
+    examples:
+      ValidData:
+        summary: "ValidData"
+        value: "Z49"
+      NoData:
+        summary: "NoData"
+        value: "Z53"
+      ExpectedData:
+        summary: "ExpectedData"
+        value: "Z48"
+      NoDataExpected:
+        summary: "NoDataExpected"
+        value: "Z55"
+      InSystemData:
+        summary: "InSystemData"
+        value: "Z47"
+      NoInSystemData:
+        summary: "NoInSystemData"
+        value: "Z54"
+    x-examples-i18n:
+      de:
+        ValidData: "Gültige Daten vorhanden"
+        NoData: "Keine Daten"
+        ExpectedData: "Erwartete Daten"
+        NoDataExpected: "Keine Daten erwartet"
+        InSystemData: "Im System vorhandene Daten"
+        NoInSystemData: "Im System keine Daten vorhanden"
+
+  validFrom:
+    type: string
+    format: date-time
+    description: |
+      Start of the validity period (ISO 8601). Required for data-present statuses.
+      **German:** Beginn des Verwendungszeitraums (ISO 8601). Pflicht bei vorhandenen Daten.
+    x-i18n:
+      de:
+        description: Beginn des Verwendungszeitraums. Pflicht bei Z49/Z48/Z47.
+    examples:
+      Q1Start:
+        summary: "Q1Start"
+        value: "2024-01-01T00:00:00Z"
+      Q3Start:
+        summary: "Q3Start"
+        value: "2024-07-01T00:00:00Z"
+      Q4Start:
+        summary: "Q4Start"
+        value: "2024-10-01T00:00:00Z"
+    x-examples-i18n:
+      de:
+        Q1Start: "Beginn Q1 2024"
+        Q3Start: "Beginn Q3 2024"
+        Q4Start: "Beginn Q4 2024"
+
+  validTo:
+    type: ["string", "null"]
+    format: date-time
+    description: |
+      End of the validity period (ISO 8601). Optional; null = open-ended.
+      **German:** Ende des Verwendungszeitraums. Optional; null = unbegrenzt.
+    x-i18n:
+      de:
+        description: Ende des Verwendungszeitraums. Optional, null = unbegrenzt.
+    examples:
+      Q1End:
+        summary: "Q1End"
+        value: "2024-03-31T23:59:59Z"
+      YearEnd:
+        summary: "YearEnd"
+        value: "2024-12-31T23:59:59Z"
+      OpenEnded:
+        summary: "OpenEnded"
+        value: null
+    x-examples-i18n:
+      de:
+        Q1End: "Ende Q1 2024"
+        YearEnd: "Jahresende 2024"
+        OpenEnded: "Unbegrenzt gültig"
+
+  noDataReason:
+    type: string
+    maxLength: 500
+    description: |
+      Reason for no data, required when dataStatus indicates absence of data.
+      **German:** Begründung für fehlende Daten. Pflicht bei Z53/Z55/Z54.
+    x-i18n:
+      de:
+        description: Begründung für fehlende Daten. Pflicht bei Z53/Z55/Z54.
+    examples:
+      NewInstallation:
+        summary: "NewInstallation"
+        value: "Neuanlage – noch keine historischen Daten vorhanden"
+      NoMeter:
+        summary: "NoMeter"
+        value: "Kein Zähler installiert"
+    x-examples-i18n:
+      de:
+        NewInstallation: "Neuanlage ohne historische Daten"
+        NoMeter: "Kein Zähler installiert"
+
+# ── Conditional validation based on dataStatus ─────────────────────────────
+
+if:
+  properties:
+    dataStatus:
+      enum: [Z49, Z48, Z47]
+  required: [dataStatus]
+
+then:
+  description: |
+    **Z49 / Z48 / Z47 (data present / expected / in-system):**
+    `validFrom` is required; `noDataReason` must not be present.
+  required:
+    - validFrom
+  properties:
+    noDataReason:
+      not: {}
+
+else:
+  description: |
+    **Z53 / Z55 / Z54 (no data / not expected / not in system):**
+    `validFrom` and `validTo` must not be present; `noDataReason` is required.
+  required:
+    - noDataReason
+  properties:
+    validFrom:
+      not: {}
+    validTo:
+      not: {}
