@@ -47,7 +47,8 @@ Open with any modern browser. Dark mode is automatically supported.
 ### `supplierchange.drawio` — GPKE Prozessdiagramm (Draw.io)
 
 Ursprüngliche grafische Darstellung des Lieferantenwechsel-Prozesses im Draw.io-Format.
-Enthält die Swimlane-Darstellung mit BPMN-Elementen.
+Enthält die Swimlane-Darstellung mit BPMN-Elementen. Darüber hinuas haben wir eine 
+interaktive [lieferbeginn-sequenz](https://) zur Verfügung gestellt
 
 Original graphical representation of the supplier change process in Draw.io format.
 Contains the swimlane view with BPMN elements.
