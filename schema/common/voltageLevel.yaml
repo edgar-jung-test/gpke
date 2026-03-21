@@ -1,0 +1,52 @@
+type: object
+title: VoltageLevel
+description: |
+  Voltage level at which a market or metering location is connected to the grid.
+  Defined in BDEW code list E02 (Spannungsebene).
+  
+  **German:** Spannungsebene, an der eine Markt- oder Messlokation ans Netz angeschlossen ist.
+  Definiert in BDEW-Codeliste E02 (Spannungsebene).
+x-i18n:
+  de:
+    title: Spannungsebene
+    description: Spannungsebene der Netzanbindung gemäß BDEW-Codeliste E02.
+x-edifact-mapping:
+  segment: CCI/CAV
+  qualifier: "Z07 (Spannungsebene)"
+  codeList: "E02"
+required:
+  - code
+properties:
+  code:
+    type: string
+    maxLength: 10
+    description: |
+      BDEW voltage level code. Common values: E01 (>110kV), E02 (110kV), 
+      E03 (Höchstspannung), E04 (Hochspannung/HS), E05 (Mittelspannung/MS), 
+      E06 (Niederspannung/NS).
+      **German:** BDEW-Code der Spannungsebene. Übliche Werte: E03 (HöS), E04 (HS), 
+      E05 (MS), E06 (NS).
+    x-i18n:
+      de:
+        description: BDEW-Code der Spannungsebene gemäß Codeliste E02. Werte z.B. E03 bis E06.
+    enum:
+      - E01
+      - E02
+      - E03
+      - E04
+      - E05
+      - E06
+    example: "E06"
+  name:
+    type: string
+    maxLength: 100
+    nullable: true
+    description: |
+      Human-readable name of the voltage level.
+      **German:** Lesbare Bezeichnung der Spannungsebene.
+    x-i18n:
+      de:
+        description: Lesbare Bezeichnung der Spannungsebene.
+    example: "Niederspannung"
+  label:
+    $ref: "../common/multilingualLabel.yaml"

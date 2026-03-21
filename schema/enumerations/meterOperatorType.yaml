@@ -1,0 +1,39 @@
+type: string
+title: MeterOperatorType
+description: |
+  Classification of the metering point operator type assigned to a grid location
+  or market location. Corresponds to EDIFACT SG10 CAV DE7110 with qualifier Z91.
+  
+  **German:** Klassifikation des Messstellenbetreiber-Typs an einer Netz- oder Marktlokation.
+  Entspricht EDIFACT SG10 CAV DE7110 mit Qualifier Z91.
+x-i18n:
+  de:
+    title: Messstellenbetreiber-Typ
+    description: Klassifikation des MSB-Typs an einer Lokation. EDIFACT SG10 CAV DE7110, Qualifier Z91.
+x-edifact-mapping:
+  segment: CAV
+  de7111: "Z91 (Messstellenbetreiber)"
+  de7110: "Z39 | Z40 | Z41"
+enum:
+  - Z39
+  - Z40
+  - Z41
+  - Z19
+  - Z20
+x-enum-descriptions:
+  Z39:
+    en: "Basic metering point operator (grundzuständiger Messstellenbetreiber, gMSB)"
+    de: "Grundzuständiger Messstellenbetreiber (gMSB) – gesetzlich zuständiger MSB"
+  Z40:
+    en: "Competitive metering point operator (wettbewerblicher Messstellenbetreiber, wMSB)"
+    de: "Wettbewerblicher Messstellenbetreiber (wMSB) – vom Anschlussnutzer gewählt"
+  Z41:
+    en: "Default metering point operator (Auffangmessstellenbetreiber)"
+    de: "Auffangmessstellenbetreiber – zuständiger MSB in Übergangssituationen"
+  Z19:
+    en: "MSB acting on contractual basis towards connection user/owner"
+    de: "MSB auf vertraglicher Grundlage gegenüber Anschlussnutzer / Anschlussnehmer"
+  Z20:
+    en: "MSB acting in delegated responsibility by basic MSB"
+    de: "MSB in der Ausübung der Weiterverpflichtung durch den gMSB"
+example: "Z39"

@@ -1,0 +1,42 @@
+type: object
+title: MarketActorRole
+description: |
+  Assignment of a market role to a market actor with a defined validity period.
+  A market actor can hold multiple roles simultaneously (e.g. NB and MSB).
+  
+  **German:** Zuordnung einer Marktrolle zu einem Marktakteur mit Gültigkeitszeitraum.
+  Ein Marktakteur kann gleichzeitig mehrere Marktrollen innehaben (z.B. NB und MSB).
+  Siehe BDEW Rollenmodell Strom.
+x-i18n:
+  de:
+    title: Marktakteur-Rollenzuordnung
+    description: Zuordnung einer Marktrolle mit Gültigkeitszeitraum gemäß BDEW Rollenmodell Strom.
+required:
+  - marketActorId
+  - roleCode
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: |
+      Internal identifier of this role assignment.
+      **German:** Interner Bezeichner dieser Rollenzuordnung.
+    x-i18n:
+      de:
+        description: Interner Bezeichner dieser Rollenzuordnung.
+    example: 101
+  marketActorId:
+    type: integer
+    description: |
+      Reference to the market actor holding this role.
+      **German:** Referenz auf den Marktakteur, der diese Rolle innehat.
+    x-i18n:
+      de:
+        description: Referenz auf den Marktakteur, der diese Rolle innehat.
+    example: 42
+  roleCode:
+    $ref: "../enumerations/marketRoleCode.yaml"
+  validity:
+    $ref: "../common/validityPeriod.yaml"
+  label:
+    $ref: "../common/multilingualLabel.yaml"

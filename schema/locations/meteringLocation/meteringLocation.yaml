@@ -1,0 +1,65 @@
+type: object
+title: MeteringLocation
+description: |
+  Metering location (Messlokation / MeLo) – the physical measurement point where
+  meters and metering equipment are installed. The metering location belongs to a
+  market location and/or grid location within a location bundle.
+  Multiple meters (Zähler) and devices can be installed at a metering location.
+  Corresponds to EDIFACT SG5 LOC+Z17 in UTILMD messages.
+  
+  **German:** Messlokation (MeLo) – der physische Messpunkt, an dem Zähler und
+  Messeinrichtungen installiert sind. Die Messlokation gehört zu einer Marktlokation
+  und/oder Netzlokation innerhalb eines Lokationsbündels.
+  An einer Messlokation können ein oder mehrere Zähler und Geräte installiert sein.
+  Entspricht EDIFACT SG5 LOC+Z17 in UTILMD-Nachrichten.
+x-i18n:
+  de:
+    title: Messlokation (MeLo)
+    description: |
+      Physischer Messpunkt mit Zählern und Messeinrichtungen.
+      Zugehörig zu MaLo und/oder NeLo im Lokationsbündel. EDIFACT SG5 LOC+Z17.
+x-edifact-mapping:
+  segment: LOC
+  de3227: "Z17 (Messlokation)"
+  de3225: "ID der Messlokation"
+required:
+  - meLoId
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+    example: 3001
+  meLoId:
+    $ref: "./meteringLocationId.yaml"
+  address:
+    $ref: "../../common/address.yaml"
+  voltageLevel:
+    $ref: "../../common/voltageLevel.yaml"
+  assignedMeteringPointOperator:
+    type: object
+    nullable: true
+    description: |
+      The metering point operator (MSB) responsible for this metering location,
+      including operator type and acting capacity.
+      Corresponds to EDIFACT SG10 CCI+ZB3 / CAV+Z91 on MeLo level.
+      **German:** Der dieser Messlokation zugeordnete Messstellenbetreiber (MSB),
+      einschließlich MSB-Typ und Ausübungsgrundlage.
+      EDIFACT SG10 CCI+ZB3 / CAV+Z91 auf MeLo-Ebene.
+    x-i18n:
+      de:
+        description: Zugeordneter Messstellenbetreiber (MSB) inkl. Typ und Grundlage. EDIFACT SG10.
+    properties:
+      actorId:
+        $ref: "../../marketActors/marketActorId.yaml"
+      operatorType:
+        $ref: "../../enumerations/meterOperatorType.yaml"
+  validity:
+    $ref: "../../common/validityPeriod.yaml"
+  label:
+    $ref: "../../common/multilingualLabel.yaml"

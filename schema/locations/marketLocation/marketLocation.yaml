@@ -1,0 +1,102 @@
+type: object
+title: MarketLocation
+description: |
+  Market location (Marktlokation / MaLo) – the central object in German electricity
+  market communication. A market location is defined as the point where electricity is
+  delivered or generated and represents the commercial accounting unit.
+  Identified by a unique 11-digit MaLo-ID assigned by the grid operator.
+  Corresponds to EDIFACT SG5 LOC+Z16 in UTILMD messages.
+  
+  **German:** Marktlokation (MaLo) – das zentrale Objekt in der deutschen Strommarkt-
+  kommunikation. Eine Marktlokation ist der Punkt, an dem Strom geliefert oder erzeugt
+  wird und stellt die kaufmännische Abrechnungseinheit dar.
+  Sie wird durch eine eindeutige 11-stellige MaLo-ID des Netzbetreibers identifiziert.
+  Entspricht EDIFACT SG5 LOC+Z16 in UTILMD-Nachrichten.
+  Siehe auch: BDEW UTILMD AHB Strom, Kapitel Stammdaten MaLo.
+x-i18n:
+  de:
+    title: Marktlokation (MaLo)
+    description: |
+      Kaufmännische Abrechnungseinheit im deutschen Strommarkt.
+      Identifiziert durch 11-stellige MaLo-ID. EDIFACT SG5 LOC+Z16.
+x-edifact-mapping:
+  segment: LOC
+  de3227: "Z16 (Marktlokation)"
+  de3225: "ID der Marktlokation (11-stellig)"
+  notes: "Central object of UTILMD – all stammdaten data refers to this object"
+required:
+  - maLoId
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+    example: 1001
+  maLoId:
+    $ref: "./marketLocationId.yaml"
+  gridAreaId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the grid area (Netzgebiet) in which this market location is located.
+      **German:** Referenz auf das Netzgebiet, in dem diese Marktlokation liegt.
+    x-i18n:
+      de:
+        description: Referenz auf das zugehörige Netzgebiet.
+    example: 5
+  address:
+    $ref: "../../common/address.yaml"
+  voltageLevel:
+    $ref: "../../common/voltageLevel.yaml"
+  energyDirection:
+    $ref: "../../enumerations/energyDirection.yaml"
+  status:
+    $ref: "./marketLocationStatus.yaml"
+  locationBundleType:
+    $ref: "../../enumerations/locationBundleType.yaml"
+  profile:
+    $ref: "./marketLocationProfile.yaml"
+  balancingAreaCode:
+    type: string
+    maxLength: 50
+    nullable: true
+    description: |
+      Code of the balancing area (Bilanzierungsgebiet) assigned to this market location.
+      **German:** Code des Bilanzierungsgebiets, dem diese Marktlokation zugeordnet ist.
+    x-i18n:
+      de:
+        description: Code des zugeordneten Bilanzierungsgebiets.
+    example: "11YE-VE-------U"
+  balancingGroupCode:
+    type: string
+    maxLength: 50
+    nullable: true
+    description: |
+      Code of the balancing group (Bilanzkreis) assigned to this market location.
+      **German:** Code des Bilanzkreises, dem diese Marktlokation zugeordnet ist.
+    x-i18n:
+      de:
+        description: Code des zugeordneten Bilanzkreises.
+    example: "11XBKV-MUSTER-K"
+  packageId:
+    type: string
+    maxLength: 50
+    nullable: true
+    description: |
+      Package ID (Paket-ID) assigned to the market location, relevant for interruptible
+      loads or product packages. Corresponds to EDIFACT SG8 SEQ+ZH0.
+      **German:** Paket-ID der Marktlokation, relevant für Unterbrechbare Verbrauchseinrichtungen
+      oder Produktpakete. EDIFACT SG8 SEQ+ZH0.
+    x-i18n:
+      de:
+        description: Paket-ID der Marktlokation für Produktpakete. EDIFACT SG8 SEQ+ZH0.
+    example: "PKT-00042"
+  validity:
+    $ref: "../../common/validityPeriod.yaml"
+  label:
+    $ref: "../../common/multilingualLabel.yaml"

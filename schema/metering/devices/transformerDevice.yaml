@@ -1,0 +1,65 @@
+type: object
+title: TransformerDevice
+description: |
+  Transformer device / current/voltage transformer (Wandlereinrichtung) – a measurement
+  transformer installed alongside a meter to extend its measurement range, e.g. current
+  transformers (CT) or voltage transformers (VT) at medium/high voltage connections.
+  Operated by the metering point operator (MSB).
+  
+  **German:** Wandlereinrichtung – ein Messtransformator, der zusammen mit einem Zähler
+  installiert wird, um seinen Messbereich zu erweitern, z.B. Stromwandler (SW) oder
+  Spannungswandler (SpW) bei Mittel-/Hochspannungsanschlüssen.
+  Betrieben durch den Messstellenbetreiber (MSB).
+x-i18n:
+  de:
+    title: Wandlereinrichtung
+    description: |
+      Messtransformator (Strom-/Spannungswandler) zur Messbereichserweiterung.
+      Betrieben durch MSB. Typisch bei MS/HS-Anschlüssen.
+required:
+  - externalId
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+    example: 13001
+  externalId:
+    type: string
+    maxLength: 80
+    description: |
+      External identifier of the transformer device.
+      **German:** Externe Identifikationsnummer der Wandlereinrichtung.
+    x-i18n:
+      de:
+        description: Externe Identifikationsnummer der Wandlereinrichtung.
+    example: "WE-0042-001"
+  meterId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the meter this transformer device is connected to.
+      **German:** Referenz auf den Zähler, mit dem diese Wandlereinrichtung verbunden ist.
+    x-i18n:
+      de:
+        description: Referenz auf den zugehörigen Zähler.
+    example: 5001
+  msbActorId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the MSB operating this transformer device.
+      **German:** Referenz auf den MSB, der diese Wandlereinrichtung betreibt.
+    x-i18n:
+      de:
+        description: Referenz auf den betreibenden MSB.
+    example: 42
+  validity:
+    $ref: "../../common/validityPeriod.yaml"
+  label:
+    $ref: "../../common/multilingualLabel.yaml"

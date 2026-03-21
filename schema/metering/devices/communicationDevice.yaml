@@ -1,0 +1,63 @@
+type: object
+title: CommunicationDevice
+description: |
+  Communication device (Kommunikationseinrichtung) – a device attached to a meter
+  enabling data transmission of metered values (e.g. modem, PLC adapter, M-Bus interface).
+  Operated by the metering point operator (MSB). Distinct from the smart meter gateway (SMGW).
+  
+  **German:** Kommunikationseinrichtung – ein am Zähler angebrachtes Gerät zur
+  Übertragung von Messdaten (z.B. Modem, PLC-Adapter, M-Bus-Schnittstelle).
+  Betrieben durch den Messstellenbetreiber (MSB). Vom Smart-Meter-Gateway (SMGW) zu unterscheiden.
+x-i18n:
+  de:
+    title: Kommunikationseinrichtung
+    description: |
+      Gerät zur Messdatenübertragung am Zähler (z.B. Modem, PLC-Adapter).
+      Betrieben durch MSB. Nicht zu verwechseln mit dem SMGW.
+required:
+  - deviceNumber
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+    example: 12001
+  deviceNumber:
+    type: string
+    maxLength: 80
+    description: |
+      Unique device number of the communication device.
+      **German:** Eindeutige Gerätenummer der Kommunikationseinrichtung.
+    x-i18n:
+      de:
+        description: Eindeutige Gerätenummer der Kommunikationseinrichtung.
+    example: "KE-9876543210"
+  meterId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the meter this communication device is attached to.
+      **German:** Referenz auf den Zähler, an dem diese Kommunikationseinrichtung angebracht ist.
+    x-i18n:
+      de:
+        description: Referenz auf den zugehörigen Zähler.
+    example: 5001
+  msbActorId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the MSB operating this communication device.
+      **German:** Referenz auf den MSB, der diese Kommunikationseinrichtung betreibt.
+    x-i18n:
+      de:
+        description: Referenz auf den betreibenden MSB.
+    example: 42
+  validity:
+    $ref: "../../common/validityPeriod.yaml"
+  label:
+    $ref: "../../common/multilingualLabel.yaml"

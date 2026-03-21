@@ -1,0 +1,68 @@
+type: object
+title: TransactionStatus
+description: |
+  Status information for a transaction within a UTILMD message, used in confirmation
+  and rejection messages. Contains the status code and optional reason/rejection code.
+  Corresponds to EDIFACT SG4 STS segment.
+  
+  **German:** Statusinformation für einen Vorgang in einer UTILMD-Nachricht, verwendet
+  in Bestätigungs- und Ablehnungsnachrichten. Enthält Statuscode und optionalen
+  Ablehnungsgrund. Entspricht EDIFACT SG4 STS-Segment.
+x-i18n:
+  de:
+    title: Vorgangsstatus
+    description: Statusinformation für UTILMD-Vorgangsbestätigungen und -ablehnungen. EDIFACT SG4 STS.
+x-edifact-mapping:
+  segment: STS (SG4)
+  de9015: "7 (Transaktionsgrund)"
+  de9013: "Statuscode / Transaktionsgrundergänzung"
+  de1131: "Codeliste"
+  de9012: "Zeitraum-ID oder zusätzlicher Code"
+properties:
+  statusCode:
+    type: string
+    maxLength: 10
+    description: |
+      Status code of the transaction response.
+      E01 = confirmation, E02 = partial confirmation, E03 = rejection.
+      Corresponds to EDIFACT STS DE9013.
+      **German:** Statuscode der Vorgangsantwort.
+      E01 = Bestätigung, E02 = Teilbestätigung, E03 = Ablehnung.
+      EDIFACT STS DE9013.
+    x-i18n:
+      de:
+        description: Statuscode. E01=Bestätigung, E02=Teilbestätigung, E03=Ablehnung. EDIFACT STS DE9013.
+    enum:
+      - E01
+      - E02
+      - E03
+    example: "E01"
+  rejectionCode:
+    type: string
+    maxLength: 20
+    nullable: true
+    description: |
+      Rejection reason code from the BDEW rejection reason code list, if status is E03.
+      Corresponds to EDIFACT STS DE9012 (code of check step / EBD reference).
+      **German:** Ablehnungsgrundcode aus der BDEW-Ablehnungsgrundliste, wenn Status E03.
+      EDIFACT STS DE9012 (Code des Prüfschritts / EBD-Referenz).
+    x-i18n:
+      de:
+        description: Ablehnungsgrundcode bei Status E03. EDIFACT STS DE9012.
+    example: "E_0610"
+  periodId:
+    type: string
+    maxLength: 35
+    nullable: true
+    description: |
+      Period ID from the request message referenced in this status response.
+      Corresponds to EDIFACT STS DE9012 (Zeitraum-ID).
+      Must be a positive integer value without decimal places.
+      **German:** Zeitraum-ID aus der Anfragenachricht, auf die sich diese Statusantwort bezieht.
+      EDIFACT STS DE9012 (Zeitraum-ID). Muss positive ganze Zahl ohne Dezimalstellen sein.
+    x-i18n:
+      de:
+        description: Zeitraum-ID aus der Anfragenachricht. EDIFACT STS DE9012. Positiver ganzzahliger Wert.
+    example: "1"
+  label:
+    $ref: "../common/multilingualLabel.yaml"

@@ -1,0 +1,64 @@
+type: object
+title: BalancingArea
+description: |
+  Balancing area (Bilanzierungsgebiet) – a geographic subdivision of a control area
+  (Regelzone) used for settlement and billing of electricity. Market locations are
+  assigned to a balancing area, which in turn is part of a control area managed by a
+  transmission system operator (ÜNB).
+  
+  **German:** Bilanzierungsgebiet – ein geografischer Teilbereich einer Regelzone,
+  der für die Abrechnung und Bilanzierung von Strom verwendet wird. Marktlokationen
+  werden einem Bilanzierungsgebiet zugeordnet, das wiederum Teil einer vom ÜNB
+  verwalteten Regelzone ist.
+x-i18n:
+  de:
+    title: Bilanzierungsgebiet
+    description: |
+      Geografischer Teilbereich einer Regelzone für Abrechnung und Bilanzierung.
+      MaLos werden einem Bilanzierungsgebiet zugeordnet.
+required:
+  - code
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+    example: 18001
+  code:
+    type: string
+    maxLength: 50
+    description: |
+      Unique EIC code of the balancing area.
+      **German:** Eindeutiger EIC-Code des Bilanzierungsgebiets.
+    x-i18n:
+      de:
+        description: Eindeutiger EIC-Code des Bilanzierungsgebiets.
+    example: "11YE-VE-------U"
+  name:
+    type: string
+    maxLength: 200
+    nullable: true
+    description: |
+      Name of the balancing area.
+      **German:** Name des Bilanzierungsgebiets.
+    x-i18n:
+      de:
+        description: Name des Bilanzierungsgebiets.
+    example: "Bilanzierungsgebiet 50Hertz"
+  controlAreaId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the control area (Regelzone) this balancing area belongs to.
+      **German:** Referenz auf die Regelzone, zu der dieses Bilanzierungsgebiet gehört.
+    x-i18n:
+      de:
+        description: Referenz auf die übergeordnete Regelzone.
+    example: 17001
+  label:
+    $ref: "../common/multilingualLabel.yaml"

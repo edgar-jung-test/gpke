@@ -1,0 +1,101 @@
+type: string
+title: TransactionReason
+description: |
+  Transaction reason code (Transaktionsgrund / Transaktionsgrundergänzung) identifying
+  the business case type of a UTILMD message. Corresponds to SG4 STS 9013 in EDIFACT.
+  
+  **German:** Transaktionsgrundcode (Transaktionsgrund / Transaktionsgrundergänzung) zur
+  Identifikation des Geschäftsvorfalls einer UTILMD-Nachricht. Entspricht SG4 STS DE9013
+  im EDIFACT-Format.
+x-i18n:
+  de:
+    title: Transaktionsgrundcode
+    description: Transaktionsgrundcode zur Identifikation des Geschäftsvorfalls. EDIFACT SG4 STS DE9013.
+x-edifact-mapping:
+  segment: STS
+  de9013: "Transaction reason/supplement qualifier"
+  de9015: "7 (Transaktionsgrund)"
+enum:
+  - ZA1
+  - ZA2
+  - ZA3
+  - ZA4
+  - ZA5
+  - ZA6
+  - ZA7
+  - ZA8
+  - ZA9
+  - ZW0
+  - ZW1
+  - ZW2
+  - ZW3
+  - ZW4
+  - ZW5
+  - ZW6
+  - ZW7
+  - ZW8
+  - ZW9
+  - ZX0
+  - ZX1
+  - ZX4
+  - E01
+  - E03
+x-enum-descriptions:
+  ZA1:
+    en: "Supplier change"
+    de: "Lieferantenwechsel"
+  ZA2:
+    en: "New market location (consuming)"
+    de: "Einzug / Neuanlage einer verbrauchenden Marktlokation"
+  ZA3:
+    en: "Move-out / deregistration"
+    de: "Auszug / Abmeldung"
+  ZA4:
+    en: "Interruptible load registration"
+    de: "Anmeldung einer unterbrechbaren Verbrauchseinrichtung"
+  ZA5:
+    en: "Disconnection"
+    de: "Sperrung"
+  ZA6:
+    en: "Reconnection"
+    de: "Entsperrung"
+  ZA7:
+    en: "Registration of generation (producing MaLo)"
+    de: "Anmeldung einer erzeugenden Marktlokation"
+  ZW0:
+    en: "Business case 1 – registration 100%"
+    de: "Geschäftsvorfall 1 – Anmeldung 100%"
+  ZW1:
+    en: "Business case 2"
+    de: "Geschäftsvorfall 2"
+  ZW2:
+    en: "Business case 3"
+    de: "Geschäftsvorfall 3"
+  ZW6:
+    en: "Flat-rate (SLP) market location"
+    de: "Pauschale Marktlokation (SLP)"
+  ZW7:
+    en: "Metered market location"
+    de: "Gemessene Marktlokation"
+  ZW8:
+    en: "Case 1"
+    de: "Fall 1"
+  ZW9:
+    en: "Case 2"
+    de: "Fall 2"
+  ZX0:
+    en: "Case 3"
+    de: "Fall 3"
+  ZX1:
+    en: "Case 4"
+    de: "Fall 4"
+  ZX4:
+    en: "Response status"
+    de: "Status der Antwort"
+  E01:
+    en: "Confirmation"
+    de: "Bestätigung"
+  E03:
+    en: "Change notification"
+    de: "Änderungsmeldung"
+example: "ZA1"
