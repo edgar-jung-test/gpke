@@ -1,535 +1,299 @@
-openapi: 3.0.3
+openapi: "3.0.3"
 info:
-  title: GPKE Supply Start (Lieferbeginn) REST API
-  version: 1.0.0
-  description: >
-    REST API for the GPKE use-case "Lieferbeginn" (supply start), representing
-    the business data typically transported via UTILMD.
+  title: GPKE / UTILMD OpenAPI Repository
+  version: "2.1.0"
+  description: |
+    Repository-level entry point aggregating the GPKE / UTILMD OpenAPI ecosystem.
+
+    This file registers all top-level API specifications and the shared schema
+    library so that tooling (Redocly, Spectral, Swagger Editor, etc.) can resolve
+    the full dependency graph from a single entry point.
+
+    **Included APIs:**
+    - `api/malo.yaml` – GPKE Lieferbeginn (supply start / supplier change)
+
+    **Shared libraries:**
+    - `schema/openapi.yaml` – BDEW UTILMD schema library (all domain schemas)
+    - `header/openapi.yaml` – EDI@Energy reusable HTTP header definitions
+
+    **German:** Repository-Einstiegspunkt, der alle API-Spezifikationen und die
+    gemeinsame Schema-Bibliothek des GPKE/UTILMD-Ökosystems aggregiert.
+
+    Enthaltene APIs:
+    - `api/malo.yaml` – GPKE Lieferbeginn (Lieferantenwechsel)
+
+    Gemeinsame Bibliotheken:
+    - `schema/openapi.yaml` – BDEW UTILMD Schema-Bibliothek
+    - `header/openapi.yaml` – EDI@Energy HTTP-Header-Definitionen
+  contact:
+    name: BDEW
+    url: https://www.bdew-mako.de
+  license:
+    name: BDEW
+    url: https://www.bdew-mako.de
+
+# ── Servers ───────────────────────────────────────────────────────────────────
 servers:
   - url: https://api.example.com
+    description: Production server / Produktionsserver
+
+# ── Tags (all APIs combined) ──────────────────────────────────────────────────
+tags:
+  # GPKE Lieferbeginn
+  - name: registrations
+    description: >
+      Registration requests: new supplier (LFN) → grid operator (NB).
+      Steps 1, 2, 5. / Anmeldungen: LFN → NB. Schritte 1, 2, 5.
+  - name: deregistrationRequests
+    description: >
+      Deregistration requests between NB and previous supplier (LFA).
+      Steps 3, 4. / Abmeldeanfragen NB ↔ LFA. Schritte 3, 4.
+  - name: assignments
+    description: >
+      Assignment termination and cancellation notifications. Steps 6, 7. /
+      Zuordnungsbeendigungen und -aufhebungen. Schritte 6, 7.
+  # UTILMD
+  - name: marketActors
+    description: Market participants and their roles / Marktakteure und Rollen
+  - name: marketLocations
+    description: Market locations (MaLo) / Marktlokationen
+  - name: gridLocations
+    description: Grid locations (NeLo) / Netzlokationen
+  - name: meteringLocations
+    description: Metering locations (MeLo) / Messlokationen
+  - name: meteringDevices
+    description: Metering devices / Messeinrichtungen
+  - name: locationBundles
+    description: Location bundle structures / Lokationsbündelstrukturen
+  - name: messages
+    description: UTILMD messages / UTILMD-Nachrichten
+  - name: balancing
+    description: Balancing areas and zones / Bilanzierungsgebiete und -kreise
+
+# ── Paths – delegated to individual API files ──────────────────────────────────
+#
+# Each API spec owns its own paths. This index aggregates them by $ref so that
+# bundling tools can resolve everything from a single entry point.
+#
 paths:
-  /malo/{maloid}:
-    post:
-      summary: Create a supply start request
-      description: Submit a new Lieferbeginn (registration) request.
-      operationId: createSupplyStart
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SupplyStartCreateRequest'
-      responses:
-        '201':
-          description: Created
-          headers:
-            Location:
-              description: URL of the created resource
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SupplyStart'
-        '400':
-          description: Validation error
-        '409':
-          description: Conflict (e.g., another registration already in progress)
-    get:
-      summary: List supply start requests
-      operationId: listSupplyStarts
-      parameters:
-        - in: query
-          name: status
-          schema:
-            $ref: '#/components/schemas/SupplyStartStatus'
-          description: Filter by status
-          x-de: Status-Filter
-        - in: query
-          name: maloId
-          schema:
-            type: string
-          description: Filter by MaLo-ID
-          x-de: Filter nach MaLo-ID
-        - in: query
-          name: fromDate
-          schema:
-            type: string
-            format: date
-          description: Filter by requested supply start date (from)
-          x-de: Filter nach Lieferbeginn-Datum (von)
-        - in: query
-          name: toDate
-          schema:
-            type: string
-            format: date
-          description: Filter by requested supply start date (to)
-          x-de: Filter nach Lieferbeginn-Datum (bis)
-        - in: query
-          name: limit
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 500
-            default: 50
-          description: Page size
-          x-de: Seitengröße
-        - in: query
-          name: offset
-          schema:
-            type: integer
-            minimum: 0
-            default: 0
-          description: Page offset
-          x-de: Seitenoffset
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SupplyStartList'
-    patch:
-      summary: Supply start
-      description: ''
-      operationId: ''
-      tags: []
-      parameters: []
-      responses:
-        '200':
-          description: OK
-    parameters:
-      - $ref: ''
-        in: path
-  /supply-starts/{supplyStartId}:
-    get:
-      summary: Get a supply start request by ID
-      operationId: getSupplyStart
-      parameters:
-        - in: path
-          name: supplyStartId
-          required: true
-          schema:
-            type: string
-          description: Supply start request ID
-          x-de: Lieferbeginn-Anfrage-ID
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SupplyStart'
-        '404':
-          description: Not found
-    patch:
-      summary: Update mutable fields of a supply start request
-      description: >
-        Update fields that are still changeable before submission/processing.
-        Typical use: add notes, correct identification details, etc.
-      operationId: patchSupplyStart
-      parameters:
-        - in: path
-          name: supplyStartId
-          required: true
-          schema:
-            type: string
-          description: Supply start request ID
-          x-de: Lieferbeginn-Anfrage-ID
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SupplyStartPatchRequest'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SupplyStart'
-        '400':
-          description: Validation error
-        '404':
-          description: Not found
-        '409':
-          description: Conflict (e.g., cannot modify in current status)
-  /supply-starts/{supplyStartId}/submit:
-    post:
-      summary: Submit the supply start request for processing
-      description: Transition from draft to submitted.
-      operationId: submitSupplyStart
-      parameters:
-        - in: path
-          name: supplyStartId
-          required: true
-          schema:
-            type: string
-          description: Supply start request ID
-          x-de: Lieferbeginn-Anfrage-ID
-      responses:
-        '202':
-          description: Accepted for processing
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SupplyStart'
-        '404':
-          description: Not found
-        '409':
-          description: Conflict (e.g., already submitted)
+
+  # GPKE Lieferbeginn ──────────────────────────────────────────────────────────
+  /market-locations/{marketLocationId}/registrations:
+    $ref: "./api/malo.yaml#/paths/~1market-locations~1{marketLocationId}~1registrations"
+
+  /market-locations/{marketLocationId}/registrations/{supplyStartId}:
+    $ref: "./api/malo.yaml#/paths/~1market-locations~1{marketLocationId}~1registrations~1{supplyStartId}"
+
+  /market-locations/{marketLocationId}/registrations/{supplyStartId}/response:
+    $ref: "./api/malo.yaml#/paths/~1market-locations~1{marketLocationId}~1registrations~1{supplyStartId}~1response"
+
+  /market-locations/{marketLocationId}/deregistration-requests:
+    $ref: "./api/malo.yaml#/paths/~1market-locations~1{marketLocationId}~1deregistration-requests"
+
+  /market-locations/{marketLocationId}/deregistration-requests/{deregistrationRequestId}/response:
+    $ref: "./api/malo.yaml#/paths/~1market-locations~1{marketLocationId}~1deregistration-requests~1{deregistrationRequestId}~1response"
+
+  /market-locations/{marketLocationId}/assignment-terminations:
+    $ref: "./api/malo.yaml#/paths/~1market-locations~1{marketLocationId}~1assignment-terminations"
+
+  /market-locations/{marketLocationId}/assignment-cancellations:
+    $ref: "./api/malo.yaml#/paths/~1market-locations~1{marketLocationId}~1assignment-cancellations"
+
+# ── Components – aggregated from schema library ───────────────────────────────
 components:
   schemas:
-    SupplyStartList:
-      type: object
-      required:
-        - items
-        - count
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/SupplyStart'
-          description: List of supply start requests
-          x-de: Liste der Lieferbeginn-Anfragen
-        count:
-          type: integer
-          description: Total number of items (after filtering)
-          x-de: Gesamtanzahl (nach Filter)
-    SupplyStart:
-      type: object
-      required:
-        - supplyStartId
-        - status
-        - createdAt
-        - updatedAt
-        - header
-        - supplyStartDate
-        - transactionReason
-        - marketLocationIdentification
-        - balancing
-        - isHouseholdCustomer
-      properties:
-        supplyStartId:
-          type: string
-          description: Unique supply start request ID
-          x-de: Eindeutige Lieferbeginn-Anfrage-ID
-        status:
-          $ref: '#/components/schemas/SupplyStartStatus'
-        createdAt:
-          type: string
-          format: date-time
-          description: Resource creation timestamp
-          x-de: Erstellzeitpunkt
-        updatedAt:
-          type: string
-          format: date-time
-          description: Last update timestamp
-          x-de: Letzte Änderung
-        header:
-          $ref: '#/components/schemas/MessageHeader'
-        supplyStartDate:
-          type: string
-          format: date
-          description: Requested supply start date (Anmeldedatum)
-          x-de: Gewünschtes Lieferbeginn-Datum (Anmeldedatum)
-        transactionReason:
-          $ref: '#/components/schemas/TransactionReason'
-        isHouseholdCustomer:
-          type: boolean
-          description: Whether the end customer is a household customer
-          x-de: Haushaltskunde (ja/nein)
-        marketLocationIdentification:
-          $ref: '#/components/schemas/MarketLocationIdentification'
-        balancing:
-          $ref: '#/components/schemas/BalancingData'
-        meterReadingCycle:
-          $ref: '#/components/schemas/MeterReadingCycle'
-        requestedStartDateForNewConnection:
-          type: string
-          format: date
-          nullable: true
-          description: Estimated supply start date for a new connection
-          x-de: Voraussichtliches Lieferbeginn-Datum bei Neuanlage
-        effectiveSupplyStartDate:
-          type: string
-          format: date
-          nullable: true
-          description: Confirmed/Effective supply start date (if known)
-          x-de: Bestätigtes/Wirkendes Lieferbeginn-Datum (falls bekannt)
-        rejectionReasons:
-          type: array
-          nullable: true
-          items:
-            $ref: '#/components/schemas/RejectionReason'
-          description: Reasons if rejected
-          x-de: Ablehnungsgründe (falls abgelehnt)
-        notes:
-          type: string
-          nullable: true
-          description: Free-text notes
-          x-de: Freitext-Notizen
-    SupplyStartCreateRequest:
-      type: object
-      required:
-        - header
-        - supplyStartDate
-        - transactionReason
-        - marketLocationIdentification
-        - balancing
-        - isHouseholdCustomer
-      properties:
-        header:
-          $ref: '#/components/schemas/MessageHeader'
-        supplyStartDate:
-          type: string
-          format: date
-          description: Requested supply start date (Anmeldedatum)
-          x-de: Gewünschtes Lieferbeginn-Datum (Anmeldedatum)
-        transactionReason:
-          $ref: '#/components/schemas/TransactionReason'
-        isHouseholdCustomer:
-          type: boolean
-          description: Whether the end customer is a household customer
-          x-de: Haushaltskunde (ja/nein)
-        marketLocationIdentification:
-          $ref: '#/components/schemas/MarketLocationIdentification'
-        balancing:
-          $ref: '#/components/schemas/BalancingData'
-        meterReadingCycle:
-          $ref: '#/components/schemas/MeterReadingCycle'
-        requestedStartDateForNewConnection:
-          type: string
-          format: date
-          nullable: true
-          description: Estimated supply start date for a new connection
-          x-de: Voraussichtliches Lieferbeginn-Datum bei Neuanlage
-        notes:
-          type: string
-          nullable: true
-          description: Free-text notes
-          x-de: Freitext-Notizen
-    SupplyStartPatchRequest:
-      type: object
-      description: Mutable fields only
-      x-de: Nur änderbare Felder
-      properties:
-        supplyStartDate:
-          type: string
-          format: date
-          description: Requested supply start date (Anmeldedatum)
-          x-de: Gewünschtes Lieferbeginn-Datum (Anmeldedatum)
-        isHouseholdCustomer:
-          type: boolean
-          description: Whether the end customer is a household customer
-          x-de: Haushaltskunde (ja/nein)
-        marketLocationIdentification:
-          $ref: '#/components/schemas/MarketLocationIdentification'
-        balancing:
-          $ref: '#/components/schemas/BalancingData'
-        meterReadingCycle:
-          $ref: '#/components/schemas/MeterReadingCycle'
-        requestedStartDateForNewConnection:
-          type: string
-          format: date
-          nullable: true
-          description: Estimated supply start date for a new connection
-          x-de: Voraussichtliches Lieferbeginn-Datum bei Neuanlage
-        notes:
-          type: string
-          nullable: true
-          description: Free-text notes
-          x-de: Freitext-Notizen
-    SupplyStartStatus:
-      type: string
-      description: Current processing status
-      x-de: Aktueller Bearbeitungsstatus
-      enum:
-        - draft
-        - submitted
-        - accepted
-        - rejected
-        - cancelled
-    MessageHeader:
-      type: object
-      required:
-        - messageId
-        - createdAt
-        - senderMarketPartnerId
-        - receiverMarketPartnerId
-      properties:
-        messageId:
-          type: string
-          description: Unique message identifier
-          x-de: Eindeutige Nachrichten-ID
-        createdAt:
-          type: string
-          format: date-time
-          description: Message creation timestamp
-          x-de: Erstellzeitpunkt der Nachricht
-        senderMarketPartnerId:
-          type: string
-          description: Market partner ID of the sender (e.g., supplier)
-          x-de: Marktpartner-ID des Senders (z. B. Lieferant)
-        receiverMarketPartnerId:
-          type: string
-          description: Market partner ID of the receiver (e.g., DSO)
-          x-de: Marktpartner-ID des Empfängers (z. B. Netzbetreiber)
-        process:
-          type: string
-          nullable: true
-          description: Process name (e.g., Lieferbeginn)
-          x-de: Prozessname (z. B. Lieferbeginn)
-        version:
-          type: string
-          nullable: true
-          description: Message/process version
-          x-de: Nachrichten-/Prozessversion
-    TransactionReason:
-      type: string
-      description: Transaction reason for supply start
-      x-de: Transaktionsgrund für Lieferbeginn
-      enum:
-        - supplierChange
-        - moveInMoveOut
-        - newConnection
-        - resumptionAfterInterruption
-        - other
-    MarketLocationIdentification:
-      type: object
-      required:
-        - identificationMode
-      properties:
-        identificationMode:
-          type: string
-          description: How the market location is identified
-          x-de: Art der Identifikation der Marktlokation
-          enum:
-            - maloIdOnly
-            - multiAttribute
-        maloId:
-          type: string
-          nullable: true
-          description: Market location ID (MaLo-ID)
-          x-de: Marktlokations-ID (MaLo-ID)
-        meterNumber:
-          type: string
-          nullable: true
-          description: Meter number (Zählernummer)
-          x-de: Zählernummer
-        address:
-          $ref: '#/components/schemas/PostalAddress'
-        customer:
-          $ref: '#/components/schemas/CustomerReference'
-      allOf:
-        - if:
-            properties:
-              identificationMode:
-                const: maloIdOnly
-          then:
-            required:
-              - maloId
-        - if:
-            properties:
-              identificationMode:
-                const: multiAttribute
-          then:
-            required:
-              - address
-    PostalAddress:
-      type: object
-      required:
-        - street
-        - houseNumber
-        - postalCode
-        - city
-        - countryCode
-      properties:
-        street:
-          type: string
-          description: Street name
-          x-de: Straße
-        houseNumber:
-          type: string
-          description: House number
-          x-de: Hausnummer
-        postalCode:
-          type: string
-          description: Postal code
-          x-de: Postleitzahl
-        city:
-          type: string
-          description: City
-          x-de: Ort
-        countryCode:
-          type: string
-          minLength: 2
-          maxLength: 2
-          description: ISO 3166-1 alpha-2 country code
-          x-de: Ländercode (ISO 3166-1 alpha-2)
-    CustomerReference:
-      type: object
-      description: Customer reference used for identification (esp. new connection)
-      x-de: Kundenreferenz zur Identifikation (insb. Neuanlage)
-      properties:
-        customerType:
-          type: string
-          enum:
-            - person
-            - company
-          description: Customer type
-          x-de: Kundentyp
-        nameOrCompany:
-          type: string
-          nullable: true
-          description: Person name or company name
-          x-de: Name der Person oder Firma
-    BalancingData:
-      type: object
-      required:
-        - balancingGroupId
-      properties:
-        balancingGroupId:
-          type: string
-          description: Balancing group assignment (Bilanzkreis)
-          x-de: Bilanzkreiszuordnung (Bilanzkreis-ID)
-        balancingGroupRole:
-          type: string
-          nullable: true
-          description: Optional role/context for balancing
-          x-de: Optionale Rolle/Kontext zur Bilanzierung
-        authorizationReference:
-          type: string
-          nullable: true
-          description: Reference to balancing authorization (if applicable)
-          x-de: Referenz der Zuordnungsermächtigung (falls vorhanden)
-    MeterReadingCycle:
-      type: object
-      nullable: true
-      description: Optional meter reading cycle differing from yearly
-      x-de: Optionaler Ableseturnus (abweichend von jährlich)
-      properties:
-        cycle:
-          type: string
-          enum:
-            - yearly
-            - semiAnnual
-            - quarterly
-            - monthly
-          description: Meter reading cycle
-          x-de: Ableseturnus
-    RejectionReason:
-      type: object
-      required:
-        - code
-      properties:
-        code:
-          type: string
-          description: Machine-readable rejection code
-          x-de: Maschinenlesbarer Ablehnungscode
-        message:
-          type: string
-          nullable: true
-          description: Human-readable rejection message
-          x-de: Lesbare Ablehnungsbegründung
+
+    # ── Common ─────────────────────────────────────────────────────────────
+    multilingualLabel:
+      $ref: "./schema/common/multilingualLabel.yaml"
+    validityPeriod:
+      $ref: "./schema/common/validityPeriod.yaml"
+    address:
+      $ref: "./schema/common/address.yaml"
+    obisCode:
+      $ref: "./schema/common/obisCode.yaml"
+    voltageLevel:
+      $ref: "./schema/common/voltageLevel.yaml"
+    product:
+      $ref: "./schema/common/product.yaml"
+    errorResponse:
+      $ref: "./schema/common/errorResponse.yaml"
+    pagedResponse:
+      $ref: "./schema/common/pagedResponse.yaml"
+
+    # ── Enumerations – UTILMD / general ────────────────────────────────────
+    marketRoleCode:
+      $ref: "./schema/enumerations/marketRoleCode.yaml"
+    transactionReason:
+      $ref: "./schema/enumerations/transactionReason.yaml"
+    meteringPointType:
+      $ref: "./schema/enumerations/meteringPointType.yaml"
+    meterOperatorType:
+      $ref: "./schema/enumerations/meterOperatorType.yaml"
+    energyDirection:
+      $ref: "./schema/enumerations/energyDirection.yaml"
+    locationBundleType:
+      $ref: "./schema/enumerations/locationBundleType.yaml"
+    profileType:
+      $ref: "./schema/enumerations/profileType.yaml"
+    messageType:
+      $ref: "./schema/enumerations/messageType.yaml"
+
+    # ── Enumerations – GPKE Lieferbeginn ───────────────────────────────────
+    supplyStartStatus:
+      $ref: "./schema/enumerations/supplyStartStatus.yaml"
+    identificationMode:
+      $ref: "./schema/enumerations/identificationMode.yaml"
+    meterReadingCycle:
+      $ref: "./schema/enumerations/meterReadingCycle.yaml"
+    terminationReason:
+      $ref: "./schema/enumerations/terminationReason.yaml"
+    deregistrationCase:
+      $ref: "./schema/enumerations/deregistrationCase.yaml"
+
+    # ── Market Actors ───────────────────────────────────────────────────────
+    marketActor:
+      $ref: "./schema/marketActors/marketActor.yaml"
+    marketActorRole:
+      $ref: "./schema/marketActors/marketActorRole.yaml"
+    marketActorId:
+      $ref: "./schema/marketActors/marketActorId.yaml"
+    communicationContact:
+      $ref: "./schema/marketActors/communicationContact.yaml"
+
+    # ── Locations – Market Location ─────────────────────────────────────────
+    marketLocationId:
+      $ref: "./schema/locations/marketLocation/marketLocationId.yaml"
+    marketLocation:
+      $ref: "./schema/locations/marketLocation/marketLocation.yaml"
+    marketLocationStatus:
+      $ref: "./schema/locations/marketLocation/marketLocationStatus.yaml"
+    marketLocationProfile:
+      $ref: "./schema/locations/marketLocation/marketLocationProfile.yaml"
+    dormantMarketLocation:
+      $ref: "./schema/locations/marketLocation/dormantMarketLocation.yaml"
+
+    # ── Locations – Grid Location ───────────────────────────────────────────
+    gridLocationId:
+      $ref: "./schema/locations/gridLocation/gridLocationId.yaml"
+    gridLocation:
+      $ref: "./schema/locations/gridLocation/gridLocation.yaml"
+
+    # ── Locations – Metering Location ──────────────────────────────────────
+    meteringLocationId:
+      $ref: "./schema/locations/meteringLocation/meteringLocationId.yaml"
+    meteringLocation:
+      $ref: "./schema/locations/meteringLocation/meteringLocation.yaml"
+
+    # ── Locations – Tranche ─────────────────────────────────────────────────
+    trancheId:
+      $ref: "./schema/locations/tranche/trancheId.yaml"
+    tranche:
+      $ref: "./schema/locations/tranche/tranche.yaml"
+
+    # ── Metering Devices ────────────────────────────────────────────────────
+    meterNumber:
+      $ref: "./schema/metering/devices/meterNumber.yaml"
+    meter:
+      $ref: "./schema/metering/devices/meter.yaml"
+    gateway:
+      $ref: "./schema/metering/devices/gateway.yaml"
+    technicalResource:
+      $ref: "./schema/metering/devices/technicalResource.yaml"
+    controllableResource:
+      $ref: "./schema/metering/devices/controllableResource.yaml"
+    controlDevice:
+      $ref: "./schema/metering/devices/controlDevice.yaml"
+    controlBox:
+      $ref: "./schema/metering/devices/controlBox.yaml"
+    volumeConverter:
+      $ref: "./schema/metering/devices/volumeConverter.yaml"
+    communicationDevice:
+      $ref: "./schema/metering/devices/communicationDevice.yaml"
+    transformerDevice:
+      $ref: "./schema/metering/devices/transformerDevice.yaml"
+    tariffDevice:
+      $ref: "./schema/metering/devices/tariffDevice.yaml"
+
+    # ── Metering Registers ──────────────────────────────────────────────────
+    meterRegister:
+      $ref: "./schema/metering/registers/meterRegister.yaml"
+    gatewayRegister:
+      $ref: "./schema/metering/registers/gatewayRegister.yaml"
+
+    # ── Balancing ───────────────────────────────────────────────────────────
+    controlArea:
+      $ref: "./schema/balancing/controlArea.yaml"
+    balancingArea:
+      $ref: "./schema/balancing/balancingArea.yaml"
+    balancingGroup:
+      $ref: "./schema/balancing/balancingGroup.yaml"
+    marketArea:
+      $ref: "./schema/balancing/marketArea.yaml"
+    gridAccount:
+      $ref: "./schema/balancing/gridAccount.yaml"
+
+    # ── Message ─────────────────────────────────────────────────────────────
+    messageHeader:
+      $ref: "./schema/message/messageHeader.yaml"
+    messageSender:
+      $ref: "./schema/message/messageSender.yaml"
+    messageRecipient:
+      $ref: "./schema/message/messageRecipient.yaml"
+    messageTransaction:
+      $ref: "./schema/message/messageTransaction.yaml"
+    transactionStatus:
+      $ref: "./schema/message/transactionStatus.yaml"
+    usagePeriod:
+      $ref: "./schema/message/usagePeriod.yaml"
+    checkIdentifier:
+      $ref: "./schema/message/checkIdentifier.yaml"
+
+    # ── Supply Start / GPKE Lieferbeginn ────────────────────────────────────
+    balancingAssignment:
+      $ref: "./schema/supplyStart/balancingAssignment.yaml"
+    marketLocationIdentification:
+      $ref: "./schema/supplyStart/marketLocationIdentification.yaml"
+    masterDataResponse:
+      $ref: "./schema/supplyStart/masterDataResponse.yaml"
+    rejectionReason:
+      $ref: "./schema/supplyStart/rejectionReason.yaml"
+    supplyStart:
+      $ref: "./schema/supplyStart/supplyStart.yaml"
+    supplyStartList:
+      $ref: "./schema/supplyStart/supplyStartList.yaml"
+
+    # ── Composed Objects ────────────────────────────────────────────────────
+    locationBundle:
+      $ref: "./schema/composed/locationBundle.yaml"
+    utilmdMessage:
+      $ref: "./schema/composed/utilmdMessage.yaml"
+    marketLocationFull:
+      $ref: "./schema/composed/marketLocationFull.yaml"
+    gridLocationFull:
+      $ref: "./schema/composed/gridLocationFull.yaml"
+    meteringLocationFull:
+      $ref: "./schema/composed/meteringLocationFull.yaml"
+    meterFull:
+      $ref: "./schema/composed/meterFull.yaml"
+    marketActorFull:
+      $ref: "./schema/composed/marketActorFull.yaml"
+
+  # ── Parameters ──────────────────────────────────────────────────────────────
+  parameters:
+    marketLocationId:
+      $ref: "./api/malo.yaml#/components/parameters/marketLocationId"
+    supplyStartId:
+      $ref: "./api/malo.yaml#/components/parameters/supplyStartId"
+    deregistrationRequestId:
+      $ref: "./api/malo.yaml#/components/parameters/deregistrationRequestId"
+
+  # ── Security ─────────────────────────────────────────────────────────────────
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
