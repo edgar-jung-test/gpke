@@ -1,0 +1,157 @@
+openapi: "3.0.3"
+info:
+  title: EDI@Energy API Headers
+  description: |
+    Reusable OpenAPI 3.0 header definitions for EDI@Energy HTTP APIs.
+    
+    All headers are defined as individual schema files and can be composed
+    into any EDI@Energy API specification via `$ref`.
+    
+    **Header groups:**
+    - `general` – Tracing, idempotency, message correlation, dry-run
+    - `stateMachine` – ETag/If-Match for long-running transaction control
+    - `versionControl` – Server, client, API spec versioning
+    
+    **German:** Wiederverwendbare OpenAPI 3.0 Header-Definitionen für
+    EDI@Energy HTTP APIs. Alle Header sind als Einzel-YAML-Dateien modelliert
+    und können per `$ref` in beliebige EDI@Energy API-Spezifikationen
+    eingebunden werden.
+  version: "1.0.0"
+  contact:
+    name: EDI@Energy
+    url: https://www.edi-energy.de
+
+# ── Components: all headers registered for $ref use ─────────────────────────
+components:
+
+  # ── Parameters (Request headers) ──────────────────────────────────────────
+  parameters:
+
+    # General – Request
+    xRequestId:
+      $ref: "./headers/xRequestId.yaml"
+
+    xMessageId:
+      $ref: "./headers/xMessageId.yaml"
+
+    idempotencyKey:
+      $ref: "./headers/idempotencyKey.yaml"
+
+    traceparent:
+      $ref: "./headers/traceparent.yaml"
+
+    prefer:
+      $ref: "./headers/prefer.yaml"
+
+    xClientVersion:
+      $ref: "./headers/xClientVersion.yaml"
+
+    # State-Machine – Request
+    ifMatch:
+      $ref: "./headers/ifMatch.yaml"
+
+  # ── Headers (Response headers) ────────────────────────────────────────────
+  # Note: In OpenAPI 3.0, response headers are defined under
+  # components/headers and referenced from responses[x].headers.
+  headers:
+
+    # General – Response
+    xMessageId:
+      description: |
+        Process-scoped message identifier echoed in the response.
+        See headers/xMessageId.yaml for full definition.
+      schema:
+        type: string
+        format: uuid
+        pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+
+    location:
+      description: URI of the created or resolved resource.
+      schema:
+        type: string
+        format: uri
+
+    preferenceApplied:
+      description: Echoes the Prefer tokens the server actually applied.
+      schema:
+        type: string
+
+    retryAfter:
+      description: Earliest time to retry (HTTP-date or delay-seconds).
+      schema:
+        type: string
+
+    xServerVersion:
+      description: Version of the responding server system.
+      schema:
+        type: string
+        pattern: '^\d+\.\d+(\.\d+)?(-[a-zA-Z0-9.]+)?$'
+
+    xApiSpecVersion:
+      description: Version of the OpenAPI specification in use.
+      schema:
+        type: string
+        pattern: '^\d+\.\d+(\.\d+)?(-[a-zA-Z0-9._-]+)?$'
+
+    xApiSpecRef:
+      description: Git reference to the active API specification.
+      schema:
+        type: string
+        pattern: '^git:[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+(@[A-Za-z0-9_./-]+)?$'
+
+    xApiSpecId:
+      description: Branch/release identifier of the active API specification.
+      schema:
+        type: string
+        maxLength: 100
+
+    xBackendVersion:
+      description: Version of the backend system that processed the request.
+      schema:
+        type: string
+        pattern: '^[a-zA-Z0-9._-]+_[a-zA-Z0-9._-]+_[a-zA-Z0-9._-]+$'
+        maxLength: 100
+
+    # State-Machine – Response
+    eTag:
+      description: |
+        Current state or entity tag of the resource.
+        EDI@Energy state values: "state:pending", "state:running",
+        "state:completed", "state:failed", "state:cancelled".
+      schema:
+        type: string
+        pattern: '^(W/)?"[^"]*"$'
+
+# ── Example: how to reference headers in an actual API ──────────────────────
+#
+# REQUEST HEADERS (as parameters):
+#
+#   parameters:
+#     - $ref: "path/to/headers/openapi.yaml#/components/parameters/xRequestId"
+#     - $ref: "path/to/headers/openapi.yaml#/components/parameters/idempotencyKey"
+#     - $ref: "path/to/headers/openapi.yaml#/components/parameters/traceparent"
+#     - $ref: "path/to/headers/openapi.yaml#/components/parameters/prefer"
+#
+# RESPONSE HEADERS:
+#
+#   responses:
+#     '202':
+#       description: Accepted
+#       headers:
+#         Location:
+#           $ref: "path/to/headers/openapi.yaml#/components/headers/location"
+#         Retry-After:
+#           $ref: "path/to/headers/openapi.yaml#/components/headers/retryAfter"
+#         ETag:
+#           $ref: "path/to/headers/openapi.yaml#/components/headers/eTag"
+#         X-Message-ID:
+#           $ref: "path/to/headers/openapi.yaml#/components/headers/xMessageId"
+#
+# STATE-MACHINE REQUEST:
+#
+#   parameters:
+#     - $ref: "path/to/headers/openapi.yaml#/components/parameters/ifMatch"
+#
+# ─────────────────────────────────────────────────────────────────────────────
+
+paths: {}

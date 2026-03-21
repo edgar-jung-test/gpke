@@ -1,0 +1,38 @@
+name: X-Client-Version
+in: header
+required: false
+description: |
+  **Request header.** Identifies the calling client system including its
+  environment and version. Enables server-side logging, debugging, audit trails,
+  and optionally access control for specific client versions.
+  
+  Recommended format: `{system}_{environment}_{version}`
+  - `system`: client system identifier (e.g. nginx, sap, java-sdk)
+  - `environment`: deployment stage (test, prod, staging, dev)
+  - `version`: SemVer or system-specific version string
+  
+  **German:** **Request-Header.** Verweis auf den aufrufenden Client.
+  Format: `<system>_<test|prod>_<Version>`. Dient der Nachvollziehbarkeit,
+  Logging, Debugging und ggf. der Sicherheit (Zulassen bestimmter Client-Systeme).
+  
+  **Bewertung:** ✅ Korrekt. Gebräuchliche Custom-Header-Konvention.
+schema:
+  type: string
+  pattern: '^[a-zA-Z0-9._-]+_[a-zA-Z0-9._-]+_[a-zA-Z0-9._-]+$'
+  maxLength: 100
+  description: |
+    Format: `{system}_{environment}_{version}`.
+    system: client identifier; environment: test|prod|staging|dev; version: semver.
+  examples:
+    NginxTest:
+      summary: "nginx client in test environment"
+      value: "nginx_test_3.12"
+    JavaSdkProd:
+      summary: "Java SDK client in production"
+      value: "java-sdk_prod_2.1.0"
+    SapTest:
+      summary: "SAP integration client in test"
+      value: "sap_test_19.2.7"
+x-header-group: version-control
+x-direction: request
+x-rfc: "EDI@Energy Konvention"

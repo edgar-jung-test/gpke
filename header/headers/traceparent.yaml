@@ -1,0 +1,38 @@
+name: traceparent
+in: header
+required: false
+description: |
+  W3C Trace Context header for distributed tracing. Carries a complete end-to-end
+  trace identifier that is passed through to all backend systems, enabling full
+  observability across service boundaries.
+  
+  Format: `{version}-{traceId}-{parentId}-{traceFlags}`
+  - `version`: 2 hex chars, always `00` (current W3C spec version)
+  - `traceId`: 32 hex chars (128-bit globally unique trace identifier)
+  - `parentId`: 16 hex chars (64-bit identifier of the calling span)
+  - `traceFlags`: 2 hex chars bitfield; `01` = sampled, `00` = not sampled
+  
+  **German:** W3C Trace Context Header für verteiltes Tracing. Trägt eine
+  durchgängige Trace-Kennung für den gesamten Prozess, die an Backendsysteme
+  durchgereicht wird. Ermöglicht vollständige Nachvollziehbarkeit über
+  Servicegrenzen hinweg.
+  
+  **Bewertung:** ✅ Korrekt. Lowercase-Schreibweise ist durch W3C-Spec vorgeschrieben.
+schema:
+  type: string
+  pattern: '^00-[0-9a-f]{32}-[0-9a-f]{16}-[0-9a-f]{2}$'
+  minLength: 55
+  maxLength: 55
+  description: |
+    W3C Trace Context format: `00-{traceId32hex}-{parentId16hex}-{flags2hex}`.
+    traceFlags: `01` = sampled, `00` = not sampled.
+  examples:
+    Sampled:
+      summary: "Sampled trace (flags=01)"
+      value: "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01"
+    NotSampled:
+      summary: "Not sampled trace (flags=00)"
+      value: "00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-00"
+x-header-group: general
+x-direction: request
+x-rfc: "W3C Trace Context Level 2 (https://www.w3.org/TR/trace-context/)"

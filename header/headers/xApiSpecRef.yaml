@@ -1,0 +1,35 @@
+name: X-API-Spec-Ref
+in: header
+required: false
+description: |
+  **Response header.** Direct reference to the API specification in the
+  EDI@Energy GitHub repository. Can point to a specific tagged release or
+  to the main branch.
+  
+  Format: `git:{owner}/{repo}@{ref}` for a specific ref, or
+  `git:{owner}/{repo}` for the default branch (main).
+  
+  **German:** **Response-Header.** Verweis auf die Schnittstelle im GitHub-Repository
+  der EDI@Energy. Kann auf einen spezifischen Branch/Tag oder auf main verweisen.
+  
+  **Korrekturen gegenüber Vorlage:** `X-Api-Spec-Ref` → **`X-API-Spec-Ref`**
+  (Akronym API wird großgeschrieben).
+schema:
+  type: string
+  pattern: '^git:[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+(@[A-Za-z0-9_./-]+)?$'
+  description: |
+    Git reference in the format `git:{owner}/{repo}@{tag-or-branch}`.
+    Omit `@{ref}` to reference the default (main) branch.
+  examples:
+    ConsultationBranch:
+      summary: "Specific consultation release branch"
+      value: "git:EDI-Energy/api-electricity@2026-02-02-consultation"
+    MainBranch:
+      summary: "Main/default branch"
+      value: "git:EDI-Energy/api-electricity"
+    TaggedRelease:
+      summary: "Specific version tag"
+      value: "git:EDI-Energy/api-electricity@v1.7.1"
+x-header-group: version-control
+x-direction: response
+x-rfc: "EDI@Energy Konvention"

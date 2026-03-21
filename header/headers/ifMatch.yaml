@@ -1,0 +1,45 @@
+name: If-Match
+in: header
+required: false
+description: |
+  **Request header.** Conditional request that instructs the server to execute
+  the operation only if the resource's current ETag matches the provided value.
+  Used for optimistic concurrency control in state-machine transitions.
+  
+  EDI@Energy state-machine use:
+  - Client reads current state via `ETag: "state:running"` in the response
+  - Client sends `If-Match: "state:running"` to trigger the next transition
+  - If the server's current state no longer matches, it responds `412 Precondition Failed`
+  - This prevents race conditions in concurrent state transitions
+  
+  `*` matches any existing ETag (use with caution).
+  
+  **German:** **Request-Header.** Führt einen Request nur aus, wenn der aktuelle
+  ETag der Ressource mit dem angegebenen Wert übereinstimmt. Steuert damit
+  Zustandsübergänge in der State-Machine: Nur wenn der Server sich im erwarteten
+  Zustand befindet, wird die Aktion ausgeführt. Bei Abweichung: `412 Precondition Failed`.
+  
+  **Bewertung:** ✅ Korrekt — standardisierter IANA-Header.
+schema:
+  type: string
+  pattern: '^(\*|(W/)?"[^"]*"(,\s*(W/)?"[^"]*")*)$'
+  description: |
+    One or more ETag values in double quotes, comma-separated, or `*`.
+    EDI@Energy state values: "state:pending", "state:running",
+    "state:completed", "state:failed", "state:cancelled".
+  examples:
+    MatchRunning:
+      summary: "Proceed only if transaction is in running state"
+      value: '"state:running"'
+    MatchPending:
+      summary: "Proceed only if transaction is pending"
+      value: '"state:pending"'
+    MatchAny:
+      summary: "Match any existing resource (use with caution)"
+      value: "*"
+    MultipleStates:
+      summary: "Proceed if in running or pending state"
+      value: '"state:running", "state:pending"'
+x-header-group: state-machine
+x-direction: request
+x-rfc: "RFC 9110 §13.1.1 (standard HTTP conditional header)"

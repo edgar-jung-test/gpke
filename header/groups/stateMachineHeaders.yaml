@@ -1,0 +1,25 @@
+description: |
+  Reusable header group for state-machine / long-running transaction control.
+  
+  Pattern:
+  1. Server sends `ETag: "state:running"` in the response
+  2. Client stores the ETag value
+  3. Client sends `If-Match: "state:running"` in the next state-transition request
+  4. Server returns `412 Precondition Failed` if the state has changed
+  
+  **German:** Wiederverwendbare Header-Gruppe für State-Machine-Steuerung bei
+  Long-Running Transactions. ETag transportiert den aktuellen Zustand;
+  If-Match stellt sicher, dass Zustandsübergänge nur bei erwartetem Zustand
+  ausgeführt werden.
+
+# Request header for state transitions
+parameters:
+
+  ifMatch:
+    $ref: "../headers/ifMatch.yaml"
+
+# Response header carrying current state
+headers:
+
+  ETag:
+    $ref: "../headers/eTag.yaml"

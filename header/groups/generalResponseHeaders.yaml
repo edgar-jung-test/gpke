@@ -1,0 +1,35 @@
+description: |
+  Reusable header group: all general response headers for EDI@Energy APIs.
+  Reference individual headers under responses[x].headers as needed.
+  
+  **German:** Wiederverwendbare Header-Gruppe: allgemeine Response-Header
+  für EDI@Energy APIs.
+
+headers:
+
+  X-Message-ID:
+    $ref: "../headers/xMessageId.yaml"
+
+  Location:
+    $ref: "../headers/location.yaml"
+
+  Preference-Applied:
+    $ref: "../headers/preferenceApplied.yaml"
+
+  Retry-After:
+    $ref: "../headers/retryAfter.yaml"
+
+  X-Server-Version:
+    $ref: "../headers/xServerVersion.yaml"
+
+  X-API-Spec-Version:
+    $ref: "../headers/xApiSpecVersion.yaml"
+
+  X-API-Spec-Ref:
+    $ref: "../headers/xApiSpecRef.yaml"
+
+  X-API-Spec-ID:
+    $ref: "../headers/xApiSpecId.yaml"
+
+  X-Backend-Version:
+    $ref: "../headers/xBackendVersion.yaml"

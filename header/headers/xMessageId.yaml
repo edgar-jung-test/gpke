@@ -1,0 +1,36 @@
+name: X-Message-ID
+in: header
+required: false
+description: |
+  Process-scoped transaction identifier spanning multiple API calls.
+  Corresponds to the initial TransactionID in EDI@Energy processes.
+  Lifetime covers the entire business process — multiple API calls across
+  different services use the same `X-Message-ID` to correlate a complete process.
+  
+  Unlike `X-Request-ID` (per-request), `X-Message-ID` is the process-level
+  correlation key.
+  
+  **German:** Prozess-übergreifende Transaktionskennung, die mehrere API-Aufrufe
+  zusammenfasst. Entspricht der initialen TransaktionsID in EDI@Energy-Prozessen.
+  Lebensdauer umspannt den gesamten Geschäftsprozess – mehrere APIs klammern
+  damit einen Prozess zusammen.
+  
+  **Korrekturen gegenüber Vorlage:** `X-Message-Id` → `X-Message-ID`
+  (Akronym ID wird großgeschrieben).
+schema:
+  type: string
+  format: uuid
+  pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+  minLength: 36
+  maxLength: 36
+  description: UUID v4 format. Stable across all requests of one business process.
+  examples:
+    ProcessA:
+      summary: "Business process A message ID"
+      value: "3e6d3f3d-2c3d-4b45-9f2b-3b2bb7f2b9a1"
+    ProcessB:
+      summary: "Business process B message ID"
+      value: "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+x-header-group: general
+x-direction: request-response
+x-rfc: "EDI@Energy Konvention; vgl. RFC 9110 §10"

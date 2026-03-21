@@ -1,0 +1,39 @@
+name: Location
+in: header
+required: false
+description: |
+  **Response header only.** URI of the resource created or the actual resource
+  that was called, when the server maps the client's URI to a different path.
+  
+  Common uses:
+  - `201 Created`: Points to the newly created resource
+  - `202 Accepted`: Points to a status endpoint for polling async operations
+  - `301/302/307/308 Redirect`: Target of the redirect
+  
+  EDI@Energy context: When the client calls `/maloIdent/` and the server
+  resolves it to a concrete resource path, `Location` carries the canonical URI,
+  e.g. `/malo/ident/45073`.
+  
+  **German:** **Nur Response-Header.** URI der erstellten Ressource oder der
+  tatsächlich aufgerufenen Ressource, wenn der Server die Client-URI umschreibt.
+  
+  **Hinweis RESTful:** `Location` ist ausschließlich ein Response-Header
+  (RFC 9110 §10.2.2). Er darf nicht als Request-Header verwendet werden.
+schema:
+  type: string
+  format: uri
+  description: Absolute or relative URI of the target resource.
+  examples:
+    CreatedResource:
+      summary: "Location of newly created MaLo"
+      value: "/malo/ident/45073"
+    AsyncStatus:
+      summary: "Polling endpoint for async operation"
+      value: "/jobs/a1b2c3d4-e5f6-7890-abcd-ef1234567890/status"
+    AbsoluteUri:
+      summary: "Absolute URI"
+      value: "https://api.example.com/malo/ident/45073"
+x-header-group: general
+x-direction: response
+x-rfc: "RFC 9110 §10.2.2 (standard HTTP header)"
+x-oas-note: "Define under responses[x].headers, NOT under parameters[in: header]"
