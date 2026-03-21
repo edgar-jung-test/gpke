@@ -30,19 +30,19 @@ servers:
     description: Production server
 
 tags:
-  - name: market-actors
+  - name: marketActors
     description: Market participants and their roles / Marktakteure und Rollen
-  - name: market-locations
+  - name: marketLocations
     description: Market locations (MaLo) / Marktlokationen
-  - name: grid-locations
+  - name: gridLocations
     description: Grid locations (NeLo) / Netzlokationen
-  - name: metering-locations
+  - name: meteringLocations
     description: Metering locations (MeLo) / Messlokationen
   - name: tranches
     description: Tranches / Tranchen
-  - name: metering-devices
+  - name: meteringDevices
     description: Metering devices / Messeinrichtungen
-  - name: location-bundles
+  - name: locationBundles
     description: Location bundle structures / Lokationsbündelstrukturen
   - name: messages
     description: UTILMD messages / UTILMD-Nachrichten
@@ -50,13 +50,13 @@ tags:
     description: Balancing areas and zones / Bilanzierungsgebiete und -kreise
 
 paths:
-  /market-locations:
+  /marketLocations:
     $ref: "./paths/marketLocations.yaml"
-  /grid-locations:
+  /gridLocations:
     $ref: "./paths/gridLocations.yaml"
-  /metering-locations:
+  /meteringLocations:
     $ref: "./paths/meteringLocations.yaml"
-  /market-actors:
+  /marketActors:
     $ref: "./paths/marketActors.yaml"
   /messages:
     $ref: "./paths/messages.yaml"
@@ -220,4 +220,4 @@ components:
       bearerFormat: JWT
 
 security:
-  - BearerAuth: []
+  - bearerAuth: []
