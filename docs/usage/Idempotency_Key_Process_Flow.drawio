@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0" version="29.6.4" pages="2">
   <diagram id="page1" name="Retry Process">
-    <mxGraphModel dx="801" dy="512" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="668" dy="427" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -123,19 +123,19 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="133" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#dae8fc;strokeColor=#1565c0;fontColor=#0d47a1;fontSize=9;align=center;verticalAlign=middle;" value="POST /messages  (Retry 2) Idempotency-Key: 2f6d3f3d-... ✦ X-Message-ID:   3e6d3f3d-... ✦ X-Request-ID:   c3d5f7a9-... ✶" vertex="1">
-          <mxGeometry height="74" width="225" x="726" y="102" as="geometry" />
+          <mxGeometry height="74" width="225" x="736.5" y="102" as="geometry" />
         </mxCell>
         <mxCell id="134" edge="1" parent="1" source="130" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#e65100;fontColor=#e65100;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="133" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="135" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#fff8e1;strokeColor=#f9a825;fontColor=#e65100;fontSize=9;align=center;verticalAlign=middle;" value="→ reaches server" vertex="1">
-          <mxGeometry height="32" width="115" x="780" y="253" as="geometry" />
+          <mxGeometry height="32" width="115" x="736.5" y="253" as="geometry" />
         </mxCell>
-        <mxCell id="136" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.ellipsePerimeter;symbol=terminate;fillColor=#f8cecc;strokeColor=#c62828;fontColor=#c62828;fontSize=8;fontStyle=1;" value="✗ RESPONSE LOST!" vertex="1">
+        <mxCell id="136" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.ellipsePerimeter;symbol=terminate;fillColor=#f8cecc;strokeColor=#c62828;fontColor=#c62828;fontSize=8;fontStyle=1;" value="✗ RESPONSE&#xa; LOST!" vertex="1">
           <mxGeometry height="52" width="52" x="940" y="248" as="geometry" />
         </mxCell>
         <mxCell id="137" parent="1" style="shape=mxgraph.bpmn.shape;perimeter=mxPerimeter.rhombusPerimeter;symbol=exclusiveGw;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#7d4e00;fontSize=8;fontStyle=1;align=center;" value="Key in Cache?" vertex="1">
-          <mxGeometry height="58" width="58" x="820" y="374" as="geometry" />
+          <mxGeometry height="58" width="58" x="765" y="350" as="geometry" />
         </mxCell>
         <mxCell id="138" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#1b5e20;fontSize=9;align=center;verticalAlign=middle;" value="PROCESS Supplier change TX-2026-004711 Status: IN_PROGRESS" vertex="1">
           <mxGeometry height="68" width="170" x="790" y="440" as="geometry" />
@@ -144,7 +144,7 @@
           <mxGeometry height="68" width="150" x="800" y="568" as="geometry" />
         </mxCell>
         <mxCell id="140" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#fce4e4;strokeColor=#b71c1c;fontColor=#b71c1c;fontSize=9;fontStyle=1;align=center;" value="⚠ CRITICAL: Backoff 20s  |  Key ✦ UNCHANGED  |  Server already processed!" vertex="1">
-          <mxGeometry height="22" width="235" x="723" y="185" as="geometry" />
+          <mxGeometry height="22" width="218" x="735" y="185" as="geometry" />
         </mxCell>
         <mxCell id="141" edge="1" parent="1" source="133" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1565c0;fontColor=#1565c0;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="135" value="send →">
           <mxGeometry relative="1" as="geometry" />
@@ -152,27 +152,25 @@
         <mxCell id="142" edge="1" parent="1" source="135" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#f9a825;fontColor=#f9a825;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="137" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="143" edge="1" parent="1" source="137" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="138" value="NO">
+        <mxCell id="143" edge="1" parent="1" source="137" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=-0.002;entryY=0.554;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;entryPerimeter=0;" target="138" value="NO">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="144" edge="1" parent="1" source="138" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#6a1b9a;fontColor=#6a1b9a;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="139" value="write">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="145" edge="1" parent="1" source="138" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;" target="136" value="202 sending...">
+        <mxCell id="145" edge="1" parent="1" source="138" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.502;entryY=0.941;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2e7d32;fontColor=#2e7d32;fontSize=8;endArrow=block;endFill=1;strokeWidth=2;entryPerimeter=0;" target="136" value="202 sending...">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="875" y="474" />
               <mxPoint x="966" y="474" />
-              <mxPoint x="966" y="274" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="146" edge="1" parent="1" source="136" style="rounded=0;orthogonalLoop=1;jettySize=auto;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#b71c1c;fontColor=#b71c1c;fontSize=8;endArrow=open;endFill=0;dashed=1;strokeWidth=2;" target="140" value="✗ no response">
+        <mxCell id="146" edge="1" parent="1" source="136" style="rounded=0;orthogonalLoop=1;jettySize=auto;edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#b71c1c;fontColor=#b71c1c;fontSize=8;endArrow=open;endFill=0;dashed=1;strokeWidth=2;exitX=0.531;exitY=0.041;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" target="140" value="✗ no response">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="966" y="248" />
-              <mxPoint x="966" y="196" />
-              <mxPoint x="958" y="196" />
+              <mxPoint x="966" y="250" />
+              <mxPoint x="966" y="230" />
+              <mxPoint x="899" y="230" />
             </Array>
           </mxGeometry>
         </mxCell>
