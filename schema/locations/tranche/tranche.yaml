@@ -1,0 +1,89 @@
+type: object
+title: Tranche
+description: |
+  Tranche (Tranche) – a partial quantity allocation of a generating market location,
+  used to represent partial feed-in quantities for different suppliers or balancing groups.
+  Relevant for business cases ZW1 (business case 2), ZW2 (business case 3), and ZX1 (case 4).
+  Each tranche has a percentage share of the total generation.
+  Corresponds to EDIFACT SG5 LOC+Z21 and SG8 SEQ+Z15 (percentage share).
+  
+  **German:** Tranche – Teilmengenzuordnung einer erzeugenden Marktlokation zur
+  Darstellung von Teilmengen für verschiedene Lieferanten oder Bilanzkreise.
+  Relevant für Geschäftsvorfälle ZW1 (GVF 2), ZW2 (GVF 3) und ZX1 (Fall 4).
+  Jede Tranche hat einen prozentualen Anteil an der Gesamterzeugung.
+  Entspricht EDIFACT SG5 LOC+Z21 und SG8 SEQ+Z15 (prozentualer Anteil).
+x-i18n:
+  de:
+    title: Tranche
+    description: |
+      Teilmengenzuordnung einer erzeugenden MaLo für GVF ZW1/ZW2/ZX1.
+      EDIFACT SG5 LOC+Z21, SG8 SEQ+Z15 (prozentualer Anteil).
+x-edifact-mapping:
+  segment: LOC
+  de3227: "Z21 (Tranche)"
+  de3225: "ID der Tranche"
+  seq: "Z15 (prozentualer Anteil der Tranche)"
+required:
+  - trancheId
+  - marketLocationId
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+    examples:
+      First:
+        summary: "First"
+        value: 1
+      Second:
+        summary: "Second"
+        value: 42
+      Third:
+        summary: "Third"
+        value: 1001
+  trancheId:
+    $ref: "./trancheId.yaml"
+  marketLocationId:
+    $ref: "../marketLocation/marketLocationId.yaml"
+  percentageShare:
+    type: number
+    format: double
+    minimum: 0
+    maximum: 100
+    description: |
+      Percentage share of the total generation capacity allocated to this tranche.
+      Must be a positive integer value (no decimals).
+      Corresponds to EDIFACT SG8 SEQ+Z15 (prozentualer Anteil der Tranche).
+      **German:** Prozentualer Anteil an der Gesamterzeugungskapazität für diese Tranche.
+      Muss ein positiver ganzzahliger Wert sein (keine Dezimalstellen).
+      EDIFACT SG8 SEQ+Z15.
+    x-i18n:
+      de:
+        description: Prozentualer Anteil der Tranche an der Gesamterzeugung. EDIFACT SG8 SEQ+Z15.
+    examples:
+      FullShare:
+        summary: "FullShare"
+        value: 100
+      HalfShare:
+        summary: "HalfShare"
+        value: 50
+      ThirdShare:
+        summary: "ThirdShare"
+        value: 33
+      QuarterShare:
+        summary: "QuarterShare"
+        value: 25
+      TwoThirds:
+        summary: "TwoThirds"
+        value: 67
+  assignedSupplier:
+    $ref: "../../marketActors/marketActorId.yaml"
+  validity:
+    $ref: "../../common/validityPeriod.yaml"
+  label:
+    $ref: "../../common/multilingualLabel.yaml"

@@ -1,0 +1,41 @@
+type: string
+title: LocationBundleType
+description: |
+  Type of location bundle (Lokationsbündeltyp) describing the structure and measurement
+  characteristics of the combined market, grid and metering locations.
+  Corresponds to EDIFACT SG4 STS with qualifier ZW6/ZW7 etc.
+  
+  **German:** Lokationsbündeltyp beschreibt die Struktur und Messcharakteristik des
+  kombinierten Bündels aus Markt-, Netz- und Messlokationen.
+  Entspricht EDIFACT SG4 STS mit Qualifier ZW6/ZW7 usw.
+x-i18n:
+  de:
+    title: Lokationsbündeltyp
+    description: Typ des Lokationsbündels aus MaLo, NeLo und MeLo. EDIFACT SG4 STS.
+x-edifact-mapping:
+  segment: STS
+  de9015: "7 (Transaktionsgrundergänzung)"
+enum:
+  - ZW6
+  - ZW7
+  - ZAP
+x-enum-descriptions:
+  ZW6:
+    en: "Flat-rate market location (SLP – standard load profile)"
+    de: "Pauschale Marktlokation – Standardlastprofil (SLP)"
+  ZW7:
+    en: "Metered market location (measured)"
+    de: "Gemessene Marktlokation – mit tatsächlicher Messung"
+  ZAP:
+    en: "Dormant market location (ruhende Marktlokation)"
+    de: "Ruhende Marktlokation – ohne aktive Versorgung (z.B. Leerstand, Kundenanlage)"
+examples:
+  FlatRate_SLP:
+    summary: "FlatRate_SLP"
+    value: "ZW6"
+  Metered:
+    summary: "Metered"
+    value: "ZW7"
+  Dormant:
+    summary: "Dormant"
+    value: "ZAP"

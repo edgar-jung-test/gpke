@@ -1,0 +1,97 @@
+type: object
+title: TariffDevice
+description: |
+  Tariff device (Tarifeinrichtung) – a device connected to a meter that enables
+  time-of-use tariff switching, e.g. a tariff switch relay or time switch for
+  day/night tariff differentiation (HT/NT). Operated by the metering point operator (MSB).
+  
+  **German:** Tarifeinrichtung – ein am Zähler angeschlossenes Gerät, das eine
+  zeitabhängige Tarifdifferenzierung ermöglicht, z.B. ein Tarifschaltrelais oder
+  eine Zeitschaltuhr für die Hoch-/Niedertarif-Unterscheidung (HT/NT).
+  Betrieben durch den Messstellenbetreiber (MSB).
+x-i18n:
+  de:
+    title: Tarifeinrichtung
+    description: |
+      Gerät zur Tarifdifferenzierung am Zähler (HT/NT-Schaltung).
+      Betrieben durch MSB.
+required:
+  - externalId
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+    examples:
+      First:
+        summary: "First"
+        value: 1
+      Second:
+        summary: "Second"
+        value: 42
+      Third:
+        summary: "Third"
+        value: 1001
+  externalId:
+    type: string
+    maxLength: 80
+    description: |
+      External identifier of the tariff device.
+      **German:** Externe Identifikationsnummer der Tarifeinrichtung.
+    x-i18n:
+      de:
+        description: Externe Identifikationsnummer der Tarifeinrichtung.
+    examples:
+      Switch1:
+        summary: "Switch1"
+        value: "TE-0042-001"
+      Switch2:
+        summary: "Switch2"
+        value: "TE-0042-002"
+      Timer1:
+        summary: "Timer1"
+        value: "TE-1001-001"
+  meterId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the meter this tariff device is connected to.
+      **German:** Referenz auf den Zähler, mit dem diese Tarifeinrichtung verbunden ist.
+    x-i18n:
+      de:
+        description: Referenz auf den zugehörigen Zähler.
+    examples:
+      Meter1:
+        summary: "Meter1"
+        value: 5001
+      Meter2:
+        summary: "Meter2"
+        value: 5002
+  msbActorId:
+    type: integer
+    nullable: true
+    description: |
+      Reference to the MSB operating this tariff device.
+      **German:** Referenz auf den MSB, der diese Tarifeinrichtung betreibt.
+    x-i18n:
+      de:
+        description: Referenz auf den betreibenden MSB.
+    examples:
+      BasicMSB:
+        summary: "BasicMSB"
+        value: 42
+      CompetitiveMSB:
+        summary: "CompetitiveMSB"
+        value: 55
+      DefaultMSB:
+        summary: "DefaultMSB"
+        value: 99
+  validity:
+    $ref: "../../common/validityPeriod.yaml"
+  label:
+    $ref: "../../common/multilingualLabel.yaml"

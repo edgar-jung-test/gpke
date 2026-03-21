@@ -1,0 +1,82 @@
+type: object
+title: GatewayRegister
+description: |
+  Register of a smart meter gateway (SMGW-Register / Gateway-Register) – a logical
+  measurement channel within a smart meter gateway identified by a register code and
+  an OBIS code. The gateway can process and store data from multiple meters and registers.
+  
+  **German:** SMGW-Register / Gateway-Register – ein logischer Messkanal innerhalb eines
+  Smart-Meter-Gateways, identifiziert durch einen Register-Code und eine OBIS-Kennzahl.
+  Das Gateway kann Daten von mehreren Zählern und Registern verarbeiten und speichern.
+x-i18n:
+  de:
+    title: Gateway-Register (SMGW-Register)
+    description: |
+      Logischer Messkanal eines Smart-Meter-Gateways mit Register-Code und OBIS-Kennzahl.
+      Das SMGW kann Daten mehrerer Zähler und Register verarbeiten.
+required:
+  - gatewayId
+  - registerCode
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+    examples:
+      First:
+        summary: "First"
+        value: 1
+      Second:
+        summary: "Second"
+        value: 42
+      Third:
+        summary: "Third"
+        value: 1001
+  gatewayId:
+    type: integer
+    description: |
+      Reference to the gateway this register belongs to.
+      **German:** Referenz auf das Gateway, zu dem dieses Register gehört.
+    x-i18n:
+      de:
+        description: Referenz auf das zugehörige Gateway.
+    examples:
+      GW1:
+        summary: "GW1"
+        value: 6001
+      GW2:
+        summary: "GW2"
+        value: 6002
+  registerCode:
+    type: string
+    maxLength: 50
+    description: |
+      Register code identifying the specific logical channel within the gateway.
+      **German:** Register-Code zur Identifikation des spezifischen logischen Kanals innerhalb des Gateways.
+    x-i18n:
+      de:
+        description: Register-Code zur Identifikation des logischen Kanals innerhalb des Gateways.
+    examples:
+      ActiveImport:
+        summary: "ActiveImport"
+        value: "1-1:1.8.0"
+      ActiveExport:
+        summary: "ActiveExport"
+        value: "1-1:2.8.0"
+      ReactiveImport:
+        summary: "ReactiveImport"
+        value: "1-1:3.8.0"
+      MaxDemand:
+        summary: "MaxDemand"
+        value: "1-1:1.6.0"
+  obisCode:
+    $ref: "../../common/obisCode.yaml"
+  validity:
+    $ref: "../../common/validityPeriod.yaml"
+  label:
+    $ref: "../../common/multilingualLabel.yaml"

@@ -1,0 +1,92 @@
+type: object
+title: GridAccount
+description: |
+  Grid account (Netzkonto) – an accounting entity within a market area (Marktgebiet)
+  used for settlement of network losses and imbalances between grid operators.
+  
+  **German:** Netzkonto – eine Abrechnungseinheit innerhalb eines Marktgebiets,
+  die zur Abrechnung von Netzverlusten und Ungleichgewichten zwischen Netzbetreibern
+  genutzt wird.
+x-i18n:
+  de:
+    title: Netzkonto
+    description: Abrechnungseinheit im Marktgebiet für Netzverluste und Ungleichgewichte zwischen NB.
+required:
+  - code
+  - marketAreaId
+properties:
+  id:
+    type: integer
+    readOnly: true
+    description: |
+      Internal system identifier.
+      **German:** Interner Systemidentifikator.
+    x-i18n:
+      de:
+        description: Interner Systemidentifikator.
+    examples:
+      First:
+        summary: "First"
+        value: 1
+      Second:
+        summary: "Second"
+        value: 42
+      Third:
+        summary: "Third"
+        value: 1001
+  code:
+    type: string
+    maxLength: 50
+    description: |
+      Unique code of the grid account.
+      **German:** Eindeutiger Code des Netzkontos.
+    x-i18n:
+      de:
+        description: Eindeutiger Code des Netzkontos.
+    examples:
+      FiftyHertz:
+        summary: "FiftyHertz"
+        value: "NK-50HZ-001"
+      TenneT:
+        summary: "TenneT"
+        value: "NK-TNET-001"
+      Amprion:
+        summary: "Amprion"
+        value: "NK-AMPR-001"
+  name:
+    type: string
+    maxLength: 200
+    nullable: true
+    description: |
+      Name of the grid account.
+      **German:** Name des Netzkontos.
+    x-i18n:
+      de:
+        description: Name des Netzkontos.
+    examples:
+      FiftyHertz:
+        summary: "FiftyHertz"
+        value: "Netzkonto 50Hertz"
+      TenneT:
+        summary: "TenneT"
+        value: "Netzkonto TenneT"
+      Amprion:
+        summary: "Amprion"
+        value: "Netzkonto Amprion"
+  marketAreaId:
+    type: integer
+    description: |
+      Reference to the market area this grid account belongs to.
+      **German:** Referenz auf das Marktgebiet, zu dem dieses Netzkonto gehört.
+    x-i18n:
+      de:
+        description: Referenz auf das übergeordnete Marktgebiet.
+    examples:
+      MA1:
+        summary: "MA1"
+        value: 20001
+      MA2:
+        summary: "MA2"
+        value: 20002
+  label:
+    $ref: "../common/multilingualLabel.yaml"

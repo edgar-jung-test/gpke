@@ -1,0 +1,60 @@
+type: string
+title: MessageType
+description: |
+  UTILMD message type / document type code (BGM segment DE1001).
+  Identifies the purpose and type of the EDIFACT UTILMD message.
+  
+  **German:** UTILMD-Nachrichtentyp / Dokumententyp (BGM Segment DE1001).
+  Identifiziert Zweck und Art der EDIFACT-UTILMD-Nachricht.
+x-i18n:
+  de:
+    title: Nachrichtentyp
+    description: UTILMD-Nachrichtentyp gemäß BGM Segment DE1001.
+x-edifact-mapping:
+  segment: BGM
+  de1001: "document/message name code"
+enum:
+  - E01
+  - E02
+  - E03
+  - E04
+  - E05
+  - E06
+x-enum-descriptions:
+  E01:
+    en: "Original message"
+    de: "Originalnachricht"
+  E02:
+    en: "Replacement message"
+    de: "Ersatznachricht"
+  E03:
+    en: "Change notification"
+    de: "Änderungsmeldung"
+  E04:
+    en: "Confirmation"
+    de: "Bestätigung"
+  E05:
+    en: "Rejection"
+    de: "Ablehnung"
+  E06:
+    en: "Cancellation"
+    de: "Stornierung"
+examples:
+  Original:
+    summary: "Original"
+    value: "E01"
+  Replacement:
+    summary: "Replacement"
+    value: "E02"
+  ChangeNotice:
+    summary: "ChangeNotice"
+    value: "E03"
+  Confirmation:
+    summary: "Confirmation"
+    value: "E04"
+  Rejection:
+    summary: "Rejection"
+    value: "E05"
+  Cancellation:
+    summary: "Cancellation"
+    value: "E06"
