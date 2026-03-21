@@ -421,3 +421,4 @@ properties:
 - EDIFACT UTILMD S2.1
 - IEC 62056-21 (OBIS)
 - [www.bdew-mako.de](https://www.bdew-mako.de)
+
