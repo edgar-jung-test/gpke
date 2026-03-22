@@ -2,55 +2,36 @@ openapi: 3.0.3
 info:
   title: GPKE Supply Start (Lieferbeginn) REST API
   version: 1.0.0
-  description: >
-    REST API for the GPKE use-case "Lieferbeginn" (supply start / supplier
-    change), covering all 7 process steps of SD: Lieferbeginn (GPKE Teil 2, p.
-    31 ff.). Business data corresponds to EDIFACT UTILMD messages exchanged
-    between market participants.
-
-    **German:** REST API für den GPKE-Use-Case „Lieferbeginn"
-    (Lieferantenwechsel). Deckt alle 7 Prozessschritte des SD: Lieferbeginn
-    (GPKE Teil 2, S. 31 ff.) ab. Die Geschäftsdaten entsprechen den
-    EDIFACT-UTILMD-Nachrichten der Marktkommunikation.
+  description: |
+    REST API for the GPKE use-case "Lieferbeginn" (supply start / supplier change), covering all 7 process steps of SD: Lieferbeginn (GPKE Teil 2, p. 31 ff.). Business data corresponds to EDIFACT UTILMD messages exchanged between market participants.
+    **German:** REST API für den GPKE-Use-Case „Lieferbeginn" (Lieferantenwechsel). Deckt alle 7 Prozessschritte des SD: Lieferbeginn (GPKE Teil 2, S. 31 ff.) ab. Die Geschäftsdaten entsprechen den EDIFACT-UTILMD-Nachrichten der Marktkommunikation.
   contact:
     name: BDEW
-    url: https://www.bdew-mako.de
+    url: 'https://www.bdew-mako.de'
   license:
     name: BDEW
-    url: https://www.bdew-mako.de
+    url: 'https://www.bdew-mako.de'
 servers:
-  - url: https://api.makohub.com
+  - url: 'https://api.makohub.com'
     description: Production server / Produktionsserver
 tags:
   - name: registrations
-    description: >
-      Registration requests: new supplier (LFN) → grid operator (NB). Steps 1,
-      2, 5. Prüf-IDs 55001, 55077, 55002, 55003, 55078, 55080. **German:**
-      Anmeldungen: neuer Lieferant (LFN) → Netzbetreiber (NB). Schritte 1, 2, 5.
+    description: |
+      Registration requests: new supplier (LFN) → grid operator (NB). Steps 1, 2, 5. Prüf-IDs 55001, 55077, 55002, 55003, 55078, 55080. **German:** Anmeldungen: neuer Lieferant (LFN) → Netzbetreiber (NB). Schritte 1, 2, 5.
   - name: deregistrationRequests
-    description: >
-      Deregistration requests between NB and previous supplier (LFA). Steps 3,
-      4. Prüf-IDs 55010, 55011, 55012. **German:** Abmeldeanfragen zwischen
-      Netzbetreiber (NB) und altem Lieferanten (LFA). Schritte 3, 4.
+    description: |
+      Deregistration requests between NB and previous supplier (LFA). Steps 3, 4. Prüf-IDs 55010, 55011, 55012. **German:** Abmeldeanfragen zwischen Netzbetreiber (NB) und altem Lieferanten (LFA). Schritte 3, 4.
   - name: assignments
-    description: >
-      Assignment termination and cancellation notifications. Steps 6, 7.
-      Prüf-IDs 55037, 55038. **German:** Zuordnungsbeendigungen und
-      -aufhebungen. Schritte 6, 7.
+    description: |
+      Assignment termination and cancellation notifications. Steps 6, 7. Prüf-IDs 55037, 55038. **German:** Zuordnungsbeendigungen und -aufhebungen. Schritte 6, 7.
 paths:
-  /market-locations/{marketLocationId}/registrations:
+  '/malo/{marketLocationId}/registrations':
     post:
       summary: Submit a registration request (Anmeldung) – Prüf-ID 55001 / 55077
-      description: >
-        **Step 1 – Registration (Anmeldung).** The new supplier (LFN) registers
-        a market location with the grid operator (NB).
-
-        Lead times (working days before supply start): Case 1 (MaLo-ID only): ≥
-        7 WT. Case 2 (address / attributes): ≥ 10 WT.
-
-        **German:** **Schritt 1 – Anmeldung.** Der neue Lieferant (LFN) meldet
-        eine Marktlokation beim Netzbetreiber (NB) an. Vorlauffristen: Fall 1
-        (nur MaLo-ID) ≥ 7 WT, Fall 2 (Adresse / Attribute) ≥ 10 WT.
+      description: |
+        **Step 1 – Registration (Anmeldung).** The new supplier (LFN) registers a market location with the grid operator (NB).
+        Lead times (working days before supply start): Case 1 (MaLo-ID only): ≥ 7 WT. Case 2 (address / attributes): ≥ 10 WT.
+        **German:** **Schritt 1 – Anmeldung.** Der neue Lieferant (LFN) meldet eine Marktlokation beim Netzbetreiber (NB) an. Vorlauffristen: Fall 1 (nur MaLo-ID) ≥ 7 WT, Fall 2 (Adresse / Attribute) ≥ 10 WT.
       operationId: createRegistration
       tags:
         - registrations
@@ -67,9 +48,8 @@ paths:
               $ref: '#/components/schemas/SupplyStartCreateRequest'
             examples:
               supplierChangeFall1:
-                summary: >
-                  Supplier change – case 1, MaLo-ID only (Prüf-ID 55001) /
-                  Lieferantenwechsel – Fall 1, nur MaLo-ID
+                summary: |
+                  Supplier change – case 1, MaLo-ID only (Prüf-ID 55001) / Lieferantenwechsel – Fall 1, nur MaLo-ID
                 value:
                   header:
                     messageId: MSG-2025-001234
@@ -99,9 +79,8 @@ paths:
                     balancingGroupId: 11XVSEW------5S
                     authorizationReference: ZE-2025-00042
               newConnectionFall2:
-                summary: >
-                  New connection – case 2, address (Prüf-ID 55001) / Neuanlage –
-                  Fall 2, Adresse
+                summary: |
+                  New connection – case 2, address (Prüf-ID 55001) / Neuanlage – Fall 2, Adresse
                 value:
                   header:
                     messageId: MSG-2025-001235
@@ -137,10 +116,8 @@ paths:
                   meterReadingCycle: monthly
       responses:
         '201':
-          description: >
-            Registration created successfully. Returns the created SupplyStart
-            resource. **German:** Anmeldung erfolgreich erstellt. Gibt die
-            erstellte Ressource zurück.
+          description: |
+            Registration created successfully. Returns the created SupplyStart resource. **German:** Anmeldung erfolgreich erstellt. Gibt die erstellte Ressource zurück.
           headers:
             Location:
               $ref: ../header/openapi.yaml#/components/headers/location
@@ -153,24 +130,21 @@ paths:
               schema:
                 $ref: '#/components/schemas/SupplyStart'
         '400':
-          description: >
-            Validation error – e.g. invalid date format, lead time not met,
-            missing required field. **German:** Validierungsfehler – z.B.
-            ungültiges Datum, Vorlaufzeit nicht eingehalten, fehlendes
-            Pflichtfeld.
+          description: |
+            Validation error – e.g. invalid date format, lead time not met, missing required field. **German:** Validierungsfehler – z.B. ungültiges Datum, Vorlaufzeit nicht eingehalten, fehlendes Pflichtfeld.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '409':
-          description: >
-            Conflict – another registration is already in progress for this
-            market location. **German:** Konflikt – für diese Marktlokation
-            läuft bereits eine Anmeldung.
+          description: |
+            Conflict – another registration is already in progress for this market location. **German:** Konflikt – für diese Marktlokation läuft bereits eine Anmeldung.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+      x-stoplight:
+        id: 21ehkz24esbpm
     get:
       summary: List registration requests / Anmeldungen auflisten
       operationId: listRegistrations
@@ -182,25 +156,22 @@ paths:
           in: query
           schema:
             $ref: '#/components/schemas/SupplyStartStatus'
-          description: >
-            Filter by processing status. **German:** Filter nach
-            Bearbeitungsstatus.
+          description: |
+            Filter by processing status. **German:** Filter nach Bearbeitungsstatus.
         - name: fromDate
           in: query
           schema:
             type: string
             format: date
-          description: >
-            Filter: supply start date ≥ this value (ISO 8601). **German:**
-            Filter: Lieferbeginn-Datum ≥ diesem Wert (ISO 8601).
+          description: |
+            Filter: supply start date ≥ this value (ISO 8601). **German:** Filter: Lieferbeginn-Datum ≥ diesem Wert (ISO 8601).
         - name: toDate
           in: query
           schema:
             type: string
             format: date
-          description: >
-            Filter: supply start date ≤ this value (ISO 8601). **German:**
-            Filter: Lieferbeginn-Datum ≤ diesem Wert (ISO 8601).
+          description: |
+            Filter: supply start date ≤ this value (ISO 8601). **German:** Filter: Lieferbeginn-Datum ≤ diesem Wert (ISO 8601).
         - name: limit
           in: query
           schema:
@@ -208,9 +179,8 @@ paths:
             minimum: 1
             maximum: 500
             default: 50
-          description: >
-            Page size (number of results per page). **German:** Seitengröße
-            (Anzahl Ergebnisse pro Seite).
+          description: |
+            Page size (number of results per page). **German:** Seitengröße (Anzahl Ergebnisse pro Seite).
         - name: offset
           in: query
           schema:
@@ -226,18 +196,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SupplyStartList'
-  /market-locations/{marketLocationId}/registrations/{supplyStartId}:
+      x-stoplight:
+        id: ny6yjclg4t0aq
+  '/market-locations/{marketLocationId}/registrations/{supplyStartId}':
     parameters:
       - $ref: '#/components/parameters/marketLocationId'
       - $ref: '#/components/parameters/supplyStartId'
     get:
       summary: Get a registration request / Anmeldung abrufen
-      description: >
-        Returns the full current state of a registration, including any NB
-        response data (step 5 confirmation / rejection) and existing-assignment
-        information (step 2). **German:** Gibt den vollständigen aktuellen Stand
-        einer Anmeldung zurück, einschließlich der NB-Antwort (Schritt 5) und
-        Informationen zur bestehenden Zuordnung (Schritt 2).
+      description: |
+        Returns the full current state of a registration, including any NB response data (step 5 confirmation / rejection) and existing-assignment information (step 2). **German:** Gibt den vollständigen aktuellen Stand einer Anmeldung zurück, einschließlich der NB-Antwort (Schritt 5) und Informationen zur bestehenden Zuordnung (Schritt 2).
       operationId: getRegistration
       tags:
         - registrations
@@ -261,15 +229,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     patch:
-      summary: >-
-        Update mutable fields of a registration / Anmeldung teilweise
-        aktualisieren
-      description: >
-        Updates changeable fields of a registration while it is still in status
-        `draft`. Once submitted to the NB the registration is immutable.
-        **German:** Aktualisiert änderbare Felder einer Anmeldung, solange diese
-        den Status `draft` hat. Nach Einreichung beim NB ist die Anmeldung
-        unveränderlich.
+      summary: Update mutable fields of a registration / Anmeldung teilweise aktualisieren
+      description: |
+        Updates changeable fields of a registration while it is still in status `draft`. Once submitted to the NB the registration is immutable. **German:** Aktualisiert änderbare Felder einer Anmeldung, solange diese den Status `draft` hat. Nach Einreichung beim NB ist die Anmeldung unveränderlich.
       operationId: patchRegistration
       tags:
         - registrations
@@ -307,38 +269,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '409':
-          description: >
-            Conflict – registration cannot be modified in current status (not
-            draft). **German:** Konflikt – Anmeldung kann im aktuellen Status
-            nicht geändert werden.
+          description: |
+            Conflict – registration cannot be modified in current status (not draft). **German:** Konflikt – Anmeldung kann im aktuellen Status nicht geändert werden.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '412':
-          description: >
-            Precondition failed – ETag mismatch (state has changed since last
-            read). **German:** Precondition Failed – ETag stimmt nicht überein
-            (Zustand hat sich geändert).
+          description: |
+            Precondition failed – ETag mismatch (state has changed since last read). **German:** Precondition Failed – ETag stimmt nicht überein (Zustand hat sich geändert).
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /market-locations/{marketLocationId}/registrations/{supplyStartId}/response:
+  '/market-locations/{marketLocationId}/registrations/{supplyStartId}/response':
     post:
       summary: NB responds to a registration – Prüf-ID 55002 / 55003 / 55078 / 55080
-      description: >
-        **Step 5 – Response (Antwort auf Anmeldung).** The grid operator (NB)
-        confirms or rejects the supplier's registration.
-
-        Deadlines (working days from receipt of registration): Case 1: by end of
-        5th WT. Case 2: by end of 8th WT.
-
-        **German:** **Schritt 5 – Antwort auf Anmeldung.** Der Netzbetreiber
-        (NB) bestätigt oder lehnt die Anmeldung ab.
-
-        Fristen ab Eingang der Anmeldung: Fall 1 bis Ende des 5. WT, Fall 2 bis
-        Ende des 8. WT.
+      description: |
+        **Step 5 – Response (Antwort auf Anmeldung).** The grid operator (NB) confirms or rejects the supplier's registration.
+        Deadlines (working days from receipt of registration): Case 1: by end of 5th WT. Case 2: by end of 8th WT.
+        **German:** **Schritt 5 – Antwort auf Anmeldung.** Der Netzbetreiber (NB) bestätigt oder lehnt die Anmeldung ab.
+        Fristen ab Eingang der Anmeldung: Fall 1 bis Ende des 5. WT, Fall 2 bis Ende des 8. WT.
       operationId: respondToRegistration
       tags:
         - registrations
@@ -356,9 +307,8 @@ paths:
               $ref: '#/components/schemas/RegistrationResponseRequest'
             examples:
               confirmation:
-                summary: >
-                  NB confirms registration (Prüf-ID 55002) / NB bestätigt
-                  Anmeldung
+                summary: |
+                  NB confirms registration (Prüf-ID 55002) / NB bestätigt Anmeldung
                 value:
                   header:
                     messageId: MSG-2025-001300
@@ -383,17 +333,16 @@ paths:
                   previousSupplierEndDate: '2025-03-31'
                   masterData:
                     voltageLevel:
-                      code: NS
-                      name: Low voltage
+                      code: E06
+                      name: Low voltage (Niederspannung NS)
                     currentMeteringPointOperatorId:
                       id: '9901234567890'
                       codingScheme: '293'
                     supplyContractId: NNV-2024-00123
                     isInterruptible: false
               rejection:
-                summary: >
-                  NB rejects registration (Prüf-ID 55003) / NB lehnt Anmeldung
-                  ab
+                summary: |
+                  NB rejects registration (Prüf-ID 55003) / NB lehnt Anmeldung ab
                 value:
                   header:
                     messageId: MSG-2025-001301
@@ -417,14 +366,11 @@ paths:
                     rejectionCode: E_0610
                   rejectionReasons:
                     - code: E_0610
-                      message: >-
-                        Previous supplier objected to deregistration within
-                        deadline
+                      message: Previous supplier objected to deregistration within deadline
       responses:
         '200':
-          description: >
-            Response processed, registration updated. **German:** Antwort
-            verarbeitet, Anmeldung aktualisiert.
+          description: |
+            Response processed, registration updated. **German:** Antwort verarbeitet, Anmeldung aktualisiert.
           content:
             application/json:
               schema:
@@ -442,30 +388,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '409':
-          description: >
-            Conflict – registration already responded to. **German:** Konflikt –
-            Anmeldung wurde bereits beantwortet.
+          description: |
+            Conflict – registration already responded to. **German:** Konflikt – Anmeldung wurde bereits beantwortet.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /market-locations/{marketLocationId}/deregistration-requests:
+  '/market-locations/{marketLocationId}/deregistration-requests':
     post:
       summary: NB sends deregistration request to LFA – Prüf-ID 55010
-      description: >
-        **Step 3 – Deregistration request (Abmeldeanfrage).** Grid operator
-        notifies previous supplier of new registration and asks whether
-        deregistration will be confirmed.
-
-        Deadlines from receipt of registration: Case 1: by end of 1st WT. Case
-        2: by end of 4th WT.
-
-        **German:** **Schritt 3 – Abmeldeanfrage.** Netzbetreiber informiert
-        alten Lieferanten über neue Anmeldung und fragt ob die Abmeldung
-        bestätigt wird.
-
-        Fristen ab Eingang der Anmeldung: Fall 1 bis Ende des 1. WT, Fall 2 bis
-        Ende des 4. WT.
+      description: |
+        **Step 3 – Deregistration request (Abmeldeanfrage).** Grid operator notifies previous supplier of new registration and asks whether deregistration will be confirmed.
+        Deadlines from receipt of registration: Case 1: by end of 1st WT. Case 2: by end of 4th WT.
+        **German:** **Schritt 3 – Abmeldeanfrage.** Netzbetreiber informiert alten Lieferanten über neue Anmeldung und fragt ob die Abmeldung bestätigt wird.
+        Fristen ab Eingang der Anmeldung: Fall 1 bis Ende des 1. WT, Fall 2 bis Ende des 4. WT.
       operationId: createDeregistrationRequest
       tags:
         - deregistrationRequests
@@ -482,9 +418,8 @@ paths:
               $ref: '#/components/schemas/DeregistrationRequestCreate'
             examples:
               deregRequest:
-                summary: >
-                  Deregistration request NB → LFA (Prüf-ID 55010) /
-                  Abmeldeanfrage NB an LFA
+                summary: |
+                  Deregistration request NB → LFA (Prüf-ID 55010) / Abmeldeanfrage NB an LFA
                 value:
                   header:
                     messageId: MSG-2025-001240
@@ -526,27 +461,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '409':
-          description: >
-            Conflict – deregistration request already exists for this
-            registration. **German:** Konflikt – für diese Anmeldung existiert
-            bereits eine Abmeldeanfrage.
+          description: |
+            Conflict – deregistration request already exists for this registration. **German:** Konflikt – für diese Anmeldung existiert bereits eine Abmeldeanfrage.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /market-locations/{marketLocationId}/deregistration-requests/{deregistrationRequestId}/response:
+  '/market-locations/{marketLocationId}/deregistration-requests/{deregistrationRequestId}/response':
     post:
       summary: LFA responds to deregistration request – Prüf-ID 55011 / 55012
-      description: >
-        **Step 4 – Response to deregistration request (Beantwortung
-        Abmeldeanfrage).** Previous supplier confirms (case a or b) or objects
-        to deregistration.
-
+      description: |
+        **Step 4 – Response to deregistration request (Beantwortung Abmeldeanfrage).** Previous supplier confirms (case a or b) or objects to deregistration.
         Deadline: by end of 3rd WT after receipt of deregistration request.
-
-        **German:** **Schritt 4 – Beantwortung der Abmeldeanfrage.** Alter
-        Lieferant bestätigt (Fall a oder b) oder widerspricht der Abmeldung.
-
+        **German:** **Schritt 4 – Beantwortung der Abmeldeanfrage.** Alter Lieferant bestätigt (Fall a oder b) oder widerspricht der Abmeldung.
         Frist: bis Ende des 3. WT nach Eingang der Abmeldeanfrage.
       operationId: respondToDeregistrationRequest
       tags:
@@ -565,9 +492,8 @@ paths:
               $ref: '#/components/schemas/DeregistrationResponseRequest'
             examples:
               confirmCaseA:
-                summary: >
-                  LFA confirms – case a, day before supply start (Prüf-ID 55011)
-                  / LFA bestätigt – Fall a, Tag vor Anmeldedatum
+                summary: |
+                  LFA confirms – case a, day before supply start (Prüf-ID 55011) / LFA bestätigt – Fall a, Tag vor Anmeldedatum
                 value:
                   header:
                     messageId: MSG-2025-001260
@@ -591,9 +517,8 @@ paths:
                   deregistrationDate: '2025-03-31'
                   deregistrationCase: caseA
               objection:
-                summary: >
-                  LFA objects to deregistration (Prüf-ID 55012) / LFA
-                  widerspricht der Abmeldung
+                summary: |
+                  LFA objects to deregistration (Prüf-ID 55012) / LFA widerspricht der Abmeldung
                 value:
                   header:
                     messageId: MSG-2025-001261
@@ -637,19 +562,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /market-locations/{marketLocationId}/assignment-terminations:
+  '/market-locations/{marketLocationId}/assignment-terminations':
     post:
       summary: NB notifies LFA of assignment termination – Prüf-ID 55037
-      description: >
-        **Step 6 – Assignment termination (Beendigung der Zuordnung).** Grid
-        operator informs previous supplier that its assignment has been
-        terminated.
-
+      description: |
+        **Step 6 – Assignment termination (Beendigung der Zuordnung).** Grid operator informs previous supplier that its assignment has been terminated.
         Deadline: same calendar day as step 5 confirmation.
-
-        **German:** **Schritt 6 – Beendigung der Zuordnung.** Netzbetreiber
-        informiert alten Lieferanten über die Beendigung seiner Zuordnung.
-
+        **German:** **Schritt 6 – Beendigung der Zuordnung.** Netzbetreiber informiert alten Lieferanten über die Beendigung seiner Zuordnung.
         Frist: am selben Kalendertag wie Schritt 5 (Bestätigung).
       operationId: notifyAssignmentTermination
       tags:
@@ -667,9 +586,8 @@ paths:
               $ref: '#/components/schemas/AssignmentTerminationCreate'
             examples:
               termination:
-                summary: >
-                  Assignment termination NB → LFA (Prüf-ID 55037) /
-                  Zuordnungsbeendigung NB an LFA
+                summary: |
+                  Assignment termination NB → LFA (Prüf-ID 55037) / Zuordnungsbeendigung NB an LFA
                 value:
                   header:
                     messageId: MSG-2025-001310
@@ -707,22 +625,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /market-locations/{marketLocationId}/assignment-cancellations:
+  '/market-locations/{marketLocationId}/assignment-cancellations':
     post:
       summary: NB cancels future assignment of LFZ – Prüf-ID 55038
-      description: >
-        **Step 7 – Cancellation of future assignment (Aufhebung zukünftiger
-        Zuordnung).** Grid operator informs future supplier (LFZ) that its
-        future assignment has been cancelled because the new supplier was
-        registered first.
-
+      description: |
+        **Step 7 – Cancellation of future assignment (Aufhebung zukünftiger Zuordnung).** Grid operator informs future supplier (LFZ) that its future assignment has been cancelled because the new supplier was registered first.
         Deadline: same calendar day as step 5 confirmation.
-
-        **German:** **Schritt 7 – Aufhebung einer zukünftigen Zuordnung.**
-        Netzbetreiber informiert zukünftigen Lieferanten (LFZ) über die
-        Aufhebung seiner zukünftigen Zuordnung, da ein anderer Lieferant zuerst
-        angemeldet wurde.
-
+        **German:** **Schritt 7 – Aufhebung einer zukünftigen Zuordnung.** Netzbetreiber informiert zukünftigen Lieferanten (LFZ) über die Aufhebung seiner zukünftigen Zuordnung, da ein anderer Lieferant zuerst angemeldet wurde.
         Frist: am selben Kalendertag wie Schritt 5 (Bestätigung).
       operationId: notifyAssignmentCancellation
       tags:
@@ -740,9 +649,8 @@ paths:
               $ref: '#/components/schemas/AssignmentCancellationCreate'
             examples:
               cancellation:
-                summary: >
-                  Future assignment cancellation NB → LFZ (Prüf-ID 55038) /
-                  Aufhebung zukünftiger Zuordnung NB an LFZ
+                summary: |
+                  Future assignment cancellation NB → LFZ (Prüf-ID 55038) / Aufhebung zukünftiger Zuordnung NB an LFZ
                 value:
                   header:
                     messageId: MSG-2025-001315
@@ -786,19 +694,16 @@ components:
       name: marketLocationId
       in: path
       required: true
-      description: >
-        Unique 11-digit market location ID (MaLo-ID). Corresponds to EDIFACT SG5
-        LOC DE3225, qualifier Z16. **German:** Eindeutige 11-stellige
-        Marktlokations-ID (MaLo-ID). EDIFACT SG5 LOC DE3225, Qualifier Z16.
+      description: |
+        Unique 11-digit market location ID (MaLo-ID). Corresponds to EDIFACT SG5 LOC DE3225, qualifier Z16. **German:** Eindeutige 11-stellige Marktlokations-ID (MaLo-ID). EDIFACT SG5 LOC DE3225, Qualifier Z16.
       schema:
         $ref: ../schema/locations/marketLocation/marketLocationId.yaml
     supplyStartId:
       name: supplyStartId
       in: path
       required: true
-      description: >
-        Unique registration (supply start) request ID. **German:** Eindeutige
-        Anmeldungs-ID (Lieferbeginn-Anfrage).
+      description: |
+        Unique registration (supply start) request ID. **German:** Eindeutige Anmeldungs-ID (Lieferbeginn-Anfrage).
       schema:
         type: string
         maxLength: 35
@@ -807,9 +712,8 @@ components:
       name: deregistrationRequestId
       in: path
       required: true
-      description: >
-        Unique deregistration request ID. **German:** Eindeutige
-        Abmeldeanfrage-ID.
+      description: |
+        Unique deregistration request ID. **German:** Eindeutige Abmeldeanfrage-ID.
       schema:
         type: string
         maxLength: 35
@@ -864,12 +768,8 @@ components:
     SupplyStartCreateRequest:
       type: object
       title: SupplyStartCreateRequest
-      description: >
-        Request body for submitting a new registration (Anmeldung) from LFN to
-        NB. Prüf-ID 55001 (consuming MaLo) or 55077 (generating MaLo).
-        **German:** Anfragekörper für die Anmeldung des neuen Lieferanten (LFN)
-        beim Netzbetreiber (NB). Prüf-ID 55001 (verbrauchende MaLo) oder 55077
-        (erzeugende MaLo).
+      description: |
+        Request body for submitting a new registration (Anmeldung) from LFN to NB. Prüf-ID 55001 (consuming MaLo) or 55077 (generating MaLo). **German:** Anfragekörper für die Anmeldung des neuen Lieferanten (LFN) beim Netzbetreiber (NB). Prüf-ID 55001 (verbrauchende MaLo) oder 55077 (erzeugende MaLo).
       x-i18n:
         de:
           title: Anmeldung – Anfragekörper
@@ -888,11 +788,8 @@ components:
         supplyStartDate:
           type: string
           format: date
-          description: >
-            Requested supply start date (Anmeldedatum). ISO 8601 date.
-            Corresponds to EDIFACT SG4 DTM qualifier 92. **German:** Gewünschtes
-            Lieferbeginn-Datum (Anmeldedatum). ISO 8601-Datum. EDIFACT SG4 DTM
-            Qualifier 92.
+          description: |
+            Requested supply start date (Anmeldedatum). ISO 8601 date. Corresponds to EDIFACT SG4 DTM qualifier 92. **German:** Gewünschtes Lieferbeginn-Datum (Anmeldedatum). ISO 8601-Datum. EDIFACT SG4 DTM Qualifier 92.
           x-i18n:
             de:
               description: Gewünschtes Lieferbeginn-Datum. ISO 8601. EDIFACT SG4 DTM Q92.
@@ -911,11 +808,8 @@ components:
           type: string
           format: date
           nullable: true
-          description: >
-            Estimated supply start date for a new connection (Neuanlage), as
-            communicated by the customer. Only set when transactionReason = ZA2.
-            **German:** Voraussichtliches Lieferbeginn-Datum bei Neuanlage
-            (ZA2), vom Kunden mitgeteilt.
+          description: |
+            Estimated supply start date for a new connection (Neuanlage), as communicated by the customer. Only set when transactionReason = ZA2. **German:** Voraussichtliches Lieferbeginn-Datum bei Neuanlage (ZA2), vom Kunden mitgeteilt.
           x-i18n:
             de:
               description: Voraussichtliches Anmeldedatum bei Neuanlage (nur bei ZA2).
@@ -923,9 +817,8 @@ components:
           $ref: ../schema/enumerations/transactionReason.yaml
         isHouseholdCustomer:
           type: boolean
-          description: >
-            Whether the end customer is a household customer (Haushaltskunde,
-            EnWG). **German:** Haushaltskunde im Sinne des EnWG (ja/nein).
+          description: |
+            Whether the end customer is a household customer (Haushaltskunde, EnWG). **German:** Haushaltskunde im Sinne des EnWG (ja/nein).
           x-i18n:
             de:
               description: Haushaltskunde im Sinne des EnWG (ja/nein).
@@ -952,19 +845,16 @@ components:
           type: string
           maxLength: 500
           nullable: true
-          description: >
-            Free-text notes for internal use. Not transmitted to the grid
-            operator. **German:** Freitext-Notizen für den internen Gebrauch.
-            Werden nicht an den NB übermittelt.
+          description: |
+            Free-text notes for internal use. Not transmitted to the grid operator. **German:** Freitext-Notizen für den internen Gebrauch. Werden nicht an den NB übermittelt.
           x-i18n:
             de:
-              description: Freitext-Notizen (intern, nicht an NB übermittelt).
+              description: 'Freitext-Notizen (intern, nicht an NB übermittelt).'
     SupplyStartPatchRequest:
       type: object
       title: SupplyStartPatchRequest
-      description: >
-        Mutable fields of a registration that can be updated while status =
-        draft. **German:** Änderbare Felder einer Anmeldung im Status draft.
+      description: |
+        Mutable fields of a registration that can be updated while status = draft. **German:** Änderbare Felder einer Anmeldung im Status draft.
       x-i18n:
         de:
           title: Anmeldung-Patch-Anfrage
@@ -973,17 +863,15 @@ components:
         supplyStartDate:
           type: string
           format: date
-          description: >
-            Updated requested supply start date (ISO 8601). **German:**
-            Aktualisiertes gewünschtes Lieferbeginn-Datum (ISO 8601).
+          description: |
+            Updated requested supply start date (ISO 8601). **German:** Aktualisiertes gewünschtes Lieferbeginn-Datum (ISO 8601).
           x-i18n:
             de:
               description: Aktualisiertes Lieferbeginn-Datum (ISO 8601).
         isHouseholdCustomer:
           type: boolean
-          description: >
-            Updated household customer flag. **German:** Aktualisiertes
-            Haushaltskunden-Kennzeichen.
+          description: |
+            Updated household customer flag. **German:** Aktualisiertes Haushaltskunden-Kennzeichen.
           x-i18n:
             de:
               description: Aktualisiertes Haushaltskunden-Kennzeichen.
@@ -1005,17 +893,12 @@ components:
     RegistrationResponseRequest:
       type: object
       title: RegistrationResponseRequest
-      description: >
-        Request body for the grid operator (NB) response to a registration.
-        Prüf-ID 55002 / 55078 (confirmation) or 55003 / 55080 (rejection).
-        **German:** Anfragekörper für die NB-Antwort auf eine Anmeldung. Prüf-ID
-        55002 / 55078 (Bestätigung) oder 55003 / 55080 (Ablehnung).
+      description: |
+        Request body for the grid operator (NB) response to a registration. Prüf-ID 55002 / 55078 (confirmation) or 55003 / 55080 (rejection). **German:** Anfragekörper für die NB-Antwort auf eine Anmeldung. Prüf-ID 55002 / 55078 (Bestätigung) oder 55003 / 55080 (Ablehnung).
       x-i18n:
         de:
           title: Anmeldungsantwort NB – Anfragekörper
-          description: >-
-            NB-Antwort (Bestätigung oder Ablehnung). Prüf-ID 55002/55078 oder
-            55003/55080.
+          description: NB-Antwort (Bestätigung oder Ablehnung). Prüf-ID 55002/55078 oder 55003/55080.
       required:
         - header
         - status
@@ -1028,15 +911,11 @@ components:
           type: string
           format: date
           nullable: true
-          description: >
-            Confirmed effective supply start date (set only on confirmation,
-            statusCode = E01). **German:** Bestätigtes wirksames
-            Lieferbeginn-Datum (nur bei Bestätigung, statusCode = E01).
+          description: |
+            Confirmed effective supply start date (set only on confirmation, statusCode = E01). **German:** Bestätigtes wirksames Lieferbeginn-Datum (nur bei Bestätigung, statusCode = E01).
           x-i18n:
             de:
-              description: >-
-                Bestätigtes wirksames Lieferbeginn-Datum (nur bei statusCode =
-                E01).
+              description: Bestätigtes wirksames Lieferbeginn-Datum (nur bei statusCode = E01).
           examples:
             Confirmed:
               summary: Confirmed
@@ -1048,10 +927,8 @@ components:
           type: string
           format: date
           nullable: true
-          description: >
-            End date of the previous supplier's assignment (set only on
-            confirmation). **German:** Enddatum der Zuordnung des alten
-            Lieferanten (nur bei Bestätigung gesetzt).
+          description: |
+            End date of the previous supplier's assignment (set only on confirmation). **German:** Enddatum der Zuordnung des alten Lieferanten (nur bei Bestätigung gesetzt).
           x-i18n:
             de:
               description: Enddatum der LFA-Zuordnung (nur bei Bestätigung).
@@ -1069,20 +946,16 @@ components:
           nullable: true
           items:
             $ref: ../schema/supplyStart/rejectionReason.yaml
-          description: >
-            Rejection reasons (set only on rejection, statusCode = E03).
-            **German:** Ablehnungsgründe (nur bei Ablehnung, statusCode = E03).
+          description: |
+            Rejection reasons (set only on rejection, statusCode = E03). **German:** Ablehnungsgründe (nur bei Ablehnung, statusCode = E03).
           x-i18n:
             de:
               description: Ablehnungsgründe (nur bei statusCode = E03).
     DeregistrationRequestCreate:
       type: object
       title: DeregistrationRequestCreate
-      description: >
-        Request body for the grid operator (NB) to notify the previous supplier
-        (LFA) of the new registration and inquire about deregistration. Prüf-ID
-        55010. **German:** Anfragekörper für die Abmeldeanfrage des
-        Netzbetreibers (NB) an den alten Lieferanten (LFA). Prüf-ID 55010.
+      description: |
+        Request body for the grid operator (NB) to notify the previous supplier (LFA) of the new registration and inquire about deregistration. Prüf-ID 55010. **German:** Anfragekörper für die Abmeldeanfrage des Netzbetreibers (NB) an den alten Lieferanten (LFA). Prüf-ID 55010.
       x-i18n:
         de:
           title: Abmeldeanfrage – Anfragekörper
@@ -1098,10 +971,8 @@ components:
         supplyStartId:
           type: string
           maxLength: 35
-          description: >
-            ID of the originating registration request that triggered this
-            deregistration inquiry. **German:** ID der auslösenden Anmeldung,
-            die diese Abmeldeanfrage verursacht hat.
+          description: |
+            ID of the originating registration request that triggered this deregistration inquiry. **German:** ID der auslösenden Anmeldung, die diese Abmeldeanfrage verursacht hat.
           x-i18n:
             de:
               description: ID der auslösenden Anmeldung.
@@ -1117,10 +988,8 @@ components:
         requestedSupplyStartDate:
           type: string
           format: date
-          description: >
-            The supply start date requested by the new supplier (LFN).
-            **German:** Das vom neuen Lieferanten (LFN) gewünschte
-            Lieferbeginn-Datum.
+          description: |
+            The supply start date requested by the new supplier (LFN). **German:** Das vom neuen Lieferanten (LFN) gewünschte Lieferbeginn-Datum.
           x-i18n:
             de:
               description: Vom LFN gewünschtes Lieferbeginn-Datum.
@@ -1134,10 +1003,8 @@ components:
     DeregistrationRequest:
       type: object
       title: DeregistrationRequest
-      description: >
-        Full representation of a deregistration request and its response state.
-        **German:** Vollständige Darstellung einer Abmeldeanfrage und ihres
-        Antwortstatus.
+      description: |
+        Full representation of a deregistration request and its response state. **German:** Vollständige Darstellung einer Abmeldeanfrage und ihres Antwortstatus.
       x-i18n:
         de:
           title: Abmeldeanfrage (vollständig)
@@ -1152,9 +1019,8 @@ components:
           type: string
           maxLength: 35
           readOnly: true
-          description: >
-            Unique deregistration request ID. **German:** Eindeutige
-            Abmeldeanfrage-ID.
+          description: |
+            Unique deregistration request ID. **German:** Eindeutige Abmeldeanfrage-ID.
           x-i18n:
             de:
               description: Eindeutige Abmeldeanfrage-ID.
@@ -1168,18 +1034,15 @@ components:
         supplyStartId:
           type: string
           maxLength: 35
-          description: >
-            ID of the registration that triggered this deregistration request.
-            **German:** ID der Anmeldung, die diese Abmeldeanfrage ausgelöst
-            hat.
+          description: |
+            ID of the registration that triggered this deregistration request. **German:** ID der Anmeldung, die diese Abmeldeanfrage ausgelöst hat.
           x-i18n:
             de:
               description: ID der auslösenden Anmeldung.
         deregistrationStatus:
           type: string
-          description: >
-            Current processing status of this deregistration request.
-            **German:** Aktueller Bearbeitungsstatus dieser Abmeldeanfrage.
+          description: |
+            Current processing status of this deregistration request. **German:** Aktueller Bearbeitungsstatus dieser Abmeldeanfrage.
           x-i18n:
             de:
               description: Bearbeitungsstatus der Abmeldeanfrage.
@@ -1216,9 +1079,8 @@ components:
           type: string
           format: date-time
           readOnly: true
-          description: >
-            Timestamp when the deregistration request was created (ISO 8601).
-            **German:** Erstellungszeitpunkt der Abmeldeanfrage (ISO 8601).
+          description: |
+            Timestamp when the deregistration request was created (ISO 8601). **German:** Erstellungszeitpunkt der Abmeldeanfrage (ISO 8601).
           x-i18n:
             de:
               description: Erstellungszeitpunkt der Abmeldeanfrage (ISO 8601).
@@ -1227,15 +1089,11 @@ components:
           format: date
           nullable: true
           readOnly: true
-          description: >
-            Confirmed deregistration end date (set after LFA confirmation,
-            deregistrationStatus = confirmed). **German:** Bestätigtes
-            Abmeldedatum (nach LFA-Bestätigung gesetzt).
+          description: |
+            Confirmed deregistration end date (set after LFA confirmation, deregistrationStatus = confirmed). **German:** Bestätigtes Abmeldedatum (nach LFA-Bestätigung gesetzt).
           x-i18n:
             de:
-              description: >-
-                Bestätigtes Abmeldedatum (nur bei deregistrationStatus =
-                confirmed).
+              description: Bestätigtes Abmeldedatum (nur bei deregistrationStatus = confirmed).
         deregistrationCase:
           $ref: ../schema/enumerations/deregistrationCase.yaml
         rejectionReasons:
@@ -1244,10 +1102,8 @@ components:
           readOnly: true
           items:
             $ref: ../schema/supplyStart/rejectionReason.yaml
-          description: >
-            LFA's objection reasons (only when deregistrationStatus = objected).
-            **German:** Widerspruchsgründe des LFA (nur bei deregistrationStatus
-            = objected).
+          description: |
+            LFA's objection reasons (only when deregistrationStatus = objected). **German:** Widerspruchsgründe des LFA (nur bei deregistrationStatus = objected).
           x-i18n:
             de:
               description: Widerspruchsgründe des LFA.
@@ -1256,12 +1112,8 @@ components:
     DeregistrationResponseRequest:
       type: object
       title: DeregistrationResponseRequest
-      description: >
-        Request body for the previous supplier (LFA) response to a
-        deregistration request. Prüf-ID 55011 (confirmation) or 55012
-        (objection). **German:** Anfragekörper für die Antwort des alten
-        Lieferanten (LFA) auf eine Abmeldeanfrage. Prüf-ID 55011 (Bestätigung)
-        oder 55012 (Widerspruch).
+      description: |
+        Request body for the previous supplier (LFA) response to a deregistration request. Prüf-ID 55011 (confirmation) or 55012 (objection). **German:** Anfragekörper für die Antwort des alten Lieferanten (LFA) auf eine Abmeldeanfrage. Prüf-ID 55011 (Bestätigung) oder 55012 (Widerspruch).
       x-i18n:
         de:
           title: Antwort auf Abmeldeanfrage – Anfragekörper
@@ -1278,17 +1130,11 @@ components:
           type: string
           format: date
           nullable: true
-          description: >
-            Confirmed deregistration end date. Case a: day before supply start
-            date. Case b: an earlier date. Null on objection (statusCode = E03).
-            **German:** Bestätigtes Abmeldedatum. Fall a: Tag vor dem
-            Anmeldedatum. Fall b: ein früheres Datum. Null bei Widerspruch
-            (statusCode = E03).
+          description: |
+            Confirmed deregistration end date. Case a: day before supply start date. Case b: an earlier date. Null on objection (statusCode = E03). **German:** Bestätigtes Abmeldedatum. Fall a: Tag vor dem Anmeldedatum. Fall b: ein früheres Datum. Null bei Widerspruch (statusCode = E03).
           x-i18n:
             de:
-              description: >-
-                Bestätigtes Abmeldedatum. Fall a oder Fall b. Null bei
-                Widerspruch.
+              description: Bestätigtes Abmeldedatum. Fall a oder Fall b. Null bei Widerspruch.
           examples:
             CaseA:
               summary: CaseA
@@ -1307,19 +1153,16 @@ components:
           nullable: true
           items:
             $ref: ../schema/supplyStart/rejectionReason.yaml
-          description: >
-            Objection reasons (only on objection, statusCode = E03). **German:**
-            Widerspruchsgründe (nur bei statusCode = E03).
+          description: |
+            Objection reasons (only on objection, statusCode = E03). **German:** Widerspruchsgründe (nur bei statusCode = E03).
           x-i18n:
             de:
               description: Widerspruchsgründe (nur bei statusCode = E03).
     AssignmentTerminationCreate:
       type: object
       title: AssignmentTerminationCreate
-      description: >
-        Request body for the NB notification to LFA about assignment
-        termination. Prüf-ID 55037. **German:** Anfragekörper für die Mitteilung
-        des NB an den LFA über die Zuordnungsbeendigung. Prüf-ID 55037.
+      description: |
+        Request body for the NB notification to LFA about assignment termination. Prüf-ID 55037. **German:** Anfragekörper für die Mitteilung des NB an den LFA über die Zuordnungsbeendigung. Prüf-ID 55037.
       x-i18n:
         de:
           title: Zuordnungsbeendigung – Anfragekörper
@@ -1336,10 +1179,8 @@ components:
         assignmentEndDate:
           type: string
           format: date
-          description: >
-            Date on which the previous supplier's (LFA) assignment at this
-            market location ends. **German:** Datum, zu dem die Zuordnung des
-            alten Lieferanten (LFA) an dieser Marktlokation endet.
+          description: |
+            Date on which the previous supplier's (LFA) assignment at this market location ends. **German:** Datum, zu dem die Zuordnung des alten Lieferanten (LFA) an dieser Marktlokation endet.
           x-i18n:
             de:
               description: Enddatum der LFA-Zuordnung an dieser Marktlokation.
@@ -1359,10 +1200,8 @@ components:
         supplyStartId:
           type: string
           maxLength: 35
-          description: >
-            ID of the registration that caused this assignment termination.
-            **German:** ID der Anmeldung, die diese Zuordnungsbeendigung
-            ausgelöst hat.
+          description: |
+            ID of the registration that caused this assignment termination. **German:** ID der Anmeldung, die diese Zuordnungsbeendigung ausgelöst hat.
           x-i18n:
             de:
               description: ID der auslösenden Anmeldung.
@@ -1378,16 +1217,12 @@ components:
     AssignmentTermination:
       type: object
       title: AssignmentTermination
-      description: >
-        Record of an assignment termination notification sent by NB to LFA.
-        Prüf-ID 55037. **German:** Datensatz einer
-        Zuordnungsbeendigungsmitteilung des NB an den LFA. Prüf-ID 55037.
+      description: |
+        Record of an assignment termination notification sent by NB to LFA. Prüf-ID 55037. **German:** Datensatz einer Zuordnungsbeendigungsmitteilung des NB an den LFA. Prüf-ID 55037.
       x-i18n:
         de:
           title: Zuordnungsbeendigung (vollständig)
-          description: >-
-            Datensatz der Zuordnungsbeendigungsmitteilung NB → LFA. Prüf-ID
-            55037.
+          description: Datensatz der Zuordnungsbeendigungsmitteilung NB → LFA. Prüf-ID 55037.
       required:
         - terminationId
         - createdAt
@@ -1398,9 +1233,8 @@ components:
           type: string
           maxLength: 35
           readOnly: true
-          description: >
-            Unique assignment termination notification ID. **German:**
-            Eindeutige ID der Zuordnungsbeendigungsmitteilung.
+          description: |
+            Unique assignment termination notification ID. **German:** Eindeutige ID der Zuordnungsbeendigungsmitteilung.
           x-i18n:
             de:
               description: Eindeutige ID der Zuordnungsbeendigungsmitteilung.
@@ -1415,18 +1249,16 @@ components:
           type: string
           format: date-time
           readOnly: true
-          description: >
-            Timestamp when the notification was created (ISO 8601). **German:**
-            Erstellungszeitpunkt der Mitteilung (ISO 8601).
+          description: |
+            Timestamp when the notification was created (ISO 8601). **German:** Erstellungszeitpunkt der Mitteilung (ISO 8601).
           x-i18n:
             de:
               description: Erstellungszeitpunkt der Mitteilung (ISO 8601).
         assignmentEndDate:
           type: string
           format: date
-          description: >
-            Date on which the previous supplier's assignment ends. **German:**
-            Enddatum der Zuordnung des alten Lieferanten.
+          description: |
+            Date on which the previous supplier's assignment ends. **German:** Enddatum der Zuordnung des alten Lieferanten.
           x-i18n:
             de:
               description: Enddatum der LFA-Zuordnung.
@@ -1437,17 +1269,12 @@ components:
     AssignmentCancellationCreate:
       type: object
       title: AssignmentCancellationCreate
-      description: >
-        Request body for the NB notification to LFZ about cancellation of its
-        future assignment. Prüf-ID 55038. **German:** Anfragekörper für die
-        Mitteilung des NB an den LFZ über die Aufhebung seiner zukünftigen
-        Zuordnung. Prüf-ID 55038.
+      description: |
+        Request body for the NB notification to LFZ about cancellation of its future assignment. Prüf-ID 55038. **German:** Anfragekörper für die Mitteilung des NB an den LFZ über die Aufhebung seiner zukünftigen Zuordnung. Prüf-ID 55038.
       x-i18n:
         de:
           title: Zuordnungsaufhebung – Anfragekörper
-          description: >-
-            Mitteilung NB an LFZ über Aufhebung zukünftiger Zuordnung. Prüf-ID
-            55038.
+          description: Mitteilung NB an LFZ über Aufhebung zukünftiger Zuordnung. Prüf-ID 55038.
       required:
         - header
         - cancelledAssignmentFrom
@@ -1460,10 +1287,8 @@ components:
         cancelledAssignmentFrom:
           type: string
           format: date
-          description: >
-            Date from which the future supplier's (LFZ) assignment is cancelled.
-            **German:** Datum, ab dem die zukünftige Zuordnung des LFZ
-            aufgehoben wird.
+          description: |
+            Date from which the future supplier's (LFZ) assignment is cancelled. **German:** Datum, ab dem die zukünftige Zuordnung des LFZ aufgehoben wird.
           x-i18n:
             de:
               description: Datum ab dem die LFZ-Zuordnung aufgehoben wird.
@@ -1483,9 +1308,8 @@ components:
         supplyStartId:
           type: string
           maxLength: 35
-          description: >
-            ID of the registration that caused this assignment cancellation.
-            **German:** ID der Anmeldung, die diese Aufhebung ausgelöst hat.
+          description: |
+            ID of the registration that caused this assignment cancellation. **German:** ID der Anmeldung, die diese Aufhebung ausgelöst hat.
           x-i18n:
             de:
               description: ID der auslösenden Anmeldung.
@@ -1501,16 +1325,12 @@ components:
     AssignmentCancellation:
       type: object
       title: AssignmentCancellation
-      description: >
-        Record of an assignment cancellation notification sent by NB to LFZ.
-        Prüf-ID 55038. **German:** Datensatz einer
-        Zuordnungsaufhebungsmitteilung des NB an den LFZ. Prüf-ID 55038.
+      description: |
+        Record of an assignment cancellation notification sent by NB to LFZ. Prüf-ID 55038. **German:** Datensatz einer Zuordnungsaufhebungsmitteilung des NB an den LFZ. Prüf-ID 55038.
       x-i18n:
         de:
           title: Zuordnungsaufhebung (vollständig)
-          description: >-
-            Datensatz der Zuordnungsaufhebungsmitteilung NB → LFZ. Prüf-ID
-            55038.
+          description: Datensatz der Zuordnungsaufhebungsmitteilung NB → LFZ. Prüf-ID 55038.
       required:
         - cancellationId
         - createdAt
@@ -1521,9 +1341,8 @@ components:
           type: string
           maxLength: 35
           readOnly: true
-          description: >
-            Unique assignment cancellation notification ID. **German:**
-            Eindeutige ID der Zuordnungsaufhebungsmitteilung.
+          description: |
+            Unique assignment cancellation notification ID. **German:** Eindeutige ID der Zuordnungsaufhebungsmitteilung.
           x-i18n:
             de:
               description: Eindeutige ID der Zuordnungsaufhebungsmitteilung.
@@ -1538,19 +1357,16 @@ components:
           type: string
           format: date-time
           readOnly: true
-          description: >
-            Timestamp when the notification was created (ISO 8601). **German:**
-            Erstellungszeitpunkt der Mitteilung (ISO 8601).
+          description: |
+            Timestamp when the notification was created (ISO 8601). **German:** Erstellungszeitpunkt der Mitteilung (ISO 8601).
           x-i18n:
             de:
               description: Erstellungszeitpunkt (ISO 8601).
         cancelledAssignmentFrom:
           type: string
           format: date
-          description: >
-            Date from which the future assignment of LFZ is cancelled.
-            **German:** Datum ab dem die zukünftige Zuordnung des LFZ aufgehoben
-            ist.
+          description: |
+            Date from which the future assignment of LFZ is cancelled. **German:** Datum ab dem die zukünftige Zuordnung des LFZ aufgehoben ist.
           x-i18n:
             de:
               description: Datum der Aufhebung der LFZ-Zuordnung.
