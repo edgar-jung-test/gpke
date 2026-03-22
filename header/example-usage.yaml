@@ -4,8 +4,14 @@ info:
   description: |
     Demonstrates how to embed the reusable EDI@Energy headers from the
     headers/ schema package into an actual API endpoint.
-    
+
     All headers are $ref'd from the central headers/openapi.yaml.
+
+    Examples:
+    - Example 1: Synchronous POST with idempotency
+    - Example 2: Async POST with dry-run
+    - Example 3: State-machine transition
+    - Example 4: POST with JWS/JWE body security (RFC 9421 + RFC 7515/7516)
   version: "1.0.0"
 
 # ── Reference the header definitions ─────────────────────────────────────────
@@ -165,3 +171,84 @@ paths:
               $ref: "./openapi.yaml#/components/headers/xMessageId"
             X-Server-Version:
               $ref: "./openapi.yaml#/components/headers/xServerVersion"
+
+  # ── Example 4: POST with HTTP Message Signature + JWE body ───────────────
+  /malo/{marketLocationId}/registrations:
+    post:
+      summary: Create registration — signed + encrypted (JWS/JWE + RFC 9421)
+      description: |
+        Full security pattern: OAuth 2.0 Bearer + JWS-signed + JWE-encrypted body
+        + HTTP Message Signature over headers and Content-Digest.
+
+        Body is either:
+        - application/json: plain JWS compact token (signed, readable)
+        - application/jose: JWE compact token (signed + encrypted)
+
+        **German:** Vollständiges Sicherheitsmuster: OAuth 2.0 Bearer + JWS-signierter
+        + JWE-verschlüsselter Body + HTTP-Message-Signatur über Header und Content-Digest.
+      tags: [registrations]
+      parameters:
+        - name: marketLocationId
+          in: path
+          required: true
+          schema:
+            type: string
+        # Tracing + Correlation
+        - $ref: "./openapi.yaml#/components/parameters/xRequestId"
+        - $ref: "./openapi.yaml#/components/parameters/traceparent"
+        - $ref: "./openapi.yaml#/components/parameters/xMessageId"
+        # Idempotency
+        - $ref: "./openapi.yaml#/components/parameters/idempotencyKey"
+        # Security — RFC 9530 + RFC 9421
+        - $ref: "./openapi.yaml#/components/parameters/contentDigest"
+        - $ref: "./openapi.yaml#/components/parameters/signatureInput"
+        - $ref: "./openapi.yaml#/components/parameters/signature"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            description: |
+              JWS-signed body (signed, readable).
+              Content-Digest covers the JWS compact token.
+              **German:** JWS-signierter Body (signiert, lesbar).
+            schema:
+              type: string
+              description: JWS compact serialization token
+              example: >-
+                eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImNsaWVudC1zaWduLTAxIn0.
+                eyJzdXBwbHlTdGFydERhdGUiOiIyMDI1LTA0LTAxIn0.
+                MEUCIQDxx...
+          application/jose:
+            description: |
+              JWE-encrypted body containing a JWS-signed payload (highest security).
+              Content-Digest covers the JWE compact token.
+              Content-Type must be application/jose.
+              **German:** JWE-verschlüsselter Body mit JWS-signiertem Payload (höchste Sicherheit).
+            schema:
+              type: string
+              description: JWE compact serialization token (5 parts separated by .)
+              example: >-
+                eyJhbGciOiJSU0EtT0FFUC0yNTYiLCJlbmMiOiJBMjU2R0NNIiwiY3R5IjoiSldUIn0.
+                m3kZ2...Q.48V1_ALb6US04U3b.u9f0c...uWQ.o2mP...8w
+      responses:
+        '201':
+          description: |
+            Registration created. Returns the SupplyStart resource.
+            **German:** Anmeldung erstellt. Gibt die SupplyStart-Ressource zurück.
+          headers:
+            Location:
+              $ref: "./openapi.yaml#/components/headers/location"
+            X-Message-ID:
+              $ref: "./openapi.yaml#/components/headers/xMessageId"
+            ETag:
+              $ref: "./openapi.yaml#/components/headers/eTag"
+        '400':
+          description: |
+            Validation error or security failure (DIGEST_MISMATCH, JWS_VERIFICATION_FAILED,
+            JWE_DECRYPTION_FAILED, CLAIMS_INVALID).
+            **German:** Validierungsfehler oder Sicherheitsfehler.
+        '401':
+          description: |
+            Authentication or signature failure (SIGNATURE_MISSING, SIGNATURE_INVALID,
+            TOKEN_EXPIRED).
+            **German:** Authentifizierungs- oder Signaturfehler.

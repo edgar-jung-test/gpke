@@ -1,7 +1,7 @@
 # EDI@Energy API Headers – Vollständige Dokumentation / Complete Documentation
 
 **Version:** 1.0.0  
-**Standard:** RFC 9110 · RFC 7240 · RFC 8694 · W3C Trace Context · OpenAPI 3.0.3  
+**Standard:** RFC 9110 · RFC 7240 · RFC 8694 · RFC 9421 · RFC 9530 · RFC 7515 · RFC 7516 · W3C Trace Context · OpenAPI 3.0.3  
 **Referenz / Reference:** [edi-energy.de](https://www.edi-energy.de) · [www.bdew-mako.de](https://www.bdew-mako.de)
 
 ---
@@ -37,6 +37,11 @@
    - [X-API-Spec-ID](#x-api-spec-id)
    - [X-Client-Version](#x-client-version)
    - [X-Backend-Version](#x-backend-version)
+4. [Gruppe 4: Sicherheits-Header / Security Headers](#4-gruppe-4-sicherheits-header--security-headers)
+   - [Content-Digest](#content-digest)
+   - [Signature-Input](#signature-input)
+   - [Signature](#signature)
+5. [Sicherheits-Ablauf / Security Flow](#5-sicherheits-ablauf--security-flow)
 6. [Verwendungsmuster / Usage Patterns](#6-verwendungsmuster--usage-patterns)
 7. [OpenAPI 3.0 Einbindung / OpenAPI 3.0 Integration](#7-openapi-30-einbindung--openapi-30-integration)
 8. [Normative Quellen / Normative References](#8-normative-quellen--normative-references)
@@ -1677,4 +1682,9 @@ Beide Beispiele → Siehe English-Abschnitt oben.
 | **IANA Header Field Registry** | Kanonische Schreibweisen aller Standard-Header |
 | **EDI@Energy Konvention** | `X-*` Custom-Header (X-Request-ID, X-Message-ID etc.) |
 | **Stripe Idempotency Standard** | Idempotency-Key Retry-Semantik |
+| **RFC 9421** – HTTP Message Signatures | `Signature`, `Signature-Input` |
+| **RFC 9530** – Digest Fields | `Content-Digest` |
+| **RFC 7515** – JSON Web Signature (JWS) | Payload-Signatur / Payload signing |
+| **RFC 7516** – JSON Web Encryption (JWE) | Payload-Verschlüsselung / Payload encryption |
+| **RFC 7517** – JSON Web Key (JWK) | Schlüsselformat / Key format |
 | **OpenAPI Specification 3.0.3** | Schema-Struktur für Header-Definitionen |

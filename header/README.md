@@ -1,7 +1,7 @@
 # EDI@Energy API Headers – OpenAPI 3.0 Schema
 
 **Basis:** Präsentation „API Header – Erweiterung der EDI@Energy HTTP API Header"  
-**Standard:** RFC 9110 · RFC 7240 · RFC 8694 · W3C Trace Context · OpenAPI 3.0.3
+**Standard:** RFC 9110 · RFC 7240 · RFC 8694 · RFC 9421 · RFC 9530 · RFC 7515 · RFC 7516 · W3C Trace Context · OpenAPI 3.0.3
 
 ---
 
@@ -28,12 +28,16 @@ REVIEW.md                             ← Header-Prüfung und Korrekturen
 │   ├── xApiSpecRef.yaml                X-API-Spec-Ref      Response
 │   ├── xApiSpecId.yaml                 X-API-Spec-ID       Response
 │   ├── xClientVersion.yaml             X-Client-Version    Request
-│   └── xBackendVersion.yaml            X-Backend-Version   Response
+│   ├── xBackendVersion.yaml            X-Backend-Version   Response
+│   ├── contentDigest.yaml              Content-Digest      Request + Response (RFC 9530)
+│   ├── signatureInput.yaml             Signature-Input     Request (RFC 9421)
+│   └── signature.yaml                  Signature           Request (RFC 9421)
 │
 └── groups/                           ← Gruppierte Header für schnelle Komposition
     ├── generalRequestHeaders.yaml      Alle allg. Request-Header
     ├── generalResponseHeaders.yaml     Alle allg. Response-Header
-    └── stateMachineHeaders.yaml        ETag + If-Match für State-Machine
+    ├── stateMachineHeaders.yaml        ETag + If-Match für State-Machine
+    └── securityHeaders.yaml            Content-Digest + Signature-Input + Signature
 ```
 
 ---
@@ -77,6 +81,20 @@ Folgende Abweichungen gegenüber der Präsentation wurden korrigiert:
 | `Location` | `location.yaml` | RFC 9110 §10.2.2 | URI der erstellten/aufgelösten Ressource |
 | `Preference-Applied` | `preferenceApplied.yaml` | RFC 7240 | Bestätigt angewandte `Prefer`-Tokens |
 | `Retry-After` | `retryAfter.yaml` | RFC 9110 §10.2.4 | Frühester Retry-Zeitpunkt (HTTP-date oder Sekunden) |
+
+### Gruppe 4: Sicherheits-Header (Security Headers)
+
+| Header-Name | Datei | RFC | Pflicht | Beschreibung |
+|---|---|---|---|---|
+| `Content-Digest` | `contentDigest.yaml` | RFC 9530 | Ja bei Body | SHA-256-Hash des Request/Response-Body für HTTP-Message-Signatur |
+| `Signature-Input` | `signatureInput.yaml` | RFC 9421 | Ja | Deklariert signierte Komponenten + Metadaten (created, keyid, alg) |
+| `Signature` | `signature.yaml` | RFC 9421 | Ja | Base64url-kodierter Signaturwert (ECDSA P-256 oder Ed25519) |
+
+**Signierte Komponenten POST/PATCH:** `"@method"` `"@authority"` `"@target-uri"` `"content-type"` `"accept"` `"content-digest"` `"date"` `"x-request-id"` `"x-api-spec-ref"` `"x-api-spec-version"`
+
+**Signierte Komponenten GET:** `"@method"` `"@path"` `"@query"` `"host"` `"date"` `"x-request-id"` `"x-api-spec-ref"` `"x-api-spec-version"`
+
+Vollständige Dokumentation: [`docs/security/README.md`](../docs/security/README.md)
 
 ### Gruppe 2: State-Machine Header
 
@@ -179,6 +197,23 @@ PATCH /messages/{id}/state
 → Response 412: ETag: "state:completed"  (Zustand hat sich geändert)
 ```
 
+### Sicherheits-Pattern POST mit JWE / Security pattern POST with JWE
+
+```yaml
+# Client erstellt JWS-signierten und JWE-verschlüsselten Body,
+# berechnet SHA-256 des JWE-Tokens und signiert die HTTP-Nachricht:
+POST /malo/{id}/registrations
+  Content-Type: application/jose
+  Content-Digest: sha-256=:uU0p7h6qv6bqGJgYy3m8n2mY0cKc6lQ5qJv8W2r9bLk=:
+  Signature-Input: sig1=("@method" "@authority" "@target-uri" "content-type"
+    "accept" "content-digest" "date" "x-request-id"
+    "x-api-spec-ref" "x-api-spec-version");
+    created=1769940930;expires=1769941230;
+    keyid="client-http-sig-01";alg="ecdsa-p256-sha256"
+  Signature: sig1=:m1dP0w7qZ8QmM8n6f0dVbQ4h2lJd0q3H6mQkq9Vxq8g=:
+  Body: eyJhbGciOiJSU0EtT0FFUC0yNTYiLCJlbmMiOiJBMjU2R0NNIn0...
+```
+
 ### Async-Pattern mit dry-run (vollständig)
 
 ```yaml
@@ -206,4 +241,8 @@ POST /messages
 | RFC 8694 | `Idempotency-Key` |
 | W3C Trace Context Level 2 | `traceparent` |
 | IANA Header Field Registry | Alle Standardnamen |
+| RFC 9421 | `Signature`, `Signature-Input` (HTTP Message Signatures) |
+| RFC 9530 | `Content-Digest` (Digest Fields) |
+| RFC 7515 | JSON Web Signature (JWS) — Payload-Signatur |
+| RFC 7516 | JSON Web Encryption (JWE) — Payload-Verschlüsselung |
 | EDI@Energy Konvention | `X-*` Custom-Header |
