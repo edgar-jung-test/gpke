@@ -39,7 +39,7 @@ docs/
 
 | Datei / File | Typ | Beschreibung / Description |
 |---|---|---|
-| [Lieferbeginn](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke/lieferbeginn-sequenz.html) | Lieferbeginn | Sequenzdiagramm aller 7 Prozessschritte. Pfeile zeigen Kommunikationsrichtung (LFNeu ↔ NB ↔ LFAlt/LFZ). Jeden Pfeil anklicken für Endpunkt-Details. / Sequence diagram of all 7 process steps. Click any arrow for endpoint details. |
+| [lieferbeginn-sequenz.html](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke/lieferbeginn-sequenz.html) | Lieferbeginn | Sequenzdiagramm aller 7 Prozessschritte. Pfeile zeigen Kommunikationsrichtung (LFNeu ↔ NB ↔ LFAlt/LFZ). Jeden Pfeil anklicken für Endpunkt-Details. / Sequence diagram of all 7 process steps. Click any arrow for endpoint details. |
 | [`supplierchange.drawio`](gpke/supplierchange.drawio) | Draw.io | Ursprüngliches BPMN-Swimlane-Diagramm des Lieferantenwechselprozesses. / Original BPMN swimlane diagram of the supplier change process. |
 | [`lieferbeginn-api.drawio`](gpke/lieferbeginn-api.drawio) | Draw.io | API-Endpunkte als Swimlane-Darstellung (alle 9 Endpunkte, alle 4 Rollen). / API endpoints as swimlane visualization (all 9 endpoints, all 4 roles). |
 | [`README.md`](gpke/README.md) | Dokumentation | Schritt-Tabelle, Rollenerklärung, Zusammenhang zu `api/malo.yaml`. / Step table, role descriptions, relation to `api/malo.yaml`. |
