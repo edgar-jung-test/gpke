@@ -1,12 +1,12 @@
 type: object
 title: BalancingArea
 description: |
-  Balancing area (Bilanzierungsgebiet) – a geographic subdivision of a control area
+  Balancing area (Bilanzierungsgebiet)  a geographic subdivision of a control area
   (Regelzone) used for settlement and billing of electricity. Market locations are
   assigned to a balancing area, which in turn is part of a control area managed by a
   transmission system operator (ÜNB).
   
-  **German:** Bilanzierungsgebiet – ein geografischer Teilbereich einer Regelzone,
+  **German:** Bilanzierungsgebiet  ein geografischer Teilbereich einer Regelzone,
   der für die Abrechnung und Bilanzierung von Strom verwendet wird. Marktlokationen
   werden einem Bilanzierungsgebiet zugeordnet, das wiederum Teil einer vom ÜNB
   verwalteten Regelzone ist.
