@@ -12,6 +12,8 @@ Es umfasst Prozessdiagramme, Sicherheitsarchitektur, Datenmodelle und Implementi
 Alle Inhalte ergänzen die normativen Spezifikationen in `api/` und `schema/` — bei Abweichungen
 gelten die YAML-Dateien.
 
+Die Gegenüberstellung der Arten von API's entnehmen Sie bitte [htmlpreview.github.io](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/usage/api-ansaetze-vergleich.html)
+
 ## EN – Overview
 
 This directory contains the companion documentation for the GPKE/UTILMD OpenAPI repository.
@@ -19,6 +21,7 @@ It covers process diagrams, security architecture, data models and implementatio
 All content supplements the normative specifications in `api/` and `schema/` — in case of
 discrepancy, the YAML files take precedence.
 
+Die Gegenüberstellung der Arten von API's entnehmen Sie bitte [htmlpreview.github.io](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/usage/api-ansaetze-vergleich.html)
 ---
 
 ## Verzeichnisstruktur / Directory Structure
