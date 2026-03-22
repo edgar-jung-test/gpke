@@ -21,7 +21,8 @@ It covers process diagrams, security architecture, data models and implementatio
 All content supplements the normative specifications in `api/` and `schema/` — in case of
 discrepancy, the YAML files take precedence.
 
-Reference concurrent API's implementations [usage/api-ansaetze-vergleich.html](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/usage/api-ansaetze-vergleich.html)
+Concurrent API's implementation rules: [htmlpreview.github.io](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/usage/api-ansaetze-vergleich.html)
+
 ---
 
 ## Verzeichnisstruktur / Directory Structure
