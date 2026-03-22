@@ -9,8 +9,8 @@
 
 Dieses Verzeichnis enthält die begleitende Dokumentation zum GPKE/UTILMD-OpenAPI-Repository.
 Es umfasst Prozessdiagramme, Sicherheitsarchitektur, Datenmodelle und Implementierungsanleitungen.
-Alle Inhalte ergänzen die normativen Spezifikationen in `api/` und `schema/` — bei Abweichungen gelten
-die YAML-Dateien.
+Alle Inhalte ergänzen die normativen Spezifikationen in `api/` und `schema/` — bei Abweichungen
+gelten die YAML-Dateien.
 
 ## EN – Overview
 
@@ -28,7 +28,7 @@ docs/
 ├── gpke/               GPKE Prozessdiagramme / GPKE process diagrams
 ├── security/           API-Sicherheitsarchitektur / API security architecture
 ├── models/             BDEW Datenmodell & ERM / BDEW data model & ERM
-└── usage/              Verwendungsanleitungen / Usage guides
+└── usage/              Verwendungsanleitungen & API-Architektur / Usage guides & API architecture
 ```
 
 ---
@@ -64,8 +64,8 @@ docs/
 
 | Datei / File | Typ | Beschreibung / Description |
 |---|---|---|
-| [`security-flow.html`](security/security-flow.html) | HTML interaktiv | Interaktives Sicherheitsdiagramm mit 7 Tabs: Übersicht, Schichten (aufklappbar), GET-Beispiel, POST+JWS, POST+JWE, Header-Referenz, Fehlercodes. / Interactive security diagram with 7 tabs: overview, layers, GET example, POST+JWS, POST+JWE, header reference, error codes. |
-| [`README.md`](security/README.md) | Dokumentation | Vollständige Beschreibung aller 4 Sicherheitsschichten mit Beispielen, Schlüsselverwaltung, Verarbeitungsreihenfolge und Fehlercodes (DE+EN). / Full description of all 4 security layers with examples, key management, processing order and error codes (DE+EN). |
+| [`security-flow.html`](security/security-flow.html) | HTML interaktiv | Interaktives Sicherheitsdiagramm mit 7 Tabs: Übersicht (Schichtenarchitektur), Schichten (aufklappbar), GET-Beispiel, POST+JWS, POST+JWE, Header-Referenz, Fehlercodes. / Interactive security diagram with 7 tabs. |
+| [`README.md`](security/README.md) | Dokumentation | Vollständige Beschreibung aller 4 Sicherheitsschichten mit Beispielen, Schlüsselverwaltung, Verarbeitungsreihenfolge und Fehlercodes (DE+EN). / Full description of all 4 security layers (DE+EN). |
 | [`20260202_API_Security.pptx`](security/20260202_API_Security.pptx) | Präsentation | Ursprüngliche Sicherheitspräsentation (Quellmaterial). / Original security presentation (source material). |
 
 **Sicherheitsschichten / Security layers:**
@@ -98,15 +98,28 @@ docs/
 
 ---
 
-## usage/ — Verwendungsanleitungen
+## usage/ — Verwendungsanleitungen & API-Architektur
 
-**Implementierungsdetails zu API-Mustern / Implementation details for API patterns**
+**Implementierungsdetails, Muster und Architekturentscheidungen / Implementation details, patterns and architecture decisions**
 
 | Datei / File | Typ | Beschreibung / Description |
 |---|---|---|
-| [`Idempotency_Key_Documentation.md`](usage/Idempotency_Key_Documentation.md) | Dokumentation | Vollständige Beschreibung des `Idempotency-Key`-Headers: Funktionsweise, Server-Verarbeitung, Retry-Semantik, Fehlerszenarien und OpenAPI-Schema (DE+EN). / Full description of the `Idempotency-Key` header: mechanics, server processing, retry semantics, error scenarios and OpenAPI schema (DE+EN). |
+| [`api-ansaetze-vergleich.html`](usage/api-ansaetze-vergleich.html) | HTML interaktiv | Interaktiver Vergleich der drei API-Architekturansätze (REST · RPC · Frankenstein). 5 Tabs: Kommunikationsfluss je Ansatz, vollständiger Kriterienkatalog, Fazit mit Empfehlung. / Interactive comparison of three API architecture approaches with flow diagrams, criteria table and summary. |
+| [`Idempotency_Key_Documentation.md`](usage/Idempotency_Key_Documentation.md) | Dokumentation | Vollständige Beschreibung des `Idempotency-Key`-Headers: Funktionsweise, Server-Verarbeitung, Retry-Semantik, Fehlerszenarien und OpenAPI-Schema (DE+EN). / Full description of the `Idempotency-Key` header including retry semantics and error scenarios (DE+EN). |
 | [`Idempotency_Key_Process_Flow.drawio`](usage/Idempotency_Key_Process_Flow.drawio) | Draw.io | Prozessablauf-Diagramm für Idempotency-Key-Verarbeitung inkl. Retry-Pfade. / Process flow diagram for Idempotency-Key handling including retry paths. |
-| [`Idempotency_Key_Process_Flow-Retry Process.jpg`](usage/Idempotency_Key_Process_Flow-Retry Process.jpg) | Bild / Image | Exportierte Grafik des Retry-Prozessablaufs. / Exported graphic of the retry process flow. |
+| [`Idempotency_Key_Process_Flow-Retry Process.jpg`](usage/Idempotency_Key_Process_Flow-Retry%20Process.jpg) | Bild / Image | Exportierte Grafik des Retry-Prozessablaufs. / Exported graphic of the retry process flow. |
+
+### API-Architekturansätze im Überblick / API Architecture Approaches Overview
+
+| Ansatz / Approach | Prinzip | Empfehlung |
+|---|---|---|
+| **REST API** | Ressourcen + HTTP-Verben · Request-Response · ETag-Zustand | Empfohlen |
+| **RPC API** | Prozeduraufrufe · aktionsorientiert · gRPC/JSON-RPC | Situationsabhängig |
+| **Frankenstein API** | UTILMD-Nachrichten per POST · HTTP als reines Transportmedium | Nicht empfohlen |
+
+> Der Frankenstein-Ansatz tauscht nur den Transportweg (AS4/E-Mail → HTTPS), behält aber EDIFACT-Prozesslogik und -Datenstrukturen vollständig bei. HTTP degeneriert zum reinen Transportrohr — alle Vorteile moderner APIs (Request-Response, sofortige Validierung, Zustandsverwaltung, Caching, Tooling) gehen verloren.
+>
+> The Frankenstein approach only replaces the transport channel (AS4/e-mail → HTTPS) while keeping EDIFACT process logic and data structures intact. HTTP degrades to a mere pipe — all benefits of modern APIs are lost.
 
 ---
 
@@ -114,17 +127,17 @@ docs/
 
 ```
 docs/                        ←  Begleitdokumentation / Companion documentation
-  gpke/                      ←  GPKE-Prozessdiagramme (Lieferbeginn)
+  gpke/                      ←  GPKE-Prozessdiagramme (Lieferbeginn, 7 Schritte)
   security/                  ←  Sicherheitsarchitektur (JWS, JWE, RFC 9421)
   models/                    ←  BDEW Datenmodell (ERM v2.2)
-  usage/                     ←  Implementierungsanleitungen (Idempotency-Key)
+  usage/                     ←  Implementierungsanleitungen + API-Architekturentscheidungen
 
 api/
-  malo.yaml                  ←  Normative OpenAPI 3.0 Spezifikation (GPKE)
+  malo.yaml                  ←  Normative OpenAPI 3.0 Spezifikation (GPKE Lieferbeginn)
 
-schema/                      ←  Wiederverwendbare Schema-Bibliothek
-header/                      ←  HTTP-Header-Definitionen (inkl. Sicherheits-Header)
-index.yaml                   ←  Repository-Einstiegspunkt
+schema/                      ←  Wiederverwendbare Schema-Bibliothek (MaLo, NeLo, UTILMD)
+header/                      ←  HTTP-Header-Definitionen (inkl. Sicherheits-Header RFC 9421)
+index.yaml                   ←  Repository-Einstiegspunkt (aggregiert alle APIs und Schemas)
 ```
 
 **Grundsatz / Principle:** Dokumentation beschreibt — YAML-Spezifikationen schreiben vor.  
@@ -135,7 +148,7 @@ In case of contradiction between `docs/` and `api/`/`schema/`, the YAML files al
 
 ---
 
-## Öffnen der Diagramme / Opening Diagrams
+## Öffnen der Dateien / Opening Files
 
 | Format | Werkzeug / Tool |
 |---|---|
@@ -143,6 +156,7 @@ In case of contradiction between `docs/` and `api/`/`schema/`, the YAML files al
 | `.drawio` | [app.diagrams.net](https://app.diagrams.net) (Web) oder [Draw.io Desktop](https://www.drawio.com) |
 | `.pptx` | Microsoft PowerPoint oder [LibreOffice Impress](https://www.libreoffice.org) |
 | `.sql` | Jeder SQL-Editor (DBeaver, DataGrip, psql, …) |
+| `.md` | GitHub rendert direkt · VS Code + Markdown Preview · Obsidian |
 
 ---
 
@@ -154,7 +168,7 @@ In case of contradiction between `docs/` and `api/`/`schema/`, the YAML files al
 | EDI@Energy Anwendungsübersicht der Prüfidentifikatoren v3.1 (01.08.2024) | `gpke/` |
 | BDEW UTILMD Anwendungshandbuch Strom 2.1 (11.12.2025) | `models/` |
 | RFC 9421 – HTTP Message Signatures | `security/` |
-| RFC 7515/7516 – JWS/JWE | `security/` |
+| RFC 7515 / 7516 – JWS / JWE | `security/` |
 | RFC 9530 – Digest Fields | `security/` |
 | RFC 8694 – Idempotency-Key | `usage/` |
 | [www.bdew-mako.de](https://www.bdew-mako.de) | Alle / All |
