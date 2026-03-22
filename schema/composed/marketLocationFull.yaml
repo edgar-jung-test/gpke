@@ -2,12 +2,12 @@ type: object
 title: MarketLocationFull
 description: |
   Full market location API response object combining all master data relevant to a
-  single market location. Suitable for use in GET /market-locations/{maLoId} responses.
+  single market location. Suitable for use in GET /malo/{maLoId} responses.
   Aggregates the market location with its address, voltage level, balancing assignments,
   profile, products, OBIS codes, and all assigned market actors.
   
   **German:** Vollständiges Marktlokations-API-Antwortobjekt, das alle Stammdaten einer
-  Marktlokation kombiniert. Geeignet für GET /market-locations/{maLoId} Antworten.
+  Marktlokation kombiniert. Geeignet für GET /malo/{maLoId} Antworten.
   Aggregiert die Marktlokation mit Adresse, Spannungsebene, Bilanzierungszuordnungen,
   Profil, Produkten, OBIS-Kennzahlen und allen zugeordneten Marktakteuren.
 x-i18n:

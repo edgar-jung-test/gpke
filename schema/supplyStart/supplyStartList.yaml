@@ -2,15 +2,15 @@ type: object
 title: SupplyStartList
 description: |
   Paginated list of supply start requests for a given market location.
-  Returned by GET /market-locations/{marketLocationId}/registrations.
+  Returned by GET /malo/{marketLocationId}/registrations.
   **German:** Seitenbasierte Liste von Lieferbeginn-Anfragen (Anmeldungen) für
-  eine Marktlokation. Zurückgegeben von GET /market-locations/{marketLocationId}/registrations.
+  eine Marktlokation. Zurückgegeben von GET /malo/{marketLocationId}/registrations.
 x-i18n:
   de:
     title: Liste Lieferbeginn-Anfragen (paginiert)
     description: |
       Seitenbasierte Liste von Anmeldungen für eine Marktlokation.
-      Antwort von GET /market-locations/{marketLocationId}/registrations.
+      Antwort von GET /malo/{marketLocationId}/registrations.
 required:
   - items
   - totalCount

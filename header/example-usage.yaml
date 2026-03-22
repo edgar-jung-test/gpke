@@ -25,7 +25,7 @@ paths:
   /marketLocations:
     post:
       summary: Create a market location (synchronous)
-      tags: [market-locations]
+      tags: [malo]
       parameters:
         # Tracing
         - $ref: "./openapi.yaml#/components/parameters/xRequestId"

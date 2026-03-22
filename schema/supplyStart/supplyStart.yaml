@@ -4,17 +4,17 @@ description: |
   Full representation of a supply start (registration / Anmeldung) request,
   including its current processing status, all submitted fields and any grid operator
   response data (step 5 confirmation or rejection).
-  This is the primary resource returned by GET and POST /market-locations/{marketLocationId}/registrations.
+  This is the primary resource returned by GET and POST /malo/{marketLocationId}/registrations.
   **German:** Vollständige Darstellung einer Lieferbeginn-Anfrage (Anmeldung), einschließlich
   des aktuellen Bearbeitungsstatus, aller eingereichten Felder und der Netzbetreiberantwort
   (Schritt 5 – Bestätigung oder Ablehnung).
-  Primäre Ressource bei GET und POST /market-locations/{marketLocationId}/registrations.
+  Primäre Ressource bei GET und POST /malo/{marketLocationId}/registrations.
 x-i18n:
   de:
     title: Lieferbeginn-Anfrage (vollständig)
     description: |
       Vollständige Darstellung einer Anmeldung inkl. Bearbeitungsstatus und NB-Antwort.
-      Primäres Ressourcenobjekt für GET und POST auf /market-locations/{marketLocationId}/registrations.
+      Primäres Ressourcenobjekt für GET und POST auf /malo/{marketLocationId}/registrations.
 required:
   - supplyStartId
   - status
