@@ -139,82 +139,127 @@
     <div class="section">
       <div class="section-title">Sicherheitsarchitektur / Security Architecture</div>
       <div class="flow-wrap">
-      <svg viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </marker>
-        <style>
-          .t{font-family:system-ui,sans-serif;dominant-baseline:central}
-          .tb{font-weight:500}
-          .ts{font-size:10px}
-          .tm{font-size:12px}
-          .tl{font-size:13px}
-          .ll{stroke-width:1.5;fill:none}
-          .ld{stroke-width:1;fill:none;stroke-dasharray:4 3}
-          .lgg{stroke:#888780}
-          @media(prefers-color-scheme:dark){
-            .lgg{stroke:#888780}
-          }
-        </style>
-      </defs>
+      <svg width="100%" viewBox="0 0 680 640" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+  <style>
+    .sv-t{font-family:system-ui,sans-serif;dominant-baseline:central}
+    .sv-b{font-weight:500}
+    .sv-s{font-size:10px}
+    .sv-m{font-size:11px}
+    @media(prefers-color-scheme:dark){
+      .sv-env{stroke:#444441}
+      .sv-env-lbl{fill:#6a6860}
+      .l4-bg{fill:#280d10;stroke:#D4537E}
+      .l4-box{fill:#280d10;stroke:#D4537E}
+      .l4-title{fill:#f4c0d1}.l4-sub{fill:#ed93b1}.l4-body{fill:#ed93b1}
+      .l4-bkt{stroke:#D4537E}
+      .l3-bg{fill:#26180a;stroke:#BA7517}
+      .l3-box{fill:#26180a;stroke:#BA7517}
+      .l3-title{fill:#fac775}.l3-sub{fill:#ef9f27}.l3-body{fill:#ef9f27}
+      .l2-bg{fill:#0e1f0d;stroke:#639922}
+      .l2-title{fill:#c0dd97}.l2-sub{fill:#97c459}.l2-body{fill:#97c459}
+      .l1-bg{fill:#0d2236;stroke:#378ADD}
+      .l1-title{fill:#b5d4f4}.l1-sub{fill:#85b7eb}.l1-body{fill:#85b7eb}
+      .st1-box{fill:#0d2236;stroke:#378ADD}.st1-t{fill:#b5d4f4}.st1-s{fill:#85b7eb}.st1-arr{stroke:#378ADD}
+      .st2-box{fill:#280d10;stroke:#D4537E}.st2-t{fill:#f4c0d1}.st2-s{fill:#ed93b1}.st2-arr{stroke:#D4537E}
+      .st3-box{fill:#26180a;stroke:#BA7517}.st3-t{fill:#fac775}.st3-s{fill:#ef9f27}.st3-arr{stroke:#BA7517}
+      .st4-box{fill:#0e1f0d;stroke:#639922}.st4-t{fill:#c0dd97}.st4-s{fill:#97c459}.st4-arr{stroke:#639922}
+      .st5-box{fill:#2c2c2a;stroke:#888780}.st5-t{fill:#d3d1c7}.st5-s{fill:#b4b2a9}
+      .gap-arr{stroke:#444441}
+      .ord-lbl{fill:#888780}
+    }
+  </style>
+</defs>
 
-      <!-- outer HTTP request box -->
-      <rect x="10" y="10" width="780" height="495" rx="12" fill="none" stroke="#d3d1c7" stroke-width="1" stroke-dasharray="6 3"/>
-      <text class="t ts" x="22" y="26" fill="#888780">HTTP/2 Request</text>
+<!-- outer envelope -->
+<rect class="sv-env" x="8" y="8" width="664" height="490" rx="10" fill="none" stroke="#b4b2a9" stroke-width="1" stroke-dasharray="5 3"/>
+<text class="sv-t sv-s sv-env-lbl" x="20" y="24" fill="#888780">HTTP/2 Request</text>
 
-      <!-- LAYER 4 band: Header signature -->
-      <rect x="20" y="34" width="760" height="145" rx="8" fill="#fbeaf0" opacity=".5"/>
-      <text class="t ts tb" x="32" y="50" fill="#72243e">Layer 4 – HTTP Message Signature (RFC 9421)</text>
+<!-- LAYER 4: HTTP Message Signature  y 30..174 -->
+<rect class="l4-bg" x="16" y="30" width="648" height="144" rx="8" fill="#FBEAF0" stroke="#D4537E" stroke-width="0.5"/>
+<text class="sv-t sv-m sv-b l4-title" x="28" y="48" fill="#72243E">Layer 4 — HTTP Message Signature</text>
+<text class="sv-t sv-s l4-sub" x="28" y="63" fill="#993556">RFC 9421 · signs headers + Content-Digest · every request</text>
+<rect class="l4-box" x="28" y="72" width="352" height="90" rx="5" fill="#fbeaf0" stroke="#D4537E" stroke-width="0.5"/>
+<text class="sv-t sv-s sv-b l4-title" x="40" y="89" fill="#72243E">Signed HTTP headers</text>
+<text class="sv-t sv-s l4-body" x="40" y="106" fill="#993556">Content-Digest: sha-256=:uU0p7h6qv6...:</text>
+<text class="sv-t sv-s l4-body" x="40" y="121" fill="#993556">Signature-Input: sig1=("@method" "@authority" ...)</text>
+<text class="sv-t sv-s l4-body" x="40" y="136" fill="#993556">Signature: sig1=:m1dP0w7qZ8Qm...:</text>
+<text class="sv-t sv-s l4-body" x="40" y="151" fill="#993556">Date · X-Request-Id · X-Api-Spec-Ref · ...</text>
+<line class="l4-bkt" x1="391" y1="78"  x2="400" y2="78"  stroke="#D4537E" stroke-width="0.5"/>
+<line class="l4-bkt" x1="400" y1="78"  x2="400" y2="156" stroke="#D4537E" stroke-width="0.5"/>
+<line class="l4-bkt" x1="391" y1="156" x2="400" y2="156" stroke="#D4537E" stroke-width="0.5"/>
+<text class="sv-t sv-s sv-b l4-body" x="406" y="117" fill="#993556">all signed</text>
 
-      <!-- header fields -->
-      <rect x="32" y="58" width="740" height="110" rx="6" fill="#fbeaf0" stroke="#d4537e" stroke-width="0.5"/>
-      <text class="t tm tb" x="44" y="76" fill="#72243e">HTTP Headers</text>
-      <text class="t ts" x="44" y="95"  fill="#993556">Authorization: Bearer &lt;JWT&gt;</text>
-      <text class="t ts" x="44" y="111" fill="#993556">Content-Type: application/jose</text>
-      <text class="t ts" x="44" y="127" fill="#993556">Content-Digest: sha-256=:uU0p7h6qv6...:</text>
-      <text class="t ts" x="44" y="143" fill="#993556">Signature-Input: sig1=("@method" "@authority" ...)</text>
-      <text class="t ts" x="44" y="159" fill="#993556">Signature: sig1=:m1dP0w7qZ8Qm...:</text>
-      <!-- bracket indicating what signature covers -->
-      <line x1="752" y1="127" x2="762" y2="127" stroke="#d4537e" stroke-width="1"/>
-      <line x1="762" y1="95"  x2="762" y2="159" stroke="#d4537e" stroke-width="1"/>
-      <line x1="752" y1="95"  x2="762" y2="95"  stroke="#d4537e" stroke-width="1"/>
-      <line x1="752" y1="159" x2="762" y2="159" stroke="#d4537e" stroke-width="1"/>
-      <text class="t ts" x="766" y="127" fill="#993556">signed</text>
+<!-- LAYER 3: JWE  y 184..327 -->
+<rect class="l3-bg" x="16" y="184" width="648" height="143" rx="8" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+<text class="sv-t sv-m sv-b l3-title" x="28" y="202" fill="#633806">Layer 3 — JWE Encryption (optional)</text>
+<text class="sv-t sv-s l3-sub" x="28" y="217" fill="#854F0B">RFC 7516 · RSA-OAEP-256 + A256GCM · Content-Type: application/jose</text>
+<rect class="l3-box" x="28" y="225" width="352" height="94" rx="5" fill="#faeeda" stroke="#BA7517" stroke-width="0.5"/>
+<text class="sv-t sv-s sv-b l3-title" x="40" y="242" fill="#633806">Body: JWE compact token (5 parts)</text>
+<text class="sv-t sv-s l3-body" x="40" y="258" fill="#854F0B">eyJhbGciOiJSU0EtT0FFUC0yNTYi...   JWE Header</text>
+<text class="sv-t sv-s l3-body" x="40" y="273" fill="#854F0B">.m3kZ2...Q                          Encrypted Key</text>
+<text class="sv-t sv-s l3-body" x="40" y="288" fill="#854F0B">.48V1_ALb6US04U3b                   IV</text>
+<text class="sv-t sv-s l3-body" x="40" y="303" fill="#854F0B">.u9f0c...uWQ                        Ciphertext  (Layer 2 inside)</text>
+<text class="sv-t sv-s l3-body" x="40" y="318" fill="#854F0B">.o2mP...8w                          Auth Tag</text>
 
-      <!-- LAYER 3 band: JWE -->
-      <rect x="20" y="188" width="760" height="175" rx="8" fill="#faeeda" opacity=".5"/>
-      <text class="t ts tb" x="32" y="204" fill="#633806">Layer 3 – JWE Encryption (RFC 7516)</text>
+<!-- LAYER 2: JWS  y 337..396 -->
+<rect class="l2-bg" x="16" y="337" width="648" height="59" rx="8" fill="#EAF3DE" stroke="#639922" stroke-width="0.5"/>
+<text class="sv-t sv-m sv-b l2-title" x="28" y="355" fill="#27500A">Layer 2 — JWS Payload Signature</text>
+<text class="sv-t sv-s l2-sub" x="28" y="370" fill="#3B6D11">RFC 7515 · ES256 (ECDSA P-256) · embedded inside JWE ciphertext when encrypted</text>
+<text class="sv-t sv-s l2-body" x="28" y="386" fill="#3B6D11">eyJhbGciOiJFUzI1NiJ9.eyJzdXBwbHlTdGFydERhdGUiOiIyMDI1LTA0LTAxIn0.MEUCIQDxx...</text>
 
-      <rect x="32" y="212" width="740" height="142" rx="6" fill="#faeeda" stroke="#ba7517" stroke-width="0.5"/>
-      <text class="t tm tb" x="44" y="230" fill="#633806">Body: JWE Compact Serialization</text>
-      <text class="t ts" x="44" y="250" fill="#854f0b">eyJhbGciOiJSU0EtT0FFUC0yNTYiLCJlbmMiOiJBMjU2R0NNIn0  ←  JWE Header</text>
-      <text class="t ts" x="44" y="266" fill="#854f0b">.m3kZ2...Q                                               ←  Encrypted Key</text>
-      <text class="t ts" x="44" y="282" fill="#854f0b">.48V1_ALb6US04U3b                                        ←  IV</text>
-      <text class="t ts" x="44" y="298" fill="#854f0b">.u9f0c...uWQ                                             ←  Ciphertext (contains JWS)</text>
-      <text class="t ts" x="44" y="314" fill="#854f0b">.o2mP...8w                                              ←  Auth Tag</text>
+<!-- LAYER 1: OAuth  y 406..487 -->
+<rect class="l1-bg" x="16" y="406" width="648" height="81" rx="8" fill="#E6F1FB" stroke="#378ADD" stroke-width="0.5"/>
+<text class="sv-t sv-m sv-b l1-title" x="28" y="424" fill="#0C447C">Layer 1 — OAuth 2.0 Bearer Token (JWT)</text>
+<text class="sv-t sv-s l1-sub" x="28" y="439" fill="#185FA5">RFC 7519 · Authorization header · every request</text>
+<text class="sv-t sv-s l1-body" x="28" y="454" fill="#185FA5">Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...</text>
+<text class="sv-t sv-s l1-body" x="28" y="469" fill="#185FA5">sub: marketpartner-123  ·  roles: ["LF"]  ·  exp: 1706786130</text>
+<text class="sv-t sv-s l1-body" x="28" y="482" fill="#185FA5">iss: auth.edi-energy.de  ·  aud: api.makohub.com</text>
 
-      <!-- LAYER 2 band: JWS inside JWE -->
-      <rect x="44" y="322" width="716" height="52" rx="5" fill="#eaf3de" stroke="#639922" stroke-width="0.5"/>
-      <text class="t ts tb" x="56" y="337" fill="#27500a">Layer 2 – JWS Signature (RFC 7515)  ←  inside encrypted ciphertext</text>
-      <text class="t ts" x="56" y="353" fill="#3b6d11">eyJhbGciOiJFUzI1NiJ9.eyJzdXBwbHlTdGFydERhdGUiOiIyMDI1LTA0LTAxIn0.MEUCIQDxx...</text>
+<!-- ══ PROCESSING ORDER  y 505..610 ══ -->
+<text class="sv-t sv-m sv-b ord-lbl" x="8" y="519" fill="#5F5E5A">Verarbeitungsreihenfolge Server / Server processing order</text>
 
-      <!-- LAYER 1: Bearer -->
-      <rect x="20" y="372" width="760" height="48" rx="8" fill="#e6f1fb" opacity=".6"/>
-      <text class="t ts tb" x="32" y="388" fill="#0c447c">Layer 1 – OAuth 2.0 Bearer Token (JWT)</text>
-      <text class="t ts"    x="32" y="404" fill="#185fa5">Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtYXJrZXRwYXJ0bmVyLTEyMyIsInJvbGVzIjpbIkxGIl19.sig</text>
+<!-- Step 1 — Auth (→ Layer 1) -->
+<rect class="st1-box" x="8" y="528" width="118" height="54" rx="6" fill="#E6F1FB" stroke="#378ADD" stroke-width="0.5"/>
+<text class="sv-t sv-s sv-b st1-t" text-anchor="middle" x="67" y="546" fill="#0C447C">1. Bearer JWT</text>
+<text class="sv-t sv-s st1-s" text-anchor="middle" x="67" y="561" fill="#185FA5">OAuth 2.0 verify</text>
+<line class="st1-arr" x1="67" y1="528" x2="67" y2="490" stroke="#378ADD" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
 
-      <!-- processing order arrows on right -->
-      <text class="t ts tb" x="400" y="448" text-anchor="middle" fill="#888780">Verarbeitungsreihenfolge Server / Server processing order</text>
-      <line x1="120" y1="458" x2="120" y2="490" stroke="#185fa5" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
-      <text class="t ts" x="130" y="468" fill="#185fa5">1. Auth</text>
-      <line x1="270" y1="458" x2="270" y2="490" stroke="#993556" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
-      <text class="t ts" x="280" y="468" fill="#993556">2. HTTP Sig</text>
-      <line x1="430" y1="458" x2="430" y2="490" stroke="#854f0b" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
-      <text class="t ts" x="440" y="468" fill="#854f0b">3. JWE decrypt</text>
-      <line x1="610" y1="458" x2="610" y2="490" stroke="#3b6d11" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
-      <text class="t ts" x="620" y="468" fill="#3b6d11">4. JWS verify</text>
-      </svg>
+<line class="gap-arr" x1="126" y1="555" x2="139" y2="555" stroke="#b4b2a9" stroke-width="1" fill="none" marker-end="url(#arrow)"/>
+
+<!-- Step 2 — HTTP Sig (→ Layer 4) -->
+<rect class="st2-box" x="141" y="528" width="118" height="54" rx="6" fill="#FBEAF0" stroke="#D4537E" stroke-width="0.5"/>
+<text class="sv-t sv-s sv-b st2-t" text-anchor="middle" x="200" y="546" fill="#72243E">2. HTTP Sig</text>
+<text class="sv-t sv-s st2-s" text-anchor="middle" x="200" y="561" fill="#993556">RFC 9421 + Digest</text>
+<line class="st2-arr" x1="200" y1="528" x2="200" y2="176" stroke="#D4537E" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+
+<line class="gap-arr" x1="259" y1="555" x2="272" y2="555" stroke="#b4b2a9" stroke-width="1" fill="none" marker-end="url(#arrow)"/>
+
+<!-- Step 3 — JWE (→ Layer 3) -->
+<rect class="st3-box" x="274" y="528" width="118" height="54" rx="6" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+<text class="sv-t sv-s sv-b st3-t" text-anchor="middle" x="333" y="546" fill="#633806">3. Decrypt JWE</text>
+<text class="sv-t sv-s st3-s" text-anchor="middle" x="333" y="561" fill="#854F0B">RSA-OAEP-256</text>
+<line class="st3-arr" x1="333" y1="528" x2="333" y2="329" stroke="#BA7517" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+
+<line class="gap-arr" x1="392" y1="555" x2="405" y2="555" stroke="#b4b2a9" stroke-width="1" fill="none" marker-end="url(#arrow)"/>
+
+<!-- Step 4 — JWS (→ Layer 2) -->
+<rect class="st4-box" x="407" y="528" width="118" height="54" rx="6" fill="#EAF3DE" stroke="#639922" stroke-width="0.5"/>
+<text class="sv-t sv-s sv-b st4-t" text-anchor="middle" x="466" y="546" fill="#27500A">4. Verify JWS</text>
+<text class="sv-t sv-s st4-s" text-anchor="middle" x="466" y="561" fill="#3B6D11">ES256 signature</text>
+<line class="st4-arr" x1="466" y1="528" x2="466" y2="398" stroke="#639922" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+
+<line class="gap-arr" x1="525" y1="555" x2="538" y2="555" stroke="#b4b2a9" stroke-width="1" fill="none" marker-end="url(#arrow)"/>
+
+<!-- Step 5 — Business logic -->
+<rect class="st5-box" x="540" y="528" width="132" height="54" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+<text class="sv-t sv-s sv-b st5-t" text-anchor="middle" x="606" y="546" fill="#444441">5. Process request</text>
+<text class="sv-t sv-s st5-s" text-anchor="middle" x="606" y="561" fill="#5F5E5A">business logic</text>
+
+</svg>
       </div>
     </div>
   </div>
