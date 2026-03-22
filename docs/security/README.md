@@ -28,37 +28,41 @@ The EDI@Energy REST APIs use a three-layer security model:
 ## Architektur / Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        HTTP/2 Request                           │
-│                                                                 │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │                       HEADERS                            │   │
-│  │  Authorization: Bearer <JWT>          ← Layer 1: Auth    │   │
-│  │  Content-Type: application/jose       ← JWE body         │   │
-│  │  Content-Digest: sha-256=:<hash>:     ← Body hash        │   │
-│  │  Signature-Input: sig1=(...)          ← What is signed   │   │
-│  │  Signature: sig1=:<value>:            ← Layer 4: RFC 9421│   │
-│  │  Date, X-Request-ID, X-Api-Spec-Ref, ...                │   │
-│  └─────────────────────────────────────────────────────────┘   │
-│                                                                 │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │                        BODY                              │   │
-│  │                                                          │   │
-│  │  JWE compact serialization:                             │   │
-│  │  ┌─────────────────────────────────────────────────┐   │   │
-│  │  │  JWE Header . Encrypted Key . IV . Ciphertext   │   │   │
-│  │  │              └── contains ──┘                   │   │   │
-│  │  │                   JWS token:                    │   │   │
-│  │  │  ┌──────────────────────────────────────────┐  │   │   │
-│  │  │  │  JWS Header . Payload . Signature        │  │   │   │
-│  │  │  │              └── is ──┘                  │  │   │   │
-│  │  │  │              JSON payload                │  │   │   │
-│  │  │  └──────────────────────────────────────────┘  │   │   │
-│  │  └─────────────────────────────────────────────────┘   │   │
-│  │    Layer 2: JWS (integrity)                             │   │
-│  │    Layer 3: JWE (confidentiality)                       │   │
-│  └─────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│                      HTTP/2 Request                          │
+│                                                              │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │ HEADERS                                                │  │
+│  │                                                        │  │
+│  │ Authorization: Bearer <JWT>                            │  │
+│  │ Content-Type: application/jose                         │  │
+│  │ Content-Digest: sha-256=:<hash>:                       │  │
+│  │ Signature-Input: sig1=(...)                            │  │
+│  │ Signature: sig1=:<value>:                              │  │
+│  │ Date, X-Request-ID, X-Api-Spec-Ref, ...                │  │
+│  └────────────────────────────────────────────────────────┘  │
+│                                                              │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │ BODY                                                   │  │
+│  │                                                        │  │
+│  │ JWE compact serialization                              │  │
+│  │                                                        │  │
+│  │ ┌────────────────────────────────────────────────────┐ │  │
+│  │ │ JWE Header . Encrypted Key . IV . Ciphertext       │ │  │
+│  │ │                contains                            │ │  │
+│  │ │                JWS token                           │ │  │
+│  │ │                                                    │ │  │
+│  │ │ ┌────────────────────────────────────────────────┐ │ │  │
+│  │ │ │ JWS Header . Payload . Signature               │ │ │  │
+│  │ │ │                    is                          │ │ │  │
+│  │ │ │               JSON payload                     │ │ │  │
+│  │ │ └────────────────────────────────────────────────┘ │ │  │
+│  │ └────────────────────────────────────────────────────┘ │  │
+│  │                                                        │  │
+│  │ Layer 2: JWS (integrity)                               │  │
+│  │ Layer 3: JWE (confidentiality)                         │  │
+│  └────────────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────┘
 ```
 [Open interactive security-flow view](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/security/security-flow.html)
 ---
