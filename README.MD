@@ -14,6 +14,11 @@ Der Schwerpunkt liegt auf einer **modularen Struktur**, in der einzelne fachlich
 Elemente als eigenständige YAML-Dateien abgelegt und per `$ref` zu größeren Objekten
 und API-Sichten zusammengesetzt werden.
 
+Die Verzeichnisse oas30-31Mig und oas31 sind zur Veranschaulichung neuer Funktionen in OAS 3.1
+gedacht. Im Unterverzeichnis wird auf die Vorteile von OAS 3.1 eingegangen. Das aktuelle
+Schema ist aus Gründen der Komatibiltit zur apiGIT nocht auf OAS 3.0. Der monderne 
+Editor lightstop kann jedoch bereits mit OAS 3.1 umgehen.
+
 Abgedeckte Prozesse:
 
 - UTILMD-Stammdatenkommunikation (MaLo, NeLo, MeLo, Bilanzierung, Marktakteure)
@@ -27,6 +32,11 @@ UTILMD-related business objects in the German electricity market domain.
 The main focus is a **modular structure** in which individual business elements are
 stored as standalone YAML files and composed via `$ref` into larger domain objects
 and API views.
+
+The directories oas30-31Mig and oas31 are intended to illustrate new features in OAS 3.1. 
+The corresponding subdirectory explains the advantages of OAS 3.1. For compatibility reasons 
+with apiGIT, the current schema is still based on OAS 3.0. However, the modern editor LightStop 
+already supports OAS 3.1.
 
 Covered processes:
 
