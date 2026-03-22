@@ -41,6 +41,9 @@ paths:
         - $ref: ../header/headers/xRequestId.yaml
         - $ref: ../header/headers/idempotencyKey.yaml
         - $ref: ../header/headers/xMessageId.yaml
+        - $ref: ../header/headers/contentDigest.yaml
+        - $ref: ../header/headers/signatureInput.yaml
+        - $ref: ../header/headers/signature.yaml
       requestBody:
         required: true
         content:
@@ -153,6 +156,8 @@ paths:
         - registrations
       parameters:
         - $ref: '#/components/parameters/marketLocationId'
+        - $ref: ../header/headers/signatureInput.yaml
+        - $ref: ../header/headers/signature.yaml
         - name: status
           in: query
           schema:
@@ -226,6 +231,8 @@ paths:
         - registrations
       parameters:
         - $ref: ../header/headers/xRequestId.yaml
+        - $ref: ../header/headers/signatureInput.yaml
+        - $ref: ../header/headers/signature.yaml
       responses:
         '200':
           description: OK
@@ -256,6 +263,9 @@ paths:
         - $ref: ../header/headers/xRequestId.yaml
         - $ref: ../header/headers/idempotencyKey.yaml
         - $ref: ../header/headers/ifMatch.yaml
+        - $ref: ../header/headers/contentDigest.yaml
+        - $ref: ../header/headers/signatureInput.yaml
+        - $ref: ../header/headers/signature.yaml
       requestBody:
         required: true
         content:
@@ -318,6 +328,9 @@ paths:
         - $ref: ../header/headers/xRequestId.yaml
         - $ref: ../header/headers/xMessageId.yaml
         - $ref: ../header/headers/idempotencyKey.yaml
+        - $ref: ../header/headers/contentDigest.yaml
+        - $ref: ../header/headers/signatureInput.yaml
+        - $ref: ../header/headers/signature.yaml
       requestBody:
         required: true
         content:
@@ -442,6 +455,9 @@ paths:
         - $ref: ../header/headers/xRequestId.yaml
         - $ref: ../header/headers/xMessageId.yaml
         - $ref: ../header/headers/idempotencyKey.yaml
+        - $ref: ../header/headers/contentDigest.yaml
+        - $ref: ../header/headers/signatureInput.yaml
+        - $ref: ../header/headers/signature.yaml
       requestBody:
         required: true
         content:
@@ -524,6 +540,9 @@ paths:
         - $ref: ../header/headers/xRequestId.yaml
         - $ref: ../header/headers/xMessageId.yaml
         - $ref: ../header/headers/idempotencyKey.yaml
+        - $ref: ../header/headers/contentDigest.yaml
+        - $ref: ../header/headers/signatureInput.yaml
+        - $ref: ../header/headers/signature.yaml
       requestBody:
         required: true
         content:
@@ -631,6 +650,9 @@ paths:
         - $ref: ../header/headers/xRequestId.yaml
         - $ref: ../header/headers/xMessageId.yaml
         - $ref: ../header/headers/idempotencyKey.yaml
+        - $ref: ../header/headers/contentDigest.yaml
+        - $ref: ../header/headers/signatureInput.yaml
+        - $ref: ../header/headers/signature.yaml
       requestBody:
         required: true
         content:
@@ -702,6 +724,9 @@ paths:
         - $ref: ../header/headers/xRequestId.yaml
         - $ref: ../header/headers/xMessageId.yaml
         - $ref: ../header/headers/idempotencyKey.yaml
+        - $ref: ../header/headers/contentDigest.yaml
+        - $ref: ../header/headers/signatureInput.yaml
+        - $ref: ../header/headers/signature.yaml
       requestBody:
         required: true
         content:

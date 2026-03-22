@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EDI@Energy API Security – Sicherheitsarchitektur</title>
+  <style>
+    :root {
+      --bg:     #ffffff; --bg2:    #f7f7f5; --bg3:    #f0eeea;
+      --text:   #1a1a18; --text2:  #5a5a56; --text3:  #9a9990;
+      --border: rgba(0,0,0,0.11); --border2: rgba(0,0,0,0.17);
+      --font:   system-ui,-apple-system,"Segoe UI",sans-serif;
+      --mono:   "SF Mono","Fira Code","Cascadia Code",monospace;
+      --blue50: #e6f1fb; --blue600: #185fa5; --blue800: #0c447c;
+      --green50:#eaf3de; --green600:#3b6d11; --green800:#27500a;
+      --amber50:#faeeda; --amber600:#854f0b; --amber800:#633806;
+      --pink50: #fbeaf0; --pink600: #993556; --pink800: #72243e;
+      --gray50: #f1efe8; --gray600: #5f5e5a; --gray800: #2c2c2a;
+    }
+    @media(prefers-color-scheme:dark){
+      :root{
+        --bg:#1a1a18;--bg2:#222220;--bg3:#2a2a28;
+        --text:#e8e6df;--text2:#a8a69e;--text3:#6a6860;
+        --border:rgba(255,255,255,0.09);--border2:rgba(255,255,255,0.15);
+        --blue50:#0d2236;--blue600:#85b7eb;--blue800:#b5d4f4;
+        --green50:#0e1f0d;--green600:#97c459;--green800:#c0dd97;
+        --amber50:#26180a;--amber600:#ef9f27;--amber800:#fac775;
+        --pink50:#280d10;--pink600:#ed93b1;--pink800:#f4c0d1;
+        --gray50:#2c2c2a;--gray600:#b4b2a9;--gray800:#d3d1c7;
+      }
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh}
+    .page-header{background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 28px 14px}
+    .page-header h1{font-size:16px;font-weight:500;margin-bottom:4px}
+    .page-header p{font-size:12px;color:var(--text2)}
+    .badge-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+    .badge{font-size:10px;padding:3px 8px;border-radius:4px;border:0.5px solid var(--border);color:var(--text2);background:var(--bg)}
+    .container{max-width:1060px;margin:0 auto;padding:24px 20px 48px}
+    .section{margin-bottom:32px}
+    .section-title{font-size:13px;font-weight:500;color:var(--text2);margin-bottom:12px;padding-bottom:6px;border-bottom:0.5px solid var(--border)}
+
+    /* tab nav */
+    .tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px;overflow-x:auto}
+    .tab{font-size:12px;font-weight:500;padding:8px 16px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s;background:none;border-top:none;border-left:none;border-right:none}
+    .tab:hover{color:var(--text)}
+    .tab.active{color:var(--blue600);border-bottom-color:var(--blue600)}
+    .tab-panel{display:none}
+    .tab-panel.active{display:block}
+
+    /* layer cards */
+    .layer-grid{display:grid;grid-template-columns:1fr;gap:12px}
+    .layer-card{border:0.5px solid var(--border);border-radius:10px;overflow:hidden;transition:box-shadow .15s}
+    .layer-card:hover{box-shadow:0 0 0 2px var(--border2)}
+    .layer-head{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;user-select:none}
+    .layer-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0}
+    .layer-title{font-size:13px;font-weight:500;flex:1}
+    .layer-sub{font-size:11px;color:var(--text2)}
+    .layer-chevron{font-size:11px;color:var(--text3);transition:transform .2s}
+    .layer-card.open .layer-chevron{transform:rotate(90deg)}
+    .layer-body{display:none;padding:0 16px 16px;border-top:0.5px solid var(--border)}
+    .layer-card.open .layer-body{display:block}
+    .layer-body p{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:10px}
+    .layer-body p:last-child{margin-bottom:0}
+
+    /* colors per layer */
+    .l1 .layer-head{background:var(--blue50)}
+    .l1 .layer-num{background:var(--blue600);color:#fff}
+    .l1 .layer-title{color:var(--blue800)}
+    .l2 .layer-head{background:var(--green50)}
+    .l2 .layer-num{background:var(--green600);color:#fff}
+    .l2 .layer-title{color:var(--green800)}
+    .l3 .layer-head{background:var(--amber50)}
+    .l3 .layer-num{background:var(--amber600);color:#fff}
+    .l3 .layer-title{color:var(--amber800)}
+    .l4 .layer-head{background:var(--pink50)}
+    .l4 .layer-num{background:var(--pink600);color:#fff}
+    .l4 .layer-title{color:var(--pink800)}
+
+    /* code blocks */
+    pre{background:var(--bg3);border:0.5px solid var(--border);border-radius:6px;padding:12px 14px;font-family:var(--mono);font-size:10.5px;overflow-x:auto;margin:10px 0;line-height:1.55;color:var(--text)}
+    code{font-family:var(--mono);font-size:10.5px;background:var(--bg3);padding:1px 5px;border-radius:3px;border:0.5px solid var(--border)}
+
+    /* flow diagram */
+    .flow-wrap{overflow-x:auto}
+    svg{display:block;width:100%;height:auto}
+
+    /* table */
+    table{width:100%;border-collapse:collapse;font-size:12px}
+    th{font-weight:500;color:var(--text2);text-align:left;padding:7px 10px;border-bottom:1px solid var(--border);background:var(--bg2)}
+    td{padding:7px 10px;border-bottom:0.5px solid var(--border);color:var(--text2);vertical-align:top}
+    tr:last-child td{border-bottom:none}
+
+    /* rfc pills */
+    .rfc{font-size:9px;font-weight:500;padding:2px 6px;border-radius:3px;display:inline-block;margin-left:4px}
+    .rfc-blue{background:var(--blue50);color:var(--blue600)}
+    .rfc-green{background:var(--green50);color:var(--green600)}
+    .rfc-amber{background:var(--amber50);color:var(--amber600)}
+    .rfc-pink{background:var(--pink50);color:var(--pink600)}
+
+    /* step indicator */
+    .steps{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+    .step{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--text2)}
+    .step-dot{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;margin-top:1px}
+
+    .footer{margin-top:28px;padding-top:14px;border-top:0.5px solid var(--border);font-size:11px;color:var(--text3);display:flex;gap:24px;flex-wrap:wrap}
+    .footer a{color:var(--text3);text-decoration:none}
+    .footer a:hover{color:var(--text2);text-decoration:underline}
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>EDI@Energy API Security – Sicherheitsarchitektur / Security Architecture</h1>
+  <p>HTTP Message Signatures · JWS · JWE · OAuth 2.0 — Mehrschichtige Absicherung aller API-Aufrufe</p>
+  <div class="badge-row">
+    <span class="badge">RFC 9421 – HTTP Message Signatures</span>
+    <span class="badge">RFC 7515 – JWS</span>
+    <span class="badge">RFC 7516 – JWE</span>
+    <span class="badge">RFC 9530 – Digest Fields</span>
+    <span class="badge">OAuth 2.0 / JWT</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <nav class="tabs">
+    <button class="tab active" onclick="showTab('overview')">Übersicht / Overview</button>
+    <button class="tab" onclick="showTab('layers')">Schichten / Layers</button>
+    <button class="tab" onclick="showTab('get')">GET Beispiel</button>
+    <button class="tab" onclick="showTab('post-jws')">POST + JWS</button>
+    <button class="tab" onclick="showTab('post-jwe')">POST + JWE</button>
+    <button class="tab" onclick="showTab('headers')">Header-Referenz</button>
+    <button class="tab" onclick="showTab('errors')">Fehlercodes</button>
+  </nav>
+
+  <!-- ── OVERVIEW ─────────────────────────────────────────────── -->
+  <div id="tab-overview" class="tab-panel active">
+    <div class="section">
+      <div class="section-title">Sicherheitsarchitektur / Security Architecture</div>
+      <div class="flow-wrap">
+      <svg viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+        <style>
+          .t{font-family:system-ui,sans-serif;dominant-baseline:central}
+          .tb{font-weight:500}
+          .ts{font-size:10px}
+          .tm{font-size:12px}
+          .tl{font-size:13px}
+          .ll{stroke-width:1.5;fill:none}
+          .ld{stroke-width:1;fill:none;stroke-dasharray:4 3}
+          .lgg{stroke:#888780}
+          @media(prefers-color-scheme:dark){
+            .lgg{stroke:#888780}
+          }
+        </style>
+      </defs>
+
+      <!-- outer HTTP request box -->
+      <rect x="10" y="10" width="780" height="495" rx="12" fill="none" stroke="#d3d1c7" stroke-width="1" stroke-dasharray="6 3"/>
+      <text class="t ts" x="22" y="26" fill="#888780">HTTP/2 Request</text>
+
+      <!-- LAYER 4 band: Header signature -->
+      <rect x="20" y="34" width="760" height="145" rx="8" fill="#fbeaf0" opacity=".5"/>
+      <text class="t ts tb" x="32" y="50" fill="#72243e">Layer 4 – HTTP Message Signature (RFC 9421)</text>
+
+      <!-- header fields -->
+      <rect x="32" y="58" width="740" height="110" rx="6" fill="#fbeaf0" stroke="#d4537e" stroke-width="0.5"/>
+      <text class="t tm tb" x="44" y="76" fill="#72243e">HTTP Headers</text>
+      <text class="t ts" x="44" y="95"  fill="#993556">Authorization: Bearer &lt;JWT&gt;</text>
+      <text class="t ts" x="44" y="111" fill="#993556">Content-Type: application/jose</text>
+      <text class="t ts" x="44" y="127" fill="#993556">Content-Digest: sha-256=:uU0p7h6qv6...:</text>
+      <text class="t ts" x="44" y="143" fill="#993556">Signature-Input: sig1=("@method" "@authority" ...)</text>
+      <text class="t ts" x="44" y="159" fill="#993556">Signature: sig1=:m1dP0w7qZ8Qm...:</text>
+      <!-- bracket indicating what signature covers -->
+      <line x1="752" y1="127" x2="762" y2="127" stroke="#d4537e" stroke-width="1"/>
+      <line x1="762" y1="95"  x2="762" y2="159" stroke="#d4537e" stroke-width="1"/>
+      <line x1="752" y1="95"  x2="762" y2="95"  stroke="#d4537e" stroke-width="1"/>
+      <line x1="752" y1="159" x2="762" y2="159" stroke="#d4537e" stroke-width="1"/>
+      <text class="t ts" x="766" y="127" fill="#993556">signed</text>
+
+      <!-- LAYER 3 band: JWE -->
+      <rect x="20" y="188" width="760" height="175" rx="8" fill="#faeeda" opacity=".5"/>
+      <text class="t ts tb" x="32" y="204" fill="#633806">Layer 3 – JWE Encryption (RFC 7516)</text>
+
+      <rect x="32" y="212" width="740" height="142" rx="6" fill="#faeeda" stroke="#ba7517" stroke-width="0.5"/>
+      <text class="t tm tb" x="44" y="230" fill="#633806">Body: JWE Compact Serialization</text>
+      <text class="t ts" x="44" y="250" fill="#854f0b">eyJhbGciOiJSU0EtT0FFUC0yNTYiLCJlbmMiOiJBMjU2R0NNIn0  ←  JWE Header</text>
+      <text class="t ts" x="44" y="266" fill="#854f0b">.m3kZ2...Q                                               ←  Encrypted Key</text>
+      <text class="t ts" x="44" y="282" fill="#854f0b">.48V1_ALb6US04U3b                                        ←  IV</text>
+      <text class="t ts" x="44" y="298" fill="#854f0b">.u9f0c...uWQ                                             ←  Ciphertext (contains JWS)</text>
+      <text class="t ts" x="44" y="314" fill="#854f0b">.o2mP...8w                                              ←  Auth Tag</text>
+
+      <!-- LAYER 2 band: JWS inside JWE -->
+      <rect x="44" y="322" width="716" height="52" rx="5" fill="#eaf3de" stroke="#639922" stroke-width="0.5"/>
+      <text class="t ts tb" x="56" y="337" fill="#27500a">Layer 2 – JWS Signature (RFC 7515)  ←  inside encrypted ciphertext</text>
+      <text class="t ts" x="56" y="353" fill="#3b6d11">eyJhbGciOiJFUzI1NiJ9.eyJzdXBwbHlTdGFydERhdGUiOiIyMDI1LTA0LTAxIn0.MEUCIQDxx...</text>
+
+      <!-- LAYER 1: Bearer -->
+      <rect x="20" y="372" width="760" height="48" rx="8" fill="#e6f1fb" opacity=".6"/>
+      <text class="t ts tb" x="32" y="388" fill="#0c447c">Layer 1 – OAuth 2.0 Bearer Token (JWT)</text>
+      <text class="t ts"    x="32" y="404" fill="#185fa5">Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtYXJrZXRwYXJ0bmVyLTEyMyIsInJvbGVzIjpbIkxGIl19.sig</text>
+
+      <!-- processing order arrows on right -->
+      <text class="t ts tb" x="400" y="448" text-anchor="middle" fill="#888780">Verarbeitungsreihenfolge Server / Server processing order</text>
+      <line x1="120" y1="458" x2="120" y2="490" stroke="#185fa5" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+      <text class="t ts" x="130" y="468" fill="#185fa5">1. Auth</text>
+      <line x1="270" y1="458" x2="270" y2="490" stroke="#993556" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+      <text class="t ts" x="280" y="468" fill="#993556">2. HTTP Sig</text>
+      <line x1="430" y1="458" x2="430" y2="490" stroke="#854f0b" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+      <text class="t ts" x="440" y="468" fill="#854f0b">3. JWE decrypt</text>
+      <line x1="610" y1="458" x2="610" y2="490" stroke="#3b6d11" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+      <text class="t ts" x="620" y="468" fill="#3b6d11">4. JWS verify</text>
+      </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── LAYERS ────────────────────────────────────────────────── -->
+  <div id="tab-layers" class="tab-panel">
+    <div class="layer-grid">
+
+      <div class="layer-card l1 open">
+        <div class="layer-head" onclick="toggleLayer(this)">
+          <div class="layer-num">1</div>
+          <div>
+            <div class="layer-title">OAuth 2.0 Bearer Token (JWT) <span class="rfc rfc-blue">RFC 7519</span></div>
+            <div class="layer-sub">Authentifizierung / Authentication — jede Anfrage</div>
+          </div>
+          <div class="layer-chevron">▶</div>
+        </div>
+        <div class="layer-body">
+          <p><strong>DE:</strong> Jede Anfrage muss ein gültiges OAuth 2.0 Bearer-Token im <code>Authorization</code>-Header tragen. Das Token ist ein JWT, das vom EDI@Energy-Autorisierungsserver ausgestellt wird und die Marktpartner-ID sowie Marktrollen enthält.</p>
+          <p><strong>EN:</strong> Every request must carry a valid OAuth 2.0 Bearer token in the <code>Authorization</code> header. The token is a JWT issued by the EDI@Energy authorization server, containing the market partner ID and market roles.</p>
+          <pre>Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.
+  eyJpc3MiOiJhdXRoLmVkaWVuZXJneS5kZSIsInN1YiI6Im1hcmtldHBhcnRuZXItMTIzIiwKICAiYXVkIjoiYXBpLm1ha29odWIuY29tIiwKICAicm9sZXMiOlsiTEYiXSwKICAiZXhwIjoxNzA2Nzg2MTMwCn0.
+  signature</pre>
+        </div>
+      </div>
+
+      <div class="layer-card l2">
+        <div class="layer-head" onclick="toggleLayer(this)">
+          <div class="layer-num">2</div>
+          <div>
+            <div class="layer-title">JWS – JSON Web Signature <span class="rfc rfc-green">RFC 7515</span></div>
+            <div class="layer-sub">Payload-Integrität / Payload integrity — POST/PATCH Body</div>
+          </div>
+          <div class="layer-chevron">▶</div>
+        </div>
+        <div class="layer-body">
+          <p><strong>DE:</strong> Der JSON-Payload wird mit ECDSA P-256 (ES256) signiert. Das JWS-Token im Compact Serialization Format besteht aus drei Base64url-Teilen: Header, Payload, Signatur.</p>
+          <p><strong>EN:</strong> The JSON payload is signed with ECDSA P-256 (ES256). The JWS token in Compact Serialization format consists of three Base64url parts: header, payload, signature.</p>
+          <p><strong>Algorithmus / Algorithm:</strong> <code>ES256</code> (ECDSA with P-256 and SHA-256)</p>
+          <pre>JWS Header:  {"alg":"ES256","typ":"JWT","kid":"client:mp-40454580000000-sign-01"}
+JWS Payload: {"iss":"client:mp-40454580000000","aud":"api.makohub.com/malo",
+              "iat":1706782530,"exp":1706782830,
+              "supplyStartDate":"2025-04-01","transactionReason":"ZA1"}
+JWS Token:   eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdXBwbHlTdGFydERhdGUiOiIyMDI1LTA0LTAxIn0.MEUCIQDxx...</pre>
+        </div>
+      </div>
+
+      <div class="layer-card l3">
+        <div class="layer-head" onclick="toggleLayer(this)">
+          <div class="layer-num">3</div>
+          <div>
+            <div class="layer-title">JWE – JSON Web Encryption <span class="rfc rfc-amber">RFC 7516</span></div>
+            <div class="layer-sub">Payload-Vertraulichkeit / Payload confidentiality — optional</div>
+          </div>
+          <div class="layer-chevron">▶</div>
+        </div>
+        <div class="layer-body">
+          <p><strong>DE:</strong> Das JWS-Token wird mit dem öffentlichen Schlüssel des Empfängers verschlüsselt. Algorithmus: RSA-OAEP-256 für den Schlüsselaustausch, A256GCM für die Inhaltsverschlüsselung. Content-Type wird zu <code>application/jose</code>.</p>
+          <p><strong>EN:</strong> The JWS token is encrypted with the recipient's public key. Algorithm: RSA-OAEP-256 for key wrapping, A256GCM for content encryption. Content-Type becomes <code>application/jose</code>.</p>
+          <pre>JWE Header: {"alg":"RSA-OAEP-256","enc":"A256GCM","cty":"JWT","kid":"hub-payload-enc-07"}
+
+JWE Token (5 parts separated by .):
+eyJhbGciOiJSU0EtT0FFUC0yNTYi...  ←  JWE Header
+.m3kZ2...Q                         ←  Encrypted Key (JWS signing key encrypted with server pub key)
+.48V1_ALb6US04U3b                  ←  Initialization Vector
+.u9f0c...uWQ                       ←  Ciphertext (the JWS token, encrypted)
+.o2mP...8w                         ←  Authentication Tag</pre>
+        </div>
+      </div>
+
+      <div class="layer-card l4">
+        <div class="layer-head" onclick="toggleLayer(this)">
+          <div class="layer-num">4</div>
+          <div>
+            <div class="layer-title">HTTP Message Signature <span class="rfc rfc-pink">RFC 9421</span></div>
+            <div class="layer-sub">Nachrichtenintegrität / Message integrity — alle Anfragen</div>
+          </div>
+          <div class="layer-chevron">▶</div>
+        </div>
+        <div class="layer-body">
+          <p><strong>DE:</strong> Die gesamte HTTP-Nachricht wird signiert — Header-Felder plus den SHA-256-Hash des Body (<code>Content-Digest</code>). Schützt vor Replay-Attacken und Header-Manipulation. Zwei neue Header: <code>Signature-Input</code> (deklariert was signiert wird) und <code>Signature</code> (der Signaturwert).</p>
+          <p><strong>EN:</strong> The entire HTTP message is signed — header fields plus the SHA-256 hash of the body (<code>Content-Digest</code>). Protects against replay attacks and header tampering. Two new headers: <code>Signature-Input</code> (declares what is signed) and <code>Signature</code> (the signature value).</p>
+          <pre>Content-Digest: sha-256=:uU0p7h6qv6bqGJgYy3m8n2mY0cKc6lQ5qJv8W2r9bLk=:
+
+Signature-Input: sig1=("@method" "@authority" "@target-uri"
+  "content-type" "accept" "content-digest" "date"
+  "x-request-id" "x-api-spec-ref" "x-api-spec-version");
+  created=1769940930;expires=1769941230;
+  keyid="client-http-sig-01";alg="ecdsa-p256-sha256"
+
+Signature: sig1=:m1dP0w7qZ8QmM8n6f0dVbQ4h2lJd0q3H6mQkq9Vxq8g=:</pre>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── GET EXAMPLE ───────────────────────────────────────────── -->
+  <div id="tab-get" class="tab-panel">
+    <div class="section">
+      <div class="section-title">GET ohne Body / GET without body — Header Signature only</div>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:12px">
+        <strong>DE:</strong> GET-Anfragen haben keinen Body, daher entfällt JWS/JWE. Nur der Bearer-Token und die HTTP-Message-Signatur sind erforderlich. Die Signatur deckt Methode, Pfad, Query-String und die wichtigsten Header ab.<br>
+        <strong>EN:</strong> GET requests have no body, so JWS/JWE are not used. Only the Bearer token and the HTTP Message Signature are required. The signature covers method, path, query string and key headers.
+      </p>
+      <pre>GET /malo/51238696781/registrations HTTP/2
+Host: api.makohub.com
+Accept: application/json
+Date: Sun, 01 Feb 2026 10:15:30 GMT
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+X-Request-Id: 7b5d3e2a-4c1a-4c0b-9e2a-1fd2c9a2b7d1
+X-Api-Spec-Ref: git:EDI-Energy/api-electricity@2026-02-02-consultation
+X-Api-Spec-Version: 1.2
+Signature-Input: sig1=("@method" "@path" "@query" "host" "date"
+  "x-request-id" "x-api-spec-ref" "x-api-spec-version");
+  created=1706782530;expires=1706782830;
+  keyid="client-ed25519-01";alg="ed25519"
+Signature: sig1=:MEQCIG0H4V4F9H0X9Y5k3y9w5q4k3vV8d1qzH7XrFQq4Ai
+  Bv3Z8f5h1Xz0M0H7mXyZq8m0b1Y2n5p8d0cH0A==:</pre>
+
+      <div class="steps" style="margin-top:16px">
+        <div class="section-title">Signatur-Konstruktion / Signature Construction</div>
+        <div class="step"><div class="step-dot" style="background:var(--pink600);color:#fff">1</div><div>Kanonische Darstellung der signierten Komponenten erstellen (RFC 9421 §2.3)<br><span style="color:var(--text3)">Build canonical representation of signed components (RFC 9421 §2.3)</span></div></div>
+        <div class="step"><div class="step-dot" style="background:var(--pink600);color:#fff">2</div><div>Signature Base String verketten: <code>"@method": GET\n"@path": /malo/...\n...</code></div></div>
+        <div class="step"><div class="step-dot" style="background:var(--pink600);color:#fff">3</div><div>Ed25519 oder ECDSA P-256 Signatur über den Base String berechnen</div></div>
+        <div class="step"><div class="step-dot" style="background:var(--pink600);color:#fff">4</div><div>Base64url-kodieren und als <code>sig1=:&lt;value&gt;:</code> in den Signature-Header schreiben</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── POST + JWS ─────────────────────────────────────────────── -->
+  <div id="tab-post-jws" class="tab-panel">
+    <div class="section">
+      <div class="section-title">POST mit JWS-signiertem Body / POST with JWS-signed body</div>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:12px">
+        <strong>DE:</strong> Der JSON-Payload wird als JWS signiert, bleibt aber lesbar (<code>Content-Type: application/json</code>). Zusätzlich wird der Body-Hash im <code>Content-Digest</code>-Header übertragen und die HTTP-Nachricht mit RFC 9421 signiert.<br>
+        <strong>EN:</strong> The JSON payload is signed as JWS but remains readable (<code>Content-Type: application/json</code>). Additionally, the body hash is sent in the <code>Content-Digest</code> header and the HTTP message is signed with RFC 9421.
+      </p>
+
+      <div class="section-title" style="margin-top:0">Schritt 1 – JWS erstellen / Step 1 – Create JWS</div>
+      <pre>// JWS Header
+{
+  "alg": "ES256",
+  "typ": "JWT",
+  "kid": "client:mabishub-40454580000000-sign-01"
+}
+
+// JWS Payload
+{
+  "iss": "client:mabishub-40454580000000",
+  "aud": "api.makohub.com/malo",
+  "iat": 1706782530,
+  "exp": 1706782830,
+  "supplyStartDate": "2025-04-01",
+  "transactionReason": "ZA1",
+  "isHouseholdCustomer": true,
+  "marketLocationIdentification": {
+    "identificationMode": "maloIdOnly",
+    "maLoId": "51238696781"
+  },
+  "balancing": { "balancingGroupId": "11XVSEW------5S" }
+}
+
+// Result: JWS Compact Token
+eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImNsaWVudC1zaWduLTAxIn0.
+eyJzdXBwbHlTdGFydERhdGUiOiIyMDI1LTA0LTAxIn0.
+MEUCIQDxx...signature</pre>
+
+      <div class="section-title">Schritt 2 – HTTP-Anfrage / Step 2 – HTTP Request</div>
+      <pre>POST /malo/51238696781/registrations HTTP/2
+Host: api.makohub.com
+Content-Type: application/json
+Accept: application/json
+Date: Sun, 01 Feb 2026 10:15:30 GMT
+Authorization: Bearer eyJhbGciOiJSUzI1NiJ9...
+X-Request-Id: 7b5d3e2a-4c1a-4c0b-9e2a-1fd2c9a2b7d1
+X-Api-Spec-Ref: git:EDI-Energy/api-electricity@2026-02-02-consultation
+X-Api-Spec-Version: 1.2
+Content-Digest: sha-256=:X48E9qOokqqrvdts8nOJRJN3OWDUoyWxBf7kbu9DBPE=:
+Signature-Input: sig1=("@method" "@authority" "@target-uri" "content-type"
+  "accept" "content-digest" "date" "x-request-id" "x-api-spec-ref"
+  "x-api-spec-version");created=1706782530;expires=1706782830;
+  keyid="client-http-sig-01";alg="ecdsa-p256-sha256"
+Signature: sig1=:m1dP0w7qZ8QmM8n6f0dVbQ4h2lJd0q3H6mQkq9Vxq8g=:
+
+eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImNsaWVudC1zaWduLTAxIn0.
+eyJzdXBwbHlTdGFydERhdGUiOiIyMDI1LTA0LTAxIn0.
+MEUCIQDxx...signature</pre>
+
+      <p style="font-size:11px;color:var(--text3);margin-top:8px">
+        Hinweis: Der Content-Digest-Hash deckt das JWS-Token als String ab, nicht den ursprünglichen JSON-Payload.<br>
+        Note: The Content-Digest hash covers the JWS token string, not the original JSON payload.
+      </p>
+    </div>
+  </div>
+
+  <!-- ── POST + JWE ─────────────────────────────────────────────── -->
+  <div id="tab-post-jwe" class="tab-panel">
+    <div class="section">
+      <div class="section-title">POST mit JWE-verschlüsseltem Body / POST with JWE-encrypted body</div>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:12px">
+        <strong>DE:</strong> Höchste Sicherheitsstufe. Der Payload wird zuerst als JWS signiert, dann als JWE verschlüsselt. Content-Type: <code>application/jose</code>. Der Content-Digest-Hash bezieht sich auf den verschlüsselten JWE-Token.<br>
+        <strong>EN:</strong> Highest security level. The payload is first signed as JWS, then encrypted as JWE. Content-Type: <code>application/jose</code>. The Content-Digest hash covers the encrypted JWE token.
+      </p>
+
+      <div class="section-title" style="margin-top:0">Schritt 1 – JWS (wie oben) / Step 1 – JWS (as above)</div>
+      <pre>JWS Token: eyJhbGciOiJFUzI1NiJ9.eyJzdXBwbHlTdGFydERhdGUiOiIyMDI1LTA0LTAxIn0.MEUCIQDxx...</pre>
+
+      <div class="section-title">Schritt 2 – JWE verschlüsseln / Step 2 – JWE encrypt</div>
+      <pre>// JWE Header
+{
+  "alg": "RSA-OAEP-256",
+  "enc": "A256GCM",
+  "cty": "JWT",
+  "kid": "hub-payload-enc-07"
+}
+
+// Input: JWS Token from step 1 → encrypt with server RSA public key
+// Output: JWE Compact Token (5 parts)
+eyJhbGciOiJSU0EtT0FFUC0yNTYiLCJlbmMiOiJBMjU2R0NNIiwiY3R5IjoiSldUIiwia2lkIjoiaHViLXBheWxvYWQtZW5jLTA3In0
+.m3kZ2...Q
+.48V1_ALb6US04U3b
+.u9f0c...uWQ
+.o2mP...8w</pre>
+
+      <div class="section-title">Schritt 3 – HTTP-Anfrage / Step 3 – HTTP Request</div>
+      <pre>POST /malo/51238696781/registrations HTTP/2
+Host: api.makohub.com
+Content-Type: application/jose
+Accept: application/json
+Date: Sun, 01 Feb 2026 10:15:30 GMT
+Authorization: Bearer eyJhbGciOiJSUzI1NiJ9...
+X-Request-Id: 7b5d3e2a-4c1a-4c0b-9e2a-1fd2c9a2b7d1
+X-Api-Spec-Ref: git:EDI-Energy/api-electricity@2026-02-02-consultation
+X-Api-Spec-Version: 1.2
+Content-Digest: sha-256=:uU0p7h6qv6bqGJgYy3m8n2mY0cKc6lQ5qJv8W2r9bLk=:
+Signature-Input: sig1=("@method" "@authority" "@target-uri" "content-type"
+  "accept" "content-digest" "date" "x-request-id" "x-api-spec-ref"
+  "x-api-spec-version");created=1769940930;expires=1769941230;
+  keyid="client-http-sig-01";alg="ecdsa-p256-sha256"
+Signature: sig1=:m1dP0w7qZ8QmM8n6f0dVbQ4h2lJd0q3H6mQkq9Vxq8g=:
+
+eyJhbGciOiJSU0EtT0FFUC0yNTYiLCJlbmMiOiJBMjU2R0NNIiwiY3R5IjoiSldUIiwia2lkIjoiaHViLXBheWxvYWQtZW5jLTA3In0.m3kZ2...Q.48V1_ALb6US04U3b.u9f0c...uWQ.o2mP...8w</pre>
+    </div>
+  </div>
+
+  <!-- ── HEADER REFERENCE ──────────────────────────────────────── -->
+  <div id="tab-headers" class="tab-panel">
+    <div class="section">
+      <div class="section-title">Neue Sicherheits-Header / New Security Headers</div>
+      <table>
+        <tr>
+          <th>Header</th><th>RFC</th><th>Pflicht / Required</th><th>Beschreibung / Description</th>
+        </tr>
+        <tr>
+          <td><code>Content-Digest</code></td>
+          <td><span class="rfc rfc-pink">RFC 9530</span></td>
+          <td>Ja bei Body / Yes with body</td>
+          <td>SHA-256 Hash des Request-Body. Format: <code>sha-256=:&lt;base64&gt;:</code><br>
+          <span style="color:var(--text3)">SHA-256 hash of the request body.</span></td>
+        </tr>
+        <tr>
+          <td><code>Signature-Input</code></td>
+          <td><span class="rfc rfc-pink">RFC 9421</span></td>
+          <td>Ja / Yes</td>
+          <td>Deklariert welche Komponenten signiert werden und Signatur-Metadaten (created, expires, keyid, alg)<br>
+          <span style="color:var(--text3)">Declares which components are signed plus metadata.</span></td>
+        </tr>
+        <tr>
+          <td><code>Signature</code></td>
+          <td><span class="rfc rfc-pink">RFC 9421</span></td>
+          <td>Ja / Yes</td>
+          <td>Der base64url-kodierte Signaturwert. Format: <code>sig1=:&lt;value&gt;:</code><br>
+          <span style="color:var(--text3)">The base64url-encoded signature value.</span></td>
+        </tr>
+      </table>
+
+      <div class="section-title" style="margin-top:20px">Bestehende Header (unverändert) / Existing headers (unchanged)</div>
+      <table>
+        <tr><th>Header</th><th>Funktion / Function</th></tr>
+        <tr><td><code>Authorization</code></td><td>Bearer JWT (OAuth 2.0)</td></tr>
+        <tr><td><code>X-Request-Id</code></td><td>Eindeutige Anfrage-ID / Unique request ID (UUID v4)</td></tr>
+        <tr><td><code>X-Message-ID</code></td><td>Prozess-Korrelations-ID / Process correlation ID</td></tr>
+        <tr><td><code>X-Api-Spec-Ref</code></td><td>Git-Referenz der API-Spezifikation / API spec git reference</td></tr>
+        <tr><td><code>X-Api-Spec-Version</code></td><td>Versionsnummer der API-Spezifikation / API spec version</td></tr>
+        <tr><td><code>Idempotency-Key</code></td><td>Idempotenz-Schlüssel für sichere Wiederholungen / Idempotency key (RFC 8694)</td></tr>
+      </table>
+
+      <div class="section-title" style="margin-top:20px">Schlüsselidentifikatoren / Key Identifiers</div>
+      <table>
+        <tr><th>Zweck / Purpose</th><th>kid Format</th><th>Algorithmus / Algorithm</th></tr>
+        <tr><td>JWS Payload-Signatur / JWS payload signing</td><td><code>client:&lt;mp-id&gt;-sign-&lt;ver&gt;</code></td><td>ES256 (ECDSA P-256)</td></tr>
+        <tr><td>HTTP Message Signature</td><td><code>client-http-sig-&lt;ver&gt;</code></td><td>ecdsa-p256-sha256 / ed25519</td></tr>
+        <tr><td>JWE Body-Verschlüsselung / JWE encryption</td><td><code>hub-payload-enc-&lt;ver&gt;</code></td><td>RSA-OAEP-256 + A256GCM</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── ERRORS ────────────────────────────────────────────────── -->
+  <div id="tab-errors" class="tab-panel">
+    <div class="section">
+      <div class="section-title">Fehlercodes / Error Codes</div>
+      <table>
+        <tr><th>HTTP</th><th>Code</th><th>Beschreibung (DE)</th><th>Description (EN)</th></tr>
+        <tr><td><code>401</code></td><td><code>SIGNATURE_MISSING</code></td><td>Signature-Header fehlt</td><td>Signature header missing</td></tr>
+        <tr><td><code>401</code></td><td><code>SIGNATURE_INVALID</code></td><td>Signatur ungültig oder abgelaufen</td><td>Invalid or expired signature</td></tr>
+        <tr><td><code>401</code></td><td><code>TOKEN_EXPIRED</code></td><td>Bearer Token abgelaufen</td><td>Bearer token expired</td></tr>
+        <tr><td><code>401</code></td><td><code>TOKEN_INVALID</code></td><td>Bearer Token ungültig</td><td>Bearer token invalid</td></tr>
+        <tr><td><code>400</code></td><td><code>DIGEST_MISMATCH</code></td><td>Content-Digest stimmt nicht überein</td><td>Content-Digest does not match body</td></tr>
+        <tr><td><code>400</code></td><td><code>JWE_DECRYPTION_FAILED</code></td><td>JWE konnte nicht entschlüsselt werden</td><td>JWE decryption failed</td></tr>
+        <tr><td><code>400</code></td><td><code>JWS_VERIFICATION_FAILED</code></td><td>JWS-Signatur ungültig</td><td>JWS signature verification failed</td></tr>
+        <tr><td><code>400</code></td><td><code>CLAIMS_INVALID</code></td><td>JWT Claims ungültig (aud, exp)</td><td>Invalid JWT claims (aud, exp)</td></tr>
+        <tr><td><code>400</code></td><td><code>SIGNATURE_INPUT_INVALID</code></td><td>Signature-Input Header fehlerhaft</td><td>Malformed Signature-Input header</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>RFC 9421 – HTTP Message Signatures</span>
+    <span>RFC 7515/7516 – JWS/JWE</span>
+    <span>RFC 9530 – Digest Fields</span>
+    <a href="https://www.edi-energy.de" target="_blank" rel="noopener">edi-energy.de ↗</a>
+  </div>
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function toggleLayer(head) {
+  head.closest('.layer-card').classList.toggle('open');
+}
+</script>
+</body>
+</html>

@@ -11,7 +11,8 @@ info:
     - `general` – Tracing, idempotency, message correlation, dry-run
     - `stateMachine` – ETag/If-Match for long-running transaction control
     - `versionControl` – Server, client, API spec versioning
-    
+    - `security` – HTTP Message Signatures (RFC 9421), Content-Digest (RFC 9530)
+
     **German:** Wiederverwendbare OpenAPI 3.0 Header-Definitionen für
     EDI@Energy HTTP APIs. Alle Header sind als Einzel-YAML-Dateien modelliert
     und können per `$ref` in beliebige EDI@Energy API-Spezifikationen
@@ -49,6 +50,16 @@ components:
     # State-Machine – Request
     ifMatch:
       $ref: "./headers/ifMatch.yaml"
+
+    # Security – Request (RFC 9421 HTTP Message Signatures + RFC 9530 Content-Digest)
+    contentDigest:
+      $ref: "./headers/contentDigest.yaml"
+
+    signatureInput:
+      $ref: "./headers/signatureInput.yaml"
+
+    signature:
+      $ref: "./headers/signature.yaml"
 
   # ── Headers (Response headers) ────────────────────────────────────────────
   # Note: In OpenAPI 3.0, response headers are defined under

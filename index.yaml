@@ -12,6 +12,12 @@ info:
     **Included APIs:**
     - `api/malo.yaml` – GPKE Lieferbeginn (supply start / supplier change)
 
+    **Security:**
+    All endpoints require HTTP Message Signatures (RFC 9421) and JWS/JWE payload security.
+    See `docs/security/` for full documentation.
+    Alle Endpunkte erfordern HTTP-Message-Signaturen (RFC 9421) und JWS/JWE-Payload-Sicherheit.
+    Vollständige Dokumentation unter `docs/security/`.
+
     **Shared libraries:**
     - `schema/openapi.yaml` – BDEW UTILMD schema library (all domain schemas)
     - `header/openapi.yaml` – EDI@Energy reusable HTTP header definitions
@@ -69,6 +75,11 @@ tags:
     description: UTILMD messages / UTILMD-Nachrichten
   - name: balancing
     description: Balancing areas and zones / Bilanzierungsgebiete und -kreise
+  - name: security
+    description: >
+      API security — HTTP Message Signatures (RFC 9421), JWS (RFC 7515), JWE (RFC 7516).
+      See docs/security/ for full documentation. /
+      API-Sicherheit — HTTP-Message-Signaturen, JWS, JWE. Siehe docs/security/.
 
 # ── Paths – delegated to individual API files ──────────────────────────────────
 #
@@ -79,25 +90,25 @@ paths:
 
   # GPKE Lieferbeginn ──────────────────────────────────────────────────────────
   /market-locations/{marketLocationId}/registrations:
-    $ref: "./api/malo.yaml#/paths/~1malo~1{marketLocationId}~1registrations"
+    $ref: "./api/malo.yaml#/paths/~1market-locations~1{marketLocationId}~1registrations"
 
   /market-locations/{marketLocationId}/registrations/{supplyStartId}:
-    $ref: "./api/malo.yaml#/paths/~1malo~1{marketLocationId}~1registrations~1{supplyStartId}"
+    $ref: "./api/malo.yaml#/paths/~1market-locations~1{marketLocationId}~1registrations~1{supplyStartId}"
 
   /market-locations/{marketLocationId}/registrations/{supplyStartId}/response:
-    $ref: "./api/malo.yaml#/paths/~1malo~1{marketLocationId}~1registrations~1{supplyStartId}~1response"
+    $ref: "./api/malo.yaml#/paths/~1market-locations~1{marketLocationId}~1registrations~1{supplyStartId}~1response"
 
   /market-locations/{marketLocationId}/deregistration-requests:
-    $ref: "./api/malo.yaml#/paths/~1malo~1{marketLocationId}~1deregistration-requests"
+    $ref: "./api/malo.yaml#/paths/~1market-locations~1{marketLocationId}~1deregistration-requests"
 
   /market-locations/{marketLocationId}/deregistration-requests/{deregistrationRequestId}/response:
-    $ref: "./api/malo.yaml#/paths/~1malo~1{marketLocationId}~1deregistration-requests~1{deregistrationRequestId}~1response"
+    $ref: "./api/malo.yaml#/paths/~1market-locations~1{marketLocationId}~1deregistration-requests~1{deregistrationRequestId}~1response"
 
   /market-locations/{marketLocationId}/assignment-terminations:
-    $ref: "./api/malo.yaml#/paths/~1malo~1{marketLocationId}~1assignment-terminations"
+    $ref: "./api/malo.yaml#/paths/~1market-locations~1{marketLocationId}~1assignment-terminations"
 
   /market-locations/{marketLocationId}/assignment-cancellations:
-    $ref: "./api/malo.yaml#/paths/~1malo~1{marketLocationId}~1assignment-cancellations"
+    $ref: "./api/malo.yaml#/paths/~1market-locations~1{marketLocationId}~1assignment-cancellations"
 
 # ── Components – aggregated from schema library ───────────────────────────────
 components:
@@ -288,12 +299,36 @@ components:
     deregistrationRequestId:
       $ref: "./api/malo.yaml#/components/parameters/deregistrationRequestId"
 
+  # ── Security headers ────────────────────────────────────────────────────────────
+  parameters:
+    marketLocationId:
+      $ref: "./api/malo.yaml#/components/parameters/marketLocationId"
+    supplyStartId:
+      $ref: "./api/malo.yaml#/components/parameters/supplyStartId"
+    deregistrationRequestId:
+      $ref: "./api/malo.yaml#/components/parameters/deregistrationRequestId"
+    contentDigest:
+      $ref: "./header/headers/contentDigest.yaml"
+    signatureInput:
+      $ref: "./header/headers/signatureInput.yaml"
+    signature:
+      $ref: "./header/headers/signature.yaml"
+
   # ── Security ─────────────────────────────────────────────────────────────────
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
+    httpMessageSignature:
+      type: apiKey
+      in: header
+      name: Signature
+      description: >
+        HTTP Message Signature per RFC 9421.
+        Must be accompanied by Signature-Input header.
+        POST/PATCH also require Content-Digest (RFC 9530).
 
 security:
   - bearerAuth: []
+    httpMessageSignature: []

@@ -472,7 +472,7 @@
       <div class="dp-grid">
         <div class="dp-row"><span class="dk">Methode</span><code>POST</code></div>
         <div class="dp-row"><span class="dk">Prüf-ID</span><code>55001</code> verbrauchende MaLo &nbsp;·&nbsp; <code>55077</code> erzeugende MaLo</div>
-        <div class="dp-row"><span class="dk">Pfad</span><code>/malo/{marketLocationId}/registrations</code></div>
+        <div class="dp-row"><span class="dk">Pfad</span><code>/market-locations/{marketLocationId}/registrations</code></div>
         <div class="dp-row"><span class="dk">Antwort</span><code>201 Created</code> + <code>Location</code>-Header</div>
         <div class="dp-row"><span class="dk">Fall 1 – maloIdOnly</span>Identifikation per MaLo-ID · Vorlauf ≥ 7 Werktage</div>
         <div class="dp-row"><span class="dk">Fall 2 – multiAttribute</span>Identifikation per Adresse / Attribute · Vorlauf ≥ 10 Werktage</div>
@@ -490,7 +490,7 @@
       </div>
       <div class="dp-grid">
         <div class="dp-row"><span class="dk">Methode</span><code>PATCH</code></div>
-        <div class="dp-row"><span class="dk">Pfad</span><code>/malo/{id}/registrations/{supplyStartId}</code></div>
+        <div class="dp-row"><span class="dk">Pfad</span><code>/market-locations/{id}/registrations/{supplyStartId}</code></div>
         <div class="dp-row"><span class="dk">Bedingung</span>Nur möglich solange Status = <code>draft</code></div>
         <div class="dp-row"><span class="dk">Antwort</span><code>200 OK</code> · Schema: <code>SupplyStart</code></div>
         <div class="dp-row"><span class="dk">Fehler</span><code>409 Conflict</code> wenn Status ≠ <code>draft</code></div>
@@ -505,8 +505,8 @@
         <button class="close-x" onclick="hide('s2')">✕ schließen</button>
       </div>
       <div class="dp-grid">
-        <div class="dp-row"><span class="dk">getRegistration</span><code>GET /malo/{id}/registrations/{supplyStartId}</code></div>
-        <div class="dp-row"><span class="dk">listRegistrations</span><code>GET /malo/{id}/registrations</code></div>
+        <div class="dp-row"><span class="dk">getRegistration</span><code>GET /market-locations/{id}/registrations/{supplyStartId}</code></div>
+        <div class="dp-row"><span class="dk">listRegistrations</span><code>GET /market-locations/{id}/registrations</code></div>
         <div class="dp-row"><span class="dk">Antwort</span><code>200 OK</code> · Schema: <code>SupplyStart</code> / <code>SupplyStartList</code></div>
         <div class="dp-row"><span class="dk">Filter (Liste)</span><code>status</code> · <code>fromDate</code> · <code>toDate</code> · <code>limit</code> · <code>offset</code></div>
         <div class="dp-row"><span class="dk">Zweck</span>NB liefert Informationen zur bestehenden Lieferantenzuordnung zurück</div>
@@ -522,7 +522,7 @@
       <div class="dp-grid">
         <div class="dp-row"><span class="dk">Methode</span><code>POST</code></div>
         <div class="dp-row"><span class="dk">Prüf-ID</span><code>55010</code></div>
-        <div class="dp-row"><span class="dk">Pfad</span><code>/malo/{id}/deregistration-requests</code></div>
+        <div class="dp-row"><span class="dk">Pfad</span><code>/market-locations/{id}/deregistration-requests</code></div>
         <div class="dp-row"><span class="dk">Antwort</span><code>201 Created</code> + <code>Location</code>-Header</div>
         <div class="dp-row"><span class="dk">Frist Fall 1</span>bis Ende des 1. Werktags nach Eingang der Anmeldung</div>
         <div class="dp-row"><span class="dk">Frist Fall 2</span>bis Ende des 4. Werktags nach Eingang der Anmeldung</div>
@@ -539,7 +539,7 @@
       <div class="dp-grid">
         <div class="dp-row"><span class="dk">Methode</span><code>POST</code></div>
         <div class="dp-row"><span class="dk">Prüf-ID</span><code>55011</code></div>
-        <div class="dp-row"><span class="dk">Pfad</span><code>/malo/{id}/deregistration-requests/{drId}/response</code></div>
+        <div class="dp-row"><span class="dk">Pfad</span><code>/market-locations/{id}/deregistration-requests/{drId}/response</code></div>
         <div class="dp-row"><span class="dk">Antwort</span><code>200 OK</code> · Schema: <code>DeregistrationRequest</code></div>
         <div class="dp-row"><span class="dk">Fall a</span>Abmeldedatum = Tag vor gewünschtem Lieferbeginn-Datum · <code>deregistrationCase: caseA</code></div>
         <div class="dp-row"><span class="dk">Fall b</span>Abmeldedatum = früheres Datum · <code>deregistrationCase: caseB</code></div>
@@ -556,7 +556,7 @@
       <div class="dp-grid">
         <div class="dp-row"><span class="dk">Methode</span><code>POST</code></div>
         <div class="dp-row"><span class="dk">Prüf-ID</span><code>55012</code></div>
-        <div class="dp-row"><span class="dk">Pfad</span><code>/malo/{id}/deregistration-requests/{drId}/response</code></div>
+        <div class="dp-row"><span class="dk">Pfad</span><code>/market-locations/{id}/deregistration-requests/{drId}/response</code></div>
         <div class="dp-row"><span class="dk">Antwort</span><code>200 OK</code></div>
         <div class="dp-row"><span class="dk">Statuscode</span><code>E03</code> (Widerspruch)</div>
         <div class="dp-row"><span class="dk">Datum</span><code>deregistrationDate</code> = <code>null</code> (kein Abmeldetermin)</div>
@@ -573,7 +573,7 @@
       <div class="dp-grid">
         <div class="dp-row"><span class="dk">Methode</span><code>POST</code></div>
         <div class="dp-row"><span class="dk">Prüf-ID</span><code>55002</code> verbrauchende MaLo &nbsp;·&nbsp; <code>55078</code> erzeugende MaLo</div>
-        <div class="dp-row"><span class="dk">Pfad</span><code>/malo/{id}/registrations/{supplyStartId}/response</code></div>
+        <div class="dp-row"><span class="dk">Pfad</span><code>/market-locations/{id}/registrations/{supplyStartId}/response</code></div>
         <div class="dp-row"><span class="dk">Antwort</span><code>200 OK</code> · Schema: <code>RegistrationResponseRequest</code></div>
         <div class="dp-row"><span class="dk">Frist Fall 1</span>bis Ende des 5. Werktags nach Eingang der Anmeldung</div>
         <div class="dp-row"><span class="dk">Frist Fall 2</span>bis Ende des 8. Werktags nach Eingang der Anmeldung</div>
@@ -590,7 +590,7 @@
       <div class="dp-grid">
         <div class="dp-row"><span class="dk">Methode</span><code>POST</code></div>
         <div class="dp-row"><span class="dk">Prüf-ID</span><code>55003</code> verbrauchende MaLo &nbsp;·&nbsp; <code>55080</code> erzeugende MaLo</div>
-        <div class="dp-row"><span class="dk">Pfad</span><code>/malo/{id}/registrations/{supplyStartId}/response</code></div>
+        <div class="dp-row"><span class="dk">Pfad</span><code>/market-locations/{id}/registrations/{supplyStartId}/response</code></div>
         <div class="dp-row"><span class="dk">Antwort</span><code>200 OK</code></div>
         <div class="dp-row"><span class="dk">Statuscode</span><code>E03</code> (Ablehnung)</div>
         <div class="dp-row"><span class="dk">Begründung</span><code>rejectionReasons[].code</code> mit EBD-Prüfschrittreferenz z.B. <code>E_0610</code></div>
@@ -605,7 +605,7 @@
       <div class="dp-grid">
         <div class="dp-row"><span class="dk">Methode</span><code>POST</code></div>
         <div class="dp-row"><span class="dk">Prüf-ID</span><code>55037</code></div>
-        <div class="dp-row"><span class="dk">Pfad</span><code>/malo/{id}/assignment-terminations</code></div>
+        <div class="dp-row"><span class="dk">Pfad</span><code>/market-locations/{id}/assignment-terminations</code></div>
         <div class="dp-row"><span class="dk">Antwort</span><code>201 Created</code></div>
         <div class="dp-row"><span class="dk">Frist</span>am selben Kalendertag wie Schritt 5</div>
         <div class="dp-row"><span class="dk">Request-Schema</span><code>AssignmentTerminationCreate</code></div>
@@ -621,7 +621,7 @@
       <div class="dp-grid">
         <div class="dp-row"><span class="dk">Methode</span><code>POST</code></div>
         <div class="dp-row"><span class="dk">Prüf-ID</span><code>55038</code></div>
-        <div class="dp-row"><span class="dk">Pfad</span><code>/malo/{id}/assignment-cancellations</code></div>
+        <div class="dp-row"><span class="dk">Pfad</span><code>/market-locations/{id}/assignment-cancellations</code></div>
         <div class="dp-row"><span class="dk">Antwort</span><code>201 Created</code></div>
         <div class="dp-row"><span class="dk">Bedingung</span>Nur wenn LFZ (Lieferant mit zukünftiger Zuordnung) vorhanden</div>
         <div class="dp-row"><span class="dk">Frist</span>am selben Kalendertag wie Schritt 5</div>

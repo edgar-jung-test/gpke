@@ -37,15 +37,15 @@ LFAlt (LFA) and future supplier (LFZ).
 
 | # | Methode | Pfad | operationId | Prüf-ID | Schritt |
 |---|---------|------|-------------|---------|---------|
-| 1 | `POST` | `/malo/{marketLocationId}/registrations` | `createRegistration` | 55001 / 55077 | 1 – Anmeldung LFN→NB |
-| 2 | `GET` | `/malo/{marketLocationId}/registrations` | `listRegistrations` | — | Liste |
-| 3 | `GET` | `/malo/{marketLocationId}/registrations/{supplyStartId}` | `getRegistration` | — | 2 – Existierende Zuordnung |
-| 4 | `PATCH` | `/malo/{marketLocationId}/registrations/{supplyStartId}` | `patchRegistration` | — | Korrektur (nur draft) |
-| 5 | `POST` | `/malo/{marketLocationId}/registrations/{supplyStartId}/response` | `respondToRegistration` | 55002 / 55003 / 55078 / 55080 | 5 – Antwort NB→LFN |
-| 6 | `POST` | `/malo/{marketLocationId}/deregistration-requests` | `createDeregistrationRequest` | 55010 | 3 – Abmeldeanfrage NB→LFA |
-| 7 | `POST` | `/malo/{marketLocationId}/deregistration-requests/{deregistrationRequestId}/response` | `respondToDeregistrationRequest` | 55011 / 55012 | 4 – Beantwortung LFA→NB |
-| 8 | `POST` | `/malo/{marketLocationId}/assignment-terminations` | `notifyAssignmentTermination` | 55037 | 6 – Zuordnungsbeendigung NB→LFA |
-| 9 | `POST` | `/malo/{marketLocationId}/assignment-cancellations` | `notifyAssignmentCancellation` | 55038 | 7 – Zuordnungsaufhebung NB→LFZ |
+| 1 | `POST` | `/market-locations/{marketLocationId}/registrations` | `createRegistration` | 55001 / 55077 | 1 – Anmeldung LFN→NB |
+| 2 | `GET` | `/market-locations/{marketLocationId}/registrations` | `listRegistrations` | — | Liste |
+| 3 | `GET` | `/market-locations/{marketLocationId}/registrations/{supplyStartId}` | `getRegistration` | — | 2 – Existierende Zuordnung |
+| 4 | `PATCH` | `/market-locations/{marketLocationId}/registrations/{supplyStartId}` | `patchRegistration` | — | Korrektur (nur draft) |
+| 5 | `POST` | `/market-locations/{marketLocationId}/registrations/{supplyStartId}/response` | `respondToRegistration` | 55002 / 55003 / 55078 / 55080 | 5 – Antwort NB→LFN |
+| 6 | `POST` | `/market-locations/{marketLocationId}/deregistration-requests` | `createDeregistrationRequest` | 55010 | 3 – Abmeldeanfrage NB→LFA |
+| 7 | `POST` | `/market-locations/{marketLocationId}/deregistration-requests/{deregistrationRequestId}/response` | `respondToDeregistrationRequest` | 55011 / 55012 | 4 – Beantwortung LFA→NB |
+| 8 | `POST` | `/market-locations/{marketLocationId}/assignment-terminations` | `notifyAssignmentTermination` | 55037 | 6 – Zuordnungsbeendigung NB→LFA |
+| 9 | `POST` | `/market-locations/{marketLocationId}/assignment-cancellations` | `notifyAssignmentCancellation` | 55038 | 7 – Zuordnungsaufhebung NB→LFZ |
 
 #### Prozessablauf / Process flow
 
@@ -53,7 +53,7 @@ LFAlt (LFA) and future supplier (LFZ).
 LFNeu (LFN)              NB (Netzbetreiber)              LFAlt (LFA)           LFZ
      │                          │                              │                  │
      │──(1) POST registrations─▶│                              │                  │
-     │◀── 201 Created ──────────│                              │                  │
+     │◀── 202 Accepted ─────────│                              │                  │
      │                          │──(3) POST dereg-requests────▶│                  │
      │                          │◀─(4) POST …/response ────────│                  │
      │                          │                              │                  │
@@ -85,22 +85,7 @@ LFNeu (LFN)              NB (Netzbetreiber)              LFAlt (LFA)           L
 
 ## Diagramme / Diagrams
 
-### `docs/gpke/lieferbeginn-sequenz.html` — Interaktives Sequenzdiagramm
-
-HTML-Sequenzdiagramm mit aufklappbaren Details zu jedem API-Endpunkt.
-Zeigt die Kommunikationsrichtung zwischen allen Rollen (LFNeu → NB → LFAlt / LFZ)
-mit HTTP-Methode, operationId und Prüfidentifikator direkt an der Linie.
-Jeder Pfeil ist klickbar — das Detail-Panel zeigt Pfad, Schemas, Pflichtfelder und Fristen.
-
-Interactive HTML sequence diagram with expandable details for each API endpoint.
-Shows the communication direction between all roles with HTTP method, operationId
-and check identifier on the arrow. Each arrow is clickable — the detail panel shows
-path, schemas, required fields and deadlines.
-
-Öffnen mit jedem modernen Browser (Dark Mode automatisch) /
-Open with any modern browser (dark mode automatic).
-
-### `lieferbeginn-api.drawio` — BPMN-Swimlane-Diagramm
+### `lieferbeginn-api.drawio`
 
 DrawIO-Prozessdiagramm aller 9 API-Endpunkte als BPMN-Swimlane-Darstellung.
 Zeigt Kommunikationsrichtungen, HTTP-Methoden, Pfade und Prüfidentifikatoren
@@ -112,6 +97,46 @@ Shows communication directions, HTTP methods, paths and check identifiers for al
 
 Geöffnet mit / Open with: [app.diagrams.net](https://app.diagrams.net) oder VS Code + Draw.io Extension.
 
+
+---
+
+## Sicherheit / Security
+
+Alle API-Endpunkte verwenden ein mehrschichtiges Sicherheitsmodell. Vollständige
+Dokumentation unter `docs/security/`.
+
+All API endpoints use a multi-layer security model. Full documentation in `docs/security/`.
+
+### Sicherheitsschichten / Security layers
+
+| Layer | Mechanismus | RFC | Pflicht |
+|-------|------------|-----|---------|
+| 1 – Authentifizierung | OAuth 2.0 Bearer JWT | RFC 7519 | Ja |
+| 2 – Payload-Integrität | JWS (ES256) | RFC 7515 | Ja (POST/PATCH) |
+| 3 – Payload-Vertraulichkeit | JWE (RSA-OAEP-256 + A256GCM) | RFC 7516 | Optional |
+| 4 – Nachrichtenintegrität | HTTP Message Signature (ECDSA P-256) | RFC 9421 | Ja |
+
+### Neue Pflicht-Header / New required headers
+
+```http
+# Bei POST/PATCH (mit Body / with body):
+Content-Digest: sha-256=:uU0p7h6qv6bqGJgYy3m8n2mY0cKc6lQ5qJv8W2r9bLk=:
+Signature-Input: sig1=("@method" "@authority" "@target-uri" "content-type"
+  "accept" "content-digest" "date" "x-request-id"
+  "x-api-spec-ref" "x-api-spec-version");
+  created=1769940930;expires=1769941230;
+  keyid="client-http-sig-01";alg="ecdsa-p256-sha256"
+Signature: sig1=:m1dP0w7qZ8QmM8n6f0dVbQ4h2lJd0q3H6mQkq9Vxq8g=:
+
+# Bei GET (ohne Body / without body):
+Signature-Input: sig1=("@method" "@path" "@query" "host" "date"
+  "x-request-id" "x-api-spec-ref" "x-api-spec-version");
+  created=1706782530;keyid="client-ed25519-01";alg="ed25519"
+Signature: sig1=:MEQCIG0H4V4...==:
+```
+
+Weitere Details: [`docs/security/README.md`](../docs/security/README.md) · [`docs/security/security-flow.html`](../docs/security/security-flow.html)
+
 ---
 
 ## DE – Konventionen
@@ -121,6 +146,7 @@ Geöffnet mit / Open with: [app.diagrams.net](https://app.diagrams.net) oder VS 
 - Alle Feldbezeichner und operationIds sind **lowerCamelCase**.
 - Beschreibungen sind zweisprachig: Englisch primär, Deutsch in `x-i18n.de`.
 - Fehlerantworten verwenden `../schema/common/errorResponse.yaml`.
+- Alle Endpunkte erfordern `Signature` + `Signature-Input` (RFC 9421); POST/PATCH zusätzlich `Content-Digest` (RFC 9530).
 
 ## EN – Conventions
 
@@ -129,6 +155,7 @@ Geöffnet mit / Open with: [app.diagrams.net](https://app.diagrams.net) oder VS 
 - All field identifiers and operationIds use **lowerCamelCase**.
 - Descriptions are bilingual: English primary, German in `x-i18n.de`.
 - Error responses use `../schema/common/errorResponse.yaml`.
+- All endpoints require `Signature` + `Signature-Input` (RFC 9421); POST/PATCH additionally require `Content-Digest` (RFC 9530).
 
 ---
 

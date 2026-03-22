@@ -1,0 +1,27 @@
+description: |
+  Reusable parameter group: security headers for EDI@Energy APIs implementing
+  HTTP Message Signatures (RFC 9421), JWS (RFC 7515), and JWE (RFC 7516).
+
+  Usage pattern for POST requests with signed/encrypted body:
+  1. Include `Content-Digest` (hash of the body)
+  2. Include `Signature-Input` (declares which components are signed)
+  3. Include `Signature` (the actual signature value)
+
+  Usage pattern for GET requests (no body):
+  1. Include `Signature-Input` (covers path, query, key headers)
+  2. Include `Signature` (the actual signature value)
+
+  **German:** Wiederverwendbare Parametergruppe: Sicherheits-Header für
+  EDI@Energy-APIs, die HTTP-Message-Signaturen (RFC 9421), JWS (RFC 7515)
+  und JWE (RFC 7516) implementieren.
+
+parameters:
+
+  contentDigest:
+    $ref: "../headers/contentDigest.yaml"
+
+  signatureInput:
+    $ref: "../headers/signatureInput.yaml"
+
+  signature:
+    $ref: "../headers/signature.yaml"

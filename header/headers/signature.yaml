@@ -1,0 +1,41 @@
+name: Signature
+in: header
+required: false
+description: |
+  Contains the base64url-encoded digital signature value(s) for the HTTP message,
+  as specified in RFC 9421. Each signature is labeled to match a corresponding
+  entry in the `Signature-Input` header.
+
+  The signature covers all components declared in `Signature-Input` and is
+  computed using the algorithm and key identified there. For EDI@Energy APIs,
+  the supported algorithms are:
+  - `ecdsa-p256-sha256` (ECDSA with P-256 and SHA-256) — primary algorithm
+  - `ed25519` (Edwards-Curve Digital Signature Algorithm) — alternative
+
+  The receiving server MUST verify this signature against the canonicalized
+  component values before processing the request.
+
+  **German:** Enthält den base64url-kodierten digitalen Signaturwert für die
+  HTTP-Nachricht (RFC 9421). Jede Signatur ist mit einem Label versehen, das
+  einem entsprechenden Eintrag im `Signature-Input`-Header entspricht.
+
+  Die Signatur deckt alle in `Signature-Input` deklarierten Komponenten ab und
+  wird mit dem dort angegebenen Algorithmus und Schlüssel berechnet. Unterstützte
+  Algorithmen für EDI@Energy-APIs:
+  - `ecdsa-p256-sha256` (ECDSA mit P-256 und SHA-256) — primärer Algorithmus
+  - `ed25519` — alternative
+schema:
+  type: string
+  description: |
+    Structured field value per RFC 8941. Contains one or more labeled byte
+    sequences, each being the raw signature bytes base64-encoded.
+  examples:
+    EcdsaSignature:
+      summary: "ECDSA P-256 signature"
+      value: "sig1=:m1dP0w7qZ8QmM8n6f0dVbQ4h2lJd0q3H6mQkq9Vxq8g=:"
+    Ed25519Signature:
+      summary: "Ed25519 signature"
+      value: "sig1=:MEQCIG0H4V4F9H0X9Y5k3y9w5q4k3vV8d1qzH7XrFQq4AiBv3Z8f5h1Xz0M0H7mXyZq8m0b1Y2n5p8d0cH0A==:"
+x-header-group: security
+x-direction: request
+x-rfc: "RFC 9421 §4 (HTTP Message Signatures — Signature)"

@@ -104,8 +104,8 @@ Covered processes:
 │
 ├── docs/                                 Fachliche Referenzmaterialien / Domain reference materials
 │   ├── gpke/                             GPKE-Prozessdiagramme / GPKE process diagrams
-│   │                                     Interaktives HTML-Sequenzdiagramm, DrawIO-Quellen für GPKE-Prozesse
-│   │                                     Interactive HTML sequence diagram, DrawIO sources for GPKE processes
+│   │                                     Ablaufdiagramme und DrawIO-Quellen für GPKE-Prozesse
+│   │                                     Flow diagrams and DrawIO sources for GPKE processes
 │   ├── models/                           BDEW-Datenmodell / BDEW data model
 │   │                                     ERM-Artefakte, Diagramme und SQL-Schema des BDEW-Rollenmodells
 │   │                                     ERM artifacts, diagrams and SQL schema of the BDEW role model
@@ -136,6 +136,8 @@ Covered processes:
 | `api/malo.yaml` | GPKE Lieferbeginn API – vollständige OpenAPI 3.0 Spezifikation |
 | `header/openapi.yaml` | Wiederverwendbare HTTP-Header-Definitionen (EDI@Energy) |
 | `index.yaml` | Aggregierender Einstiegspunkt auf Repository-Ebene |
+| `docs/security/README.md` | Sicherheitsarchitektur mit Beispielen (DE+EN) |
+| `docs/security/security-flow.html` | Interaktives Sicherheitsdiagramm |
 
 ## EN – Entry points
 
@@ -145,6 +147,8 @@ Covered processes:
 | `api/malo.yaml` | GPKE supply start API – complete OpenAPI 3.0 specification |
 | `header/openapi.yaml` | Reusable HTTP header definitions (EDI@Energy) |
 | `index.yaml` | Aggregating repository-level entry point |
+| `docs/security/README.md` | Security architecture with examples (DE+EN) |
+| `docs/security/security-flow.html` | Interactive security flow diagram |
 
 ---
 

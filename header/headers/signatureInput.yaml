@@ -1,0 +1,51 @@
+name: Signature-Input
+in: header
+required: false
+description: |
+  Declares the components and parameters used to construct each HTTP Message
+  Signature, as specified in RFC 9421. Each entry names a signature label and
+  lists the covered components (derived components, header fields) along with
+  metadata such as creation time, expiry, key identifier, and algorithm.
+
+  The `Signature-Input` header MUST accompany every `Signature` header and
+  reference the same label identifiers.
+
+  Covered components for EDI@Energy POST requests with body:
+  `"@method"`, `"@authority"`, `"@target-uri"`, `"content-type"`, `"accept"`,
+  `"content-digest"`, `"date"`, `"x-request-id"`, `"x-api-spec-ref"`,
+  `"x-api-spec-version"`
+
+  Covered components for GET requests (no body):
+  `"@method"`, `"@path"`, `"@query"`, `"host"`, `"date"`, `"x-request-id"`,
+  `"x-api-spec-ref"`, `"x-api-spec-version"`
+
+  **German:** Deklariert die Komponenten und Parameter, die zur Konstruktion
+  jeder HTTP-Message-Signatur verwendet werden (RFC 9421). Jeder Eintrag benennt
+  ein Signatur-Label und listet die abgedeckten Komponenten (abgeleitete
+  Komponenten, Header-Felder) mit Metadaten wie Erstellzeit, Ablaufzeit,
+  Schlüssel-ID und Algorithmus.
+
+  Der `Signature-Input`-Header MUSS jeden `Signature`-Header begleiten und
+  dieselben Label-Bezeichner referenzieren.
+schema:
+  type: string
+  description: |
+    Structured field value per RFC 8941 (Structured Field Values for HTTP).
+    Contains one or more labeled inner-lists of covered components with parameters.
+  examples:
+    PostWithBody:
+      summary: "POST with JWE body — full component list"
+      value: >-
+        sig1=("@method" "@authority" "@target-uri" "content-type" "accept"
+        "content-digest" "date" "x-request-id" "x-api-spec-ref"
+        "x-api-spec-version");created=1769940930;expires=1769941230;
+        keyid="client-http-sig-01";alg="ecdsa-p256-sha256"
+    GetNoBody:
+      summary: "GET without body — path and query included"
+      value: >-
+        sig1=("@method" "@path" "@query" "host" "date" "x-request-id"
+        "x-api-spec-ref" "x-api-spec-version");created=1706782530;
+        expires=1706782830;keyid="client-ed25519-01";alg="ed25519"
+x-header-group: security
+x-direction: request
+x-rfc: "RFC 9421 §2.5 (HTTP Message Signatures — Signature-Input)"

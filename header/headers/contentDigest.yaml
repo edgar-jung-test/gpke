@@ -1,0 +1,37 @@
+name: Content-Digest
+in: header
+required: false
+description: |
+  SHA-256 digest of the request or response body, used to bind the payload to
+  the HTTP Message Signature (RFC 9421). The server verifies this value against
+  the received body before accepting the signature as valid.
+
+  Format: `sha-256=:<base64url-encoded SHA-256 hash>:`
+
+  When JWE or JWS is used as the body (`Content-Type: application/jose`), the
+  digest covers the serialized compact JWE/JWS token, not the original plaintext.
+
+  **German:** SHA-256-Digest des Anfrage- oder Antwort-Body, der den Payload an
+  die HTTP-Message-Signatur (RFC 9421) bindet. Der Server prüft diesen Wert gegen
+  den empfangenen Body, bevor er die Signatur akzeptiert.
+
+  Format: `sha-256=:<base64url-kodierter SHA-256-Hash>:`
+
+  Bei Verwendung von JWE oder JWS als Body (`Content-Type: application/jose`)
+  deckt der Digest das serialisierte kompakte JWE/JWS-Token ab, nicht den
+  ursprünglichen Klartext.
+schema:
+  type: string
+  pattern: '^sha-256=:[A-Za-z0-9+/=]+:$'
+  description: |
+    SHA-256 content digest in the format: sha-256=:<base64-encoded hash>:
+  examples:
+    Example1:
+      summary: "SHA-256 digest of a JWE body"
+      value: "sha-256=:uU0p7h6qv6bqGJgYy3m8n2mY0cKc6lQ5qJv8W2r9bLk=:"
+    Example2:
+      summary: "SHA-256 digest of a JSON body"
+      value: "sha-256=:X48E9qOokqqrvdts8nOJRJN3OWDUoyWxBf7kbu9DBPE=:"
+x-header-group: security
+x-direction: request-response
+x-rfc: "RFC 9530 (Digest Fields); used by RFC 9421 (HTTP Message Signatures)"
