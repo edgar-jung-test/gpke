@@ -8,6 +8,7 @@ info:
   contact:
     name: BDEW
     url: 'https://www.bdew-mako.de'
+    email: edgar.jung.external@westnetz.de
   license:
     name: BDEW
     url: 'https://www.bdew-mako.de'
@@ -15,15 +16,15 @@ servers:
   - url: 'https://api.makohub.com'
     description: Production server / Produktionsserver
 tags:
-  - name: registrations
-    description: |
-      Registration requests: new supplier (LFN) → grid operator (NB). Steps 1, 2, 5. Prüf-IDs 55001, 55077, 55002, 55003, 55078, 55080. **German:** Anmeldungen: neuer Lieferant (LFN) → Netzbetreiber (NB). Schritte 1, 2, 5.
-  - name: deregistrationRequests
-    description: |
-      Deregistration requests between NB and previous supplier (LFA). Steps 3, 4. Prüf-IDs 55010, 55011, 55012. **German:** Abmeldeanfragen zwischen Netzbetreiber (NB) und altem Lieferanten (LFA). Schritte 3, 4.
   - name: assignments
     description: |
       Assignment termination and cancellation notifications. Steps 6, 7. Prüf-IDs 55037, 55038. **German:** Zuordnungsbeendigungen und -aufhebungen. Schritte 6, 7.
+  - name: deregistrationRequests
+    description: |
+      Deregistration requests between NB and previous supplier (LFA). Steps 3, 4. Prüf-IDs 55010, 55011, 55012. **German:** Abmeldeanfragen zwischen Netzbetreiber (NB) und altem Lieferanten (LFA). Schritte 3, 4.
+  - name: registrations
+    description: |
+      Registration requests: new supplier (LFN) → grid operator (NB). Steps 1, 2, 5. Prüf-IDs 55001, 55077, 55002, 55003, 55078, 55080. **German:** Anmeldungen: neuer Lieferant (LFN) → Netzbetreiber (NB). Schritte 1, 2, 5.
 paths:
   '/malo/{marketLocationId}/registrations':
     post:
@@ -198,10 +199,24 @@ paths:
                 $ref: '#/components/schemas/SupplyStartList'
       x-stoplight:
         id: ny6yjclg4t0aq
-  '/market-locations/{marketLocationId}/registrations/{supplyStartId}':
+  '/malo/{marketLocationId}/registrations/{supplyStartId}':
     parameters:
-      - $ref: '#/components/parameters/marketLocationId'
-      - $ref: '#/components/parameters/supplyStartId'
+      - name: marketLocationId
+        in: path
+        required: true
+        description: |
+          Unique 11-digit market location ID (MaLo-ID). Corresponds to EDIFACT SG5 LOC DE3225, qualifier Z16. **German:** Eindeutige 11-stellige Marktlokations-ID (MaLo-ID). EDIFACT SG5 LOC DE3225, Qualifier Z16.
+        schema:
+          $ref: '#/components/schemas/MarketLocationId'
+      - name: supplyStartId
+        in: path
+        required: true
+        description: |
+          Unique registration (supply start) request ID. **German:** Eindeutige Anmeldungs-ID (Lieferbeginn-Anfrage).
+        schema:
+          type: string
+          maxLength: 35
+          example: SS-2025-00042
     get:
       summary: Get a registration request / Anmeldung abrufen
       description: |
@@ -228,6 +243,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+      x-stoplight:
+        id: zxh2ziba377kh
     patch:
       summary: Update mutable fields of a registration / Anmeldung teilweise aktualisieren
       description: |
@@ -282,7 +299,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  '/market-locations/{marketLocationId}/registrations/{supplyStartId}/response':
+      x-stoplight:
+        id: hr70cbq47wy9l
+  '/malo/{marketLocationId}/registrations/{supplyStartId}/response':
     post:
       summary: NB responds to a registration – Prüf-ID 55002 / 55003 / 55078 / 55080
       description: |
@@ -394,7 +413,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  '/market-locations/{marketLocationId}/deregistration-requests':
+      x-stoplight:
+        id: 9by8890htxu5w
+    parameters:
+      - schema:
+          type: string
+        name: marketLocationId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: supplyStartId
+        in: path
+        required: true
+  '/malo/{marketLocationId}/deregistration-requests':
     post:
       summary: NB sends deregistration request to LFA – Prüf-ID 55010
       description: |
@@ -467,7 +499,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  '/market-locations/{marketLocationId}/deregistration-requests/{deregistrationRequestId}/response':
+      x-stoplight:
+        id: zvcg8fwbp815s
+    parameters:
+      - schema:
+          type: string
+        name: marketLocationId
+        in: path
+        required: true
+  '/malo/{marketLocationId}/deregistration-requests/{deregistrationRequestId}/response':
     post:
       summary: LFA responds to deregistration request – Prüf-ID 55011 / 55012
       description: |
@@ -562,7 +602,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  '/market-locations/{marketLocationId}/assignment-terminations':
+      x-stoplight:
+        id: zibwz7tpzv3ja
+    parameters:
+      - schema:
+          type: string
+        name: marketLocationId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: deregistrationRequestId
+        in: path
+        required: true
+  '/malo/{marketLocationId}/assignment-terminations':
     post:
       summary: NB notifies LFA of assignment termination – Prüf-ID 55037
       description: |
@@ -625,7 +678,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  '/market-locations/{marketLocationId}/assignment-cancellations':
+      x-stoplight:
+        id: x4smm3snavkce
+    parameters:
+      - schema:
+          type: string
+        name: marketLocationId
+        in: path
+        required: true
+  '/malo/{marketLocationId}/assignment-cancellations':
     post:
       summary: NB cancels future assignment of LFZ – Prüf-ID 55038
       description: |
@@ -688,6 +749,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+      x-stoplight:
+        id: hxqwnq7qc8nd3
+    parameters:
+      - schema:
+          type: string
+        name: marketLocationId
+        in: path
+        required: true
 components:
   parameters:
     marketLocationId:
