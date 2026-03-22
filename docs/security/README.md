@@ -60,7 +60,7 @@ The EDI@Energy REST APIs use a three-layer security model:
 │  └─────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
 ```
-[Open interactive security-flow view](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/security/security-flow.html)
+
 ---
 
 ## Layer 1 – Authentifizierung / Authentication (OAuth 2.0 JWT)
