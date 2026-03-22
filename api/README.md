@@ -37,15 +37,15 @@ LFAlt (LFA) and future supplier (LFZ).
 
 | # | Methode | Pfad | operationId | Prüf-ID | Schritt |
 |---|---------|------|-------------|---------|---------|
-| 1 | `POST` | `/market-locations/{marketLocationId}/registrations` | `createRegistration` | 55001 / 55077 | 1 – Anmeldung LFN→NB |
-| 2 | `GET` | `/market-locations/{marketLocationId}/registrations` | `listRegistrations` | — | Liste |
-| 3 | `GET` | `/market-locations/{marketLocationId}/registrations/{supplyStartId}` | `getRegistration` | — | 2 – Existierende Zuordnung |
-| 4 | `PATCH` | `/market-locations/{marketLocationId}/registrations/{supplyStartId}` | `patchRegistration` | — | Korrektur (nur draft) |
-| 5 | `POST` | `/market-locations/{marketLocationId}/registrations/{supplyStartId}/response` | `respondToRegistration` | 55002 / 55003 / 55078 / 55080 | 5 – Antwort NB→LFN |
-| 6 | `POST` | `/market-locations/{marketLocationId}/deregistration-requests` | `createDeregistrationRequest` | 55010 | 3 – Abmeldeanfrage NB→LFA |
-| 7 | `POST` | `/market-locations/{marketLocationId}/deregistration-requests/{deregistrationRequestId}/response` | `respondToDeregistrationRequest` | 55011 / 55012 | 4 – Beantwortung LFA→NB |
-| 8 | `POST` | `/market-locations/{marketLocationId}/assignment-terminations` | `notifyAssignmentTermination` | 55037 | 6 – Zuordnungsbeendigung NB→LFA |
-| 9 | `POST` | `/market-locations/{marketLocationId}/assignment-cancellations` | `notifyAssignmentCancellation` | 55038 | 7 – Zuordnungsaufhebung NB→LFZ |
+| 1 | `POST` | `/malo/{marketLocationId}/registrations` | `createRegistration` | 55001 / 55077 | 1 – Anmeldung LFN→NB |
+| 2 | `GET` | `/malo/{marketLocationId}/registrations` | `listRegistrations` | — | Liste |
+| 3 | `GET` | `/malo/{marketLocationId}/registrations/{supplyStartId}` | `getRegistration` | — | 2 – Existierende Zuordnung |
+| 4 | `PATCH` | `/malo/{marketLocationId}/registrations/{supplyStartId}` | `patchRegistration` | — | Korrektur (nur draft) |
+| 5 | `POST` | `/malo/{marketLocationId}/registrations/{supplyStartId}/response` | `respondToRegistration` | 55002 / 55003 / 55078 / 55080 | 5 – Antwort NB→LFN |
+| 6 | `POST` | `/malo/{marketLocationId}/deregistration-requests` | `createDeregistrationRequest` | 55010 | 3 – Abmeldeanfrage NB→LFA |
+| 7 | `POST` | `/malo/{marketLocationId}/deregistration-requests/{deregistrationRequestId}/response` | `respondToDeregistrationRequest` | 55011 / 55012 | 4 – Beantwortung LFA→NB |
+| 8 | `POST` | `/malo/{marketLocationId}/assignment-terminations` | `notifyAssignmentTermination` | 55037 | 6 – Zuordnungsbeendigung NB→LFA |
+| 9 | `POST` | `/malo/{marketLocationId}/assignment-cancellations` | `notifyAssignmentCancellation` | 55038 | 7 – Zuordnungsaufhebung NB→LFZ |
 
 #### Prozessablauf / Process flow
 
@@ -53,7 +53,7 @@ LFAlt (LFA) and future supplier (LFZ).
 LFNeu (LFN)              NB (Netzbetreiber)              LFAlt (LFA)           LFZ
      │                          │                              │                  │
      │──(1) POST registrations─▶│                              │                  │
-     │◀── 202 Accepted ─────────│                              │                  │
+     │◀── 201 Created ──────────│                              │                  │
      │                          │──(3) POST dereg-requests────▶│                  │
      │                          │◀─(4) POST …/response ────────│                  │
      │                          │                              │                  │
@@ -85,7 +85,22 @@ LFNeu (LFN)              NB (Netzbetreiber)              LFAlt (LFA)           L
 
 ## Diagramme / Diagrams
 
-### `lieferbeginn-api.drawio`
+### `docs/gpke/lieferbeginn-sequenz.html` — Interaktives Sequenzdiagramm
+
+HTML-Sequenzdiagramm mit aufklappbaren Details zu jedem API-Endpunkt.
+Zeigt die Kommunikationsrichtung zwischen allen Rollen (LFNeu → NB → LFAlt / LFZ)
+mit HTTP-Methode, operationId und Prüfidentifikator direkt an der Linie.
+Jeder Pfeil ist klickbar — das Detail-Panel zeigt Pfad, Schemas, Pflichtfelder und Fristen.
+
+Interactive HTML sequence diagram with expandable details for each API endpoint.
+Shows the communication direction between all roles with HTTP method, operationId
+and check identifier on the arrow. Each arrow is clickable — the detail panel shows
+path, schemas, required fields and deadlines.
+
+Öffnen mit jedem modernen Browser (Dark Mode automatisch) /
+Open with any modern browser (dark mode automatic).
+
+### `lieferbeginn-api.drawio` — BPMN-Swimlane-Diagramm
 
 DrawIO-Prozessdiagramm aller 9 API-Endpunkte als BPMN-Swimlane-Darstellung.
 Zeigt Kommunikationsrichtungen, HTTP-Methoden, Pfade und Prüfidentifikatoren

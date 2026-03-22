@@ -104,8 +104,8 @@ Covered processes:
 │
 ├── docs/                                 Fachliche Referenzmaterialien / Domain reference materials
 │   ├── gpke/                             GPKE-Prozessdiagramme / GPKE process diagrams
-│   │                                     Ablaufdiagramme und DrawIO-Quellen für GPKE-Prozesse
-│   │                                     Flow diagrams and DrawIO sources for GPKE processes
+│   │                                     Interaktives HTML-Sequenzdiagramm, DrawIO-Quellen für GPKE-Prozesse
+│   │                                     Interactive HTML sequence diagram, DrawIO sources for GPKE processes
 │   ├── models/                           BDEW-Datenmodell / BDEW data model
 │   │                                     ERM-Artefakte, Diagramme und SQL-Schema des BDEW-Rollenmodells
 │   │                                     ERM artifacts, diagrams and SQL schema of the BDEW role model

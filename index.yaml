@@ -79,25 +79,25 @@ paths:
 
   # GPKE Lieferbeginn ──────────────────────────────────────────────────────────
   /market-locations/{marketLocationId}/registrations:
-    $ref: "./api/malo.yaml#/paths/~1market-locations~1{marketLocationId}~1registrations"
+    $ref: "./api/malo.yaml#/paths/~1malo~1{marketLocationId}~1registrations"
 
   /market-locations/{marketLocationId}/registrations/{supplyStartId}:
-    $ref: "./api/malo.yaml#/paths/~1market-locations~1{marketLocationId}~1registrations~1{supplyStartId}"
+    $ref: "./api/malo.yaml#/paths/~1malo~1{marketLocationId}~1registrations~1{supplyStartId}"
 
   /market-locations/{marketLocationId}/registrations/{supplyStartId}/response:
-    $ref: "./api/malo.yaml#/paths/~1market-locations~1{marketLocationId}~1registrations~1{supplyStartId}~1response"
+    $ref: "./api/malo.yaml#/paths/~1malo~1{marketLocationId}~1registrations~1{supplyStartId}~1response"
 
   /market-locations/{marketLocationId}/deregistration-requests:
-    $ref: "./api/malo.yaml#/paths/~1market-locations~1{marketLocationId}~1deregistration-requests"
+    $ref: "./api/malo.yaml#/paths/~1malo~1{marketLocationId}~1deregistration-requests"
 
   /market-locations/{marketLocationId}/deregistration-requests/{deregistrationRequestId}/response:
-    $ref: "./api/malo.yaml#/paths/~1market-locations~1{marketLocationId}~1deregistration-requests~1{deregistrationRequestId}~1response"
+    $ref: "./api/malo.yaml#/paths/~1malo~1{marketLocationId}~1deregistration-requests~1{deregistrationRequestId}~1response"
 
   /market-locations/{marketLocationId}/assignment-terminations:
-    $ref: "./api/malo.yaml#/paths/~1market-locations~1{marketLocationId}~1assignment-terminations"
+    $ref: "./api/malo.yaml#/paths/~1malo~1{marketLocationId}~1assignment-terminations"
 
   /market-locations/{marketLocationId}/assignment-cancellations:
-    $ref: "./api/malo.yaml#/paths/~1market-locations~1{marketLocationId}~1assignment-cancellations"
+    $ref: "./api/malo.yaml#/paths/~1malo~1{marketLocationId}~1assignment-cancellations"
 
 # ── Components – aggregated from schema library ───────────────────────────────
 components:
