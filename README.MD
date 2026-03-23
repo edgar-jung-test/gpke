@@ -19,8 +19,6 @@ gedacht. Im Unterverzeichnis wird auf die Vorteile von OAS 3.1 eingegangen. Das 
 Schema ist aus Gründen der Komatibiltit zur apiGIT nocht auf OAS 3.0. Der moderne
 Editor Stoplight Studio kann jedoch bereits mit OAS 3.1 umgehen.
 
-Die Swagger-UI Dokumentation erhalten Sie unter [![Swagger UI](https://img.shields.io/badge/Swagger_UI-live-85EA2D?logo=swagger)](https://edgar-jung-test.github.io/gpke/)
-
 Abgedeckte Prozesse:
 
 - UTILMD-Stammdatenkommunikation (MaLo, NeLo, MeLo, Bilanzierung, Marktakteure)
@@ -39,8 +37,6 @@ The directories oas30-31Mig and oas31 are intended to illustrate new features in
 The corresponding subdirectory explains the advantages of OAS 3.1. For compatibility reasons 
 with apiGIT, the current schema is still based on OAS 3.0. However, the modern editor Stoplight Studio
 already supports OAS 3.1.
-
-Refer to Swagger-UI Documentation [![Swagger UI](https://img.shields.io/badge/Swagger_UI-live-85EA2D?logo=swagger)](https://edgar-jung-test.github.io/gpke/)
 
 Covered processes:
 
@@ -218,16 +214,153 @@ Recommended tools: **Redocly CLI**, **Swagger Editor**, **Stoplight Studio**, **
 
 ## DE – Empfohlene Werkzeuge / EN – Recommended Tools
 
+### 📝 OpenAPI-Editoren / OpenAPI Editors
+
 | Tool | Website | Dateitypen / File types | Beispiel / Example | DE – Beschreibung | EN – Description |
 |------|---------|-------------------------|--------------------|-------------------|------------------|
 | **Stoplight Studio** | [stoplight.io](https://stoplight.io/studio) | `.yaml`, `.json` (OAS 3.0, OAS 3.1) | `api/malo.yaml`, `index.yaml` | Visueller OpenAPI-Editor mit Formular- und Code-Ansicht, Linting via Spectral, $ref-Auflösung und Vorschau. Empfohlener Editor für dieses Repository. | Visual OpenAPI editor with form and code view, Spectral-based linting, $ref resolution and preview. Recommended editor for this repository. |
-| **apiGit** | [apigit.io](https://apigit.io) | `.yaml`, `.json` (OAS 3.0) | `index.yaml`, `api/malo.yaml` | Git-natives API-Lifecycle-Tool: versioniert OpenAPI-Spezifikationen direkt im Repository, zeigt Diffs auf Operationsebene und erzwingt Rückwärtskompatibilität. Das aktuelle Schema bleibt aus Kompatibilitätsgründen bei OAS 3.0. | Git-native API lifecycle tool: versions OpenAPI specs directly in the repository, shows operation-level diffs and enforces backwards compatibility. The current schema stays on OAS 3.0 for apiGit compatibility. |
 | **Swagger Editor / UI** | [editor.swagger.io](https://editor.swagger.io) | `.yaml`, `.json` (OAS 2.0, OAS 3.0, OAS 3.1) | `api/malo.yaml` | Browser-basierter OpenAPI-Editor mit Live-Vorschau der API-Dokumentation. Swagger UI rendert die Dokumentation als interaktive HTML-Seite. | Browser-based OpenAPI editor with live documentation preview. Swagger UI renders the spec as an interactive HTML page. |
+
+### 🔧 API-Lifecycle & Linting
+
+| Tool | Website | Dateitypen / File types | Beispiel / Example | DE – Beschreibung | EN – Description |
+|------|---------|-------------------------|--------------------|-------------------|------------------|
+| **apiGit** | [apigit.io](https://apigit.io) | `.yaml`, `.json` (OAS 3.0) | `index.yaml`, `api/malo.yaml` | Git-natives API-Lifecycle-Tool: versioniert OpenAPI-Spezifikationen direkt im Repository, zeigt Diffs auf Operationsebene und erzwingt Rückwärtskompatibilität. Das aktuelle Schema bleibt aus Kompatibilitätsgründen bei OAS 3.0. | Git-native API lifecycle tool: versions OpenAPI specs directly in the repository, shows operation-level diffs and enforces backwards compatibility. The current schema stays on OAS 3.0 for apiGit compatibility. |
 | **Redocly CLI** | [redocly.com/docs/cli](https://redocly.com/docs/cli/) | `.yaml`, `.json` (OAS 3.0, OAS 3.1), `redocly.yaml` | `index.yaml` | Kommandozeilenwerkzeug zum Bündeln (`bundle`), Validieren (`lint`) und Vorschauen (`preview-docs`) von OpenAPI-Spezifikationen. Löst `$ref`-Ketten über Dateigrenzen hinweg auf. | Command-line tool for bundling (`bundle`), validating (`lint`) and previewing (`preview-docs`) OpenAPI specifications. Resolves `$ref` chains across file boundaries. |
 | **Spectral** | [stoplight.io/open-source/spectral](https://stoplight.io/open-source/spectral) | `.yaml`, `.json` (OAS), `.mjs` (Ruleset) | `.spectral.mjs` | OpenAPI-Linter mit konfigurierbaren Regelwerken. Wird in diesem Repository über `.spectral.mjs` konfiguriert. Läuft als CLI oder ist in Stoplight Studio integriert. | OpenAPI linter with configurable rulesets. Configured in this repository via `.spectral.mjs`. Runs as CLI or is integrated into Stoplight Studio. |
+
+### 📊 Diagramme & Datenmodellierung / Diagrams & Data Modelling
+
+| Tool | Website | Dateitypen / File types | Beispiel / Example | DE – Beschreibung | EN – Description |
+|------|---------|-------------------------|--------------------|-------------------|------------------|
 | **draw.io / diagrams.net** | [app.diagrams.net](https://app.diagrams.net) | `.drawio`, `.xml`, `.svg`, `.png` | `docs/gpke/*.drawio`, `gpke-utilmd.drawio` | Kostenloses Diagrammwerkzeug für Fluss-, Sequenz- und UML-Diagramme. Die GPKE-Prozessdiagramme und das UML-Datenmodell dieses Repositories liegen im `.drawio`-Format vor. | Free diagramming tool for flow, sequence and UML diagrams. The GPKE process diagrams and the UML data model of this repository are stored in `.drawio` format. |
 | **Modelio** | [modelio.org](https://www.modelio.org) | `.xmi` (UML 2.x / XMI 2.1), `.eap` | `gpke-utilmd-modelio.xmi` | Kostenloser Open-Source-UML-Editor. Importiert XMI 2.1-Dateien nativ (`File → Import/Export → XMI Import`). Empfohlen zum Bearbeiten und Erweitern des Datenmodells. | Free open-source UML editor. Imports XMI 2.1 files natively (`File → Import/Export → XMI Import`). Recommended for editing and extending the data model. |
 | **Enterprise Architect** | [sparxsystems.com](https://sparxsystems.com) | `.eap`, `.eapx`, `.qea`, `.xmi` (UML 2.x) | `gpke-utilmd-model.xml` | Kommerzielles UML-Modellierungswerkzeug. Importiert XMI 2.1 über `File → Import → Import Package from XMI`. Vollständige UML-2-Unterstützung inkl. Code-Generierung. | Commercial UML modelling tool. Imports XMI 2.1 via `File → Import → Import Package from XMI`. Full UML 2 support including code generation. |
+
+### 🗂 Versionskontrolle / Version Control
+
+| Tool | Website | Dateitypen / File types | Beispiel / Example | DE – Beschreibung | EN – Description |
+|------|---------|-------------------------|--------------------|-------------------|------------------|
+| **GitHub Desktop** | [desktop.github.com](https://desktop.github.com) | Git-Repositories (alle Dateitypen) | Gesamtes Repository | Kostenloser grafischer Git-Client für Windows und Mac. Ermöglicht Branching, Commits und Push/Pull ohne Kommandozeile. Empfohlen für alle, die mit Stoplight oder einem anderen Editor arbeiten und Git nur als Transport nutzen. | Free graphical Git client for Windows and Mac. Enables branching, commits and push/pull without command line. Recommended for anyone working with Stoplight or another editor and using Git purely as transport. |
+| **TortoiseGit** | [tortoisegit.org](https://tortoisegit.org) | Git-Repositories (alle Dateitypen) | Gesamtes Repository | Kostenloser grafischer Git-Client für Windows, direkt in den Windows Explorer integriert (Rechtsklick-Menü). Gleiches Konzept wie GitHub Desktop, jedoch tiefer ins Betriebssystem integriert. Unterstützt beliebige Git-Server (GitHub, GitLab, eigener Server). | Free graphical Git client for Windows, integrated directly into Windows Explorer (right-click menu). Same concept as GitHub Desktop but more deeply integrated into the OS. Supports any Git server (GitHub, GitLab, self-hosted). |
+
+---
+
+## DE – GitHub: Issues, Projekte und Branches / EN – GitHub: Issues, Projects and Branches
+
+### ⚠️ Browser-Einstellung: Popups für github.com erlauben
+
+> **Diese Einstellung ist zwingend erforderlich**, damit Datei-Permalinks (Zeilen-Links)
+> beim Anlegen von Issues automatisch in den Issue-Body übernommen werden.
+> Ohne diese Einstellung öffnet sich das Issue-Formular kurz und verschwindet sofort wieder.
+
+**Chrome:**
+```
+Adressleiste → Schloss-Symbol 🔒 → Website-Einstellungen
+→ Pop-ups und Weiterleitungen → Zulassen
+```
+
+**Firefox:**
+```
+Adressleiste → Schloss-Symbol 🔒 → Weitere Informationen
+→ Berechtigungen → Fenster öffnen → Erlauben
+```
+
+**Edge:**
+```
+Adressleiste → Schloss-Symbol 🔒 → Berechtigungen für diese Website
+→ Pop-ups → Zulassen
+```
+
+> **This setting is mandatory** for file permalinks (line links) to be automatically
+> inserted into the issue body when creating issues from code.
+> Without this setting, the issue form opens briefly and closes immediately.
+
+---
+
+### DE – Issue anlegen und mit Projekt und Branch verknüpfen
+
+**Schritt 1 – Permalink auf eine Zeile kopieren**
+
+1. Datei im Repository öffnen (z.B. `api/malo.yaml`)
+2. Zur gewünschten Zeile scrollen
+3. **Zeilennummer anklicken** → Zeile wird blau markiert
+4. Links neben der Zeilennummer auf **`...`** klicken (erscheint beim Hover)
+5. → **„Reference in new issue"** wählen
+
+> Für mehrere Zeilen: erste Zeile anklicken → **Shift** + letzte Zeile anklicken → `...` → „Reference in new issue"
+
+**Schritt 2 – Issue anlegen**
+
+1. Im Issue-Formular: **Titel** eingeben
+2. Der **Permalink** (`…/blob/main/api/malo.yaml#L42`) ist bereits im Body
+3. Rechte Spalte → **Projects** → Projekt auswählen (z.B. „GPKE V0.1 Bugtracker")
+4. Rechte Spalte → **Assignees** → Person zuweisen
+5. Rechte Spalte → **Labels** → Label setzen (z.B. `bug`, `enhancement`)
+6. → **„Create"** klicken
+
+**Schritt 3 – Branch zum Issue anlegen**
+
+1. Das neu erstellte Issue öffnen
+2. Rechte Spalte → Abschnitt **„Development"**
+3. → **„Create a branch"** klicken
+4. Branch-Name wird aus dem Issue-Titel vorgeschlagen (z.B. `3-bitte-pruefen`)
+5. → **„Create branch"** bestätigen
+
+> Der Branch ist jetzt automatisch mit dem Issue verknüpft und im Abschnitt „Development" sichtbar.
+
+**Schritt 4 – Branch lokal auschecken (GitHub Desktop / TortoiseGit)**
+
+```
+GitHub Desktop:
+  Repository → Fetch origin → Branch-Dropdown → Branch auswählen
+
+TortoiseGit:
+  Rechtsklick auf Ordner → TortoiseGit → Switch/Checkout → Branch auswählen
+```
+
+---
+
+### EN – Creating an issue and linking it to a project and branch
+
+**Step 1 – Copy a permalink to a line**
+
+1. Open a file in the repository (e.g. `api/malo.yaml`)
+2. Scroll to the desired line
+3. **Click the line number** → line is highlighted in blue
+4. Click **`...`** to the left of the line number (appears on hover)
+5. → Select **"Reference in new issue"**
+
+> For multiple lines: click first line → **Shift** + click last line → `...` → "Reference in new issue"
+
+**Step 2 – Create the issue**
+
+1. In the issue form: enter a **title**
+2. The **permalink** (`…/blob/main/api/malo.yaml#L42`) is already in the body
+3. Right column → **Projects** → select project (e.g. "GPKE V0.1 Bugtracker")
+4. Right column → **Assignees** → assign a person
+5. Right column → **Labels** → set a label (e.g. `bug`, `enhancement`)
+6. → Click **"Create"**
+
+**Step 3 – Create a branch for the issue**
+
+1. Open the newly created issue
+2. Right column → section **"Development"**
+3. → Click **"Create a branch"**
+4. A branch name is suggested from the issue title (e.g. `3-bitte-pruefen`)
+5. → Confirm with **"Create branch"**
+
+> The branch is now automatically linked to the issue and visible in the "Development" section.
+
+**Step 4 – Check out branch locally (GitHub Desktop / TortoiseGit)**
+
+```
+GitHub Desktop:
+  Repository → Fetch origin → Branch dropdown → select branch
+
+TortoiseGit:
+  Right-click folder → TortoiseGit → Switch/Checkout → select branch
+```
 
 ---
 
