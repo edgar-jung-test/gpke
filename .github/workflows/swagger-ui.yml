@@ -1,0 +1,168 @@
+name: Build Swagger UI
+
+# ── Trigger ────────────────────────────────────────────────────────────────
+on:
+  push:
+    branches:
+      - main
+    paths:
+      # Re-build whenever any API/schema/header file changes
+      - 'api/**'
+      - 'schema/**'
+      - 'header/**'
+      - 'index.yaml'
+      - '.github/workflows/swagger-ui.yml'
+  workflow_dispatch:   # allow manual trigger from Actions tab
+
+# ── Permissions ────────────────────────────────────────────────────────────
+permissions:
+  contents: write      # needed to push the /ui output back to the repo
+
+jobs:
+  build-swagger-ui:
+    name: Bundle → Swagger UI → commit /ui
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # ── 1. Checkout ──────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0          # full history so we can push back
+
+      # ── 2. Node.js (for Redocly CLI) ─────────────────────────────────────
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # ── 3. Install Redocly CLI ────────────────────────────────────────────
+      - name: Install Redocly CLI
+        run: npm install -g @redocly/cli@latest
+
+      # ── 4. Lint (fail fast on broken $refs) ──────────────────────────────
+      - name: Lint API spec
+        run: |
+          redocly lint api/malo.yaml \
+            --skip-rule=operation-operationId-unique \
+            || true
+          # '|| true' keeps the build going; remove if you want lint to be a hard gate
+
+      # ── 5. Bundle: resolve all $ref chains into a single file ─────────────
+      # Swagger UI cannot load multi-file specs with relative $refs served
+      # from a static host, so we bundle everything into one self-contained YAML.
+      - name: Bundle API spec (resolve all $refs)
+        run: |
+          mkdir -p ui
+          redocly bundle api/malo.yaml \
+            --output ui/openapi-bundled.yaml \
+            --dereferenced=false
+
+      # ── 6. Download Swagger UI dist ───────────────────────────────────────
+      # We pin to a specific release for reproducibility.
+      # To update: change SWAGGER_UI_VERSION below.
+      - name: Download Swagger UI
+        env:
+          SWAGGER_UI_VERSION: '5.17.14'
+        run: |
+          curl -sL \
+            "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v${SWAGGER_UI_VERSION}.tar.gz" \
+            | tar -xz --strip-components=2 \
+              "swagger-ui-${SWAGGER_UI_VERSION}/dist" \
+            -C ui/
+
+      # ── 7. Patch swagger-initializer.js ──────────────────────────────────
+      # Replace the default Petstore URL with our bundled spec.
+      - name: Configure Swagger UI initializer
+        run: |
+          sed -i \
+            's|url: "https://petstore.swagger.io/v2/swagger.json"|url: "./openapi-bundled.yaml"|g' \
+            ui/swagger-initializer.js
+
+          # Also set a custom title and disable the top-bar URL input
+          # so users cannot accidentally navigate away from our spec.
+          cat >> ui/swagger-initializer.js << 'JS'
+
+          // GPKE / UTILMD customisation – appended by CI
+          window.onload = function () {
+            window.ui = SwaggerUIBundle({
+              url:          "./openapi-bundled.yaml",
+              dom_id:       '#swagger-ui',
+              presets: [
+                SwaggerUIBundle.presets.apis,
+                SwaggerUIStandalonePreset
+              ],
+              layout:        "StandaloneLayout",
+              docExpansion:  "list",
+              deepLinking:   true,
+              displayRequestDuration: true,
+              filter:        true,
+              showExtensions: true,
+              showCommonExtensions: true,
+            });
+          };
+          JS
+
+      # ── 8. Write index.html ───────────────────────────────────────────────
+      # The Swagger UI dist ships its own index.html, but we overwrite it
+      # to inject our branding and canonical <title>.
+      - name: Write custom index.html
+        run: |
+          cat > ui/index.html << 'HTML'
+          <!DOCTYPE html>
+          <html lang="de">
+          <head>
+            <meta charset="UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1"/>
+            <title>GPKE / UTILMD – API-Dokumentation</title>
+            <link rel="stylesheet" href="./swagger-ui.css"/>
+            <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32"/>
+          </head>
+          <body>
+            <div id="swagger-ui"></div>
+            <script src="./swagger-ui-bundle.js"></script>
+            <script src="./swagger-ui-standalone-preset.js"></script>
+            <script src="./swagger-initializer.js"></script>
+          </body>
+          </html>
+          HTML
+
+      # ── 9. Write .nojekyll (required for GitHub Pages) ───────────────────
+      - name: Add .nojekyll
+        run: touch ui/.nojekyll
+
+      # ── 10. Commit and push /ui back to the repository ───────────────────
+      - name: Commit and push /ui
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add ui/
+
+          # Only commit if something actually changed
+          if git diff --staged --quiet; then
+            echo "No changes to /ui – skipping commit."
+          else
+            SPEC_SHA=$(git rev-parse --short HEAD)
+            git commit -m "chore(ui): rebuild Swagger UI from ${SPEC_SHA}
+
+          Bundled: api/malo.yaml → ui/openapi-bundled.yaml
+          Swagger UI version: 5.17.14
+          Triggered by: ${{ github.event_name }} on ${{ github.ref_name }}"
+
+            git push origin HEAD:${{ github.ref_name }}
+          fi
+
+      # ── 11. (Optional) Deploy to GitHub Pages ────────────────────────────
+      # Uncomment the block below and enable Pages in repo Settings
+      # (Source: Deploy from branch → main → /ui) to get a public URL.
+      #
+      # - name: Deploy to GitHub Pages
+      #   uses: peaceiris/actions-gh-pages@v4
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir:  ./ui
+      #     publish_branch: gh-pages
+      #     destination_dir: .

@@ -1,0 +1,17 @@
+# redocly.yaml – Konfiguration für Redocly CLI
+# Wird vom GitHub Actions Workflow (swagger-ui.yml) verwendet.
+# Wird auch lokal genutzt: `redocly bundle api/malo.yaml -o ui/openapi-bundled.yaml`
+
+apis:
+  gpke-lieferbeginn@v1:
+    root: api/malo.yaml
+
+rules:
+  # Allow OAS 3.0 examples: keyword (used intentionally in this repo)
+  no-invalid-schema-examples: off
+  # Allow x-* extension fields (x-i18n, x-edifact-mapping, x-stoplight, …)
+  no-unknown-extension: off
+
+bundling:
+  # Keep $ref names intact where possible (improves readability of bundled output)
+  referenceDereference: false
