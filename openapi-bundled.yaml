@@ -1,0 +1,4275 @@
+openapi: 3.0.3
+info:
+  title: GPKE Supply Start (Lieferbeginn) REST API
+  version: 1.0.0
+  description: |
+    **The APIs are intended solely as a framework. 
+    The proposed APIs must be validated against the processes and adapted accordingly.
+    This interface must not be used in this version.**
+
+    **Bei den API's handelt es sich ausschließlich um einen Rahmen. 
+    Die vorgeschlagenen API'S müssen gegen die Prozesse validiert und entsprechend angepasst werden.
+    Diese Schnittstelle darf in dieser Version nicht verwendet werden.**
+
+    Content / Inhaltlich
+
+    REST API for the GPKE use-case "Lieferbeginn" (supply start / supplier change), 
+    covering all 7 process steps of SD: Lieferbeginn (GPKE Teil 2, p. 31 ff.). 
+    Business data corresponds to EDIFACT UTILMD messages exchanged between market participants.
+
+    **German:** REST API für den GPKE-Use-Case „Lieferbeginn" (Lieferantenwechsel).
+     Deckt alle 7 Prozessschritte des SD: Lieferbeginn (GPKE Teil 2, S. 31 ff.) ab.
+      Die Geschäftsdaten entsprechen den EDIFACT-UTILMD-Nachrichten der Marktkommunikation.
+  contact:
+    name: BDEW
+    url: https://www.bdew-mako.de
+    email: edgar.jung.external@westnetz.de
+  license:
+    name: BDEW
+    url: https://www.bdew-mako.de
+servers:
+  - url: https://api.makohub.com
+    description: Production server / Produktionsserver
+security:
+  - bearerAuth: []
+tags:
+  - name: assignments
+    description: |
+      Assignment termination and cancellation notifications. Steps 6, 7. Prüf-IDs 55037, 55038. **German:** Zuordnungsbeendigungen und -aufhebungen. Schritte 6, 7.
+  - name: deregistrationRequests
+    description: |
+      Deregistration requests between NB and previous supplier (LFA). Steps 3, 4. Prüf-IDs 55010, 55011, 55012. **German:** Abmeldeanfragen zwischen Netzbetreiber (NB) und altem Lieferanten (LFA). Schritte 3, 4.
+  - name: registrations
+    description: |
+      Registration requests: new supplier (LFN) → grid operator (NB). Steps 1, 2, 5. Prüf-IDs 55001, 55077, 55002, 55003, 55078, 55080. **German:** Anmeldungen: neuer Lieferant (LFN) → Netzbetreiber (NB). Schritte 1, 2, 5.
+paths:
+  /malo/{marketLocationId}/registrations:
+    post:
+      summary: Submit a registration request (Anmeldung) – Prüf-ID 55001 / 55077
+      description: |
+        **Step 1 – Registration (Anmeldung).** The new supplier (LFN) registers a market location with the grid operator (NB).
+        Lead times (working days before supply start): 
+        - Case 1 (MaLo-ID only): ≥ 7 WT. 
+        - Case 2 (address / attributes): ≥ 10 WT.
+        **German:** **Schritt 1 – Anmeldung.** 
+        Der neue Lieferant (LFN) meldet eine Marktlokation beim Netzbetreiber (NB) an. Vorlauffristen: 
+        - Fall 1 (nur MaLo-ID) ≥ 7 WT, 
+        - Fall 2 (Adresse / Attribute) ≥ 10 WT.
+      operationId: createRegistration
+      tags:
+        - registrations
+      parameters:
+        - $ref: '#/components/parameters/marketLocationId'
+        - $ref: '#/components/parameters/xRequestId'
+        - $ref: '#/components/parameters/idempotencyKey'
+        - $ref: '#/components/parameters/xMessageId'
+        - $ref: '#/components/parameters/contentDigest'
+        - $ref: '#/components/parameters/signatureInput'
+        - $ref: '#/components/parameters/signature'
+        - $ref: '#/components/parameters/xApiSpecRef'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplyStartCreateRequest'
+            examples:
+              supplierChangeFall1:
+                summary: |
+                  Supplier change – case 1, MaLo-ID only (Prüf-ID 55001) / Lieferantenwechsel – Fall 1, nur MaLo-ID
+                value:
+                  header:
+                    messageId: MSG-2025-001234
+                    messageType: E01
+                    checkIdentifier:
+                      value: '55001'
+                      communicationDirection: LF→NB
+                    createdAt: '2025-03-15T08:00:00Z'
+                    sender:
+                      actorId:
+                        id: '9900987654321'
+                        codingScheme: '293'
+                      marketRole: LF
+                    recipient:
+                      actorId:
+                        id: '9904132000002'
+                        codingScheme: '293'
+                      marketRole: NB
+                  supplyStartDate: '2025-04-01'
+                  transactionReason: ZA1
+                  isHouseholdCustomer: true
+                  marketLocationIdentification:
+                    identificationMode: maloIdOnly
+                    maLoId: '51238696781'
+                  energyDirection: CONSUMPTION
+                  balancing:
+                    balancingGroupId: 11XVSEW------5S
+                    authorizationReference: ZE-2025-00042
+              newConnectionFall2:
+                summary: |
+                  New connection – case 2, address (Prüf-ID 55001) / Neuanlage – Fall 2, Adresse
+                value:
+                  header:
+                    messageId: MSG-2025-001235
+                    messageType: E01
+                    checkIdentifier:
+                      value: '55001'
+                      communicationDirection: LF→NB
+                    createdAt: '2025-03-15T09:15:00Z'
+                    sender:
+                      actorId:
+                        id: '9900987654321'
+                        codingScheme: '293'
+                      marketRole: LF
+                    recipient:
+                      actorId:
+                        id: '9904132000002'
+                        codingScheme: '293'
+                      marketRole: NB
+                  supplyStartDate: '2025-05-01'
+                  requestedStartDateForNewConnection: '2025-05-01'
+                  transactionReason: ZA2
+                  isHouseholdCustomer: false
+                  marketLocationIdentification:
+                    identificationMode: multiAttribute
+                    address:
+                      street: Industriestraße 14b
+                      city: Berlin
+                      postalCode: '10115'
+                      countryCode: DE
+                  energyDirection: CONSUMPTION
+                  balancing:
+                    balancingGroupId: 11XVSEW------5S
+                  meterReadingCycle: monthly
+      responses:
+        '201':
+          description: |
+            Registration created successfully. Returns the created SupplyStart resource. **German:** Anmeldung erfolgreich erstellt. Gibt die erstellte Ressource zurück.
+          headers:
+            Location:
+              $ref: '#/components/headers/location'
+            X-Message-ID:
+              $ref: '#/components/headers/xMessageId'
+            ETag:
+              $ref: '#/components/headers/eTag'
+            X-API-Spec-Ref:
+              $ref: '#/components/headers/xApiSpecRef'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/supplyStart'
+        '400':
+          description: |
+            Validation error – e.g. invalid date format, lead time not met, missing required field. **German:** Validierungsfehler – z.B. ungültiges Datum, Vorlaufzeit nicht eingehalten, fehlendes Pflichtfeld.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '409':
+          description: |
+            Conflict – another registration is already in progress for this market location. **German:** Konflikt – für diese Marktlokation läuft bereits eine Anmeldung.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+      x-stoplight:
+        id: 21ehkz24esbpm
+    get:
+      summary: List registration requests / Anmeldungen auflisten
+      operationId: listRegistrations
+      tags:
+        - registrations
+      parameters:
+        - $ref: '#/components/parameters/marketLocationId'
+        - $ref: '#/components/parameters/signatureInput'
+        - $ref: '#/components/parameters/signature'
+        - name: status
+          in: query
+          schema:
+            $ref: '#/components/schemas/supplyStartStatus'
+          description: |
+            Filter by processing status. **German:** Filter nach Bearbeitungsstatus.
+        - name: fromDate
+          in: query
+          schema:
+            type: string
+            format: date
+          description: |
+            Filter: supply start date ≥ this value (ISO 8601). **German:** Filter: Lieferbeginn-Datum ≥ diesem Wert (ISO 8601).
+        - name: toDate
+          in: query
+          schema:
+            type: string
+            format: date
+          description: |
+            Filter: supply start date ≤ this value (ISO 8601). **German:** Filter: Lieferbeginn-Datum ≤ diesem Wert (ISO 8601).
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 50
+          description: |
+            Page size (number of results per page). **German:** Seitengröße (Anzahl Ergebnisse pro Seite).
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          description: |
+            Page offset (zero-based). **German:** Seitenoffset (nullbasiert).
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/supplyStartList'
+      x-stoplight:
+        id: ny6yjclg4t0aq
+  /malo/{marketLocationId}/registrations/{supplyStartId}:
+    parameters:
+      - name: marketLocationId
+        in: path
+        required: true
+        description: |
+          Unique 11-digit market location ID (MaLo-ID). Corresponds to EDIFACT SG5 LOC DE3225, qualifier Z16. **German:** Eindeutige 11-stellige Marktlokations-ID (MaLo-ID). EDIFACT SG5 LOC DE3225, Qualifier Z16.
+        schema:
+          $ref: '#/components/schemas/marketLocationId'
+      - name: supplyStartId
+        in: path
+        required: true
+        description: |
+          Unique registration (supply start) request ID. **German:** Eindeutige Anmeldungs-ID (Lieferbeginn-Anfrage).
+        schema:
+          type: string
+          maxLength: 35
+          example: SS-2025-00042
+    get:
+      summary: Get a registration request / Anmeldung abrufen
+      description: |
+        Returns the full current state of a registration, including any NB response data (step 5 confirmation / rejection) and existing-assignment information (step 2). **German:** Gibt den vollständigen aktuellen Stand einer Anmeldung zurück, einschließlich der NB-Antwort (Schritt 5) und Informationen zur bestehenden Zuordnung (Schritt 2).
+      operationId: getRegistration
+      tags:
+        - registrations
+      parameters:
+        - $ref: '#/components/parameters/xRequestId'
+        - $ref: '#/components/parameters/signatureInput'
+        - $ref: '#/components/parameters/signature'
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag:
+              $ref: '#/components/headers/eTag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/supplyStart'
+        '404':
+          description: |
+            Registration not found. **German:** Anmeldung nicht gefunden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+      x-stoplight:
+        id: zxh2ziba377kh
+    patch:
+      summary: Update mutable fields of a registration / Anmeldung teilweise aktualisieren
+      description: |
+        Updates changeable fields of a registration while it is still in status `draft`. Once submitted to the NB the registration is immutable. **German:** Aktualisiert änderbare Felder einer Anmeldung, solange diese den Status `draft` hat. Nach Einreichung beim NB ist die Anmeldung unveränderlich.
+      operationId: patchRegistration
+      tags:
+        - registrations
+      parameters:
+        - $ref: '#/components/parameters/xRequestId'
+        - $ref: '#/components/parameters/idempotencyKey'
+        - $ref: '#/components/parameters/ifMatch'
+        - $ref: '#/components/parameters/contentDigest'
+        - $ref: '#/components/parameters/signatureInput'
+        - $ref: '#/components/parameters/signature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplyStartPatchRequest'
+      responses:
+        '200':
+          description: |
+            Updated successfully. **German:** Erfolgreich aktualisiert.
+          headers:
+            ETag:
+              $ref: '#/components/headers/eTag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/supplyStart'
+        '400':
+          description: Validation error / Validierungsfehler.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '404':
+          description: Not found / Nicht gefunden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '409':
+          description: |
+            Conflict – registration cannot be modified in current status (not draft). **German:** Konflikt – Anmeldung kann im aktuellen Status nicht geändert werden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '412':
+          description: |
+            Precondition failed – ETag mismatch (state has changed since last read). **German:** Precondition Failed – ETag stimmt nicht überein (Zustand hat sich geändert).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+      x-stoplight:
+        id: hr70cbq47wy9l
+  /malo/{marketLocationId}/registrations/{supplyStartId}/response:
+    post:
+      summary: NB responds to a registration – Prüf-ID 55002 / 55003 / 55078 / 55080
+      description: |
+        **Step 5 – Response (Antwort auf Anmeldung).** The grid operator (NB) confirms or rejects the supplier's registration.
+        Deadlines (working days from receipt of registration): Case 1: by end of 5th WT. Case 2: by end of 8th WT.
+        **German:** **Schritt 5 – Antwort auf Anmeldung.** Der Netzbetreiber (NB) bestätigt oder lehnt die Anmeldung ab.
+        Fristen ab Eingang der Anmeldung: Fall 1 bis Ende des 5. WT, Fall 2 bis Ende des 8. WT.
+      operationId: respondToRegistration
+      tags:
+        - registrations
+      parameters:
+        - $ref: '#/components/parameters/marketLocationId'
+        - $ref: '#/components/parameters/supplyStartId'
+        - $ref: '#/components/parameters/xRequestId'
+        - $ref: '#/components/parameters/xMessageId'
+        - $ref: '#/components/parameters/idempotencyKey'
+        - $ref: '#/components/parameters/contentDigest'
+        - $ref: '#/components/parameters/signatureInput'
+        - $ref: '#/components/parameters/signature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationResponseRequest'
+            examples:
+              confirmation:
+                summary: |
+                  NB confirms registration (Prüf-ID 55002) / NB bestätigt Anmeldung
+                value:
+                  header:
+                    messageId: MSG-2025-001300
+                    messageType: E04
+                    checkIdentifier:
+                      value: '55002'
+                      communicationDirection: NB→LF
+                    createdAt: '2025-03-18T09:00:00Z'
+                    sender:
+                      actorId:
+                        id: '9904132000002'
+                        codingScheme: '293'
+                      marketRole: NB
+                    recipient:
+                      actorId:
+                        id: '9900987654321'
+                        codingScheme: '293'
+                      marketRole: LF
+                  status:
+                    statusCode: E01
+                  effectiveSupplyStartDate: '2025-04-01'
+                  previousSupplierEndDate: '2025-03-31'
+                  masterData:
+                    voltageLevel:
+                      code: E06
+                      name: Low voltage (Niederspannung NS)
+                    currentMeteringPointOperatorId:
+                      id: '9901234567890'
+                      codingScheme: '293'
+                    supplyContractId: NNV-2024-00123
+                    isInterruptible: false
+              rejection:
+                summary: |
+                  NB rejects registration (Prüf-ID 55003) / NB lehnt Anmeldung ab
+                value:
+                  header:
+                    messageId: MSG-2025-001301
+                    messageType: E05
+                    checkIdentifier:
+                      value: '55003'
+                      communicationDirection: NB→LF
+                    createdAt: '2025-03-18T09:30:00Z'
+                    sender:
+                      actorId:
+                        id: '9904132000002'
+                        codingScheme: '293'
+                      marketRole: NB
+                    recipient:
+                      actorId:
+                        id: '9900987654321'
+                        codingScheme: '293'
+                      marketRole: LF
+                  status:
+                    statusCode: E03
+                    rejectionCode: E_0610
+                  rejectionReasons:
+                    - code: E_0610
+                      message: Previous supplier objected to deregistration within deadline
+      responses:
+        '200':
+          description: |
+            Response processed, registration updated. **German:** Antwort verarbeitet, Anmeldung aktualisiert.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/supplyStart'
+        '400':
+          description: Validation error / Validierungsfehler.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '404':
+          description: Registration not found / Anmeldung nicht gefunden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '409':
+          description: |
+            Conflict – registration already responded to. **German:** Konflikt – Anmeldung wurde bereits beantwortet.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+      x-stoplight:
+        id: 9by8890htxu5w
+    parameters:
+      - schema:
+          type: string
+        name: marketLocationId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: supplyStartId
+        in: path
+        required: true
+  /malo/{marketLocationId}/deregistration-requests:
+    post:
+      summary: NB sends deregistration request to LFA – Prüf-ID 55010
+      description: |
+        **Step 3 – Deregistration request (Abmeldeanfrage).** Grid operator notifies previous supplier of new registration and asks whether deregistration will be confirmed.
+        Deadlines from receipt of registration: Case 1: by end of 1st WT. Case 2: by end of 4th WT.
+        **German:** **Schritt 3 – Abmeldeanfrage.** Netzbetreiber informiert alten Lieferanten über neue Anmeldung und fragt ob die Abmeldung bestätigt wird.
+        Fristen ab Eingang der Anmeldung: Fall 1 bis Ende des 1. WT, Fall 2 bis Ende des 4. WT.
+      operationId: createDeregistrationRequest
+      tags:
+        - deregistrationRequests
+      parameters:
+        - $ref: '#/components/parameters/marketLocationId'
+        - $ref: '#/components/parameters/xRequestId'
+        - $ref: '#/components/parameters/xMessageId'
+        - $ref: '#/components/parameters/idempotencyKey'
+        - $ref: '#/components/parameters/contentDigest'
+        - $ref: '#/components/parameters/signatureInput'
+        - $ref: '#/components/parameters/signature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeregistrationRequestCreate'
+            examples:
+              deregRequest:
+                summary: |
+                  Deregistration request NB → LFA (Prüf-ID 55010) / Abmeldeanfrage NB an LFA
+                value:
+                  header:
+                    messageId: MSG-2025-001240
+                    messageType: E01
+                    checkIdentifier:
+                      value: '55010'
+                      communicationDirection: NB→LF
+                    createdAt: '2025-03-15T17:00:00Z'
+                    sender:
+                      actorId:
+                        id: '9904132000002'
+                        codingScheme: '293'
+                      marketRole: NB
+                    recipient:
+                      actorId:
+                        id: '9900111222333'
+                        codingScheme: '293'
+                      marketRole: LF
+                  supplyStartId: SS-2025-00042
+                  newSupplierId:
+                    id: '9900987654321'
+                    codingScheme: '293'
+                  requestedSupplyStartDate: '2025-04-01'
+      responses:
+        '201':
+          description: |
+            Deregistration request created. **German:** Abmeldeanfrage erstellt.
+          headers:
+            Location:
+              $ref: '#/components/headers/location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeregistrationRequest'
+        '400':
+          description: Validation error / Validierungsfehler.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '409':
+          description: |
+            Conflict – deregistration request already exists for this registration. **German:** Konflikt – für diese Anmeldung existiert bereits eine Abmeldeanfrage.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+      x-stoplight:
+        id: zvcg8fwbp815s
+    parameters:
+      - schema:
+          type: string
+        name: marketLocationId
+        in: path
+        required: true
+  /malo/{marketLocationId}/deregistration-requests/{deregistrationRequestId}/response:
+    post:
+      summary: LFA responds to deregistration request – Prüf-ID 55011 / 55012
+      description: |
+        **Step 4 – Response to deregistration request (Beantwortung Abmeldeanfrage).** Previous supplier confirms (case a or b) or objects to deregistration.
+        Deadline: by end of 3rd WT after receipt of deregistration request.
+        **German:** **Schritt 4 – Beantwortung der Abmeldeanfrage.** Alter Lieferant bestätigt (Fall a oder b) oder widerspricht der Abmeldung.
+        Frist: bis Ende des 3. WT nach Eingang der Abmeldeanfrage.
+      operationId: respondToDeregistrationRequest
+      tags:
+        - deregistrationRequests
+      parameters:
+        - $ref: '#/components/parameters/marketLocationId'
+        - $ref: '#/components/parameters/deregistrationRequestId'
+        - $ref: '#/components/parameters/xRequestId'
+        - $ref: '#/components/parameters/xMessageId'
+        - $ref: '#/components/parameters/idempotencyKey'
+        - $ref: '#/components/parameters/contentDigest'
+        - $ref: '#/components/parameters/signatureInput'
+        - $ref: '#/components/parameters/signature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeregistrationResponseRequest'
+            examples:
+              confirmCaseA:
+                summary: |
+                  LFA confirms – case a, day before supply start (Prüf-ID 55011) / LFA bestätigt – Fall a, Tag vor Anmeldedatum
+                value:
+                  header:
+                    messageId: MSG-2025-001260
+                    messageType: E04
+                    checkIdentifier:
+                      value: '55011'
+                      communicationDirection: LF→NB
+                    createdAt: '2025-03-18T08:00:00Z'
+                    sender:
+                      actorId:
+                        id: '9900111222333'
+                        codingScheme: '293'
+                      marketRole: LF
+                    recipient:
+                      actorId:
+                        id: '9904132000002'
+                        codingScheme: '293'
+                      marketRole: NB
+                  status:
+                    statusCode: E01
+                  deregistrationDate: '2025-03-31'
+                  deregistrationCase: caseA
+              objection:
+                summary: |
+                  LFA objects to deregistration (Prüf-ID 55012) / LFA widerspricht der Abmeldung
+                value:
+                  header:
+                    messageId: MSG-2025-001261
+                    messageType: E05
+                    checkIdentifier:
+                      value: '55012'
+                      communicationDirection: LF→NB
+                    createdAt: '2025-03-18T08:30:00Z'
+                    sender:
+                      actorId:
+                        id: '9900111222333'
+                        codingScheme: '293'
+                      marketRole: LF
+                    recipient:
+                      actorId:
+                        id: '9904132000002'
+                        codingScheme: '293'
+                      marketRole: NB
+                  status:
+                    statusCode: E03
+                    rejectionCode: CONTRACT_ACTIVE
+                  rejectionReasons:
+                    - code: CONTRACT_ACTIVE
+                      message: Fixed-term contract runs until 2025-12-31
+      responses:
+        '200':
+          description: Response processed / Antwort verarbeitet.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeregistrationRequest'
+        '400':
+          description: Validation error / Validierungsfehler.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '404':
+          description: Deregistration request not found / Abmeldeanfrage nicht gefunden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+      x-stoplight:
+        id: zibwz7tpzv3ja
+    parameters:
+      - schema:
+          type: string
+        name: marketLocationId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: deregistrationRequestId
+        in: path
+        required: true
+  /malo/{marketLocationId}/assignment-terminations:
+    post:
+      summary: NB notifies LFA of assignment termination – Prüf-ID 55037
+      description: |
+        **Step 6 – Assignment termination (Beendigung der Zuordnung).** Grid operator informs previous supplier that its assignment has been terminated.
+        Deadline: same calendar day as step 5 confirmation.
+        **German:** **Schritt 6 – Beendigung der Zuordnung.** Netzbetreiber informiert alten Lieferanten über die Beendigung seiner Zuordnung.
+        Frist: am selben Kalendertag wie Schritt 5 (Bestätigung).
+      operationId: notifyAssignmentTermination
+      tags:
+        - assignments
+      parameters:
+        - $ref: '#/components/parameters/marketLocationId'
+        - $ref: '#/components/parameters/xRequestId'
+        - $ref: '#/components/parameters/xMessageId'
+        - $ref: '#/components/parameters/idempotencyKey'
+        - $ref: '#/components/parameters/contentDigest'
+        - $ref: '#/components/parameters/signatureInput'
+        - $ref: '#/components/parameters/signature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignmentTerminationCreate'
+            examples:
+              termination:
+                summary: |
+                  Assignment termination NB → LFA (Prüf-ID 55037) / Zuordnungsbeendigung NB an LFA
+                value:
+                  header:
+                    messageId: MSG-2025-001310
+                    messageType: E01
+                    checkIdentifier:
+                      value: '55037'
+                      communicationDirection: NB→LF
+                    createdAt: '2025-03-18T10:00:00Z'
+                    sender:
+                      actorId:
+                        id: '9904132000002'
+                        codingScheme: '293'
+                      marketRole: NB
+                    recipient:
+                      actorId:
+                        id: '9900111222333'
+                        codingScheme: '293'
+                      marketRole: LF
+                  assignmentEndDate: '2025-03-31'
+                  terminationReason: supplierChange
+                  supplyStartId: SS-2025-00042
+                  newSupplierId:
+                    id: '9900987654321'
+                    codingScheme: '293'
+      responses:
+        '201':
+          description: Notification created / Mitteilung erstellt.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssignmentTermination'
+        '400':
+          description: Validation error / Validierungsfehler.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+      x-stoplight:
+        id: x4smm3snavkce
+    parameters:
+      - schema:
+          type: string
+        name: marketLocationId
+        in: path
+        required: true
+  /malo/{marketLocationId}/assignment-cancellations:
+    post:
+      summary: NB cancels future assignment of LFZ – Prüf-ID 55038
+      description: |
+        **Step 7 – Cancellation of future assignment (Aufhebung zukünftiger Zuordnung).** Grid operator informs future supplier (LFZ) that its future assignment has been cancelled because the new supplier was registered first.
+        Deadline: same calendar day as step 5 confirmation.
+        **German:** **Schritt 7 – Aufhebung einer zukünftigen Zuordnung.** Netzbetreiber informiert zukünftigen Lieferanten (LFZ) über die Aufhebung seiner zukünftigen Zuordnung, da ein anderer Lieferant zuerst angemeldet wurde.
+        Frist: am selben Kalendertag wie Schritt 5 (Bestätigung).
+      operationId: notifyAssignmentCancellation
+      tags:
+        - assignments
+      parameters:
+        - $ref: '#/components/parameters/marketLocationId'
+        - $ref: '#/components/parameters/xRequestId'
+        - $ref: '#/components/parameters/xMessageId'
+        - $ref: '#/components/parameters/idempotencyKey'
+        - $ref: '#/components/parameters/contentDigest'
+        - $ref: '#/components/parameters/signatureInput'
+        - $ref: '#/components/parameters/signature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignmentCancellationCreate'
+            examples:
+              cancellation:
+                summary: |
+                  Future assignment cancellation NB → LFZ (Prüf-ID 55038) / Aufhebung zukünftiger Zuordnung NB an LFZ
+                value:
+                  header:
+                    messageId: MSG-2025-001315
+                    messageType: E01
+                    checkIdentifier:
+                      value: '55038'
+                      communicationDirection: NB→LF
+                    createdAt: '2025-03-18T10:05:00Z'
+                    sender:
+                      actorId:
+                        id: '9904132000002'
+                        codingScheme: '293'
+                      marketRole: NB
+                    recipient:
+                      actorId:
+                        id: '9900555666777'
+                        codingScheme: '293'
+                      marketRole: LF
+                  cancelledAssignmentFrom: '2025-05-01'
+                  cancellationReason: priorRegistration
+                  supplyStartId: SS-2025-00042
+                  newSupplierId:
+                    id: '9900987654321'
+                    codingScheme: '293'
+      responses:
+        '201':
+          description: Cancellation notification created / Aufhebungsmitteilung erstellt.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssignmentCancellation'
+        '400':
+          description: Validation error / Validierungsfehler.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+      x-stoplight:
+        id: hxqwnq7qc8nd3
+    parameters:
+      - schema:
+          type: string
+        name: marketLocationId
+        in: path
+        required: true
+components:
+  parameters:
+    marketLocationId:
+      name: marketLocationId
+      in: path
+      required: true
+      description: |
+        Unique 11-digit market location ID (MaLo-ID). Corresponds to EDIFACT SG5 LOC DE3225, qualifier Z16. **German:** Eindeutige 11-stellige Marktlokations-ID (MaLo-ID). EDIFACT SG5 LOC DE3225, Qualifier Z16.
+      schema:
+        $ref: '#/components/schemas/marketLocationId'
+    supplyStartId:
+      name: supplyStartId
+      in: path
+      required: true
+      description: |
+        Unique registration (supply start) request ID. **German:** Eindeutige Anmeldungs-ID (Lieferbeginn-Anfrage).
+      schema:
+        type: string
+        maxLength: 35
+        example: SS-2025-00042
+    deregistrationRequestId:
+      name: deregistrationRequestId
+      in: path
+      required: true
+      description: |
+        Unique deregistration request ID. **German:** Eindeutige Abmeldeanfrage-ID.
+      schema:
+        type: string
+        maxLength: 35
+        example: DR-2025-00007
+    signatureInput:
+      name: Signature-Input
+      in: header
+      required: false
+      description: |
+        Declares the components and parameters used to construct each HTTP Message
+        Signature, as specified in RFC 9421. Each entry names a signature label and
+        lists the covered components (derived components, header fields) along with
+        metadata such as creation time, expiry, key identifier, and algorithm.
+
+        The `Signature-Input` header MUST accompany every `Signature` header and
+        reference the same label identifiers.
+
+        Covered components for EDI@Energy POST requests with body:
+        `"@method"`, `"@authority"`, `"@target-uri"`, `"content-type"`, `"accept"`,
+        `"content-digest"`, `"date"`, `"x-request-id"`, `"x-api-spec-ref"`,
+        `"x-api-spec-version"`
+
+        Covered components for GET requests (no body):
+        `"@method"`, `"@path"`, `"@query"`, `"host"`, `"date"`, `"x-request-id"`,
+        `"x-api-spec-ref"`, `"x-api-spec-version"`
+
+        **German:** Deklariert die Komponenten und Parameter, die zur Konstruktion
+        jeder HTTP-Message-Signatur verwendet werden (RFC 9421). Jeder Eintrag benennt
+        ein Signatur-Label und listet die abgedeckten Komponenten (abgeleitete
+        Komponenten, Header-Felder) mit Metadaten wie Erstellzeit, Ablaufzeit,
+        Schlüssel-ID und Algorithmus.
+
+        Der `Signature-Input`-Header MUSS jeden `Signature`-Header begleiten und
+        dieselben Label-Bezeichner referenzieren.
+      schema:
+        type: string
+        description: |
+          Structured field value per RFC 8941 (Structured Field Values for HTTP).
+          Contains one or more labeled inner-lists of covered components with parameters.
+        examples:
+          PostWithBody:
+            summary: POST with JWE body — full component list
+            value: sig1=("@method" "@authority" "@target-uri" "content-type" "accept" "content-digest" "date" "x-request-id" "x-api-spec-ref" "x-api-spec-version");created=1769940930;expires=1769941230; keyid="client-http-sig-01";alg="ecdsa-p256-sha256"
+          GetNoBody:
+            summary: GET without body — path and query included
+            value: sig1=("@method" "@path" "@query" "host" "date" "x-request-id" "x-api-spec-ref" "x-api-spec-version");created=1706782530; expires=1706782830;keyid="client-ed25519-01";alg="ed25519"
+      x-header-group: security
+      x-direction: request
+      x-rfc: RFC 9421 §2.5 (HTTP Message Signatures — Signature-Input)
+    signature:
+      name: Signature
+      in: header
+      required: false
+      description: |
+        Contains the base64url-encoded digital signature value(s) for the HTTP message,
+        as specified in RFC 9421. Each signature is labeled to match a corresponding
+        entry in the `Signature-Input` header.
+
+        The signature covers all components declared in `Signature-Input` and is
+        computed using the algorithm and key identified there. For EDI@Energy APIs,
+        the supported algorithms are:
+        - `ecdsa-p256-sha256` (ECDSA with P-256 and SHA-256) — primary algorithm
+        - `ed25519` (Edwards-Curve Digital Signature Algorithm) — alternative
+
+        The receiving server MUST verify this signature against the canonicalized
+        component values before processing the request.
+
+        **German:** Enthält den base64url-kodierten digitalen Signaturwert für die
+        HTTP-Nachricht (RFC 9421). Jede Signatur ist mit einem Label versehen, das
+        einem entsprechenden Eintrag im `Signature-Input`-Header entspricht.
+
+        Die Signatur deckt alle in `Signature-Input` deklarierten Komponenten ab und
+        wird mit dem dort angegebenen Algorithmus und Schlüssel berechnet. Unterstützte
+        Algorithmen für EDI@Energy-APIs:
+        - `ecdsa-p256-sha256` (ECDSA mit P-256 und SHA-256) — primärer Algorithmus
+        - `ed25519` — alternative
+      schema:
+        type: string
+        description: |
+          Structured field value per RFC 8941. Contains one or more labeled byte
+          sequences, each being the raw signature bytes base64-encoded.
+        examples:
+          EcdsaSignature:
+            summary: ECDSA P-256 signature
+            value: 'sig1=:m1dP0w7qZ8QmM8n6f0dVbQ4h2lJd0q3H6mQkq9Vxq8g=:'
+          Ed25519Signature:
+            summary: Ed25519 signature
+            value: 'sig1=:MEQCIG0H4V4F9H0X9Y5k3y9w5q4k3vV8d1qzH7XrFQq4AiBv3Z8f5h1Xz0M0H7mXyZq8m0b1Y2n5p8d0cH0A==:'
+      x-header-group: security
+      x-direction: request
+      x-rfc: RFC 9421 §4 (HTTP Message Signatures — Signature)
+    xRequestId:
+      name: X-Request-ID
+      in: header
+      required: false
+      description: |
+        Unique identifier for a single HTTP request. Can be generated by either the
+        client or the server. Lifetime is scoped to this single request only.
+        Can be used as an alternative to `Idempotency-Key`.
+
+        If the client provides this header, the server SHOULD echo it back in the
+        response unchanged to enable end-to-end request correlation in logs and
+        distributed tracing.
+
+        **German:** Eindeutige Kennung für genau einen HTTP-Request. Kann vom Client
+        oder Server erzeugt werden. Lebensdauer beschränkt auf diesen einzelnen Request.
+        Kann alternativ zu `Idempotency-Key` verwendet werden.
+
+        **Korrekturen gegenüber Vorlage:** `X-Request-Id` → `X-Request-ID`
+        (Akronym ID wird großgeschrieben – gängige HTTP-Header-Konvention).
+      schema:
+        type: string
+        format: uuid
+        pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+        minLength: 36
+        maxLength: 36
+        description: UUID v4 format.
+        examples:
+          UUIDv4:
+            summary: Standard UUID v4
+            value: 7c9b3a2e-3c8a-4f0e-9a16-2a4efc0d2b8a
+          AnotherUUID:
+            summary: Another UUID v4 example
+            value: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+      x-header-group: general
+      x-direction: request-response
+      x-rfc: Konvention; vgl. RFC 9110 §10
+    idempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: false
+      description: |
+        Client-generated key that makes a request idempotent. The server uses this key
+        to detect duplicate requests and return the same response for retries without
+        re-executing the operation.
+
+        Rules:
+        - MUST be generated by the client (never the server)
+        - MUST remain unchanged across retries of the same logical operation
+        - Server SHOULD store responses keyed by this value for a defined TTL
+        - If the key matches a completed request, the server returns the cached response
+
+        **German:** Vom Client erzeugter Schlüssel für Idempotenz. Der Server erkennt
+        damit Duplikate und gibt bei Wiederholungen (Retries) dieselbe Antwort zurück,
+        ohne die Operation nochmals auszuführen. Bleibt beim Retry unverändert.
+
+        **Korrekturen gegenüber Vorlage:**
+        - Spaltenname `Idempotency-ID` → **`Idempotency-Key`** (RFC 8694 / Stripe-Standard;
+          das Beispiel in der Präsentation zeigte bereits den korrekten Namen).
+      schema:
+        type: string
+        format: uuid
+        pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+        minLength: 36
+        maxLength: 36
+        description: |
+          UUID v4 format. Must be client-generated and stable across retries.
+        examples:
+          RetryableOperation:
+            summary: Idempotency key for a retryable POST
+            value: 2f6d3f3d-2c3d-4b45-9f2b-3b2bb7f2b9c1
+          AnotherOperation:
+            summary: Another idempotency key
+            value: 550e8400-e29b-41d4-a716-446655440000
+      x-header-group: general
+      x-direction: request
+      x-rfc: RFC 8694; Stripe Idempotency Standard
+    xMessageId:
+      name: X-Message-ID
+      in: header
+      required: false
+      description: |
+        Process-scoped transaction identifier spanning multiple API calls.
+        Corresponds to the initial TransactionID in EDI@Energy processes.
+        Lifetime covers the entire business process — multiple API calls across
+        different services use the same `X-Message-ID` to correlate a complete process.
+
+        Unlike `X-Request-ID` (per-request), `X-Message-ID` is the process-level
+        correlation key.
+
+        **German:** Prozess-übergreifende Transaktionskennung, die mehrere API-Aufrufe
+        zusammenfasst. Entspricht der initialen TransaktionsID in EDI@Energy-Prozessen.
+        Lebensdauer umspannt den gesamten Geschäftsprozess – mehrere APIs klammern
+        damit einen Prozess zusammen.
+
+        **Korrekturen gegenüber Vorlage:** `X-Message-Id` → `X-Message-ID`
+        (Akronym ID wird großgeschrieben).
+      schema:
+        type: string
+        format: uuid
+        pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+        minLength: 36
+        maxLength: 36
+        description: UUID v4 format. Stable across all requests of one business process.
+        examples:
+          ProcessA:
+            summary: Business process A message ID
+            value: 3e6d3f3d-2c3d-4b45-9f2b-3b2bb7f2b9a1
+          ProcessB:
+            summary: Business process B message ID
+            value: f47ac10b-58cc-4372-a567-0e02b2c3d479
+      x-header-group: general
+      x-direction: request-response
+      x-rfc: EDI@Energy Konvention; vgl. RFC 9110 §10
+    contentDigest:
+      name: Content-Digest
+      in: header
+      required: false
+      description: |
+        SHA-256 digest of the request or response body, used to bind the payload to
+        the HTTP Message Signature (RFC 9421). The server verifies this value against
+        the received body before accepting the signature as valid.
+
+        Format: `sha-256=:<base64url-encoded SHA-256 hash>:`
+
+        When JWE or JWS is used as the body (`Content-Type: application/jose`), the
+        digest covers the serialized compact JWE/JWS token, not the original plaintext.
+
+        **German:** SHA-256-Digest des Anfrage- oder Antwort-Body, der den Payload an
+        die HTTP-Message-Signatur (RFC 9421) bindet. Der Server prüft diesen Wert gegen
+        den empfangenen Body, bevor er die Signatur akzeptiert.
+
+        Format: `sha-256=:<base64url-kodierter SHA-256-Hash>:`
+
+        Bei Verwendung von JWE oder JWS als Body (`Content-Type: application/jose`)
+        deckt der Digest das serialisierte kompakte JWE/JWS-Token ab, nicht den
+        ursprünglichen Klartext.
+      schema:
+        type: string
+        pattern: ^sha-256=:[A-Za-z0-9+/=]+:$
+        description: |
+          SHA-256 content digest in the format: sha-256=:<base64-encoded hash>:
+        examples:
+          Example1:
+            summary: SHA-256 digest of a JWE body
+            value: 'sha-256=:uU0p7h6qv6bqGJgYy3m8n2mY0cKc6lQ5qJv8W2r9bLk=:'
+          Example2:
+            summary: SHA-256 digest of a JSON body
+            value: 'sha-256=:X48E9qOokqqrvdts8nOJRJN3OWDUoyWxBf7kbu9DBPE=:'
+      x-header-group: security
+      x-direction: request-response
+      x-rfc: RFC 9530 (Digest Fields); used by RFC 9421 (HTTP Message Signatures)
+    xApiSpecRef:
+      name: X-API-Spec-Ref
+      in: header
+      required: false
+      description: |
+        **Response header.** Direct reference to the API specification in the
+        EDI@Energy GitHub repository. Can point to a specific tagged release or
+        to the main branch.
+
+        Format: `git:{owner}/{repo}@{ref}` for a specific ref, or
+        `git:{owner}/{repo}` for the default branch (main).
+
+        **German:** **Response-Header.** Verweis auf die Schnittstelle im GitHub-Repository
+        der EDI@Energy. Kann auf einen spezifischen Branch/Tag oder auf main verweisen.
+
+        **Korrekturen gegenüber Vorlage:** `X-Api-Spec-Ref` → **`X-API-Spec-Ref`**
+        (Akronym API wird großgeschrieben).
+      schema:
+        type: string
+        pattern: ^git:[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+(@[A-Za-z0-9_./-]+)?$
+        description: |
+          Git reference in the format `git:{owner}/{repo}@{tag-or-branch}`.
+          Omit `@{ref}` to reference the default (main) branch.
+        examples:
+          ConsultationBranch:
+            summary: Specific consultation release branch
+            value: git:EDI-Energy/api-electricity@2026-02-02-consultation
+          MainBranch:
+            summary: Main/default branch
+            value: git:EDI-Energy/api-electricity
+          TaggedRelease:
+            summary: Specific version tag
+            value: git:EDI-Energy/api-electricity@v1.7.1
+      x-header-group: version-control
+      x-direction: response
+      x-rfc: EDI@Energy Konvention
+    ifMatch:
+      name: If-Match
+      in: header
+      required: false
+      description: |
+        **Request header.** Conditional request that instructs the server to execute
+        the operation only if the resource's current ETag matches the provided value.
+        Used for optimistic concurrency control in state-machine transitions.
+
+        EDI@Energy state-machine use:
+        - Client reads current state via `ETag: "state:running"` in the response
+        - Client sends `If-Match: "state:running"` to trigger the next transition
+        - If the server's current state no longer matches, it responds `412 Precondition Failed`
+        - This prevents race conditions in concurrent state transitions
+
+        `*` matches any existing ETag (use with caution).
+
+        **German:** **Request-Header.** Führt einen Request nur aus, wenn der aktuelle
+        ETag der Ressource mit dem angegebenen Wert übereinstimmt. Steuert damit
+        Zustandsübergänge in der State-Machine: Nur wenn der Server sich im erwarteten
+        Zustand befindet, wird die Aktion ausgeführt. Bei Abweichung: `412 Precondition Failed`.
+
+        **Bewertung:** ✅ Korrekt — standardisierter IANA-Header.
+      schema:
+        type: string
+        pattern: ^(\*|(W/)?"[^"]*"(,\s*(W/)?"[^"]*")*)$
+        description: |
+          One or more ETag values in double quotes, comma-separated, or `*`.
+          EDI@Energy state values: "state:pending", "state:running",
+          "state:completed", "state:failed", "state:cancelled".
+        examples:
+          MatchRunning:
+            summary: Proceed only if transaction is in running state
+            value: '"state:running"'
+          MatchPending:
+            summary: Proceed only if transaction is pending
+            value: '"state:pending"'
+          MatchAny:
+            summary: Match any existing resource (use with caution)
+            value: '*'
+          MultipleStates:
+            summary: Proceed if in running or pending state
+            value: '"state:running", "state:pending"'
+      x-header-group: state-machine
+      x-direction: request
+      x-rfc: RFC 9110 §13.1.1 (standard HTTP conditional header)
+  schemas:
+    MarketLocationId:
+      $ref: '#/components/schemas/marketLocationId'
+    CheckIdentifier:
+      $ref: '#/components/schemas/checkIdentifier'
+    MessageHeader:
+      $ref: '#/components/schemas/messageHeader'
+    TransactionStatus:
+      $ref: '#/components/schemas/transactionStatus'
+    TransactionReason:
+      $ref: '#/components/schemas/transactionReason'
+    EnergyDirection:
+      $ref: '#/components/schemas/energyDirection'
+    MarketRoleCode:
+      $ref: '#/components/schemas/marketRoleCode'
+    MarketActorId:
+      $ref: '#/components/schemas/marketActorId'
+    Address:
+      $ref: '#/components/schemas/address'
+    ValidityPeriod:
+      $ref: '#/components/schemas/validityPeriod'
+    VoltageLevel:
+      $ref: '#/components/schemas/voltageLevel'
+    ErrorResponse:
+      $ref: '#/components/schemas/errorResponse'
+    SupplyStartStatus:
+      $ref: '#/components/schemas/supplyStartStatus'
+    IdentificationMode:
+      $ref: '#/components/schemas/identificationMode'
+    MeterReadingCycle:
+      $ref: '#/components/schemas/meterReadingCycle'
+    TerminationReason:
+      $ref: '#/components/schemas/terminationReason'
+    DeregistrationCase:
+      $ref: '#/components/schemas/deregistrationCase'
+    RejectionReason:
+      $ref: '#/components/schemas/rejectionReason'
+    MarketLocationIdentification:
+      $ref: '#/components/schemas/marketLocationIdentification'
+    BalancingAssignment:
+      $ref: '#/components/schemas/balancingAssignment'
+    MasterDataResponse:
+      $ref: '#/components/schemas/masterDataResponse'
+    SupplyStart:
+      $ref: '#/components/schemas/supplyStart'
+    SupplyStartList:
+      $ref: '#/components/schemas/supplyStartList'
+    SupplyStartCreateRequest:
+      type: object
+      title: SupplyStartCreateRequest
+      description: |
+        Request body for submitting a new registration (Anmeldung) from LFN to NB. Prüf-ID 55001 (consuming MaLo) or 55077 (generating MaLo). **German:** Anfragekörper für die Anmeldung des neuen Lieferanten (LFN) beim Netzbetreiber (NB). Prüf-ID 55001 (verbrauchende MaLo) oder 55077 (erzeugende MaLo).
+      x-i18n:
+        de:
+          title: Anmeldung – Anfragekörper
+          description: Anfragekörper für die Anmeldung LFN an NB. Prüf-ID 55001 / 55077.
+      required:
+        - header
+        - supplyStartDate
+        - transactionReason
+        - isHouseholdCustomer
+        - marketLocationIdentification
+        - energyDirection
+        - balancing
+      properties:
+        header:
+          $ref: '#/components/schemas/messageHeader'
+        supplyStartDate:
+          type: string
+          format: date
+          description: |
+            Requested supply start date (Anmeldedatum). ISO 8601 date. Corresponds to EDIFACT SG4 DTM qualifier 92. **German:** Gewünschtes Lieferbeginn-Datum (Anmeldedatum). ISO 8601-Datum. EDIFACT SG4 DTM Qualifier 92.
+          x-i18n:
+            de:
+              description: Gewünschtes Lieferbeginn-Datum. ISO 8601. EDIFACT SG4 DTM Q92.
+          examples:
+            QuarterStart:
+              summary: QuarterStart
+              value: '2025-04-01'
+            YearStart:
+              summary: YearStart
+              value: '2026-01-01'
+          x-examples-i18n:
+            de:
+              QuarterStart: Quartalsbeginn
+              YearStart: Jahresbeginn
+        requestedStartDateForNewConnection:
+          type: string
+          format: date
+          nullable: true
+          description: |
+            Estimated supply start date for a new connection (Neuanlage), as communicated by the customer. Only set when transactionReason = ZA2. **German:** Voraussichtliches Lieferbeginn-Datum bei Neuanlage (ZA2), vom Kunden mitgeteilt.
+          x-i18n:
+            de:
+              description: Voraussichtliches Anmeldedatum bei Neuanlage (nur bei ZA2).
+        transactionReason:
+          $ref: '#/components/schemas/transactionReason'
+        isHouseholdCustomer:
+          type: boolean
+          description: |
+            Whether the end customer is a household customer (Haushaltskunde, EnWG). **German:** Haushaltskunde im Sinne des EnWG (ja/nein).
+          x-i18n:
+            de:
+              description: Haushaltskunde im Sinne des EnWG (ja/nein).
+          examples:
+            Household:
+              summary: Household
+              value: true
+            Commercial:
+              summary: Commercial
+              value: false
+          x-examples-i18n:
+            de:
+              Household: Haushaltskunde
+              Commercial: Gewerbe-/Industriekunde
+        marketLocationIdentification:
+          $ref: '#/components/schemas/marketLocationIdentification'
+        energyDirection:
+          $ref: '#/components/schemas/energyDirection'
+        balancing:
+          $ref: '#/components/schemas/balancingAssignment'
+        meterReadingCycle:
+          $ref: '#/components/schemas/meterReadingCycle'
+        notes:
+          type: string
+          maxLength: 500
+          nullable: true
+          description: |
+            Free-text notes for internal use. Not transmitted to the grid operator. **German:** Freitext-Notizen für den internen Gebrauch. Werden nicht an den NB übermittelt.
+          x-i18n:
+            de:
+              description: Freitext-Notizen (intern, nicht an NB übermittelt).
+    SupplyStartPatchRequest:
+      type: object
+      title: SupplyStartPatchRequest
+      description: |
+        Mutable fields of a registration that can be updated while status = draft. **German:** Änderbare Felder einer Anmeldung im Status draft.
+      x-i18n:
+        de:
+          title: Anmeldung-Patch-Anfrage
+          description: Änderbare Felder einer Anmeldung (nur Status draft).
+      properties:
+        supplyStartDate:
+          type: string
+          format: date
+          description: |
+            Updated requested supply start date (ISO 8601). **German:** Aktualisiertes gewünschtes Lieferbeginn-Datum (ISO 8601).
+          x-i18n:
+            de:
+              description: Aktualisiertes Lieferbeginn-Datum (ISO 8601).
+        isHouseholdCustomer:
+          type: boolean
+          description: |
+            Updated household customer flag. **German:** Aktualisiertes Haushaltskunden-Kennzeichen.
+          x-i18n:
+            de:
+              description: Aktualisiertes Haushaltskunden-Kennzeichen.
+        marketLocationIdentification:
+          $ref: '#/components/schemas/marketLocationIdentification'
+        balancing:
+          $ref: '#/components/schemas/balancingAssignment'
+        meterReadingCycle:
+          $ref: '#/components/schemas/meterReadingCycle'
+        notes:
+          type: string
+          maxLength: 500
+          nullable: true
+          description: |
+            Free-text notes. **German:** Freitext-Notizen.
+          x-i18n:
+            de:
+              description: Freitext-Notizen.
+    RegistrationResponseRequest:
+      type: object
+      title: RegistrationResponseRequest
+      description: |
+        Request body for the grid operator (NB) response to a registration. Prüf-ID 55002 / 55078 (confirmation) or 55003 / 55080 (rejection). **German:** Anfragekörper für die NB-Antwort auf eine Anmeldung. Prüf-ID 55002 / 55078 (Bestätigung) oder 55003 / 55080 (Ablehnung).
+      x-i18n:
+        de:
+          title: Anmeldungsantwort NB – Anfragekörper
+          description: NB-Antwort (Bestätigung oder Ablehnung). Prüf-ID 55002/55078 oder 55003/55080.
+      required:
+        - header
+        - status
+      properties:
+        header:
+          $ref: '#/components/schemas/messageHeader'
+        status:
+          $ref: '#/components/schemas/transactionStatus'
+        effectiveSupplyStartDate:
+          type: string
+          format: date
+          nullable: true
+          description: |
+            Confirmed effective supply start date (set only on confirmation, statusCode = E01). **German:** Bestätigtes wirksames Lieferbeginn-Datum (nur bei Bestätigung, statusCode = E01).
+          x-i18n:
+            de:
+              description: Bestätigtes wirksames Lieferbeginn-Datum (nur bei statusCode = E01).
+          examples:
+            Confirmed:
+              summary: Confirmed
+              value: '2025-04-01'
+          x-examples-i18n:
+            de:
+              Confirmed: Bestätigter Lieferbeginn
+        previousSupplierEndDate:
+          type: string
+          format: date
+          nullable: true
+          description: |
+            End date of the previous supplier's assignment (set only on confirmation). **German:** Enddatum der Zuordnung des alten Lieferanten (nur bei Bestätigung gesetzt).
+          x-i18n:
+            de:
+              description: Enddatum der LFA-Zuordnung (nur bei Bestätigung).
+          examples:
+            EndDate:
+              summary: EndDate
+              value: '2025-03-31'
+          x-examples-i18n:
+            de:
+              EndDate: Enddatum LFA-Zuordnung
+        masterData:
+          $ref: '#/components/schemas/masterDataResponse'
+        rejectionReasons:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/rejectionReason'
+          description: |
+            Rejection reasons (set only on rejection, statusCode = E03). **German:** Ablehnungsgründe (nur bei Ablehnung, statusCode = E03).
+          x-i18n:
+            de:
+              description: Ablehnungsgründe (nur bei statusCode = E03).
+    DeregistrationRequestCreate:
+      type: object
+      title: DeregistrationRequestCreate
+      description: |
+        Request body for the grid operator (NB) to notify the previous supplier (LFA) of the new registration and inquire about deregistration. Prüf-ID 55010. **German:** Anfragekörper für die Abmeldeanfrage des Netzbetreibers (NB) an den alten Lieferanten (LFA). Prüf-ID 55010.
+      x-i18n:
+        de:
+          title: Abmeldeanfrage – Anfragekörper
+          description: Abmeldeanfrage NB an LFA. Prüf-ID 55010.
+      required:
+        - header
+        - supplyStartId
+        - newSupplierId
+        - requestedSupplyStartDate
+      properties:
+        header:
+          $ref: '#/components/schemas/messageHeader'
+        supplyStartId:
+          type: string
+          maxLength: 35
+          description: |
+            ID of the originating registration request that triggered this deregistration inquiry. **German:** ID der auslösenden Anmeldung, die diese Abmeldeanfrage verursacht hat.
+          x-i18n:
+            de:
+              description: ID der auslösenden Anmeldung.
+          examples:
+            Reg1:
+              summary: Reg1
+              value: SS-2025-00042
+          x-examples-i18n:
+            de:
+              Reg1: Auslösende Anmeldung
+        newSupplierId:
+          $ref: '#/components/schemas/marketActorId'
+        requestedSupplyStartDate:
+          type: string
+          format: date
+          description: |
+            The supply start date requested by the new supplier (LFN). **German:** Das vom neuen Lieferanten (LFN) gewünschte Lieferbeginn-Datum.
+          x-i18n:
+            de:
+              description: Vom LFN gewünschtes Lieferbeginn-Datum.
+          examples:
+            Q2Start:
+              summary: Q2Start
+              value: '2025-04-01'
+          x-examples-i18n:
+            de:
+              Q2Start: Quartalsbeginn Q2 2025
+    DeregistrationRequest:
+      type: object
+      title: DeregistrationRequest
+      description: |
+        Full representation of a deregistration request and its response state. **German:** Vollständige Darstellung einer Abmeldeanfrage und ihres Antwortstatus.
+      x-i18n:
+        de:
+          title: Abmeldeanfrage (vollständig)
+          description: Vollständige Darstellung einer Abmeldeanfrage inkl. Antwortstatus.
+      required:
+        - deregistrationRequestId
+        - supplyStartId
+        - deregistrationStatus
+        - createdAt
+      properties:
+        deregistrationRequestId:
+          type: string
+          maxLength: 35
+          readOnly: true
+          description: |
+            Unique deregistration request ID. **German:** Eindeutige Abmeldeanfrage-ID.
+          x-i18n:
+            de:
+              description: Eindeutige Abmeldeanfrage-ID.
+          examples:
+            DR1:
+              summary: DR1
+              value: DR-2025-00007
+          x-examples-i18n:
+            de:
+              DR1: Abmeldeanfrage Beispiel
+        supplyStartId:
+          type: string
+          maxLength: 35
+          description: |
+            ID of the registration that triggered this deregistration request. **German:** ID der Anmeldung, die diese Abmeldeanfrage ausgelöst hat.
+          x-i18n:
+            de:
+              description: ID der auslösenden Anmeldung.
+        deregistrationStatus:
+          type: string
+          description: |
+            Current processing status of this deregistration request. **German:** Aktueller Bearbeitungsstatus dieser Abmeldeanfrage.
+          x-i18n:
+            de:
+              description: Bearbeitungsstatus der Abmeldeanfrage.
+          enum:
+            - pending
+            - confirmed
+            - objected
+            - expired
+          x-enum-descriptions:
+            pending:
+              en: Awaiting response from previous supplier (LFA)
+              de: Warte auf Antwort des alten Lieferanten (LFA)
+            confirmed:
+              en: LFA confirmed deregistration (Prüf-ID 55011)
+              de: LFA hat die Abmeldung bestätigt (Prüf-ID 55011)
+            objected:
+              en: LFA objected to deregistration (Prüf-ID 55012)
+              de: LFA hat der Abmeldung widersprochen (Prüf-ID 55012)
+            expired:
+              en: Response deadline passed without answer from LFA
+              de: Antwortfrist abgelaufen ohne Rückmeldung des LFA
+          examples:
+            Pending:
+              summary: Pending
+              value: pending
+            Confirmed:
+              summary: Confirmed
+              value: confirmed
+          x-examples-i18n:
+            de:
+              Pending: Ausstehend
+              Confirmed: Bestätigt
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+          description: |
+            Timestamp when the deregistration request was created (ISO 8601). **German:** Erstellungszeitpunkt der Abmeldeanfrage (ISO 8601).
+          x-i18n:
+            de:
+              description: Erstellungszeitpunkt der Abmeldeanfrage (ISO 8601).
+        deregistrationDate:
+          type: string
+          format: date
+          nullable: true
+          readOnly: true
+          description: |
+            Confirmed deregistration end date (set after LFA confirmation, deregistrationStatus = confirmed). **German:** Bestätigtes Abmeldedatum (nach LFA-Bestätigung gesetzt).
+          x-i18n:
+            de:
+              description: Bestätigtes Abmeldedatum (nur bei deregistrationStatus = confirmed).
+        deregistrationCase:
+          $ref: '#/components/schemas/deregistrationCase'
+        rejectionReasons:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/rejectionReason'
+          description: |
+            LFA's objection reasons (only when deregistrationStatus = objected). **German:** Widerspruchsgründe des LFA (nur bei deregistrationStatus = objected).
+          x-i18n:
+            de:
+              description: Widerspruchsgründe des LFA.
+        label:
+          $ref: '#/components/schemas/multilingualLabel'
+    DeregistrationResponseRequest:
+      type: object
+      title: DeregistrationResponseRequest
+      description: |
+        Request body for the previous supplier (LFA) response to a deregistration request. Prüf-ID 55011 (confirmation) or 55012 (objection). **German:** Anfragekörper für die Antwort des alten Lieferanten (LFA) auf eine Abmeldeanfrage. Prüf-ID 55011 (Bestätigung) oder 55012 (Widerspruch).
+      x-i18n:
+        de:
+          title: Antwort auf Abmeldeanfrage – Anfragekörper
+          description: Beantwortung der Abmeldeanfrage durch LFA. Prüf-ID 55011 oder 55012.
+      required:
+        - header
+        - status
+      properties:
+        header:
+          $ref: '#/components/schemas/messageHeader'
+        status:
+          $ref: '#/components/schemas/transactionStatus'
+        deregistrationDate:
+          type: string
+          format: date
+          nullable: true
+          description: |
+            Confirmed deregistration end date. Case a: day before supply start date. Case b: an earlier date. Null on objection (statusCode = E03). **German:** Bestätigtes Abmeldedatum. Fall a: Tag vor dem Anmeldedatum. Fall b: ein früheres Datum. Null bei Widerspruch (statusCode = E03).
+          x-i18n:
+            de:
+              description: Bestätigtes Abmeldedatum. Fall a oder Fall b. Null bei Widerspruch.
+          examples:
+            CaseA:
+              summary: CaseA
+              value: '2025-03-31'
+            CaseB:
+              summary: CaseB
+              value: '2025-02-28'
+          x-examples-i18n:
+            de:
+              CaseA: Fall a – Tag vor Anmeldedatum
+              CaseB: Fall b – früheres Datum
+        deregistrationCase:
+          $ref: '#/components/schemas/deregistrationCase'
+        rejectionReasons:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/rejectionReason'
+          description: |
+            Objection reasons (only on objection, statusCode = E03). **German:** Widerspruchsgründe (nur bei statusCode = E03).
+          x-i18n:
+            de:
+              description: Widerspruchsgründe (nur bei statusCode = E03).
+    AssignmentTerminationCreate:
+      type: object
+      title: AssignmentTerminationCreate
+      description: |
+        Request body for the NB notification to LFA about assignment termination. Prüf-ID 55037. **German:** Anfragekörper für die Mitteilung des NB an den LFA über die Zuordnungsbeendigung. Prüf-ID 55037.
+      x-i18n:
+        de:
+          title: Zuordnungsbeendigung – Anfragekörper
+          description: Mitteilung NB an LFA über Zuordnungsbeendigung. Prüf-ID 55037.
+      required:
+        - header
+        - assignmentEndDate
+        - terminationReason
+        - supplyStartId
+        - newSupplierId
+      properties:
+        header:
+          $ref: '#/components/schemas/messageHeader'
+        assignmentEndDate:
+          type: string
+          format: date
+          description: |
+            Date on which the previous supplier's (LFA) assignment at this market location ends. **German:** Datum, zu dem die Zuordnung des alten Lieferanten (LFA) an dieser Marktlokation endet.
+          x-i18n:
+            de:
+              description: Enddatum der LFA-Zuordnung an dieser Marktlokation.
+          examples:
+            MarchEnd:
+              summary: MarchEnd
+              value: '2025-03-31'
+            JuneEnd:
+              summary: JuneEnd
+              value: '2025-06-30'
+          x-examples-i18n:
+            de:
+              MarchEnd: Monatsende März 2025
+              JuneEnd: Monatsende Juni 2025
+        terminationReason:
+          $ref: '#/components/schemas/terminationReason'
+        supplyStartId:
+          type: string
+          maxLength: 35
+          description: |
+            ID of the registration that caused this assignment termination. **German:** ID der Anmeldung, die diese Zuordnungsbeendigung ausgelöst hat.
+          x-i18n:
+            de:
+              description: ID der auslösenden Anmeldung.
+          examples:
+            SS1:
+              summary: SS1
+              value: SS-2025-00042
+          x-examples-i18n:
+            de:
+              SS1: Auslösende Anmeldung
+        newSupplierId:
+          $ref: '#/components/schemas/marketActorId'
+    AssignmentTermination:
+      type: object
+      title: AssignmentTermination
+      description: |
+        Record of an assignment termination notification sent by NB to LFA. Prüf-ID 55037. **German:** Datensatz einer Zuordnungsbeendigungsmitteilung des NB an den LFA. Prüf-ID 55037.
+      x-i18n:
+        de:
+          title: Zuordnungsbeendigung (vollständig)
+          description: Datensatz der Zuordnungsbeendigungsmitteilung NB → LFA. Prüf-ID 55037.
+      required:
+        - terminationId
+        - createdAt
+        - assignmentEndDate
+        - terminationReason
+      properties:
+        terminationId:
+          type: string
+          maxLength: 35
+          readOnly: true
+          description: |
+            Unique assignment termination notification ID. **German:** Eindeutige ID der Zuordnungsbeendigungsmitteilung.
+          x-i18n:
+            de:
+              description: Eindeutige ID der Zuordnungsbeendigungsmitteilung.
+          examples:
+            AT1:
+              summary: AT1
+              value: AT-2025-00003
+          x-examples-i18n:
+            de:
+              AT1: Zuordnungsbeendigung Beispiel
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+          description: |
+            Timestamp when the notification was created (ISO 8601). **German:** Erstellungszeitpunkt der Mitteilung (ISO 8601).
+          x-i18n:
+            de:
+              description: Erstellungszeitpunkt der Mitteilung (ISO 8601).
+        assignmentEndDate:
+          type: string
+          format: date
+          description: |
+            Date on which the previous supplier's assignment ends. **German:** Enddatum der Zuordnung des alten Lieferanten.
+          x-i18n:
+            de:
+              description: Enddatum der LFA-Zuordnung.
+        terminationReason:
+          $ref: '#/components/schemas/terminationReason'
+        label:
+          $ref: '#/components/schemas/multilingualLabel'
+    AssignmentCancellationCreate:
+      type: object
+      title: AssignmentCancellationCreate
+      description: |
+        Request body for the NB notification to LFZ about cancellation of its future assignment. Prüf-ID 55038. **German:** Anfragekörper für die Mitteilung des NB an den LFZ über die Aufhebung seiner zukünftigen Zuordnung. Prüf-ID 55038.
+      x-i18n:
+        de:
+          title: Zuordnungsaufhebung – Anfragekörper
+          description: Mitteilung NB an LFZ über Aufhebung zukünftiger Zuordnung. Prüf-ID 55038.
+      required:
+        - header
+        - cancelledAssignmentFrom
+        - cancellationReason
+        - supplyStartId
+        - newSupplierId
+      properties:
+        header:
+          $ref: '#/components/schemas/messageHeader'
+        cancelledAssignmentFrom:
+          type: string
+          format: date
+          description: |
+            Date from which the future supplier's (LFZ) assignment is cancelled. **German:** Datum, ab dem die zukünftige Zuordnung des LFZ aufgehoben wird.
+          x-i18n:
+            de:
+              description: Datum ab dem die LFZ-Zuordnung aufgehoben wird.
+          examples:
+            MayStart:
+              summary: MayStart
+              value: '2025-05-01'
+            JulyStart:
+              summary: JulyStart
+              value: '2025-07-01'
+          x-examples-i18n:
+            de:
+              MayStart: Beginn Mai 2025
+              JulyStart: Beginn Juli 2025
+        cancellationReason:
+          $ref: '#/components/schemas/terminationReason'
+        supplyStartId:
+          type: string
+          maxLength: 35
+          description: |
+            ID of the registration that caused this assignment cancellation. **German:** ID der Anmeldung, die diese Aufhebung ausgelöst hat.
+          x-i18n:
+            de:
+              description: ID der auslösenden Anmeldung.
+          examples:
+            SS1:
+              summary: SS1
+              value: SS-2025-00042
+          x-examples-i18n:
+            de:
+              SS1: Auslösende Anmeldung
+        newSupplierId:
+          $ref: '#/components/schemas/marketActorId'
+    AssignmentCancellation:
+      type: object
+      title: AssignmentCancellation
+      description: |
+        Record of an assignment cancellation notification sent by NB to LFZ. Prüf-ID 55038. **German:** Datensatz einer Zuordnungsaufhebungsmitteilung des NB an den LFZ. Prüf-ID 55038.
+      x-i18n:
+        de:
+          title: Zuordnungsaufhebung (vollständig)
+          description: Datensatz der Zuordnungsaufhebungsmitteilung NB → LFZ. Prüf-ID 55038.
+      required:
+        - cancellationId
+        - createdAt
+        - cancelledAssignmentFrom
+        - cancellationReason
+      properties:
+        cancellationId:
+          type: string
+          maxLength: 35
+          readOnly: true
+          description: |
+            Unique assignment cancellation notification ID. **German:** Eindeutige ID der Zuordnungsaufhebungsmitteilung.
+          x-i18n:
+            de:
+              description: Eindeutige ID der Zuordnungsaufhebungsmitteilung.
+          examples:
+            AC1:
+              summary: AC1
+              value: AC-2025-00001
+          x-examples-i18n:
+            de:
+              AC1: Zuordnungsaufhebung Beispiel
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+          description: |
+            Timestamp when the notification was created (ISO 8601). **German:** Erstellungszeitpunkt der Mitteilung (ISO 8601).
+          x-i18n:
+            de:
+              description: Erstellungszeitpunkt (ISO 8601).
+        cancelledAssignmentFrom:
+          type: string
+          format: date
+          description: |
+            Date from which the future assignment of LFZ is cancelled. **German:** Datum ab dem die zukünftige Zuordnung des LFZ aufgehoben ist.
+          x-i18n:
+            de:
+              description: Datum der Aufhebung der LFZ-Zuordnung.
+        cancellationReason:
+          $ref: '#/components/schemas/terminationReason'
+        label:
+          $ref: '#/components/schemas/multilingualLabel'
+    marketLocationId:
+      type: string
+      title: MarketLocationId
+      description: |
+        Unique identifier of a market location (Marktlokations-ID / MaLo-ID).
+        The MaLo-ID is an 11-digit numeric code assigned by the grid operator to identify
+        a market location unambiguously within the German electricity market.
+        Corresponds to EDIFACT SG5 LOC DE3225 with qualifier Z16 (Marktlokation).
+
+        **German:** Eindeutige Marktlokations-ID (MaLo-ID). Die MaLo-ID ist ein 11-stelliger
+        numerischer Code, der vom Netzbetreiber vergeben wird und eine Marktlokation im
+        deutschen Strommarkt eindeutig identifiziert.
+        Entspricht EDIFACT SG5 LOC DE3225 mit Qualifier Z16 (Marktlokation).
+      x-i18n:
+        de:
+          title: Marktlokations-ID (MaLo-ID)
+          description: 11-stellige numerische MaLo-ID, vergeben vom Netzbetreiber. EDIFACT SG5 LOC DE3225, Z16.
+      x-edifact-mapping:
+        segment: LOC
+        de3227: Z16 (Marktlokation)
+        de3225: ID der Marktlokation
+        format: '[0-9]{11}'
+      pattern: ^[0-9]{11}$
+      maxLength: 11
+      minLength: 11
+      examples:
+        Residential:
+          summary: Residential
+          value: '51238696781'
+        Commercial:
+          summary: Commercial
+          value: '41111234567'
+        Generating:
+          summary: Generating
+          value: '62345678901'
+        Dormant:
+          summary: Dormant
+          value: '73456789012'
+        Industrial:
+          summary: Industrial
+          value: '84567890123'
+      x-examples-i18n:
+        de:
+          Residential: Haushalt
+          Commercial: Gewerbe
+          Generating: Erzeugungsanlage
+          Dormant: Ruhend
+          Industrial: Industrie
+    supplyStartStatus:
+      type: string
+      title: SupplyStartStatus
+      description: |
+        Current processing status of a supply start (registration / Anmeldung) request.
+        Lifecycle: draft → submitted → accepted / rejected → (cancelled).
+        **German:** Aktueller Bearbeitungsstatus einer Lieferbeginn-Anfrage (Anmeldung).
+        Lebenszyklus: draft → submitted → accepted / rejected → (cancelled).
+      x-i18n:
+        de:
+          title: Bearbeitungsstatus Lieferbeginn
+          description: |
+            Bearbeitungsstatus einer Anmeldung im Prozess Lieferbeginn.
+            Lebenszyklus: draft → submitted → accepted / rejected → (cancelled).
+      enum:
+        - draft
+        - submitted
+        - accepted
+        - rejected
+        - cancelled
+      x-enum-descriptions:
+        draft:
+          en: Draft – created locally, not yet transmitted to the grid operator
+          de: Entwurf – lokal erstellt, noch nicht an den Netzbetreiber übermittelt
+        submitted:
+          en: Submitted to the grid operator (NB), awaiting response (Prüf-ID 55001 / 55077 sent)
+          de: Beim Netzbetreiber eingereicht (Prüf-ID 55001 / 55077 gesendet), Antwort ausstehend
+        accepted:
+          en: Confirmed by the grid operator (Prüf-ID 55002 / 55078 received)
+          de: Vom Netzbetreiber bestätigt (Prüf-ID 55002 / 55078 empfangen)
+        rejected:
+          en: Rejected by the grid operator (Prüf-ID 55003 / 55080 received)
+          de: Vom Netzbetreiber abgelehnt (Prüf-ID 55003 / 55080 empfangen)
+        cancelled:
+          en: Cancelled by the registering supplier before grid operator processing
+          de: Vom anmeldenden Lieferanten vor der Bearbeitung durch den Netzbetreiber storniert
+      examples:
+        Draft:
+          summary: Draft
+          value: draft
+        Submitted:
+          summary: Submitted
+          value: submitted
+        Accepted:
+          summary: Accepted
+          value: accepted
+        Rejected:
+          summary: Rejected
+          value: rejected
+        Cancelled:
+          summary: Cancelled
+          value: cancelled
+      x-examples-i18n:
+        de:
+          Draft: Entwurf
+          Submitted: Eingereicht
+          Accepted: Bestätigt
+          Rejected: Abgelehnt
+          Cancelled: Storniert
+    messageType:
+      type: string
+      title: MessageType
+      description: |
+        UTILMD message type / document type code (BGM segment DE1001).
+        Identifies the purpose and type of the EDIFACT UTILMD message.
+
+        **German:** UTILMD-Nachrichtentyp / Dokumententyp (BGM Segment DE1001).
+        Identifiziert Zweck und Art der EDIFACT-UTILMD-Nachricht.
+      x-i18n:
+        de:
+          title: Nachrichtentyp
+          description: UTILMD-Nachrichtentyp gemäß BGM Segment DE1001.
+      x-edifact-mapping:
+        segment: BGM
+        de1001: document/message name code
+      enum:
+        - E01
+        - E02
+        - E03
+        - E04
+        - E05
+        - E06
+      x-enum-descriptions:
+        E01:
+          en: Original message
+          de: Originalnachricht
+        E02:
+          en: Replacement message
+          de: Ersatznachricht
+        E03:
+          en: Change notification
+          de: Änderungsmeldung
+        E04:
+          en: Confirmation
+          de: Bestätigung
+        E05:
+          en: Rejection
+          de: Ablehnung
+        E06:
+          en: Cancellation
+          de: Stornierung
+      examples:
+        Original:
+          summary: Original
+          value: E01
+        Replacement:
+          summary: Replacement
+          value: E02
+        ChangeNotice:
+          summary: ChangeNotice
+          value: E03
+        Confirmation:
+          summary: Confirmation
+          value: E04
+        Rejection:
+          summary: Rejection
+          value: E05
+        Cancellation:
+          summary: Cancellation
+          value: E06
+      x-examples-i18n:
+        de:
+          Original: Originalnachricht
+          Replacement: Ersatznachricht
+          ChangeNotice: Änderungsmeldung
+          Confirmation: Bestätigung
+          Rejection: Ablehnung
+          Cancellation: Stornierung
+    multilingualLabel:
+      type: object
+      title: MultilingualLabel
+      description: |
+        A multilingual label containing field names and descriptions in multiple languages.
+        English is the primary identifier language; German is the authoritative description language.
+
+        **German:** Mehrsprachige Bezeichnung mit Feldbeschreibungen in verschiedenen Sprachen.
+        Englisch dient als primäre Bezeichnersprache; Deutsch ist die führende Beschreibungssprache
+        gemäß BDEW UTILMD-Standard.
+      x-i18n:
+        de:
+          title: Mehrsprachige Bezeichnung
+          description: Mehrsprachige Bezeichnung mit Feldbeschreibungen in verschiedenen Sprachen.
+      required:
+        - en
+      properties:
+        en:
+          type: string
+          description: Field label or value in English / Feldbezeichner oder Wert auf Englisch
+          x-i18n:
+            de:
+              description: Feldbezeichner oder Wert auf Englisch
+          examples:
+            MarketLocation:
+              summary: MarketLocation
+              value: Market Location
+            GridLocation:
+              summary: GridLocation
+              value: Grid Location
+            MeteringLocation:
+              summary: MeteringLocation
+              value: Metering Location
+            ValidFrom:
+              summary: ValidFrom
+              value: Valid From
+          x-examples-i18n:
+            de:
+              MarketLocation: Marktlokation
+              GridLocation: Netzlokation
+              MeteringLocation: Messlokation
+              ValidFrom: Gültig ab
+        de:
+          type: string
+          description: |
+            Field label or value in German (authoritative).
+            **German:** Feldbezeichner oder Wert auf Deutsch (führend/maßgeblich).
+          x-i18n:
+            de:
+              description: Feldbezeichner oder Wert auf Deutsch (maßgeblich)
+          examples:
+            Marktlokation:
+              summary: Marktlokation
+              value: Marktlokation
+            Netzlokation:
+              summary: Netzlokation
+              value: Netzlokation
+            Messlokation:
+              summary: Messlokation
+              value: Messlokation
+            GueltigAb:
+              summary: GueltigAb
+              value: Gültig ab
+          x-examples-i18n:
+            de:
+              Marktlokation: Marktlokation
+              Netzlokation: Netzlokation
+              Messlokation: Messlokation
+              GueltigAb: Gültig ab
+    checkIdentifier:
+      type: object
+      title: CheckIdentifier
+      description: |
+        Check identifier (Prüfidentifikator) – a numeric code identifying the specific
+        UTILMD business process (Anwendungsfall) and communication direction within the
+        BDEW market communication rules. Defined in UTILMD AHB.
+        Corresponds to EDIFACT SG6 RFF+Z13 (Prüfidentifikator).
+
+        **German:** Prüfidentifikator – eine numerische Kennung, die den spezifischen
+        UTILMD-Anwendungsfall und die Kommunikationsrichtung innerhalb der BDEW-Markt-
+        kommunikationsregeln identifiziert. Definiert im UTILMD AHB.
+        Entspricht EDIFACT SG6 RFF+Z13 (Prüfidentifikator).
+      x-i18n:
+        de:
+          title: Prüfidentifikator
+          description: |
+            Numerische Kennung des UTILMD-Anwendungsfalls und der Kommunikationsrichtung.
+            Definiert im UTILMD AHB. EDIFACT SG6 RFF+Z13.
+      x-edifact-mapping:
+        segment: RFF (SG6)
+        de1153: Z13 (Prüfidentifikator)
+        de1154: Prüfidentifikator-Wert (5-stellig)
+      required:
+        - value
+      properties:
+        value:
+          type: string
+          pattern: ^\d{5}$
+          description: |
+            5-digit numeric check identifier code as defined in the UTILMD AHB.
+            Examples: 55001 (supplier change LF→NB), 55002 (confirmation NB→LF),
+            55175 (location bundle structure change NB→LF), 55218 (billing data NB→LF).
+            **German:** 5-stelliger numerischer Prüfidentifikator gemäß UTILMD AHB.
+            Beispiele: 55001 (Lieferantenwechsel LF→NB), 55002 (Bestätigung NB→LF),
+            55175 (Lokationsbündelstruktur NB→LF), 55218 (Abrechnungsdaten NB→LF).
+          x-i18n:
+            de:
+              description: |
+                5-stelliger Prüfidentifikator gemäß UTILMD AHB.
+                Beispiele: 55001, 55002, 55077, 55078, 55175, 55218, 55220.
+          examples:
+            SupplierChange:
+              summary: SupplierChange
+              value: '55001'
+            SupplierChangeConfirm:
+              summary: SupplierChangeConfirm
+              value: '55002'
+            LocationBundleChange:
+              summary: LocationBundleChange
+              value: '55175'
+            MaLoDataChange:
+              summary: MaLoDataChange
+              value: '55616'
+            NeLoDataChange:
+              summary: NeLoDataChange
+              value: '55615'
+            MeLoDataChange:
+              summary: MeLoDataChange
+              value: '55620'
+            BillingData:
+              summary: BillingData
+              value: '55218'
+            GeneratingMaLoReg:
+              summary: GeneratingMaLoReg
+              value: '55077'
+          x-examples-i18n:
+            de:
+              SupplierChange: Lieferantenwechsel
+              SupplierChangeConfirm: Lieferantenwechsel – Bestätigung NB an LF
+              LocationBundleChange: Änderung Lokationsbündelstruktur NB an LF
+              MaLoDataChange: Änderung Daten der MaLo
+              NeLoDataChange: Änderung Daten der NeLo
+              MeLoDataChange: Änderung Daten der MeLo
+              BillingData: Abrechnungsdaten Netznutzungsabrechnung
+              GeneratingMaLoReg: Anmeldung erzeugende MaLo LF an NB
+        description:
+          type: string
+          maxLength: 500
+          nullable: true
+          description: |
+            Human-readable description of the business process identified by this check identifier.
+            **German:** Lesbare Beschreibung des durch den Prüfidentifikator identifizierten Anwendungsfalls.
+          x-i18n:
+            de:
+              description: Lesbare Beschreibung des Anwendungsfalls zum Prüfidentifikator.
+          examples:
+            LFtoNB:
+              summary: LFtoNB
+              value: Lieferantenwechsel – Anmeldung LF an NB
+            NBtoLF:
+              summary: NBtoLF
+              value: Lieferantenwechsel – Bestätigung NB an LF
+            BundleChange:
+              summary: BundleChange
+              value: Änderung Lokationsbündelstruktur NB an LF
+          x-examples-i18n:
+            de:
+              LFtoNB: Kommunikationsrichtung LF an NB
+              NBtoLF: Kommunikationsrichtung NB an LF
+              BundleChange: Änderung Lokationsbündelstruktur
+        communicationDirection:
+          type: string
+          nullable: true
+          description: |
+            Communication direction for this check identifier, e.g. 'LF→NB', 'NB→LF', 'NB→MSB'.
+            **German:** Kommunikationsrichtung für diesen Prüfidentifikator, z.B. 'LF→NB', 'NB→LF'.
+          x-i18n:
+            de:
+              description: Kommunikationsrichtung, z.B. 'LF→NB', 'NB→LF', 'NB→MSB'.
+          examples:
+            LFtoNB:
+              summary: LFtoNB
+              value: LF→NB
+            NBtoLF:
+              summary: NBtoLF
+              value: NB→LF
+            NBtoMSB:
+              summary: NBtoMSB
+              value: NB→MSB
+            MSBtoNB:
+              summary: MSBtoNB
+              value: MSB→NB
+            NBAtoNBN:
+              summary: NBAtoNBN
+              value: NBA→NBN
+          x-examples-i18n:
+            de:
+              LFtoNB: Kommunikationsrichtung LF an NB
+              NBtoLF: Kommunikationsrichtung NB an LF
+              NBtoMSB: Kommunikationsrichtung NB an MSB
+              MSBtoNB: Kommunikationsrichtung MSB an NB
+              NBAtoNBN: Kommunikationsrichtung NBA an NBN
+        label:
+          $ref: '#/components/schemas/multilingualLabel'
+    marketActorId:
+      type: object
+      title: MarketActorId
+      description: |
+        Unique identification of a market participant (Marktpartner-Identifikation).
+        In UTILMD, market participants are identified by their MP-ID (Marktpartner-ID),
+        typically the EIC code or BDEW code, combined with the code scheme.
+        Corresponds to EDIFACT NAD DE3039 (MP-ID) and DE3055 (code scheme qualifier).
+
+        **German:** Eindeutige Identifikation eines Marktpartners (MP-ID).
+        In der UTILMD werden Marktpartner über ihre MP-ID (Marktpartner-Identifikationsnummer),
+        in der Regel ein EIC-Code oder BDEW-Code, zusammen mit dem Codesystem identifiziert.
+        Entspricht EDIFACT NAD DE3039 (MP-ID) und DE3055 (Codesystem-Qualifier).
+      x-i18n:
+        de:
+          title: Marktpartner-Identifikation
+          description: Eindeutige MP-ID eines Marktpartners mit Codesystem-Qualifier. EDIFACT NAD DE3039/DE3055.
+      x-edifact-mapping:
+        segment: NAD
+        de3039: MP-ID (Marktpartner-ID)
+        de3055: 9 (GS1), 293 (BDEW/DE), 260 (DVGW)
+      required:
+        - id
+        - codingScheme
+      properties:
+        id:
+          type: string
+          maxLength: 50
+          description: |
+            Market participant identification number (MP-ID), typically an EIC or BDEW code.
+            **German:** Marktpartner-Identifikationsnummer (MP-ID), in der Regel EIC- oder BDEW-Code.
+          x-i18n:
+            de:
+              description: Marktpartner-Identifikationsnummer (MP-ID), z.B. EIC- oder BDEW-Code.
+          examples:
+            GridOperator:
+              summary: GridOperator
+              value: '9904132000002'
+            Supplier:
+              summary: Supplier
+              value: '9900987654321'
+            MSB:
+              summary: MSB
+              value: '9901234567890'
+            BKV:
+              summary: BKV
+              value: '9905000012345'
+          x-examples-i18n:
+            de:
+              GridOperator: Netzbetreiber
+              Supplier: Lieferant
+              MSB: Messstellenbetreiber
+              BKV: Bilanzkreisverantwortlicher
+        codingScheme:
+          type: string
+          description: |
+            Code list qualifier identifying the coding scheme used for the MP-ID.
+            Values: 9 (GS1/ILN), 293 (BDEW), 260 (DVGW).
+            **German:** Qualifier des Codesystems für die MP-ID. Werte: 9 (GS1/ILN), 293 (BDEW), 260 (DVGW).
+          x-i18n:
+            de:
+              description: Qualifier des Codesystems der MP-ID. 9=GS1, 293=BDEW, 260=DVGW.
+          enum:
+            - '9'
+            - '293'
+            - '260'
+          examples:
+            BDEW:
+              summary: BDEW
+              value: '293'
+            GS1:
+              summary: GS1
+              value: '9'
+            DVGW:
+              summary: DVGW
+              value: '260'
+          x-examples-i18n:
+            de:
+              BDEW: BDEW-Codesystem
+              GS1: GS1-Codesystem
+              DVGW: DVGW-Codesystem
+        label:
+          $ref: '#/components/schemas/multilingualLabel'
+    marketRoleCode:
+      type: string
+      title: MarketRoleCode
+      description: |
+        BDEW market role code identifying the function of a market actor in the electricity market.
+        Based on BDEW code list for market roles (Marktrollencodes).
+
+        **German:** BDEW-Marktrollencode zur Identifikation der Funktion eines Marktakteurs
+        im Strommarkt. Basierend auf der BDEW-Codeliste der Marktrollen.
+      x-i18n:
+        de:
+          title: Marktrollencode
+          description: BDEW-Marktrollencode gemäß BDEW-Codeliste der Marktrollen.
+      x-edifact-mapping:
+        segment: NAD
+        qualifier: 3035 (party function code qualifier)
+        codeList: BDEW Marktrollen
+      enum:
+        - NB
+        - LF
+        - MSB
+        - BKV
+        - BIKO
+        - UeNB
+        - UNB
+        - ESA
+        - DP
+        - MGV
+        - BTR
+        - EIV
+        - EOG
+        - RB
+        - NBA
+        - NBN
+        - MR
+        - MS
+      x-enum-descriptions:
+        NB:
+          en: Grid operator (Netzbetreiber)
+          de: Netzbetreiber – Betreiber des Stromverteilungsnetzes
+        LF:
+          en: Supplier (Lieferant)
+          de: Lieferant – Stromlieferant der Marktlokation
+        MSB:
+          en: Metering point operator (Messstellenbetreiber)
+          de: Messstellenbetreiber – Betreiber der Messstelle
+        BKV:
+          en: Balance responsible party (Bilanzkreisverantwortlicher)
+          de: Bilanzkreisverantwortlicher – Verantwortlicher für den Bilanzkreis
+        BIKO:
+          en: Balancing coordinator (Bilanzkoordinator)
+          de: Bilanzkoordinator – Koordinator der Bilanzierung
+        UeNB:
+          en: Transmission system operator (Übertragungsnetzbetreiber)
+          de: Übertragungsnetzbetreiber – Betreiber des Übertragungsnetzes
+        UNB:
+          en: Distribution network operator (Umspannnetzbetreiber)
+          de: Umspannnetzbetreiber
+        ESA:
+          en: Central market entity / clearinghouse (Entsprechende Stelle/Abwicklung)
+          de: Entsprechende Stelle/Abwicklung
+        DP:
+          en: Data provider
+          de: Datenprovider
+        MGV:
+          en: Market area manager (Marktgebietsverantwortlicher)
+          de: Marktgebietsverantwortlicher – Verantwortlicher für das Marktgebiet
+        BTR:
+          en: Operator of technical resource (Betreiber einer technischen Ressource)
+          de: Betreiber einer technischen Ressource
+        EIV:
+          en: Feed-in manager (Einspeiseverantwortlicher)
+          de: Einspeiseverantwortlicher – Verantwortlicher für die Einspeisung
+        EOG:
+          en: Generation/consumption unit operator (Erzeugungs-/Verbrauchsanlagenanlagenbetreiber)
+          de: Anlagenbetreiber Erzeugung/Verbrauch (EOG)
+        RB:
+          en: Grid access coordinator (Regulierungsbehörde/Regelungsbehörde)
+          de: Regulierungsbehörde
+        NBA:
+          en: Previous grid operator (NetzbetreiberAlt)
+          de: Netzbetreiber alt – bisheriger Netzbetreiber beim NBWechsel
+        NBN:
+          en: New grid operator (NetzbetreiberNeu)
+          de: Netzbetreiber neu – neuer Netzbetreiber beim NBWechsel
+        MR:
+          en: Message recipient (Nachrichtenempfänger)
+          de: Nachrichtenempfänger
+        MS:
+          en: Message sender (Nachrichtensender)
+          de: Nachrichtensender
+      examples:
+        GridOperator:
+          summary: GridOperator
+          value: NB
+        Supplier:
+          summary: Supplier
+          value: LF
+        MeteringPointOp:
+          summary: MeteringPointOp
+          value: MSB
+        BalanceResponsible:
+          summary: BalanceResponsible
+          value: BKV
+        FeedInManager:
+          summary: FeedInManager
+          value: EIV
+        TransmissionOp:
+          summary: TransmissionOp
+          value: UeNB
+      x-examples-i18n:
+        de:
+          GridOperator: Netzbetreiber
+          Supplier: Lieferant
+          MeteringPointOp: Messstellenbetreiber (MSB)
+          BalanceResponsible: Bilanzkreisverantwortlicher (BKV)
+          FeedInManager: Einspeiseverantwortlicher (EIV)
+          TransmissionOp: Übertragungsnetzbetreiber
+    communicationContact:
+      type: object
+      title: CommunicationContact
+      description: |
+        Communication contact details for a market participant, including contact person
+        name and communication channels (email, phone, fax).
+        Corresponds to EDIFACT SG3 CTA (contact information) and COM (communication contact) segments.
+
+        **German:** Kommunikationsverbindung eines Marktpartners mit Ansprechpartner und
+        Kommunikationskanälen (E-Mail, Telefon, Fax).
+        Entspricht EDIFACT SG3 CTA (Kontaktinformation) und COM (Kommunikationsverbindung).
+      x-i18n:
+        de:
+          title: Kommunikationsverbindung / Ansprechpartner
+          description: Ansprechpartner und Kommunikationskanäle eines Marktpartners. EDIFACT SG3 CTA/COM.
+      x-edifact-mapping:
+        segment: CTA (SG3)
+        de3139: IC (Informationskontakt)
+        de3412: Name des Ansprechpartners
+      properties:
+        contactType:
+          type: string
+          description: |
+            Contact type qualifier. IC = Information contact.
+            Corresponds to EDIFACT CTA DE3139.
+            **German:** Kontakttyp-Qualifier. IC = Informationskontakt. EDIFACT CTA DE3139.
+          x-i18n:
+            de:
+              description: Kontakttyp-Qualifier. IC = Informationskontakt. EDIFACT CTA DE3139.
+          enum:
+            - IC
+          default: IC
+          examples:
+            InfoContact:
+              summary: InfoContact
+              value: IC
+          x-examples-i18n:
+            de:
+              InfoContact: Informationskontakt
+        contactName:
+          type: string
+          maxLength: 256
+          nullable: true
+          description: |
+            Name of the contact person.
+            Corresponds to EDIFACT CTA DE3412.
+            **German:** Name des Ansprechpartners. Entspricht EDIFACT CTA DE3412.
+          x-i18n:
+            de:
+              description: Name des Ansprechpartners. EDIFACT CTA DE3412.
+          examples:
+            PersonName:
+              summary: PersonName
+              value: Max Mustermann
+            TeamName:
+              summary: TeamName
+              value: Marktkommunikation
+            DeptName:
+              summary: DeptName
+              value: Messwesen und Abrechnung
+          x-examples-i18n:
+            de:
+              PersonName: Name einer Person
+              TeamName: Teambezeichnung
+              DeptName: Abteilungsbezeichnung
+        email:
+          type: string
+          format: email
+          maxLength: 200
+          nullable: true
+          description: |
+            Email address. String must contain '@' and '.'.
+            Corresponds to EDIFACT COM DE3148 with DE3155=EM.
+            **German:** E-Mail-Adresse. Zeichenkette muss '@' und '.' enthalten.
+            EDIFACT COM DE3148, DE3155=EM.
+          x-i18n:
+            de:
+              description: E-Mail-Adresse. Pflicht wenn EM. EDIFACT COM DE3148, DE3155=EM.
+          examples:
+            Personal:
+              summary: Personal
+              value: max.mustermann@stadtwerke.de
+            Department:
+              summary: Department
+              value: marktkommunikation@netzbetreiber.de
+          x-examples-i18n:
+            de:
+              Personal: Persönliche E-Mail
+              Department: Abteilungs-E-Mail
+        phone:
+          type: string
+          maxLength: 50
+          nullable: true
+          description: |
+            Telephone number. Must start with '+' followed by digits only.
+            Corresponds to EDIFACT COM DE3148 with DE3155=TE.
+            **German:** Telefonnummer. Beginnt mit '+', danach nur Ziffern. EDIFACT COM, DE3155=TE.
+          x-i18n:
+            de:
+              description: Telefonnummer. Beginnt mit '+'. EDIFACT COM DE3148, DE3155=TE.
+          pattern: ^\+[0-9]+$
+          examples:
+            Direct:
+              summary: Direct
+              value: '+4930123456789'
+            Extension:
+              summary: Extension
+              value: '+4989987654321'
+          x-examples-i18n:
+            de:
+              Direct: Durchwahl
+              Extension: Nebenstelle
+        fax:
+          type: string
+          maxLength: 50
+          nullable: true
+          description: |
+            Fax number. Must start with '+' followed by digits only.
+            Corresponds to EDIFACT COM DE3148 with DE3155=FX.
+            **German:** Faxnummer. Beginnt mit '+', danach nur Ziffern. EDIFACT COM, DE3155=FX.
+          x-i18n:
+            de:
+              description: Faxnummer. Beginnt mit '+'. EDIFACT COM DE3148, DE3155=FX.
+          pattern: ^\+[0-9]+$
+          examples:
+            Office:
+              summary: Office
+              value: '+4930123456780'
+            Dept:
+              summary: Dept
+              value: '+4989987654320'
+          x-examples-i18n:
+            de:
+              Office: Bürofax
+              Dept: Abteilungsfax
+        mobile:
+          type: string
+          maxLength: 50
+          nullable: true
+          description: |
+            Mobile phone number. Corresponds to EDIFACT COM DE3148 with DE3155=AL.
+            **German:** Mobilfunknummer. EDIFACT COM DE3148, DE3155=AL.
+          x-i18n:
+            de:
+              description: Mobilfunknummer. EDIFACT COM DE3148, DE3155=AL.
+          pattern: ^\+[0-9]+$
+          examples:
+            WorkMobile:
+              summary: WorkMobile
+              value: '+491701234567'
+            OnCall:
+              summary: OnCall
+              value: '+491629876543'
+          x-examples-i18n:
+            de:
+              WorkMobile: Diensthandy
+              OnCall: Bereitschaftshandy
+    messageSender:
+      type: object
+      title: MessageSender
+      description: |
+        Sending party of a UTILMD message. Corresponds to EDIFACT SG2 NAD with qualifier MS (message sender).
+        Contains the market participant ID (MP-ID) and coding scheme of the sender.
+
+        **German:** Sendende Partei einer UTILMD-Nachricht. Entspricht EDIFACT SG2 NAD mit Qualifier MS
+        (Nachrichtensender). Enthält MP-ID und Codesystem des Senders.
+      x-i18n:
+        de:
+          title: Nachrichtensender
+          description: Sendende Partei der UTILMD-Nachricht mit MP-ID. EDIFACT SG2 NAD, Qualifier MS.
+      x-edifact-mapping:
+        segment: NAD (SG2)
+        de3035: MS (message sender)
+      required:
+        - actorId
+        - marketRole
+      properties:
+        actorId:
+          $ref: '#/components/schemas/marketActorId'
+        marketRole:
+          $ref: '#/components/schemas/marketRoleCode'
+        contact:
+          $ref: '#/components/schemas/communicationContact'
+        label:
+          $ref: '#/components/schemas/multilingualLabel'
+    messageRecipient:
+      type: object
+      title: MessageRecipient
+      description: |
+        Receiving party of a UTILMD message. Corresponds to EDIFACT SG2 NAD with qualifier MR
+        (message recipient). Contains the market participant ID (MP-ID) and coding scheme of
+        the recipient.
+
+        **German:** Empfangende Partei einer UTILMD-Nachricht. Entspricht EDIFACT SG2 NAD mit
+        Qualifier MR (Nachrichtenempfänger). Enthält MP-ID und Codesystem des Empfängers.
+      x-i18n:
+        de:
+          title: Nachrichtenempfänger
+          description: Empfangende Partei der UTILMD-Nachricht mit MP-ID. EDIFACT SG2 NAD, Qualifier MR.
+      x-edifact-mapping:
+        segment: NAD (SG2)
+        de3035: MR (message recipient)
+        de3039: MP-ID
+        de3055: 9 (GS1) oder 293 (BDEW)
+      required:
+        - actorId
+        - marketRole
+      properties:
+        actorId:
+          $ref: '#/components/schemas/marketActorId'
+        marketRole:
+          $ref: '#/components/schemas/marketRoleCode'
+        label:
+          $ref: '#/components/schemas/multilingualLabel'
+    messageHeader:
+      type: object
+      title: MessageHeader
+      description: |
+        UTILMD message header containing identification, routing and control information
+        for EDIFACT UTILMD interchange. Covers UNB (interchange header) and UNH (message header)
+        segments as well as BGM (beginning of message) and DTM (date/time).
+
+        **German:** UTILMD-Nachrichtenheader mit Identifikations-, Routing- und Kontrollinformationen
+        für den EDIFACT-UTILMD-Austausch. Deckt UNB (Interchangeheader), UNH (Nachrichtenheader),
+        BGM (Nachrichtenbeginn) und DTM (Datum/Uhrzeit) ab.
+      x-i18n:
+        de:
+          title: Nachrichtenheader
+          description: EDIFACT UTILMD Nachrichtenheader (UNB, UNH, BGM, DTM).
+      x-edifact-mapping:
+        segments: UNB, UNH, BGM, DTM
+      required:
+        - messageId
+        - messageType
+        - createdAt
+        - sender
+        - recipient
+      properties:
+        messageId:
+          type: string
+          maxLength: 35
+          description: |
+            Unique message reference number identifying this UTILMD message.
+            Corresponds to EDIFACT UNH DE0062 (message reference number).
+            **German:** Eindeutige Nachrichten-Referenznummer dieser UTILMD-Nachricht.
+            Entspricht EDIFACT UNH DE0062.
+          x-i18n:
+            de:
+              description: Eindeutige Nachrichten-Referenznummer. EDIFACT UNH DE0062.
+          examples:
+            Sequential:
+              summary: Sequential
+              value: MSG-2024-001234
+            UUID:
+              summary: UUID
+              value: MSG-2024-056789
+            Reference:
+              summary: Reference
+              value: UTL-2024-NB-001
+          x-examples-i18n:
+            de:
+              Sequential: Fortlaufende Nummer
+              UUID: UUID-Format
+              Reference: Referenz-Format
+        messageType:
+          $ref: '#/components/schemas/messageType'
+        checkIdentifier:
+          $ref: '#/components/schemas/checkIdentifier'
+        createdAt:
+          type: string
+          format: date-time
+          description: |
+            Date and time when the message was created (ISO 8601).
+            Corresponds to EDIFACT BGM DTM with qualifier 137.
+            **German:** Erstellungsdatum und -uhrzeit der Nachricht (ISO 8601).
+            EDIFACT BGM DTM Qualifier 137.
+          x-i18n:
+            de:
+              description: Erstellungszeitpunkt der Nachricht. EDIFACT DTM Qualifier 137.
+          examples:
+            Morning:
+              summary: Morning
+              value: '2024-10-01T08:00:00Z'
+            Afternoon:
+              summary: Afternoon
+              value: '2024-10-15T14:30:00Z'
+            EOD:
+              summary: EOD
+              value: '2024-12-31T23:00:00Z'
+          x-examples-i18n:
+            de:
+              Morning: Morgendliche Erstellung
+              Afternoon: Nachmittägliche Erstellung
+              EOD: Jahresende
+        sender:
+          $ref: '#/components/schemas/messageSender'
+        recipient:
+          $ref: '#/components/schemas/messageRecipient'
+        documentNumber:
+          type: string
+          maxLength: 35
+          nullable: true
+          description: |
+            Document/message name code identifier from BGM segment.
+            **German:** Dokumenten-/Nachrichtenbezeichner aus dem BGM-Segment.
+          x-i18n:
+            de:
+              description: Dokumenten-/Nachrichtenbezeichner aus dem BGM-Segment.
+          examples:
+            UTILMD:
+              summary: UTILMD
+              value: UTILMD
+            UTILMD_Strom:
+              summary: UTILMD_Strom
+              value: UTILMD Strom
+          x-examples-i18n:
+            de:
+              UTILMD: UTILMD-Nachricht
+              UTILMD_Strom: UTILMD Strom
+    transactionReason:
+      type: string
+      title: TransactionReason
+      description: |
+        Transaction reason code (Transaktionsgrund / Transaktionsgrundergänzung) identifying
+        the business case type of a UTILMD message. Corresponds to SG4 STS 9013 in EDIFACT.
+
+        **German:** Transaktionsgrundcode (Transaktionsgrund / Transaktionsgrundergänzung) zur
+        Identifikation des Geschäftsvorfalls einer UTILMD-Nachricht. Entspricht SG4 STS DE9013
+        im EDIFACT-Format.
+      x-i18n:
+        de:
+          title: Transaktionsgrundcode
+          description: Transaktionsgrundcode zur Identifikation des Geschäftsvorfalls. EDIFACT SG4 STS DE9013.
+      x-edifact-mapping:
+        segment: STS
+        de9013: Transaction reason/supplement qualifier
+        de9015: 7 (Transaktionsgrund)
+      enum:
+        - ZA1
+        - ZA2
+        - ZA3
+        - ZA4
+        - ZA5
+        - ZA6
+        - ZA7
+        - ZA8
+        - ZA9
+        - ZW0
+        - ZW1
+        - ZW2
+        - ZW3
+        - ZW4
+        - ZW5
+        - ZW6
+        - ZW7
+        - ZW8
+        - ZW9
+        - ZX0
+        - ZX1
+        - ZX4
+        - E01
+        - E03
+      x-enum-descriptions:
+        ZA1:
+          en: Supplier change
+          de: Lieferantenwechsel
+        ZA2:
+          en: New market location (consuming)
+          de: Einzug / Neuanlage einer verbrauchenden Marktlokation
+        ZA3:
+          en: Move-out / deregistration
+          de: Auszug / Abmeldung
+        ZA4:
+          en: Interruptible load registration
+          de: Anmeldung einer unterbrechbaren Verbrauchseinrichtung
+        ZA5:
+          en: Disconnection
+          de: Sperrung
+        ZA6:
+          en: Reconnection
+          de: Entsperrung
+        ZA7:
+          en: Registration of generation (producing MaLo)
+          de: Anmeldung einer erzeugenden Marktlokation
+        ZW0:
+          en: Business case 1 – registration 100%
+          de: Geschäftsvorfall 1 – Anmeldung 100%
+        ZW1:
+          en: Business case 2
+          de: Geschäftsvorfall 2
+        ZW2:
+          en: Business case 3
+          de: Geschäftsvorfall 3
+        ZW6:
+          en: Flat-rate (SLP) market location
+          de: Pauschale Marktlokation (SLP)
+        ZW7:
+          en: Metered market location
+          de: Gemessene Marktlokation
+        ZW8:
+          en: Case 1
+          de: Fall 1
+        ZW9:
+          en: Case 2
+          de: Fall 2
+        ZX0:
+          en: Case 3
+          de: Fall 3
+        ZX1:
+          en: Case 4
+          de: Fall 4
+        ZX4:
+          en: Response status
+          de: Status der Antwort
+        E01:
+          en: Confirmation
+          de: Bestätigung
+        E03:
+          en: Change notification
+          de: Änderungsmeldung
+      examples:
+        SupplierChange:
+          summary: SupplierChange
+          value: ZA1
+        NewMoveIn:
+          summary: NewMoveIn
+          value: ZA2
+        MoveOut:
+          summary: MoveOut
+          value: ZA3
+        GeneratingRegistration:
+          summary: GeneratingRegistration
+          value: ZW0
+        SLPLocation:
+          summary: SLPLocation
+          value: ZW6
+        MeteredLocation:
+          summary: MeteredLocation
+          value: ZW7
+      x-examples-i18n:
+        de:
+          SupplierChange: Lieferantenwechsel
+          NewMoveIn: Einzug / Neuanlage
+          MoveOut: Auszug / Abmeldung
+          GeneratingRegistration: Anmeldung erzeugende MaLo
+          SLPLocation: Pauschale Marktlokation (SLP)
+          MeteredLocation: Gemessene Marktlokation
+    identificationMode:
+      type: string
+      title: IdentificationMode
+      description: |
+        Defines how the market location is identified in a registration (Anmeldung) request.
+        Corresponds to GPKE identification cases (Kapitel I.6):
+        - **maloIdOnly** (Fall 1): identification exclusively by MaLo-ID; lead time ≥ 7 working days.
+        - **multiAttribute** (Fall 2): identification by address and / or additional attributes;
+          lead time ≥ 10 working days.
+        **German:** Gibt an, wie die Marktlokation in der Anmeldung identifiziert wird.
+        Entspricht den GPKE-Identifikationsfällen (Kapitel I.6):
+        - **maloIdOnly** (Fall 1): Identifikation ausschließlich per MaLo-ID; Vorlauf ≥ 7 WT.
+        - **multiAttribute** (Fall 2): Identifikation per Adresse und / oder weiteren Merkmalen;
+          Vorlauf ≥ 10 WT.
+      x-i18n:
+        de:
+          title: Identifikationsmodus (Identifikationsfall)
+          description: |
+            Art der Marktlokationsidentifikation gemäß GPKE Kapitel I.6.
+            Fall 1 (maloIdOnly): nur MaLo-ID, Vorlauf ≥ 7 WT.
+            Fall 2 (multiAttribute): Adresse / weitere Merkmale, Vorlauf ≥ 10 WT.
+      enum:
+        - maloIdOnly
+        - multiAttribute
+      x-enum-descriptions:
+        maloIdOnly:
+          en: Identification by MaLo-ID only (GPKE case 1, minimum lead time 7 working days)
+          de: Identifikation nur per MaLo-ID (GPKE Fall 1, Mindestvorlauf 7 WT)
+        multiAttribute:
+          en: Identification by postal address and / or additional attributes (GPKE case 2, minimum lead time 10 working days)
+          de: Identifikation per Postanschrift und / oder weiterer Merkmale (GPKE Fall 2, Mindestvorlauf 10 WT)
+      examples:
+        MaloIdOnly:
+          summary: MaloIdOnly
+          value: maloIdOnly
+        MultiAttribute:
+          summary: MultiAttribute
+          value: multiAttribute
+      x-examples-i18n:
+        de:
+          MaloIdOnly: Nur MaLo-ID (Fall 1)
+          MultiAttribute: Adresse / weitere Merkmale (Fall 2)
+    meterNumber:
+      type: string
+      title: MeterNumber
+      description: |
+        Device number / meter number (Gerätenummer / Zählernummer) uniquely identifying
+        a meter within the metering infrastructure. Assigned by the metering point operator (MSB).
+        Corresponds to the meter serial number used in EDIFACT device identification.
+
+        **German:** Gerätenummer / Zählernummer zur eindeutigen Identifikation eines Zählers
+        innerhalb der Messinfrastruktur. Vergeben durch den Messstellenbetreiber (MSB).
+        Entspricht der Gerätenummer in der EDIFACT-Geräteidentifikation.
+      x-i18n:
+        de:
+          title: Gerätenummer / Zählernummer
+          description: Eindeutige Zählernummer, vergeben durch den MSB.
+      x-edifact-mapping:
+        segment: EQD / SEQ
+        notes: Equipment identifier in metering device segments
+      maxLength: 80
+      examples:
+        ModernMeter:
+          summary: ModernMeter
+          value: 1ESY1234567890
+        LegacyFerrarisType:
+          summary: LegacyFerrarisType
+          value: EHZ0012345678
+        SmartMeter:
+          summary: SmartMeter
+          value: SML9876543210
+        EDL21Meter:
+          summary: EDL21Meter
+          value: 1EMH0001234567
+      x-examples-i18n:
+        de:
+          ModernMeter: Moderner Zähler
+          LegacyFerrarisType: Ferraris-Zähler (alt)
+          SmartMeter: Smart Meter
+          EDL21Meter: EDL21-Zähler
+    address:
+      type: object
+      title: Address
+      description: |
+        Postal address of a market participant, location or metering point.
+        Mapped to EDIFACT NAD segment data elements.
+
+        **German:** Postanschrift eines Marktakteurs, einer Lokation oder Messstelle.
+        Entspricht den NAD-Segment-Datenelementen im EDIFACT-Format der UTILMD.
+      x-i18n:
+        de:
+          title: Anschrift
+          description: Postanschrift eines Marktakteurs, einer Lokation oder Messstelle.
+      x-edifact-mapping:
+        segment: NAD
+        notes: NAD 3042 Street+Number, NAD 3164 City, NAD 3251 PostalCode, NAD 3207 CountryCode, NAD 3124 AdditionalInfo
+      properties:
+        additionalInfo:
+          type: string
+          maxLength: 200
+          nullable: true
+          description: |
+            Additional address information such as building name, floor, care-of.
+            Corresponds to EDIFACT NAD DE3124.
+            **German:** Adresszusatz wie Gebäudename, Etage, c/o. Entspricht EDIFACT NAD DE3124.
+          x-i18n:
+            de:
+              description: Adresszusatz wie Gebäudename, Etage oder c/o-Angabe. EDIFACT NAD DE3124.
+          examples:
+            BuildingWing:
+              summary: BuildingWing
+              value: Gebäude B, 3. OG
+            CareOf:
+              summary: CareOf
+              value: c/o Mustermann GmbH
+            Apartment:
+              summary: Apartment
+              value: Wohnung 12a
+          x-examples-i18n:
+            de:
+              BuildingWing: Gebäudeflügel / Stockwerk
+              CareOf: c/o Angabe
+              Apartment: Wohnungsnummer
+        street:
+          type: string
+          maxLength: 200
+          nullable: true
+          description: |
+            Street name including house number.
+            Corresponds to EDIFACT NAD DE3042 (street and house number combined).
+            **German:** Straßenname einschließlich Hausnummer. Entspricht EDIFACT NAD DE3042.
+          x-i18n:
+            de:
+              description: Straßenname einschließlich Hausnummer. EDIFACT NAD DE3042.
+          examples:
+            UrbanStreet:
+              summary: UrbanStreet
+              value: Reinhardtstraße 32
+            IndustrialPark:
+              summary: IndustrialPark
+              value: Industriestraße 14b
+            ResidentialArea:
+              summary: ResidentialArea
+              value: Am Stadtpark 5
+            RuralAddress:
+              summary: RuralAddress
+              value: Dorfstraße 1
+          x-examples-i18n:
+            de:
+              UrbanStreet: Stadtstraße
+              IndustrialPark: Gewerbegebiet
+              ResidentialArea: Wohngebiet
+              RuralAddress: Ländliche Adresse
+        postOfficeBox:
+          type: string
+          maxLength: 50
+          nullable: true
+          description: |
+            Post office box number, used as an alternative to street address.
+            **German:** Postfachnummer, alternativ zur Straßenanschrift.
+          x-i18n:
+            de:
+              description: Postfachnummer, alternativ zur Straßenanschrift.
+          examples:
+            Standard:
+              summary: Standard
+              value: Postfach 12 34 56
+            Short:
+              summary: Short
+              value: Postfach 1000
+          x-examples-i18n:
+            de:
+              Standard: Standard
+              Short: Kurzform
+        city:
+          type: string
+          maxLength: 100
+          nullable: true
+          description: |
+            City or municipality name.
+            Corresponds to EDIFACT NAD DE3164.
+            **German:** Ortsname / Stadtname. Entspricht EDIFACT NAD DE3164.
+          x-i18n:
+            de:
+              description: Ortsname oder Stadtname. EDIFACT NAD DE3164.
+          examples:
+            Berlin:
+              summary: Berlin
+              value: Berlin
+            Hamburg:
+              summary: Hamburg
+              value: Hamburg
+            Munich:
+              summary: Munich
+              value: München
+            Frankfurt:
+              summary: Frankfurt
+              value: Frankfurt am Main
+            Stuttgart:
+              summary: Stuttgart
+              value: Stuttgart
+            Cologne:
+              summary: Cologne
+              value: Köln
+          x-examples-i18n:
+            de:
+              Berlin: Berlin
+              Hamburg: Hamburg
+              Munich: München
+              Frankfurt: Frankfurt am Main
+              Stuttgart: Stuttgart
+              Cologne: Köln
+        postalCode:
+          type: string
+          maxLength: 20
+          nullable: true
+          description: |
+            Postal code (ZIP code). For Germany typically 5 digits.
+            Corresponds to EDIFACT NAD DE3251.
+            **German:** Postleitzahl. Für Deutschland in der Regel 5-stellig. EDIFACT NAD DE3251.
+          x-i18n:
+            de:
+              description: Postleitzahl. In Deutschland 5-stellig. EDIFACT NAD DE3251.
+          examples:
+            BerlinMitte:
+              summary: BerlinMitte
+              value: '10117'
+            Hamburg:
+              summary: Hamburg
+              value: '20095'
+            Munich:
+              summary: Munich
+              value: '80331'
+            Frankfurt:
+              summary: Frankfurt
+              value: '60311'
+            Stuttgart:
+              summary: Stuttgart
+              value: '70173'
+            Cologne:
+              summary: Cologne
+              value: '50667'
+          x-examples-i18n:
+            de:
+              BerlinMitte: Berlin Mitte
+              Hamburg: Hamburg
+              Munich: München
+              Frankfurt: Frankfurt am Main
+              Stuttgart: Stuttgart
+              Cologne: Köln
+        countryCode:
+          type: string
+          maxLength: 2
+          nullable: true
+          description: |
+            ISO 3166-1 alpha-2 country code.
+            Corresponds to EDIFACT NAD DE3207.
+            **German:** ISO 3166-1 alpha-2 Ländercode. EDIFACT NAD DE3207. Beispiel: DE für Deutschland.
+          x-i18n:
+            de:
+              description: ISO 3166-1 alpha-2 Ländercode. EDIFACT NAD DE3207.
+          examples:
+            Germany:
+              summary: Germany
+              value: DE
+            Austria:
+              summary: Austria
+              value: AT
+            Switzerland:
+              summary: Switzerland
+              value: CH
+            Luxembourg:
+              summary: Luxembourg
+              value: LU
+          x-examples-i18n:
+            de:
+              Germany: Deutschland
+              Austria: Österreich
+              Switzerland: Schweiz
+              Luxembourg: Luxemburg
+    marketLocationIdentification:
+      type: object
+      title: MarketLocationIdentification
+      description: |
+        Defines how the market location is identified in a registration (Anmeldung) request.
+        Corresponds to GPKE identification cases (Kapitel I.6, GPKE Teil 2):
+        - **Case 1 (maloIdOnly):** identification exclusively by 11-digit MaLo-ID.
+          Minimum lead time: 7 working days before supply start.
+        - **Case 2 (multiAttribute):** identification by postal address and / or additional
+          attributes (e.g. meter number) when the MaLo-ID is not known.
+          Minimum lead time: 10 working days before supply start.
+        Corresponds to EDIFACT SG5 LOC DE3225 Z16 (MaLo-ID) and SG8 attribute qualifiers.
+        **German:** Gibt an, wie die Marktlokation in der Anmeldung identifiziert wird.
+        Entspricht den GPKE-Identifikationsfällen (Kapitel I.6, GPKE Teil 2):
+        - **Fall 1 (maloIdOnly):** Identifikation ausschließlich per 11-stelliger MaLo-ID.
+          Mindestvorlauf: 7 Werktage vor Lieferbeginn.
+        - **Fall 2 (multiAttribute):** Identifikation per Postanschrift und / oder weiterer
+          Merkmale (z.B. Zählernummer), wenn die MaLo-ID nicht bekannt ist.
+          Mindestvorlauf: 10 Werktage vor Lieferbeginn.
+        Entspricht EDIFACT SG5 LOC DE3225 Z16 (MaLo-ID) und SG8-Attributqualifiern.
+      x-i18n:
+        de:
+          title: Marktlokationsidentifikation (Identifikationsfall)
+          description: |
+            Identifikationsfall der Marktlokation gemäß GPKE Kapitel I.6.
+            Fall 1: MaLo-ID (≥7 WT Vorlauf). Fall 2: Adresse / weitere Merkmale (≥10 WT Vorlauf).
+            EDIFACT SG5 LOC DE3225 Z16 (MaLo-ID) und SG8-Attributqualifier.
+      x-edifact-mapping:
+        case1:
+          segment: LOC (SG5)
+          de3227: Z16 (Marktlokation)
+          de3225: MaLo-ID (11-stellig)
+        case2:
+          segment: SG8 attribute qualifiers
+          notes: Address attributes used when MaLo-ID not known
+      required:
+        - identificationMode
+      properties:
+        identificationMode:
+          $ref: '#/components/schemas/identificationMode'
+        maLoId:
+          $ref: '#/components/schemas/marketLocationId'
+        meterNumber:
+          $ref: '#/components/schemas/meterNumber'
+        address:
+          $ref: '#/components/schemas/address'
+        label:
+          $ref: '#/components/schemas/multilingualLabel'
+      allOf:
+        - if:
+            properties:
+              identificationMode:
+                const: maloIdOnly
+          then:
+            required:
+              - maLoId
+        - if:
+            properties:
+              identificationMode:
+                const: multiAttribute
+          then:
+            required:
+              - address
+    energyDirection:
+      type: string
+      title: EnergyDirection
+      description: |
+        Direction of energy flow at a market location – either consumption (import from grid)
+        or generation (export to grid). Corresponds to EDIFACT LOC qualifier Z16/CCI characteristcs.
+
+        **German:** Energieflussrichtung an einer Marktlokation – entweder Verbrauch (Bezug aus dem Netz)
+        oder Erzeugung (Einspeisung ins Netz). Entspricht den LOC-Qualifier Z16-Charakteristiken in EDIFACT.
+      x-i18n:
+        de:
+          title: Energieflussrichtung
+          description: Energieflussrichtung an einer Marktlokation – Verbrauch oder Erzeugung.
+      x-edifact-mapping:
+        segment: CCI/CAV
+        notes: Differentiates consuming (verbrauchend) vs generating (erzeugend) MaLo
+      enum:
+        - CONSUMPTION
+        - GENERATION
+      x-enum-descriptions:
+        CONSUMPTION:
+          en: Consuming market location (energy flows from grid to customer)
+          de: Verbrauchende Marktlokation – Energie fließt vom Netz zum Kunden
+        GENERATION:
+          en: Generating market location (energy flows from installation to grid)
+          de: Erzeugende Marktlokation – Energie fließt von der Anlage ins Netz
+      examples:
+        Consumption:
+          summary: Consumption
+          value: CONSUMPTION
+        Generation:
+          summary: Generation
+          value: GENERATION
+      x-examples-i18n:
+        de:
+          Consumption: Verbrauch (Bezug)
+          Generation: Erzeugung (Einspeisung)
+    balancingAssignment:
+      type: object
+      title: BalancingAssignment
+      description: |
+        Balancing data submitted by the new supplier (LFN) when registering a market location.
+        Contains the balancing group (Bilanzkreis) EIC code and, if the supplier uses a
+        third-party balance responsible party (BKV), the reference to the balancing
+        authorization (Zuordnungsermächtigung) held at the grid operator.
+        Corresponds to EDIFACT SG4 / SG6 CAV / CCI segments (Bilanzkreiszuordnung).
+        **German:** Bilanzierungsdaten des neuen Lieferanten (LFN) bei der Anmeldung einer
+        Marktlokation. Enthält den EIC-Code des Bilanzkreises und, wenn der Lieferant einen
+        fremden BKV nutzt, die Referenz der beim Netzbetreiber hinterlegten
+        Zuordnungsermächtigung.
+        Entspricht EDIFACT SG4 / SG6 CAV / CCI-Segmenten (Bilanzkreiszuordnung).
+      x-i18n:
+        de:
+          title: Bilanzierungszuordnung
+          description: |
+            Bilanzierungsdaten (Bilanzkreis-EIC, Zuordnungsermächtigung) des neuen Lieferanten
+            für die Anmeldung. EDIFACT SG4 / SG6 CAV / CCI.
+      x-edifact-mapping:
+        segment: CCI / CAV (SG6)
+        notes: Bilanzkreiszuordnung – balancing group and authorization reference
+      required:
+        - balancingGroupId
+      properties:
+        balancingGroupId:
+          type: string
+          maxLength: 50
+          description: |
+            EIC code of the balancing group (Bilanzkreis) the market location is assigned to
+            by the new supplier. Format: 16-character EIC code.
+            **German:** EIC-Code des Bilanzkreises, dem die Marktlokation durch den neuen
+            Lieferanten zugeordnet wird. Format: 16-stelliger EIC-Code.
+          x-i18n:
+            de:
+              description: EIC-Code des Bilanzkreises der Marktlokation (16-stellig).
+          examples:
+            SupplierA:
+              summary: SupplierA
+              value: 11XVSEW------5S
+            SupplierB:
+              summary: SupplierB
+              value: 11XENERGY----3T
+          x-examples-i18n:
+            de:
+              SupplierA: Bilanzkreis Lieferant A
+              SupplierB: Bilanzkreis Lieferant B
+        authorizationReference:
+          type: string
+          maxLength: 35
+          nullable: true
+          description: |
+            Reference number of the balancing authorization (Zuordnungsermächtigung) held at
+            the grid operator. Required if the new supplier uses a third-party BKV.
+            **German:** Referenznummer der beim Netzbetreiber hinterlegten Zuordnungsermächtigung.
+            Erforderlich, wenn der Lieferant einen fremden BKV (Bilanzkreisverantwortlichen) nutzt.
+          x-i18n:
+            de:
+              description: |
+                Referenz der Zuordnungsermächtigung. Pflichtfeld bei Nutzung eines fremden BKV.
+          examples:
+            Auth1:
+              summary: Auth1
+              value: ZE-2025-00042
+            Auth2:
+              summary: Auth2
+              value: ZE-2024-10099
+          x-examples-i18n:
+            de:
+              Auth1: Zuordnungsermächtigung Beispiel 1
+              Auth2: Zuordnungsermächtigung Beispiel 2
+        label:
+          $ref: '#/components/schemas/multilingualLabel'
+    meterReadingCycle:
+      type: string
+      title: MeterReadingCycle
+      description: |
+        Requested meter reading cycle (Ableseturnus) when the new supplier wishes a reading
+        frequency other than the default (yearly). Specifies the cycle, not the exact reading date.
+        **German:** Gewünschter Ableseturnus, wenn der Lieferant einen vom Standard (jährlich)
+        abweichenden Ablesezyklus vorgibt. Gibt den Turnus an, nicht den genauen Ablesetermin.
+      x-i18n:
+        de:
+          title: Ableseturnus
+          description: |
+            Ableseturnus (Ablesezyklus) abweichend vom Standard (jährlich).
+            Gibt den Zyklus an, nicht den konkreten Ablesetermin.
+      enum:
+        - yearly
+        - semiAnnual
+        - quarterly
+        - monthly
+      x-enum-descriptions:
+        yearly:
+          en: Annual meter reading (default – no explicit request needed)
+          de: Jährliche Ablesung (Standard – kein expliziter Wunsch nötig)
+        semiAnnual:
+          en: Semi-annual meter reading (twice per year)
+          de: Halbjährliche Ablesung (zweimal pro Jahr)
+        quarterly:
+          en: Quarterly meter reading (four times per year)
+          de: Vierteljährliche Ablesung (viermal pro Jahr)
+        monthly:
+          en: Monthly meter reading (twelve times per year)
+          de: Monatliche Ablesung (zwölfmal pro Jahr)
+      examples:
+        Yearly:
+          summary: Yearly
+          value: yearly
+        Monthly:
+          summary: Monthly
+          value: monthly
+      x-examples-i18n:
+        de:
+          Yearly: Jährlich (Standard)
+          Monthly: Monatlich
+    voltageLevel:
+      type: object
+      title: VoltageLevel
+      description: |
+        Voltage level at which a market or metering location is connected to the grid.
+        Defined in BDEW code list E02 (Spannungsebene).
+
+        **German:** Spannungsebene, an der eine Markt- oder Messlokation ans Netz angeschlossen ist.
+        Definiert in BDEW-Codeliste E02 (Spannungsebene).
+      x-i18n:
+        de:
+          title: Spannungsebene
+          description: Spannungsebene der Netzanbindung gemäß BDEW-Codeliste E02.
+      x-edifact-mapping:
+        segment: CCI/CAV
+        qualifier: Z07 (Spannungsebene)
+        codeList: E02
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          maxLength: 10
+          description: |
+            BDEW voltage level code. Common values: E01 (>110kV), E02 (110kV), 
+            E03 (Höchstspannung), E04 (Hochspannung/HS), E05 (Mittelspannung/MS), 
+            E06 (Niederspannung/NS).
+            **German:** BDEW-Code der Spannungsebene. Übliche Werte: E03 (HöS), E04 (HS), 
+            E05 (MS), E06 (NS).
+          x-i18n:
+            de:
+              description: BDEW-Code der Spannungsebene gemäß Codeliste E02. Werte z.B. E03 bis E06.
+          enum:
+            - E01
+            - E02
+            - E03
+            - E04
+            - E05
+            - E06
+          examples:
+            Niederspannung:
+              summary: Niederspannung
+              value: E06
+            Mittelspannung:
+              summary: Mittelspannung
+              value: E05
+            Hochspannung:
+              summary: Hochspannung
+              value: E04
+            Hoechstspannung:
+              summary: Hoechstspannung
+              value: E03
+          x-examples-i18n:
+            de:
+              Niederspannung: Niederspannung (NS)
+              Mittelspannung: Mittelspannung (MS)
+              Hochspannung: Hochspannung (HS)
+              Hoechstspannung: Höchstspannung (HöS)
+        name:
+          type: string
+          maxLength: 100
+          nullable: true
+          description: |
+            Human-readable name of the voltage level.
+            **German:** Lesbare Bezeichnung der Spannungsebene.
+          x-i18n:
+            de:
+              description: Lesbare Bezeichnung der Spannungsebene.
+          examples:
+            Niederspannung:
+              summary: Niederspannung
+              value: Niederspannung
+            Mittelspannung:
+              summary: Mittelspannung
+              value: Mittelspannung
+            Hochspannung:
+              summary: Hochspannung
+              value: Hochspannung
+          x-examples-i18n:
+            de:
+              Niederspannung: Niederspannung (NS)
+              Mittelspannung: Mittelspannung (MS)
+              Hochspannung: Hochspannung (HS)
+        label:
+          $ref: '#/components/schemas/multilingualLabel'
+    masterDataResponse:
+      type: object
+      title: MasterDataResponse
+      description: |
+        Relevant master data of the market location transmitted by the grid operator (NB)
+        in a confirmation response (Prüf-ID 55002 / 55078).
+        Contains voltage level, interruptibility flag, supply contract reference and the
+        market partner ID of the current metering point operator (MSB).
+        **German:** Relevante Stammdaten der Marktlokation, die der Netzbetreiber (NB) in
+        der Bestätigungsantwort (Prüf-ID 55002 / 55078) übermittelt.
+        Enthält Spannungsebene, Unterbrechbarkeitskennzeichen, Netznutzungsvertragsreferenz
+        und die Marktpartner-ID des aktuellen Messstellenbetreibers (MSB).
+      x-i18n:
+        de:
+          title: Stammdatenantwort (NB-Bestätigung)
+          description: |
+            Stammdaten der Marktlokation aus der Bestätigungsantwort des Netzbetreibers
+            (Prüf-ID 55002 / 55078). Enthält Spannungsebene, Unterbrechbarkeit,
+            Netznutzungsvertrag und MSB-Marktpartner-ID.
+      properties:
+        voltageLevel:
+          $ref: '#/components/schemas/voltageLevel'
+        currentMeteringPointOperatorId:
+          $ref: '#/components/schemas/marketActorId'
+        supplyContractId:
+          type: string
+          maxLength: 35
+          nullable: true
+          description: |
+            Reference identifier of the grid usage contract (Netznutzungsvertrag / NNV)
+            applicable for this market location.
+            **German:** Referenzkennung des Netznutzungsvertrags (NNV) für diese Marktlokation.
+          x-i18n:
+            de:
+              description: Referenzkennung des Netznutzungsvertrags (NNV) der Marktlokation.
+          examples:
+            NNV1:
+              summary: NNV1
+              value: NNV-2024-00123
+            NNV2:
+              summary: NNV2
+              value: NNV-2025-00456
+          x-examples-i18n:
+            de:
+              NNV1: Netznutzungsvertrag Beispiel 1
+              NNV2: Netznutzungsvertrag Beispiel 2
+        isInterruptible:
+          type: boolean
+          nullable: true
+          description: |
+            Indicates whether the consumption equipment at this market location is interruptible
+            (unterbrechbare Verbrauchseinrichtung, §14a EnWG).
+            **German:** Gibt an, ob die Verbrauchseinrichtungen an dieser Marktlokation
+            unterbrechbar sind (§14a EnWG, unterbrechbare Verbrauchseinrichtung).
+          x-i18n:
+            de:
+              description: |
+                Unterbrechbarkeit der Verbrauchseinrichtung gemäß §14a EnWG (ja/nein).
+          examples:
+            NotInterruptible:
+              summary: NotInterruptible
+              value: false
+            Interruptible:
+              summary: Interruptible
+              value: true
+          x-examples-i18n:
+            de:
+              NotInterruptible: Nicht unterbrechbar
+              Interruptible: Unterbrechbar (§14a EnWG)
+        label:
+          $ref: '#/components/schemas/multilingualLabel'
+    rejectionReason:
+      type: object
+      title: RejectionReason
+      description: |
+        A single rejection or objection reason returned by a market participant
+        (grid operator NB or previous supplier LFA) in a negative response.
+        Rejection codes may reference BDEW EBD check-step codes or business-defined values.
+        **German:** Einzelner Ablehnungs- oder Widerspruchsgrund eines Marktpartners
+        (Netzbetreiber NB oder alter Lieferant LFA) in einer negativen Antwort.
+        Ablehnungscodes können BDEW EBD-Prüfschrittreferenzen oder fachliche Codes sein.
+      x-i18n:
+        de:
+          title: Ablehnungsgrund / Widerspruchsgrund
+          description: |
+            Einzelner Ablehnungsgrund (NB) oder Widerspruchsgrund (LFA) in einer negativen Antwort.
+            Codes können EBD-Prüfschrittreferenzen oder fachlich definierte Werte sein.
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          maxLength: 35
+          description: |
+            Machine-readable rejection code. May be a BDEW EBD check-step reference
+            (e.g. E_0610) or a business-defined code (e.g. CONTRACT_ACTIVE).
+            Corresponds to EDIFACT STS DE9012 (code of check step / EBD reference).
+            **German:** Maschinenlesbarer Ablehnungscode. Kann ein BDEW-EBD-Prüfschrittverweis
+            (z.B. E_0610) oder ein fachlicher Code sein (z.B. CONTRACT_ACTIVE).
+            Entspricht EDIFACT STS DE9012 (Code des Prüfschritts / EBD-Referenz).
+          x-i18n:
+            de:
+              description: |
+                Maschinenlesbarer Ablehnungscode (EBD-Prüfschrittverweis oder fachlicher Code).
+                EDIFACT STS DE9012.
+          examples:
+            EBD_E0610:
+              summary: EBD_E0610
+              value: E_0610
+            EBD_E0602:
+              summary: EBD_E0602
+              value: E_0602
+            ContractActive:
+              summary: ContractActive
+              value: CONTRACT_ACTIVE
+          x-examples-i18n:
+            de:
+              EBD_E0610: EBD-Prüfschritt E_0610
+              EBD_E0602: EBD-Prüfschritt E_0602
+              ContractActive: Vertrag noch aktiv
+        message:
+          type: string
+          maxLength: 500
+          nullable: true
+          description: |
+            Human-readable rejection message in English describing why the request was rejected.
+            **German:** Lesbare Ablehnungsbegründung auf Englisch, die den Ablehnungsgrund erläutert.
+          x-i18n:
+            de:
+              description: Lesbare Ablehnungsbegründung auf Englisch.
+          examples:
+            PreviousSupplierObjected:
+              summary: PreviousSupplierObjected
+              value: Previous supplier objected to deregistration
+            ContractRunning:
+              summary: ContractRunning
+              value: Contract runs until 2025-12-31 and cannot be terminated early
+          x-examples-i18n:
+            de:
+              PreviousSupplierObjected: Vorheriger Lieferant hat der Abmeldung widersprochen
+              ContractRunning: Vertrag läuft bis 31.12.2025 und kann nicht vorzeitig beendet werden
+        label:
+          $ref: '#/components/schemas/multilingualLabel'
+    validityPeriod:
+      type: object
+      title: ValidityPeriod
+      description: |
+        Defines the temporal validity of a data record with start and optional end date.
+        Used throughout UTILMD to qualify time-variant master data.
+
+        **German:** Definiert den zeitlichen Gültigkeitsbereich eines Datensatzes mit
+        Start- und optionalem Enddatum. Wird in der UTILMD zur Qualifizierung zeitvarianter
+        Stammdaten verwendet (z.B. DTM Segmente in EDIFACT).
+      x-i18n:
+        de:
+          title: Gültigkeitszeitraum
+          description: Definiert den zeitlichen Gültigkeitsbereich eines Datensatzes mit Start- und optionalem Enddatum.
+      x-edifact-mapping:
+        segment: DTM
+        qualifier: 163 (valid from) / 164 (valid to)
+      properties:
+        validFrom:
+          type: string
+          format: date-time
+          description: |
+            Start of validity period (inclusive). Format: ISO 8601 date-time.
+            **German:** Beginn des Gültigkeitszeitraums (einschließlich). Format: ISO 8601 Datum-Zeit.
+          x-i18n:
+            de:
+              description: Beginn des Gültigkeitszeitraums (einschließlich). Format ISO 8601.
+          examples:
+            StartOfYear2024:
+              summary: StartOfYear2024
+              value: '2024-01-01T00:00:00Z'
+            StartOfOctober:
+              summary: StartOfOctober
+              value: '2024-10-01T00:00:00Z'
+            MidYear:
+              summary: MidYear
+              value: '2024-07-01T00:00:00Z'
+            FutureDate:
+              summary: FutureDate
+              value: '2025-04-01T00:00:00Z'
+          x-examples-i18n:
+            de:
+              StartOfYear2024: Jahresbeginn 2024
+              StartOfOctober: Beginn Oktober 2024
+              MidYear: Jahresmitte 2024
+              FutureDate: Zukünftiges Datum
+        validTo:
+          type: string
+          format: date-time
+          nullable: true
+          description: |
+            End of validity period (exclusive). Null means open-ended / indefinite.
+            **German:** Ende des Gültigkeitszeitraums (ausschließlich). Null bedeutet unbegrenzt gültig.
+          x-i18n:
+            de:
+              description: Ende des Gültigkeitszeitraums (ausschließlich). Null bedeutet unbegrenzt.
+          examples:
+            EndOfYear2024:
+              summary: EndOfYear2024
+              value: '2024-12-31T23:59:59Z'
+            EndOfQuarter:
+              summary: EndOfQuarter
+              value: '2024-09-30T23:59:59Z'
+            OpenEnded:
+              summary: OpenEnded
+              value: null
+          x-examples-i18n:
+            de:
+              EndOfYear2024: Jahresende 2024
+              EndOfQuarter: Quartalsende
+              OpenEnded: Unbegrenzt gültig
+    supplyStart:
+      type: object
+      title: SupplyStart
+      description: |
+        Full representation of a supply start (registration / Anmeldung) request,
+        including its current processing status, all submitted fields and any grid operator
+        response data (step 5 confirmation or rejection).
+        This is the primary resource returned by GET and POST /malo/{marketLocationId}/registrations.
+        **German:** Vollständige Darstellung einer Lieferbeginn-Anfrage (Anmeldung), einschließlich
+        des aktuellen Bearbeitungsstatus, aller eingereichten Felder und der Netzbetreiberantwort
+        (Schritt 5 – Bestätigung oder Ablehnung).
+        Primäre Ressource bei GET und POST /malo/{marketLocationId}/registrations.
+      x-i18n:
+        de:
+          title: Lieferbeginn-Anfrage (vollständig)
+          description: |
+            Vollständige Darstellung einer Anmeldung inkl. Bearbeitungsstatus und NB-Antwort.
+            Primäres Ressourcenobjekt für GET und POST auf /malo/{marketLocationId}/registrations.
+      required:
+        - supplyStartId
+        - status
+        - createdAt
+        - updatedAt
+        - header
+        - supplyStartDate
+        - transactionReason
+        - isHouseholdCustomer
+        - marketLocationIdentification
+        - energyDirection
+        - balancing
+      properties:
+        supplyStartId:
+          type: string
+          maxLength: 35
+          readOnly: true
+          description: |
+            Unique supply start request identifier assigned by the server on creation.
+            **German:** Eindeutige, serverseitig bei Erstellung vergebene Lieferbeginn-Anfrage-ID.
+          x-i18n:
+            de:
+              description: Eindeutige serverseitig vergebene Lieferbeginn-Anfrage-ID.
+          examples:
+            Example1:
+              summary: Example1
+              value: SS-2025-00042
+            Example2:
+              summary: Example2
+              value: SS-2025-00099
+          x-examples-i18n:
+            de:
+              Example1: Beispiel 1
+              Example2: Beispiel 2
+        status:
+          $ref: '#/components/schemas/supplyStartStatus'
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+          description: |
+            Timestamp when this resource was created (ISO 8601).
+            **German:** Erstellungszeitpunkt dieser Ressource (ISO 8601).
+          x-i18n:
+            de:
+              description: Erstellungszeitpunkt der Ressource (ISO 8601).
+          examples:
+            Morning:
+              summary: Morning
+              value: '2025-03-15T08:00:00Z'
+            Afternoon:
+              summary: Afternoon
+              value: '2025-03-15T14:30:00Z'
+          x-examples-i18n:
+            de:
+              Morning: Morgen
+              Afternoon: Nachmittag
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+          description: |
+            Timestamp of the last update to this resource (ISO 8601).
+            **German:** Zeitpunkt der letzten Aktualisierung dieser Ressource (ISO 8601).
+          x-i18n:
+            de:
+              description: Zeitpunkt der letzten Änderung (ISO 8601).
+          examples:
+            Updated:
+              summary: Updated
+              value: '2025-03-17T10:15:00Z'
+          x-examples-i18n:
+            de:
+              Updated: Beispiel Aktualisierung
+        header:
+          $ref: '#/components/schemas/messageHeader'
+        supplyStartDate:
+          type: string
+          format: date
+          description: |
+            Requested supply start date (Lieferbeginn-Datum / Anmeldedatum). ISO 8601 date.
+            Corresponds to EDIFACT SG4 DTM qualifier 92.
+            **German:** Gewünschtes Lieferbeginn-Datum (Anmeldedatum). ISO 8601-Datum.
+            Entspricht EDIFACT SG4 DTM Qualifier 92.
+          x-i18n:
+            de:
+              description: Gewünschtes Lieferbeginn-Datum (Anmeldedatum). ISO 8601. EDIFACT SG4 DTM Q92.
+          examples:
+            QuarterStart:
+              summary: QuarterStart
+              value: '2025-04-01'
+            YearStart:
+              summary: YearStart
+              value: '2026-01-01'
+          x-examples-i18n:
+            de:
+              QuarterStart: Quartalsbeginn
+              YearStart: Jahresbeginn
+        requestedStartDateForNewConnection:
+          type: string
+          format: date
+          nullable: true
+          description: |
+            Estimated supply start date communicated by the customer for a new connection.
+            Only populated when transactionReason = ZA2 (new connection / Neuanlage).
+            **German:** Voraussichtliches Lieferbeginn-Datum bei Neuanlage, vom Kunden mitgeteilt.
+            Nur bei transactionReason = ZA2 (Neuanlage) zu befüllen.
+          x-i18n:
+            de:
+              description: Voraussichtliches Anmeldedatum bei Neuanlage (nur bei ZA2 = Neuanlage).
+          examples:
+            NewConnection:
+              summary: NewConnection
+              value: '2025-05-01'
+          x-examples-i18n:
+            de:
+              NewConnection: Neuanlage Mai 2025
+        effectiveSupplyStartDate:
+          type: string
+          format: date
+          nullable: true
+          readOnly: true
+          description: |
+            Confirmed effective supply start date set by the grid operator upon confirmation (Prüf-ID 55002).
+            Null until the registration is accepted.
+            **German:** Bestätigtes wirksames Lieferbeginn-Datum, gesetzt durch den Netzbetreiber bei
+            Bestätigung (Prüf-ID 55002). Null bis zur Bestätigung.
+          x-i18n:
+            de:
+              description: Bestätigtes wirksames Lieferbeginn-Datum (nach NB-Bestätigung, sonst null).
+          examples:
+            Confirmed:
+              summary: Confirmed
+              value: '2025-04-01'
+          x-examples-i18n:
+            de:
+              Confirmed: Bestätigter Lieferbeginn
+        transactionReason:
+          $ref: '#/components/schemas/transactionReason'
+        isHouseholdCustomer:
+          type: boolean
+          description: |
+            Whether the end customer at this market location is a household customer (Haushaltskunde)
+            within the meaning of the energy law (EnWG).
+            **German:** Gibt an, ob der Letztverbraucher an dieser Marktlokation ein Haushaltskunde
+            im Sinne des EnWG ist.
+          x-i18n:
+            de:
+              description: Haushaltskunde im Sinne des EnWG (ja/nein).
+          examples:
+            Household:
+              summary: Household
+              value: true
+            Commercial:
+              summary: Commercial
+              value: false
+          x-examples-i18n:
+            de:
+              Household: Haushaltskunde
+              Commercial: Gewerbe-/Industriekunde
+        marketLocationIdentification:
+          $ref: '#/components/schemas/marketLocationIdentification'
+        energyDirection:
+          $ref: '#/components/schemas/energyDirection'
+        balancing:
+          $ref: '#/components/schemas/balancingAssignment'
+        meterReadingCycle:
+          $ref: '#/components/schemas/meterReadingCycle'
+        masterData:
+          $ref: '#/components/schemas/masterDataResponse'
+        previousSupplierEndDate:
+          type: string
+          format: date
+          nullable: true
+          readOnly: true
+          description: |
+            End date of the previous supplier's (LFA) assignment, as confirmed by the grid operator.
+            Set only when status = accepted.
+            **German:** Enddatum der Zuordnung des alten Lieferanten (LFA), wie vom Netzbetreiber
+            bestätigt. Nur bei status = accepted gesetzt.
+          x-i18n:
+            de:
+              description: Bestätigtes Enddatum der LFA-Zuordnung (nur bei status = accepted).
+          examples:
+            EndDate:
+              summary: EndDate
+              value: '2025-03-31'
+          x-examples-i18n:
+            de:
+              EndDate: Enddatum LFA-Zuordnung
+        rejectionReasons:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/rejectionReason'
+          description: |
+            List of rejection reasons returned by the grid operator. Populated only when status = rejected.
+            **German:** Liste der Ablehnungsgründe des Netzbetreibers. Nur bei status = rejected befüllt.
+          x-i18n:
+            de:
+              description: Ablehnungsgründe des NB (nur bei status = rejected).
+        notes:
+          type: string
+          maxLength: 500
+          nullable: true
+          description: |
+            Free-text notes for internal use by the registering party. Not transmitted to the grid operator.
+            **German:** Freitext-Notizen für den internen Gebrauch der anmeldenden Partei.
+            Werden nicht an den Netzbetreiber übermittelt.
+          x-i18n:
+            de:
+              description: Freitext-Notizen (intern, nicht an NB übermittelt).
+        validity:
+          $ref: '#/components/schemas/validityPeriod'
+        label:
+          $ref: '#/components/schemas/multilingualLabel'
+    supplyStartList:
+      type: object
+      title: SupplyStartList
+      description: |
+        Paginated list of supply start requests for a given market location.
+        Returned by GET /malo/{marketLocationId}/registrations.
+        **German:** Seitenbasierte Liste von Lieferbeginn-Anfragen (Anmeldungen) für
+        eine Marktlokation. Zurückgegeben von GET /malo/{marketLocationId}/registrations.
+      x-i18n:
+        de:
+          title: Liste Lieferbeginn-Anfragen (paginiert)
+          description: |
+            Seitenbasierte Liste von Anmeldungen für eine Marktlokation.
+            Antwort von GET /malo/{marketLocationId}/registrations.
+      required:
+        - items
+        - totalCount
+        - page
+        - pageSize
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/supplyStart'
+          description: |
+            List of supply start requests matching the filter criteria.
+            **German:** Liste der Anmeldungen, die den Filterkriterien entsprechen.
+          x-i18n:
+            de:
+              description: Liste der gefilterten Anmeldungen.
+        totalCount:
+          type: integer
+          minimum: 0
+          description: |
+            Total number of supply start requests matching the filter (before pagination).
+            **German:** Gesamtanzahl der Anmeldungen, die den Filterkriterien entsprechen (vor Paginierung).
+          x-i18n:
+            de:
+              description: Gesamtanzahl der Treffer vor Paginierung.
+          examples:
+            Small:
+              summary: Small
+              value: 3
+            Large:
+              summary: Large
+              value: 147
+          x-examples-i18n:
+            de:
+              Small: Wenige Treffer
+              Large: Viele Treffer
+        page:
+          type: integer
+          minimum: 0
+          description: |
+            Current page index (zero-based).
+            **German:** Aktueller Seitenindex (nullbasiert).
+          x-i18n:
+            de:
+              description: Aktueller Seitenindex (nullbasiert).
+          examples:
+            FirstPage:
+              summary: FirstPage
+              value: 0
+            SecondPage:
+              summary: SecondPage
+              value: 1
+          x-examples-i18n:
+            de:
+              FirstPage: Erste Seite
+              SecondPage: Zweite Seite
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 500
+          description: |
+            Number of items per page (as requested via query parameter limit).
+            **German:** Anzahl der Einträge pro Seite (wie über Query-Parameter limit angefordert).
+          x-i18n:
+            de:
+              description: Einträge pro Seite (laut Query-Parameter limit).
+          examples:
+            Default:
+              summary: Default
+              value: 50
+            Large:
+              summary: Large
+              value: 200
+          x-examples-i18n:
+            de:
+              Default: Standardseitengröße
+              Large: Große Seitengröße
+    errorResponse:
+      type: object
+      title: ErrorResponse
+      description: |
+        Standardized error response returned when an API request fails.
+        **German:** Standardisierte Fehlerantwort bei fehlgeschlagenen API-Anfragen.
+      x-i18n:
+        de:
+          title: Fehlerantwort
+          description: Standardisierte Fehlerantwort bei fehlgeschlagenen API-Anfragen.
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: |
+            Machine-readable error code.
+            **German:** Maschinenlesbarer Fehlercode.
+          x-i18n:
+            de:
+              description: Maschinenlesbarer Fehlercode.
+          examples:
+            NotFound:
+              summary: NotFound
+              value: MALO_NOT_FOUND
+            Invalid:
+              summary: Invalid
+              value: MALO_ID_INVALID
+            Unauthorized:
+              summary: Unauthorized
+              value: UNAUTHORIZED
+            Conflict:
+              summary: Conflict
+              value: DUPLICATE_TRANSACTION
+          x-examples-i18n:
+            de:
+              NotFound: Nicht gefunden
+              Invalid: Ungültige Eingabe
+              Unauthorized: Nicht autorisiert
+              Conflict: Konflikt / Duplikat
+        message:
+          type: string
+          description: |
+            Human-readable error message in English.
+            **German:** Lesbare Fehlermeldung auf Englisch.
+          x-i18n:
+            de:
+              description: Lesbare Fehlermeldung auf Englisch.
+          examples:
+            NotFound:
+              summary: NotFound
+              value: Market location not found
+            Invalid:
+              summary: Invalid
+              value: Market location ID must be 11 digits
+            Unauthorized:
+              summary: Unauthorized
+              value: Bearer token missing or invalid
+          x-examples-i18n:
+            de:
+              NotFound: Nicht gefunden
+              Invalid: Ungültige Eingabe
+              Unauthorized: Nicht autorisiert
+        messageLocalized:
+          $ref: '#/components/schemas/multilingualLabel'
+        details:
+          type: array
+          items:
+            type: string
+          description: |
+            Additional error detail messages.
+            **German:** Zusätzliche Fehlerdetails.
+          x-i18n:
+            de:
+              description: Zusätzliche Fehlerdetails.
+        timestamp:
+          type: string
+          format: date-time
+          description: |
+            Timestamp when the error occurred (ISO 8601).
+            **German:** Zeitstempel des Auftretens (ISO 8601).
+          x-i18n:
+            de:
+              description: Zeitstempel des Fehlerauftretens (ISO 8601).
+    transactionStatus:
+      type: object
+      title: TransactionStatus
+      description: |
+        Status information for a transaction within a UTILMD message, used in confirmation
+        and rejection messages. Contains the status code and optional reason/rejection code.
+        Corresponds to EDIFACT SG4 STS segment.
+
+        **German:** Statusinformation für einen Vorgang in einer UTILMD-Nachricht, verwendet
+        in Bestätigungs- und Ablehnungsnachrichten. Enthält Statuscode und optionalen
+        Ablehnungsgrund. Entspricht EDIFACT SG4 STS-Segment.
+      x-i18n:
+        de:
+          title: Vorgangsstatus
+          description: Statusinformation für UTILMD-Vorgangsbestätigungen und -ablehnungen. EDIFACT SG4 STS.
+      x-edifact-mapping:
+        segment: STS (SG4)
+        de9015: 7 (Transaktionsgrund)
+        de9013: Statuscode / Transaktionsgrundergänzung
+        de1131: Codeliste
+        de9012: Zeitraum-ID oder zusätzlicher Code
+      properties:
+        statusCode:
+          type: string
+          maxLength: 10
+          description: |
+            Status code of the transaction response.
+            E01 = confirmation, E02 = partial confirmation, E03 = rejection.
+            Corresponds to EDIFACT STS DE9013.
+            **German:** Statuscode der Vorgangsantwort.
+            E01 = Bestätigung, E02 = Teilbestätigung, E03 = Ablehnung.
+            EDIFACT STS DE9013.
+          x-i18n:
+            de:
+              description: Statuscode. E01=Bestätigung, E02=Teilbestätigung, E03=Ablehnung. EDIFACT STS DE9013.
+          enum:
+            - E01
+            - E02
+            - E03
+          examples:
+            Confirmation:
+              summary: Confirmation
+              value: E01
+            PartialConfirmation:
+              summary: PartialConfirmation
+              value: E02
+            Rejection:
+              summary: Rejection
+              value: E03
+          x-examples-i18n:
+            de:
+              Confirmation: Bestätigung
+              PartialConfirmation: Teilbestätigung
+              Rejection: Ablehnung
+        rejectionCode:
+          type: string
+          maxLength: 20
+          nullable: true
+          description: |
+            Rejection reason code from the BDEW rejection reason code list, if status is E03.
+            Corresponds to EDIFACT STS DE9012 (code of check step / EBD reference).
+            **German:** Ablehnungsgrundcode aus der BDEW-Ablehnungsgrundliste, wenn Status E03.
+            EDIFACT STS DE9012 (Code des Prüfschritts / EBD-Referenz).
+          x-i18n:
+            de:
+              description: Ablehnungsgrundcode bei Status E03. EDIFACT STS DE9012.
+          examples:
+            EBD_E0610:
+              summary: EBD_E0610
+              value: E_0610
+            EBD_E0602:
+              summary: EBD_E0602
+              value: E_0602
+            EBD_E0505:
+              summary: EBD_E0505
+              value: E_0505
+          x-examples-i18n:
+            de:
+              EBD_E0610: Prüfschritt E_0610
+              EBD_E0602: Prüfschritt E_0602
+              EBD_E0505: Prüfschritt E_0505
+        periodId:
+          type: string
+          maxLength: 35
+          nullable: true
+          description: |
+            Period ID from the request message referenced in this status response.
+            Corresponds to EDIFACT STS DE9012 (Zeitraum-ID).
+            Must be a positive integer value without decimal places.
+            **German:** Zeitraum-ID aus der Anfragenachricht, auf die sich diese Statusantwort bezieht.
+            EDIFACT STS DE9012 (Zeitraum-ID). Muss positive ganze Zahl ohne Dezimalstellen sein.
+          x-i18n:
+            de:
+              description: Zeitraum-ID aus der Anfragenachricht. EDIFACT STS DE9012. Positiver ganzzahliger Wert.
+          examples:
+            First:
+              summary: First
+              value: '1'
+            Second:
+              summary: Second
+              value: '2'
+            Third:
+              summary: Third
+              value: '3'
+          x-examples-i18n:
+            de:
+              First: Erste Instanz
+              Second: Zweite Instanz
+              Third: Dritte Instanz
+        label:
+          $ref: '#/components/schemas/multilingualLabel'
+    deregistrationCase:
+      type: string
+      title: DeregistrationCase
+      description: |
+        Identifies which deregistration confirmation case the previous supplier (LFA) has chosen
+        when responding to a deregistration request (Abmeldeanfrage), as defined in GPKE step 4.
+        Applicable only when statusCode = E01 (confirmation).
+        **German:** Gibt an, welchen Abmeldefall der alte Lieferant (LFA) bei der Beantwortung
+        der Abmeldeanfrage gewählt hat, gemäß GPKE Schritt 4.
+        Nur bei statusCode = E01 (Bestätigung) relevant.
+      x-i18n:
+        de:
+          title: Abmeldefall (LFA-Antwort)
+          description: |
+            Vom alten Lieferanten (LFA) gewählter Abmeldefall gemäß GPKE Schritt 4.
+            Nur bei Bestätigung (statusCode = E01) zu befüllen.
+      enum:
+        - caseA
+        - caseB
+      x-enum-descriptions:
+        caseA:
+          en: Case a – deregistration confirmed for the day before the requested supply start date
+          de: Fall a – Abmeldung zum Tag vor dem gewünschten Anmeldedatum bestätigt
+        caseB:
+          en: Case b – deregistration confirmed at an earlier date (before the day prior to the requested supply start)
+          de: Fall b – Abmeldung zu einem noch früheren Datum bestätigt (vor dem Tag vor dem Anmeldedatum)
+      examples:
+        CaseA:
+          summary: CaseA
+          value: caseA
+        CaseB:
+          summary: CaseB
+          value: caseB
+      x-examples-i18n:
+        de:
+          CaseA: Fall a – Tag vor Anmeldedatum
+          CaseB: Fall b – noch früheres Datum
+    terminationReason:
+      type: string
+      title: TerminationReason
+      description: |
+        Reason for the termination or cancellation of a supplier assignment at a market location.
+        Used in assignment-termination notifications (step 6, Prüf-ID 55037) and
+        assignment-cancellation notifications (step 7, Prüf-ID 55038).
+        **German:** Grund für die Beendigung oder Aufhebung einer Lieferantenzuordnung
+        an einer Marktlokation. Verwendet in Zuordnungsbeendigungsmitteilungen (Schritt 6,
+        Prüf-ID 55037) und Zuordnungsaufhebungsmitteilungen (Schritt 7, Prüf-ID 55038).
+      x-i18n:
+        de:
+          title: Beendigungs-/Aufhebungsgrund
+          description: |
+            Grund für die Beendigung (Schritt 6, Prüf-ID 55037) oder Aufhebung
+            (Schritt 7, Prüf-ID 55038) einer Lieferantenzuordnung.
+      enum:
+        - supplierChange
+        - moveOut
+        - decommissioning
+        - priorRegistration
+      x-enum-descriptions:
+        supplierChange:
+          en: Supplier change – a new supplier has been registered for this market location
+          de: Lieferantenwechsel – ein neuer Lieferant hat sich für diese Marktlokation angemeldet
+        moveOut:
+          en: Customer move-out (Auszug) – the customer has left the premises
+          de: Auszug des Kunden – der Letztverbraucher hat die Entnahmestelle verlassen
+        decommissioning:
+          en: Market location has been decommissioned and removed from supply
+          de: Marktlokation wurde stillgelegt und aus der Versorgung genommen
+        priorRegistration:
+          en: Prior registration by another supplier – cancels an existing future assignment (step 7)
+          de: Frühere Anmeldung eines anderen Lieferanten – hebt eine bestehende Zukunftszuordnung auf (Schritt 7)
+      examples:
+        SupplierChange:
+          summary: SupplierChange
+          value: supplierChange
+        PriorRegistration:
+          summary: PriorRegistration
+          value: priorRegistration
+      x-examples-i18n:
+        de:
+          SupplierChange: Lieferantenwechsel
+          PriorRegistration: Frühere Anmeldung eines anderen Lieferanten
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  headers:
+    location:
+      description: URI of the created or resolved resource.
+      schema:
+        type: string
+        format: uri
+    xMessageId:
+      description: |
+        Process-scoped message identifier echoed in the response.
+        See headers/xMessageId.yaml for full definition.
+      schema:
+        type: string
+        format: uuid
+        pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    eTag:
+      description: |
+        Current state or entity tag of the resource.
+        EDI@Energy state values: "state:pending", "state:running",
+        "state:completed", "state:failed", "state:cancelled".
+      schema:
+        type: string
+        pattern: ^(W/)?"[^"]*"$
+    xApiSpecRef:
+      description: Git reference to the active API specification.
+      schema:
+        type: string
+        pattern: ^git:[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+(@[A-Za-z0-9_./-]+)?$
