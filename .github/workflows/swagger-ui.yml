@@ -61,17 +61,19 @@ jobs:
             --dereferenced=false
 
       # ── 6. Download Swagger UI dist ───────────────────────────────────────
-      # We pin to a specific release for reproducibility.
+      # Install via npm (avoids fragile tar --strip-components path issues).
       # To update: change SWAGGER_UI_VERSION below.
       - name: Download Swagger UI
         env:
           SWAGGER_UI_VERSION: '5.17.14'
         run: |
-          curl -sL \
-            "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v${SWAGGER_UI_VERSION}.tar.gz" \
-            | tar -xz --strip-components=2 \
-              "swagger-ui-${SWAGGER_UI_VERSION}/dist" \
-            -C ui/
+          npm install --prefix /tmp/swagger-ui-dist \
+            swagger-ui-dist@${SWAGGER_UI_VERSION}
+          SRC=/tmp/swagger-ui-dist/node_modules/swagger-ui-dist
+          cp ${SRC}/*.js   ui/
+          cp ${SRC}/*.css  ui/
+          cp ${SRC}/*.png  ui/ 2>/dev/null || true
+          cp ${SRC}/swagger-initializer.js ui/
 
       # ── 7. Patch swagger-initializer.js ──────────────────────────────────
       # Replace the default Petstore URL with our bundled spec.
