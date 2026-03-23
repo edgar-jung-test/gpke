@@ -3,326 +3,615 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>BDEW · API Wissenstest</title>
+<title>EDI@Energy · API Wissenstest</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500&display=swap');
-:root{--bdew-blue:#003F7D;--bdew-mid:#005BAA;--bdew-lite:#0070C0;--bdew-teal:#00A3A0;--bdew-orange:#E87722;--bdew-gray:#58595B;--bdew-gl:#D1D3D4;--bdew-bg:#F5F7FA;--white:#fff;--green:#1E7E34;--green-bg:#D4EDDA;--red:#C0392B;--red-bg:#FDECEA;--yellow:#856404;--yellow-bg:#FFF3CD;--r:6px;--sh:0 2px 8px rgba(0,63,125,.10)}
+:root{
+  --blue:#003F7D;--blue-mid:#005BAA;--blue-lt:#0070C0;
+  --teal:#00A3A0;--orange:#E87722;--gray:#58595B;--gl:#D1D3D4;
+  --bg:#F5F7FA;--white:#fff;
+  --green:#1E7E34;--gbg:#D4EDDA;--red:#C0392B;--rbg:#FDECEA;
+  --yellow:#856404;--ybg:#FFF3CD;
+  --r:6px;--sh:0 2px 8px rgba(0,63,125,.10);
+  --timer-ok:#1E7E34;--timer-warn:#856404;--timer-danger:#C0392B;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bdew-bg);color:#1A1A2E;font-family:'Source Sans 3',sans-serif;font-size:16px;line-height:1.65;min-height:100vh}
-.topbar{background:var(--bdew-blue);height:4px}
-header{background:var(--white);border-bottom:1px solid var(--bdew-gl);box-shadow:var(--sh);position:sticky;top:0;z-index:100}
-.hi{max-width:900px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:20px}
-.logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.lm{width:40px;height:40px;background:var(--bdew-blue);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'Source Code Pro',monospace;font-weight:500;font-size:12px;color:#fff;letter-spacing:-.5px}
+body{background:var(--bg);color:#1A1A2E;font-family:'Source Sans 3',sans-serif;font-size:14px;line-height:1.6;min-height:100vh}
+/* ── Topbar ── */
+.topbar{background:var(--blue);height:4px}
+/* ── Header ── */
+header{background:var(--white);border-bottom:1px solid var(--gl);box-shadow:var(--sh);position:sticky;top:0;z-index:200}
+.hi{max-width:900px;margin:0 auto;padding:0 20px;height:58px;display:flex;align-items:center;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;flex-shrink:0;cursor:pointer}
+.lm{width:38px;height:38px;background:var(--blue);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'Source Code Pro',monospace;font-weight:500;font-size:11px;color:#fff;letter-spacing:-.3px}
 .lt{display:flex;flex-direction:column;line-height:1.2}
-.lt-main{font-size:15px;font-weight:700;color:var(--bdew-blue);letter-spacing:.05em}
-.lt-sub{font-size:10px;color:var(--bdew-gray);letter-spacing:.04em}
-.hdiv{width:1px;height:32px;background:var(--bdew-gl)}
-.htitle{font-size:14px;font-weight:600;color:var(--bdew-blue);flex:1}
-.pw{display:flex;align-items:center;gap:10px;min-width:200px}
-.pb{flex:1;height:5px;background:var(--bdew-gl);border-radius:99px;overflow:hidden}
-.pf{height:100%;background:linear-gradient(90deg,var(--bdew-teal),var(--bdew-lite));border-radius:99px;transition:width .4s ease}
-.pl{font-family:'Source Code Pro',monospace;font-size:12px;color:var(--bdew-gray);white-space:nowrap}
-.container{max-width:900px;margin:0 auto;padding:36px 24px 80px}
-/* Start */
-#ss{max-width:700px;margin:0 auto}
-.sbadge{display:inline-flex;align-items:center;background:var(--bdew-blue);color:#fff;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:5px 14px;border-radius:99px;margin-bottom:24px}
-.stitle{font-size:clamp(26px,4vw,38px);font-weight:700;color:var(--bdew-blue);line-height:1.2;margin-bottom:12px}
-.ssub{font-size:17px;color:var(--bdew-gray);margin-bottom:32px;max-width:560px}
-.mrow{display:flex;gap:16px;margin-bottom:28px}
-.mchip{background:var(--white);border:1.5px solid var(--bdew-gl);border-radius:var(--r);padding:14px 20px;text-align:center;flex:1;box-shadow:var(--sh)}
-.mchip .num{font-size:30px;font-weight:700;color:var(--bdew-blue);display:block}
-.mchip .lbl{font-size:12px;color:var(--bdew-gray);margin-top:2px}
-.gp{background:var(--white);border:1px solid var(--bdew-gl);border-radius:var(--r);overflow:hidden;margin-bottom:28px;box-shadow:var(--sh)}
-.gprow{display:flex;align-items:center;gap:14px;padding:11px 20px;border-bottom:1px solid var(--bdew-gl);font-size:13px}
-.gprow:last-child{border-bottom:none}
-.gpnum{font-family:'Source Code Pro',monospace;font-size:11px;color:#fff;background:var(--bdew-mid);padding:2px 8px;border-radius:3px;min-width:62px;text-align:center}
-.gpname{color:#1A1A2E;font-weight:500;flex:1;font-size:14px}
-.gpcnt{font-size:12px;color:var(--bdew-gray)}
-.bstart{background:var(--bdew-orange);color:#fff;border:none;padding:14px 36px;border-radius:var(--r);font-family:'Source Sans 3',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 3px 12px rgba(232,119,34,.35)}
-.bstart:hover{background:#CF6A1E;transform:translateY(-1px)}
-/* Group header */
-.gh{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid var(--bdew-blue)}
-.gbadge{background:var(--bdew-blue);color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:3px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
-.gtitle{font-size:19px;font-weight:700;color:var(--bdew-blue)}
-/* Question */
-.qcard{background:var(--white);border:1px solid var(--bdew-gl);border-radius:var(--r);padding:24px;margin-bottom:16px;box-shadow:var(--sh);animation:fi .25s ease}
-@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.qmeta{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.qnum{font-family:'Source Code Pro',monospace;font-size:11px;color:var(--bdew-gray)}
-.qdiff{font-size:10px;font-weight:600;padding:2px 8px;border-radius:3px;text-transform:uppercase;letter-spacing:.06em}
-.diff-easy{background:var(--green-bg);color:var(--green)}
-.diff-medium{background:var(--yellow-bg);color:var(--yellow)}
-.diff-hard{background:var(--red-bg);color:var(--red)}
-.qtext{font-size:16px;font-weight:600;color:#1A1A2E;margin-bottom:18px;line-height:1.55}
-code{font-family:'Source Code Pro',monospace;font-size:13px;background:#EEF2F7;color:var(--bdew-blue);padding:1px 6px;border-radius:3px}
-.cblock{font-family:'Source Code Pro',monospace;font-size:12.5px;background:#1A1A2E;color:#E2E8F0;padding:14px 18px;border-radius:var(--r);margin:12px 0 18px;line-height:1.6;overflow-x:auto;white-space:pre;border-left:3px solid var(--bdew-teal)}
-.opts{display:flex;flex-direction:column;gap:8px}
-.opt{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border:1.5px solid var(--bdew-gl);border-radius:var(--r);background:var(--bdew-bg);cursor:pointer;transition:all .15s;text-align:left;width:100%;color:#1A1A2E;font-family:'Source Sans 3',sans-serif;font-size:15px;line-height:1.5}
-.opt:hover:not(:disabled){border-color:var(--bdew-lite);background:#EEF4FB}
+.lt-main{font-size:14px;font-weight:700;color:var(--blue);letter-spacing:.04em}
+.lt-sub{font-size:10px;color:var(--gray)}
+.hdiv{width:1px;height:28px;background:var(--gl)}
+.htitle{font-size:13px;font-weight:600;color:var(--blue);flex:1}
+/* ── Timer ── */
+.timer-wrap{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.timer-icon{font-size:14px}
+.timer-display{font-family:'Source Code Pro',monospace;font-size:14px;font-weight:500;color:var(--blue);min-width:50px;text-align:right;transition:color .3s}
+.timer-display.warn{color:var(--timer-warn)}
+.timer-display.danger{color:var(--timer-danger);animation:pulse .8s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.timer-bar{width:100px;height:4px;background:var(--gl);border-radius:99px;overflow:hidden}
+.timer-fill{height:100%;background:var(--blue);border-radius:99px;transition:width 1s linear,background .5s}
+/* ── Progress ── */
+.pw{display:flex;align-items:center;gap:8px;min-width:160px}
+.pb{flex:1;height:4px;background:var(--gl);border-radius:99px;overflow:hidden}
+.pf{height:100%;background:linear-gradient(90deg,var(--teal),var(--blue-lt));border-radius:99px;transition:width .4s ease}
+.pl{font-family:'Source Code Pro',monospace;font-size:11px;color:var(--gray);white-space:nowrap}
+/* ── Container ── */
+.container{max-width:900px;margin:0 auto;padding:28px 20px 70px}
+/* ══════════ START SCREEN ══════════ */
+#ss{max-width:720px;margin:0 auto}
+.sbadge{display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:#fff;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:99px;margin-bottom:20px}
+.stitle{font-size:clamp(24px,3.5vw,36px);font-weight:700;color:var(--blue);line-height:1.2;margin-bottom:10px}
+.ssub{font-size:14px;color:var(--gray);margin-bottom:28px;max-width:540px}
+.mrow{display:flex;gap:12px;margin-bottom:24px}
+.mc{background:var(--white);border:1.5px solid var(--gl);border-radius:var(--r);padding:12px 16px;text-align:center;flex:1;box-shadow:var(--sh)}
+.mc .num{font-size:26px;font-weight:700;color:var(--blue);display:block}
+.mc .lbl{font-size:11px;color:var(--gray);margin-top:2px}
+/* ── Group Cards Grid ── */
+.groups-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:28px}
+.gc-card{background:var(--white);border:1.5px solid var(--gl);border-radius:var(--r);padding:14px 16px;cursor:pointer;transition:all .18s;box-shadow:var(--sh);display:flex;flex-direction:column;gap:4px;position:relative;overflow:hidden}
+.gc-card:hover{border-color:var(--blue-lt);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,63,125,.13)}
+.gc-card:hover .gc-arrow{opacity:1;transform:translateX(0)}
+.gc-num{font-family:'Source Code Pro',monospace;font-size:10px;color:var(--white);background:var(--blue-mid);padding:2px 7px;border-radius:3px;align-self:flex-start}
+.gc-title{font-size:12px;font-weight:600;color:#1A1A2E;line-height:1.35;flex:1}
+.gc-count{font-size:11px;color:var(--gray)}
+.gc-arrow{position:absolute;right:12px;top:50%;transform:translateY(-50%) translateX(4px);color:var(--blue-lt);font-size:14px;opacity:0;transition:all .18s}
+.gc-card.done{border-color:var(--green);background:#F0FAF2}
+.gc-card.done .gc-num{background:var(--green)}
+.gc-card.in-progress{border-color:var(--orange);background:#FFF8F3}
+.gc-card.in-progress .gc-num{background:var(--orange)}
+.start-all-btn{background:var(--orange);color:#fff;border:none;padding:13px 32px;border-radius:var(--r);font-family:'Source Sans 3',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 3px 12px rgba(232,119,34,.3)}
+.start-all-btn:hover{background:#CF6A1E;transform:translateY(-1px)}
+/* ══════════ GROUP HEADER ══════════ */
+.gh{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--blue)}
+.gh-left{display:flex;align-items:center;gap:10px}
+.gbadge{background:var(--blue);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:3px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.gtitle{font-size:16px;font-weight:700;color:var(--blue)}
+.back-btn{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--blue-lt);cursor:pointer;padding:5px 10px;border:1px solid var(--gl);border-radius:var(--r);background:var(--white);transition:all .15s;white-space:nowrap}
+.back-btn:hover{border-color:var(--blue-lt);background:#EEF4FB}
+/* ══════════ QUESTION CARD ══════════ */
+.qcard{background:var(--white);border:1px solid var(--gl);border-radius:var(--r);padding:20px 22px;margin-bottom:14px;box-shadow:var(--sh);animation:fi .25s ease}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.qmeta{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.qnum{font-family:'Source Code Pro',monospace;font-size:10px;color:var(--gray)}
+.qdiff{font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:.06em}
+.diff-easy{background:var(--gbg);color:var(--green)}
+.diff-medium{background:var(--ybg);color:var(--yellow)}
+.diff-hard{background:var(--rbg);color:var(--red)}
+.qtext{font-size:15px;font-weight:600;color:#1A1A2E;margin-bottom:16px;line-height:1.55}
+code{font-family:'Source Code Pro',monospace;font-size:12px;background:#EEF2F7;color:var(--blue);padding:1px 5px;border-radius:3px}
+.cblock{font-family:'Source Code Pro',monospace;font-size:12px;background:#1A1A2E;color:#E2E8F0;padding:12px 16px;border-radius:var(--r);margin:10px 0 16px;line-height:1.6;overflow-x:auto;white-space:pre;border-left:3px solid var(--teal)}
+.opts{display:flex;flex-direction:column;gap:7px}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border:1.5px solid var(--gl);border-radius:var(--r);background:var(--bg);cursor:pointer;text-align:left;width:100%;color:#1A1A2E;font-family:'Source Sans 3',sans-serif;font-size:13px;line-height:1.5;transition:all .15s}
+.opt:hover:not(:disabled){border-color:var(--blue-lt);background:#EEF4FB}
 .opt:disabled{cursor:default}
-.opt.correct{border-color:var(--green);background:var(--green-bg)}
-.opt.wrong{border-color:var(--red);background:var(--red-bg)}
-.opt.reveal{border-color:var(--green);background:#F0FAF2;opacity:.75}
-.ol{font-family:'Source Code Pro',monospace;font-size:11px;font-weight:600;min-width:22px;height:22px;display:flex;align-items:center;justify-content:center;border-radius:3px;background:var(--white);border:1.5px solid var(--bdew-gl);color:var(--bdew-gray);flex-shrink:0;margin-top:1px}
+.opt.correct{border-color:var(--green);background:var(--gbg)}
+.opt.wrong{border-color:var(--red);background:var(--rbg)}
+.opt.reveal{border-color:var(--green);background:#F0FAF2;opacity:.7}
+.ol{font-family:'Source Code Pro',monospace;font-size:10px;font-weight:700;min-width:20px;height:20px;display:flex;align-items:center;justify-content:center;border-radius:3px;background:var(--white);border:1.5px solid var(--gl);color:var(--gray);flex-shrink:0;margin-top:1px}
 .opt.correct .ol{background:var(--green);border-color:var(--green);color:#fff}
 .opt.wrong .ol{background:var(--red);border-color:var(--red);color:#fff}
 .opt.reveal .ol{background:var(--green);border-color:var(--green);color:#fff}
-.expl{display:none;margin-top:14px;padding:12px 16px;background:#EEF4FB;border-left:3px solid var(--bdew-lite);border-radius:0 var(--r) var(--r) 0;font-size:14px;color:var(--bdew-gray);line-height:1.6}
+.expl{display:none;margin-top:12px;padding:11px 14px;background:#EEF4FB;border-left:3px solid var(--blue-lt);border-radius:0 var(--r) var(--r) 0;font-size:12px;color:var(--gray);line-height:1.6}
 .expl.show{display:block;animation:fi .2s ease}
 .expl strong{color:#1A1A2E}
-/* Nav */
-.nav{display:flex;justify-content:space-between;align-items:center;margin-top:24px}
-.btn{padding:10px 24px;border-radius:var(--r);font-family:'Source Sans 3',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s}
-.bs{background:var(--white);border:1.5px solid var(--bdew-gl);color:var(--bdew-blue)}
-.bs:hover{border-color:var(--bdew-blue)}
-.bp{background:var(--bdew-blue);border:1.5px solid var(--bdew-blue);color:#fff}
-.bp:hover{background:var(--bdew-mid)}
+.expl em{color:var(--blue-lt);font-style:normal;font-size:11px}
+/* ── Nav ── */
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:20px;gap:10px}
+.btn{padding:9px 20px;border-radius:var(--r);font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
+.bs{background:var(--white);border:1.5px solid var(--gl);color:var(--blue)}
+.bs:hover{border-color:var(--blue)}
+.bp{background:var(--blue);border:1.5px solid var(--blue);color:#fff}
+.bp:hover{background:var(--blue-mid)}
 .btn:disabled{opacity:.35;cursor:default;pointer-events:none}
-/* Results */
+/* ══════════ RESULTS ══════════ */
 #rs{display:none}
-.rh{background:var(--bdew-blue);color:#fff;border-radius:var(--r);padding:32px 36px;margin-bottom:24px;display:flex;align-items:center;gap:28px;box-shadow:0 4px 20px rgba(0,63,125,.15)}
-.gc{width:88px;height:88px;border-radius:50%;border:3px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:700;flex-shrink:0}
-.rgl{font-size:24px;font-weight:700;margin-bottom:4px}
-.rsl{font-size:14px;opacity:.85}
-.sr{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-.sb{background:var(--white);border:1px solid var(--bdew-gl);border-radius:var(--r);padding:14px 16px;text-align:center;box-shadow:var(--sh)}
-.sb .val{font-size:28px;font-weight:700}
-.sb .lbl{font-size:11px;color:var(--bdew-gray);margin-top:3px}
-.panel{background:var(--white);border:1px solid var(--bdew-gl);border-radius:var(--r);overflow:hidden;margin-bottom:16px;box-shadow:var(--sh)}
-.ph{padding:12px 20px;border-bottom:1px solid var(--bdew-gl);font-size:12px;font-weight:700;color:var(--bdew-blue);text-transform:uppercase;letter-spacing:.07em;background:var(--bdew-bg)}
-.srow{display:flex;align-items:center;gap:12px;padding:11px 20px;border-bottom:1px solid var(--bdew-gl);font-size:13px}
+.rh{background:var(--blue);color:#fff;border-radius:var(--r);padding:24px 28px;margin-bottom:20px;display:flex;align-items:center;gap:22px;box-shadow:0 4px 20px rgba(0,63,125,.15)}
+.gc2{width:76px;height:76px;border-radius:50%;border:3px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:700;flex-shrink:0}
+.rgl{font-size:20px;font-weight:700;margin-bottom:4px}
+.rsl{font-size:13px;opacity:.85}
+.sr{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.sb{background:var(--white);border:1px solid var(--gl);border-radius:var(--r);padding:12px;text-align:center;box-shadow:var(--sh)}
+.sb .val{font-size:24px;font-weight:700}
+.sb .lbl{font-size:10px;color:var(--gray);margin-top:2px}
+.panel{background:var(--white);border:1px solid var(--gl);border-radius:var(--r);overflow:hidden;margin-bottom:14px;box-shadow:var(--sh)}
+.ph{padding:10px 18px;border-bottom:1px solid var(--gl);font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.07em;background:var(--bg);display:flex;align-items:center;justify-content:space-between}
+.srow{display:flex;align-items:center;gap:10px;padding:9px 18px;border-bottom:1px solid var(--gl);font-size:12px;cursor:pointer;transition:background .15s}
 .srow:last-child{border-bottom:none}
-.sname{flex:1;color:#1A1A2E;font-size:14px}
-.sbw{flex:2;height:7px;background:var(--bdew-gl);border-radius:99px;overflow:hidden}
+.srow:hover{background:#EEF4FB}
+.sname{flex:1;color:#1A1A2E}
+.sbw{flex:2;height:6px;background:var(--gl);border-radius:99px;overflow:hidden}
 .sbf{height:100%;border-radius:99px;transition:width .8s ease}
-.sfr{font-family:'Source Code Pro',monospace;font-size:12px;color:var(--bdew-gray);min-width:40px;text-align:right}
-.ri{padding:14px 20px;border-bottom:1px solid var(--bdew-gl)}
+.sfr{font-family:'Source Code Pro',monospace;font-size:11px;color:var(--gray);min-width:36px;text-align:right}
+.ri{padding:12px 18px;border-bottom:1px solid var(--gl)}
 .ri:last-child{border-bottom:none}
-.rt{font-size:14px;font-weight:700;color:var(--bdew-blue);margin-bottom:8px}
-.rl{padding-left:18px}
-.rl li{font-size:14px;color:var(--bdew-gray);margin-bottom:4px}
+.rt{font-size:13px;font-weight:700;color:var(--blue);margin-bottom:6px}
+.rl{padding-left:16px}
+.rl li{font-size:12px;color:var(--gray);margin-bottom:4px}
 .rl li strong{color:#1A1A2E}
-.rl2{padding:16px 20px;display:flex;flex-wrap:wrap;gap:8px}
-.rl2 a{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--bdew-lite);text-decoration:none;padding:4px 12px;border:1px solid var(--bdew-gl);border-radius:3px;background:var(--bdew-bg);transition:all .15s}
-.rl2 a:hover{border-color:var(--bdew-lite);background:#EEF4FB}
-.brs{display:block;width:100%;padding:13px;background:var(--white);border:1.5px solid var(--bdew-blue);border-radius:var(--r);color:var(--bdew-blue);font-family:'Source Sans 3',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:20px;text-align:center}
-.brs:hover{background:var(--bdew-blue);color:#fff}
-footer{background:var(--white);border-top:1px solid var(--bdew-gl);padding:16px 24px;text-align:center;font-size:11px;color:var(--bdew-gray);margin-top:40px}
-@media(max-width:620px){.mrow{flex-wrap:wrap}.sr{grid-template-columns:repeat(2,1fr)}.rh{flex-direction:column;text-align:center}.pw{min-width:130px}}
+.refs{padding:14px 18px;display:flex;flex-wrap:wrap;gap:7px}
+.refs a{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--blue-lt);text-decoration:none;padding:3px 10px;border:1px solid var(--gl);border-radius:3px;background:var(--bg);transition:all .15s}
+.refs a:hover{border-color:var(--blue-lt);background:#EEF4FB}
+.brs{display:block;width:100%;padding:11px;background:var(--white);border:1.5px solid var(--blue);border-radius:var(--r);color:var(--blue);font-family:'Source Sans 3',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:18px;text-align:center}
+.brs:hover{background:var(--blue);color:#fff}
+/* ── Timeout modal ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:999;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:var(--white);border-radius:10px;padding:32px 36px;max-width:380px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal h2{font-size:20px;color:var(--red);margin-bottom:10px}
+.modal p{font-size:13px;color:var(--gray);margin-bottom:20px}
+.modal-btns{display:flex;gap:10px;justify-content:center}
+.modal-btn{padding:9px 24px;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
+.modal-btn.primary{background:var(--blue);color:#fff}
+.modal-btn.primary:hover{background:var(--blue-mid)}
+.modal-btn.secondary{background:var(--bg);color:var(--blue);border:1.5px solid var(--gl)}
+.modal-btn.secondary:hover{border-color:var(--blue)}
+footer{background:var(--white);border-top:1px solid var(--gl);padding:12px 20px;text-align:center;font-size:10px;color:var(--gray)}
+@media(max-width:600px){.sr{grid-template-columns:repeat(2,1fr)}.rh{flex-direction:column;text-align:center}.pw{min-width:120px}.timer-bar{width:70px}.groups-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 <div class="topbar"></div>
 <header>
   <div class="hi">
-    <div class="logo">
-      <div class="lm">BDEW</div>
-      <div class="lt"><span class="lt-main">BDEW</span><span class="lt-sub">Akademie · Digitalisierung</span></div>
+    <div class="logo" onclick="goHome()">
+      <div class="lm">EDI</div>
+      <div class="lt"><span class="lt-main">EDI@Energy</span><span class="lt-sub">API Wissenstest</span></div>
     </div>
     <div class="hdiv"></div>
-    <div class="htitle">API – Wissenstest</div>
-    <div class="pw">
+    <div class="htitle" id="htitle">API – Wissenstest</div>
+    <div class="timer-wrap" id="timer-wrap" style="display:none">
+      <span class="timer-icon">⏱</span>
+      <div>
+        <div class="timer-display" id="timer-display">20:00</div>
+        <div class="timer-bar"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div>
+      </div>
+    </div>
+    <div class="pw" id="prog-wrap" style="display:none">
       <div class="pb"><div class="pf" id="pf" style="width:0%"></div></div>
-      <div class="pl" id="pl">0 / 73</div>
+      <div class="pl" id="pl">0/60</div>
     </div>
   </div>
 </header>
+
 <div class="container">
+  <!-- START SCREEN -->
   <div id="ss">
-    <div class="sbadge">Kompetenzcheck 2025</div>
-    <h1 class="stitle">Von EDIFACT zur modernen API-Welt</h1>
-    <p class="ssub">Für EDIFACT/UTILMD-Experten: Test über REST, RPC, API-Architektur, OpenAPI, JSON, Header, Sicherheit und Tooling.</p>
+    <div class="sbadge">Kompetenzcheck · Von EDIFACT zur modernen API-Welt</div>
+    <h1 class="stitle">API – Wissenstest</h1>
+    <p class="ssub">Für EDIFACT/UTILMD-Experten: REST, RPC, OpenAPI, JSON, Header, Sicherheit und Tooling. Wähle eine Gruppe zum Üben oder starte den vollständigen Test.</p>
     <div class="mrow">
-      <div class="mchip"><span class="num">73</span><span class="lbl">Fragen</span></div>
-      <div class="mchip"><span class="num">11</span><span class="lbl">Gruppen</span></div>
-      <div class="mchip"><span class="num">~25</span><span class="lbl">Minuten</span></div>
+      <div class="mc"><span class="num">60</span><span class="lbl">Fragen</span></div>
+      <div class="mc"><span class="num">11</span><span class="lbl">Gruppen</span></div>
+      <div class="mc"><span class="num">20</span><span class="lbl">Minuten</span></div>
+      <div class="mc"><span class="num">A–D</span><span class="lbl">Multiple Choice</span></div>
     </div>
-    <div class="gp" id="gp"></div>
-    <button class="bstart" onclick="go()">Test starten →</button>
+    <div class="groups-grid" id="groups-grid"></div>
+    <button class="start-all-btn" onclick="startAll()">▶ Alle 60 Fragen starten (mit Timer)</button>
   </div>
+
+  <!-- QUIZ SCREEN -->
   <div id="qs" style="display:none">
     <div class="gh">
-      <div class="gbadge" id="gb"></div>
-      <div class="gtitle" id="gt"></div>
+      <div class="gh-left">
+        <div class="gbadge" id="gbadge"></div>
+        <div class="gtitle" id="gtitle"></div>
+      </div>
+      <button class="back-btn" onclick="goHome()">← Übersicht</button>
     </div>
     <div id="qc"></div>
     <div class="nav">
-      <button class="btn bs" id="bp2" onclick="nav(-1)">← Zurück</button>
-      <button class="btn bp" id="bn" onclick="nav(1)">Weiter →</button>
+      <button class="btn bs" id="btn-prev" onclick="nav(-1)">← Zurück</button>
+      <button class="btn bp" id="btn-next" onclick="nav(1)">Weiter →</button>
     </div>
   </div>
+
+  <!-- RESULT SCREEN -->
   <div id="rs">
     <div class="rh">
-      <div class="gc" id="gc"></div>
+      <div class="gc2" id="gc2"></div>
       <div><div class="rgl" id="rgl"></div><div class="rsl" id="rsl"></div></div>
     </div>
-    <div class="sr" id="sr"></div>
-    <div class="panel"><div class="ph">Ergebnis nach Themengruppe</div><div id="secrows"></div></div>
-    <div class="panel"><div class="ph">Empfehlungen zur Nacharbeit</div><div id="recob"></div></div>
-    <div class="panel"><div class="ph">Lernmaterial &amp; Referenzen</div><div class="rl2" id="refs"></div></div>
-    <button class="brs" onclick="restart()">↺ Test wiederholen</button>
+    <div class="sr" id="sr-stats"></div>
+    <div class="panel">
+      <div class="ph">Ergebnis nach Themengruppe <span style="font-size:10px;color:var(--gray);font-weight:400">(Klick → Gruppe nochmals üben)</span></div>
+      <div id="sec-rows"></div>
+    </div>
+    <div class="panel" id="reco-panel">
+      <div class="ph">Empfehlungen zur Nacharbeit</div>
+      <div id="reco-body"></div>
+    </div>
+    <div class="panel">
+      <div class="ph">Lernmaterial &amp; Referenzen</div>
+      <div class="refs" id="ref-links"></div>
+    </div>
+    <button class="brs" onclick="goHome()">↺ Zurück zur Übersicht</button>
   </div>
 </div>
-<footer>© BDEW Bundesverband der Energie- und Wasserwirtschaft e.V. · Akademie Digitalisierung · Fragen basieren auf GPKE, UTILMD AHB 2.1, API &amp; REST Design Syllabus und REST/RPC/Header-Konzepten</footer>
+
+<!-- Timeout Modal -->
+<div class="modal-overlay" id="timeout-modal">
+  <div class="modal">
+    <h2>⏱ Zeit abgelaufen</h2>
+    <p>Die 20 Minuten sind um. Du hast <strong id="modal-answered">0</strong> von 60 Fragen beantwortet.</p>
+    <div class="modal-btns">
+      <button class="modal-btn primary" onclick="showResults()">Auswertung ansehen</button>
+      <button class="modal-btn secondary" onclick="goHome()">Zur Übersicht</button>
+    </div>
+  </div>
+</div>
+
+<footer>© EDI@Energy · BDEW Bundesverband der Energie- und Wasserwirtschaft e.V. · Fragen basieren auf GPKE, UTILMD AHB 2.1, API &amp; REST Design Syllabus</footer>
+
 <script>
 const G=[
 {id:'json',tag:'Gruppe 1',title:'JSON & Datenformate',questions:[
-{text:'JSON kennt genau sechs Datentypen. Welche Auswahl ist vollständig korrekt?',options:['string, integer, float, boolean, array, object','string, number, boolean, undefined, array, object','text, number, bool, null, list, dict','string, number, boolean, null, array, object'],correct:3,diff:'easy',expl:'<strong>Die 6 JSON-Typen</strong>: string, number (kein int/float-Unterschied), boolean, null, array, object. Kein <code>date</code>, kein <code>undefined</code> (JavaScript), kein <code>integer</code>.'},
-{text:'Wie wird der 1. April 2025 als JSON-Datumsfeld korrekt serialisiert?',options:['"supplyStartDate": "2025-04-01"','"supplyStartDate": "01.04.2025"','"supplyStartDate": 1743465600','"supplyStartDate": new Date(2025,3,1)'],correct:0,diff:'easy',expl:'<strong>ISO 8601</strong> (internationaler Datumsstandard): <code>"2025-04-01"</code>. In OpenAPI: <code>type: string, format: date</code>. Kein deutsches Format, kein Unix-Timestamp, kein JavaScript-Ausdruck.'},
-{text:'Eine PATCH-Anfrage enthält ein Feld mit dem Wert <code>null</code>. Ein anderes Feld fehlt komplett. Was bewirkt das?',options:['Server ignoriert beide Felder','Null-Feld wird auf leer gesetzt; fehlendes Feld bleibt unverändert','Server setzt alle fehlenden Felder auf null','Beide Felder werden auf null gesetzt'],correct:1,diff:'medium',expl:'Bei <strong>PATCH</strong>: <em>null</em> = explizit auf keinen Wert setzen. <em>Fehlendes Feld</em> = nicht ändern, Server behält aktuellen Wert. Wichtig z.B. für optionale Felder wie <code>notes</code> im GPKE-Schema.'},
-{text:'Welches JSON-Konstrukt ist für eine geordnete Liste von MaLo-IDs korrekt?',options:['{"maLoIds": ["51238696781","51238696782"]}','{"maLoIds": "51238696781,51238696782"}','{"maLoIds": {0:"51238696781",1:"51238696782"}}','{"maLoIds": (51238696781,51238696782)}'],correct:0,diff:'easy',expl:'<strong>JSON-Array</strong>: eckige Klammern, Strings in doppelten Anführungszeichen: <code>["a","b"]</code>. Kein kommagetrennnter String, kein nummerisches Objekt, kein Tupel (das ist Python-Syntax).'},
-{text:'JSON Schema beschreibt Struktur und Validierungsregeln für JSON-Dokumente. Welche Aussage ist falsch?',options:['JSON Schema kann Pflichtfelder definieren','JSON Schema kann Wertebereiche und Muster (pattern) prüfen','OpenAPI 3.0 basiert auf einem JSON-Schema-Subset','JSON Schema ist eine Programmiersprache zum Transformieren von Daten'],correct:3,diff:'medium',expl:'<strong>JSON Schema</strong> ist eine <em>Beschreibungssprache</em>, keine Programmiersprache. Es definiert: Pflichtfelder (required), Typen, Wertebereiche, Regex-Muster. OpenAPI 3.0 nutzt einen Subset, OAS 3.1 nutzt JSON Schema 2020-12 vollständig.'},
-{text:'Was bedeutet Content-Type <code>application/jose</code> im Unterschied zu <code>application/json</code>?',options:['Der Body ist ein JWS- oder JWE-Token (z.B. <code>eyJ…</code>) statt rohem JSON','JOSE ist ein alter Name für JSON','JOSE-Bodies sind komprimiert','JOSE ist nur für Fehlermeldungen'],correct:0,diff:'hard',expl:'<strong>JOSE</strong> (JSON Object Signing and Encryption): kompaktes Token-Format. <code>application/jose</code> signalisiert: Body ist kein rohes JSON sondern ein signiertes (JWS) oder verschlüsseltes (JWE) Token wie <code>eyJhbGci…</code>. Im GPKE-Sicherheitskonzept für verschlüsselte Payloads genutzt.'},
-{text:'Wie kodiert man ein Anführungszeichen innerhalb eines JSON-Strings?',options:['Als HTML-Entity: <code>&amp;quot;</code>','JSON erlaubt keine Anführungszeichen in Strings','Als URL-Code: <code>%22</code>','Mit Backslash: <code>\\\\"</code>'],correct:3,diff:'medium',expl:'<strong>JSON-Escaping</strong> mit Backslash: <code>\\\\"</code> für Anführungszeichen, <code>\\\\\\\\</code> für Backslash, <code>\\\\n</code> für Zeilenumbruch. HTML-Entities und URL-Encoding haben in JSON-Strings nichts zu suchen.'},
-{text:'GET, POST, PUT, PATCH, DELETE – welches Verb ist „safe" (keine Seiteneffekte) und idempotent?',options:['GET','POST','PUT','PATCH'],correct:0,diff:'easy',expl:'<strong>GET</strong>: safe (keine Zustandsänderung) und idempotent (n-mal = 1-mal). POST: nicht idempotent, erzeugt neue Ressourcen. PUT: idempotent aber nicht safe. PATCH: weder noch.'}
+{text:'Welche JSON-Syntax ist syntaktisch ungültig?',options:['{"key": \\\'einfache Anführungszeichen\\\'}','{"active": true, "name": null}','{"items": [1, "zwei", false]}','{"a": {"b": {"c": 3}}}, ohne weitere Konfigura'],correct:0,diff:'medium',expl:'<strong>Einfache Anführungszeichen</strong> sind in JSON verboten – weder für Keys noch Werte. JSON verlangt ausschließlich doppelte Anführungszeichen. Die übrigen drei sind valides JSON. → <em>RFC 8259 §7 (JSON-String)</em>'},
+{text:'JSON Schema beschreibt Validierungsregeln für JSON. Was kann es NICHT?',options:['Daten transformieren oder berechnen','Pflichtfelder und erlaubte Typen definieren','Wertebereiche und Regex-Muster (pattern) prüfen','enum-Werte für Felder einschränken'],correct:0,diff:'medium',expl:'<strong>JSON Schema</strong> ist eine Beschreibungs- und Validierungssprache, keine Programmiersprache – es transformiert keine Daten. OAS 3.0 nutzt einen Subset, OAS 3.1 nutzt JSON Schema 2020-12. → <em>json-schema.org · Syllabus Kap. 4</em>'},
+{text:'Wie schreibt man ein Anführungszeichen innerhalb eines JSON-Strings?',options:['Als HTML-Entity &amp;quot;','Mit Backslash-Escaping: \\"','Als URL-Code %22','In einfache Anführungszeichen wechseln'],correct:1,diff:'medium',expl:'<strong>JSON-Escaping</strong>: Backslash vor Sonderzeichen: <code>\\"</code> Anführungszeichen, <code>\\\\</code> Backslash, <code>\\n</code> Newline. HTML-Entities und URL-Encoding haben in JSON nichts zu suchen. → <em>RFC 8259 §7</em>'},
+{text:'Was ist der Unterschied zwischen einem JSON-Array und einem JSON-Objekt?',options:['Array ist schneller, Objekt ist sicherer – in OAS 3.0 und 3.1','Arrays erlauben nur Zahlen, Objekte nur Strings – für alle API-Typen','Array: geordnete Liste in [ ]; Objekt: Schlüssel-Wert-Paare in { }','Kein Unterschied – beide sind Listen von Werten – per YAML-Definition'],correct:2,diff:'easy',expl:'<strong>Array</strong> <code>["a","b"]</code>: geordnete Sequenz beliebiger Typen. <strong>Objekt</strong> <code>{"key":"val"}</code>: benannte Felder. → <em>RFC 8259 §4 und §5 · json.org</em>'},
+{text:'PATCH ändert nur angegebene Felder. Feld A hat Wert <code>null</code>, Feld B fehlt komplett. Was bewirkt das?',options:['Beide Felder werden auf null gesetzt','Server ignoriert beide Felder komplett','Fehlende Felder erzeugen automatisch einen 400-Fehler','Feld A → null gesetzt; Feld B → unverändert'],correct:3,diff:'medium',expl:'Bei <strong>PATCH</strong>: <em>null</em> = explizit löschen; <em>fehlendes Feld</em> = unverändert lassen. Wichtig z.B. für optionale Felder wie <code>notes</code> im GPKE-Schema. → <em>RFC 5789 (HTTP PATCH) · Syllabus Kap. 3</em>'},
+{text:'<code>application/jose</code> als HTTP Content-Type: Was ist JOSE (JSON Object Signing and Encryption)?',options:['Ein veralteter Name für reguläres JSON – per RFC-Definition','Ein signiertes (JWS) oder verschlüsseltes (JWE) Token wie <code>eyJ…</code>','Eine komprimierte JSON-Variante für große Payloads','Ein spezielles Format ausschließlich für Fehlermeldungen'],correct:1,diff:'hard',expl:'<strong>JOSE</strong>: kompaktes Token-Format. <code>application/jose</code> signalisiert: kein rohes JSON, sondern signiert/verschlüsselt. Im GPKE-Sicherheitskonzept für JWE-Payloads. → <em>RFC 7165 (JOSE) · GPKE docs/security/</em>'}
 ]},
 {id:'rest',tag:'Gruppe 2',title:'REST & HTTP Grundlagen',questions:[
-{text:'Was bedeutet Idempotenz bei HTTP-Methoden? (Idempotenz = n-mal ausführen liefert dasselbe Ergebnis wie 1-mal)',options:['Die Anfrage hat keine Seiteneffekte auf dem Server','Das n-fache Ausführen bewirkt dasselbe wie das einmalige Ausführen','Die Anfrage wird nur einmal ausgeführt und danach gecacht','Die Antwort ist immer ein leerer Body'],correct:1,diff:'medium',expl:'<strong>Idempotenz</strong>: 10× PUT = 1× PUT (gleiche Wirkung). GET, PUT, DELETE sind idempotent. POST ist es nicht. Deshalb braucht POST einen <code>Idempotency-Key</code>-Header für sichere Netzwerk-Retries.'},
-{text:'Ressource erfolgreich erstellt – welcher HTTP-Statuscode ist korrekt?',options:['200 OK','202 Accepted','204 No Content','201 Created'],correct:3,diff:'easy',expl:'<strong>201 Created</strong>: Ressource wurde erstellt. Der <code>Location</code>-Header enthält die URI der neuen Ressource. 200 = Erfolg (Abruf/Update), 202 = asynchrone Verarbeitung läuft noch, 204 = Erfolg ohne Body.'},
-{text:'Richardson Maturity Model Level 2: HTTP-Methoden und Statuscodes korrekt verwendet. Was beschreibt Level 3?',options:['Ausschließlich Ressourcen-URLs ohne HTTP-Verben','SOAP über HTTP','HATEOAS – Hypermedia-Links zeigen dem Client die nächsten möglichen Aktionen','GraphQL-Endpunkte'],correct:2,diff:'medium',expl:'<strong>HATEOAS</strong> (Hypermedia As The Engine Of Application State): Server liefert Links zu möglichen nächsten Schritten mit. Level 0=RPC, Level 1=URLs, Level 2=Verben+Statuscodes, Level 3=HATEOAS. Ziel für GPKE: Level 2–3.'},
-{text:'Warum heißt es <code>POST /registrations</code> und nicht <code>POST /createRegistration</code>?',options:['Die HTTP-Methode POST ist bereits das Verb; die URL benennt die Ressource','OpenAPI erlaubt keine Verben in Pfaden','Verben sind per RFC 3986 (URI-Syntax) verboten','Browser cachen URLs mit Verben nicht'],correct:0,diff:'medium',expl:'<strong>REST-Prinzip</strong>: URL = Ressource (Substantiv), HTTP-Methode = Aktion (Verb). <code>POST /registrations</code> = „erstelle eine Anmeldung". <code>/createRegistration</code> wäre RPC-Stil und redundant, da POST schon „erstellen" bedeutet.'},
-{text:'MaLo-ID hat 12 statt 11 Stellen – das JSON ist syntaktisch korrekt, der Wert aber ungültig. Welcher Statuscode?',options:['422 Unprocessable Entity','400 Bad Request','404 Not Found','500 Internal Server Error'],correct:0,diff:'medium',expl:'<strong>422 Unprocessable Entity</strong>: syntaktisch korrektes JSON, fachliche Validierung schlägt fehl. 400 = kaputtes JSON/Syntaxfehler. 404 = nicht gefunden. 500 = Serverfehler. 422 ist der korrekte Code für Validierungsfehler.'},
-{text:'PUT ersetzt die gesamte Ressource, PATCH aktualisiert Teilfelder. Welche Aussage ist außerdem korrekt?',options:['PUT ist veraltet und durch PATCH ersetzt','Beide sind identisch im Ergebnis','PATCH ist nicht idempotent, PUT ist idempotent','PATCH benötigt keinen Request-Body'],correct:2,diff:'medium',expl:'<strong>PUT ist idempotent</strong>: 10× PUT = 1× PUT. <strong>PATCH kann nicht-idempotent sein</strong> (z.B. „erhöhe Zähler um 1"). GPKE nutzt PATCH für Anmeldungen im Status <code>draft</code> – partielle Updates ohne Vollständigkeitspflicht.'},
-{text:'202 Accepted als Antwort auf einen POST – was bedeutet das?',options:['Ressource wurde erstellt und ist sofort verfügbar','Anfrage wurde abgelehnt und muss wiederholt werden','Anfrage entgegengenommen, Verarbeitung läuft noch asynchron','Server braucht mehr Informationen'],correct:2,diff:'medium',expl:'<strong>202 Accepted</strong>: Server hat Anfrage entgegengenommen, aber noch nicht fertig verarbeitet. Client muss später den Status abfragen (Polling via GET oder Callback). Typisch für GPKE: NB verarbeitet Anmeldungen nicht sofort synchron.'},
-{text:'Was macht <code>$ref: "../schema/common/address.yaml"</code> in einer OpenAPI-Datei?',options:['Importiert eine externe HTTP-URL','Versteckt das Schema vor dem Linter','Referenziert ein wiederverwendbares Schema ohne Inhaltsduplizierung','Markiert das Feld als optional'],correct:2,diff:'easy',expl:'<strong>$ref</strong>: Zeigt auf einmalig definiertes Schema. Grundprinzip des GPKE-Repos: atomar definieren, per $ref überall referenzieren – statt copy-paste. Änderungen an <code>address.yaml</code> wirken überall automatisch.'}
+{text:'Richardson Maturity Model (RMM) beschreibt REST-Reife in 4 Leveln. Was ist Level 3 – HATEOAS?',options:['Server liefert Hypermedia-Links zu möglichen nächsten Aktionen','Nur Ressourcen-URLs, keine HTTP-Verben verwendet','HTTP-Verben und Statuscodes korrekt eingesetzt','SOAP-Nachrichten über HTTP transportiert – bei jeder Anfrage'],correct:0,diff:'medium',expl:'<strong>HATEOAS</strong> (Hypermedia As The Engine Of Application State): Server zeigt im Response welche Aktionen als nächstes möglich sind. Level 0=RPC, Level 1=URLs, Level 2=Verben+Codes, Level 3=HATEOAS. → <em>martinfowler.com/articles/richardsonMaturityModel · Syllabus Kap. 2</em>'},
+{text:'202 Accepted als sofortige Antwort auf einen POST: Was muss der Client als nächstes tun?',options:['Nichts – 202 bedeutet die Ressource ist fertig erstellt','Den Request mit 201 wiederholen – ohne weitere Konfiguration','Sofort ein DELETE senden um die Operation abzubrechen','Status später per GET abfragen oder auf Callback warten'],correct:3,diff:'medium',expl:'<strong>202 Accepted</strong>: Server verarbeitet noch asynchron. Client pollt via GET oder wartet auf Webhook. Für GPKE: NB verarbeitet Anmeldungen asynchron, gibt nicht sofort die Bestätigung. → <em>RFC 9110 §15.3.3 · Syllabus Kap. 5</em>'},
+{text:'HTTP-Statuscode 201 vs. 200 vs. 202 – was bedeutet 201 Created?',options:['Ressource neu erstellt, Location-Header enthält URI','Anfrage empfangen, Hintergrundverarbeitung läuft noch','Erfolgreich ausgeführt, Server sendet keinen Body zurück','Allgemeiner HTTP-Erfolg, keine weiteren Details'],correct:0,diff:'easy',expl:'<strong>201 Created</strong>: neue Ressource erstellt, <code>Location</code>-Header zeigt auf ihre URI. 200=Erfolg, 202=asynchron läuft noch, 204=Erfolg ohne Body. → <em>RFC 9110 §15.3.2 · Syllabus Kap. 2</em>'},
+{text:'HTTP definiert sichere und idempotente Methoden. Welches Verb ist beides – safe UND idempotent?',options:['GET (liest, ändert nichts)','POST (erzeugt neue Ressourcen)','PUT (ersetzt vollständig)','PATCH (ändert Teilfelder)'],correct:0,diff:'easy',expl:'<strong>GET</strong>: safe = keine Seiteneffekte; idempotent = n-mal = 1-mal. POST: nicht idempotent. PUT: idempotent, aber nicht safe. → <em>RFC 9110 §9.2 (Safe) und §9.3 (Idempotent) · Syllabus Kap. 2</em>'},
+{text:'REST: URL = Ressource, HTTP-Methode = Aktion. Was ist falsch an <code>POST /createRegistration</code>?',options:['POST darf nur für bestehende Ressourcen verwendet werden – auf allen Servern – in jedem Fall','Der Pfad muss mit einer Zahl enden – unabhängig vom Statuscode – für alle Ressourcen – ohne Header-Angabe','OpenAPI erlaubt keine Verben in Pfaden – in jedem Fall – per YAML-Definition – bei jeder Anfrage','Das Verb \\\'create\\\' ist redundant – POST ist bereits die Aktion; korrekt: POST /registrations'],correct:3,diff:'medium',expl:'REST-Prinzip: <strong>URL nennt Ressource, Methode ist das Verb</strong>. <code>POST /registrations</code> = erstelle eine Anmeldung. <code>/createRegistration</code> ist RPC-Stil – doppelt gemoppelt. → <em>restfulapi.net/resource-naming · Syllabus Kap. 3</em>'},
+{text:'PUT und PATCH unterscheiden sich in der Vollständigkeit. Was ist außerdem korrekt?',options:['PUT ist veraltet und durch PATCH abgelöst','PUT ist idempotent; PATCH kann es sein, muss es aber nicht','Beide ersetzen immer die gesamte Ressource','PATCH ist idempotent, PUT nicht – in der Praxis üblich'],correct:1,diff:'medium',expl:'<strong>PUT idempotent</strong>: 10× PUT = 1× PUT. <strong>PATCH</strong>: Teilupdate – kann idempotent sein (Feld setzen) oder nicht (Zähler erhöhen). GPKE nutzt PATCH für Anmeldungen im Status draft. → <em>RFC 5789 §2 · RFC 9110 §9.3.4</em>'}
 ]},
 {id:'openapi',tag:'Gruppe 3',title:'OpenAPI & Schema-Design',questions:[
-{text:'<code>oneOf</code> und <code>anyOf</code> in OpenAPI/JSON Schema: Was ist der Unterschied?',options:['anyOf in OAS 3.0 verboten','oneOf nur für Strings, anyOf für Objekte','Kein Unterschied – Synonyme','oneOf: exakt ein Schema passt; anyOf: mindestens eines passt'],correct:3,diff:'hard',expl:'<strong>oneOf</strong>: mutual exclusive – genau EIN Schema trifft zu. Oft mit <code>discriminator</code>. <strong>anyOf</strong>: eines oder mehrere dürfen zutreffen. <strong>allOf</strong>: alle Schemas müssen passen (Komposition). GPKE nutzt oneOf für MaLo-Identifikation Fall 1 / Fall 2.'},
-{text:'Wie definiert man in OpenAPI 3.0 ein Pflichtfeld?',options:['Ausrufezeichen nach dem Feldnamen: <code>maLoId!</code>','Attribut <code>required: true</code> am Feld selbst','Felder sind standardmäßig alle Pflicht','Feldname in die <code>required</code>-Liste des Elternobjekts'],correct:3,diff:'medium',expl:'<code>required</code> ist eine <strong>Liste auf Objekt-Ebene</strong>, nicht ein Attribut am Feld: <code>required: [maLoId, supplyStartDate]</code>. Felder die nicht in der Liste stehen, sind automatisch optional.'},
-{text:'API-First: Die OpenAPI-Spec wird vor dem Code erstellt. Was ist der zentrale Vorteil?',options:['Spec ist die Quelle der Wahrheit: Frontend und Backend können parallel entwickeln, Linting greift früh','Code wird automatisch deployed','API ist schneller','Weniger Speicherverbrauch'],correct:0,diff:'easy',expl:'<strong>API-First</strong>: Design → OpenAPI-Spec → Code-Generierung → Implementierung. Vorteil: parallele Entwicklung, Spectral-Linting ab Designphase, gemeinsame Sprache zwischen allen Beteiligten. Gegenteil: Code-First (Spec aus Code generiert).'},
-{text:'OAS 3.1 nutzt JSON Schema 2020-12. Was ändert sich konkret gegenüber OAS 3.0?',options:['Nur der Versionsnummer-Eintrag','<code>if/then/else</code> für bedingte Schemas, <code>examples:</code> nativ erlaubt, <code>type:[string,"null"]</code> statt <code>nullable: true</code>','Neue HTTP-Methoden werden unterstützt','Swagger-UI wird nicht mehr benötigt'],correct:1,diff:'hard',expl:'<strong>OAS 3.1</strong>: vollständiges JSON Schema 2020-12. Konkret: <code>if/then/else</code> für UTILMD-Bedingungsregeln, <code>examples:</code> als Standard-Keyword (kein Spectral-Workaround mehr), <code>nullable</code> → <code>type: [string,"null"]</code>. Im GPKE-Repo: <code>oas31/</code>-Verzeichnis.'},
-{text:'Was gehört in OpenAPI nach <code>components/headers</code>?',options:['Wiederverwendbare Response-Header wie ETag, Location, Retry-After','Alle HTTP-Header (Request + Response)','Nur Sicherheits-Header','Nur Custom-Header mit X-Präfix'],correct:0,diff:'hard',expl:'<strong>components/headers</strong>: ausschließlich <em>Response</em>-Header (ETag, Location, X-Message-ID). Request-Header werden als <code>parameters</code> mit <code>in: header</code> definiert. Diese Trennung ist in OAS 3.0 Pflicht und oft Quelle von Fehlern.'},
-{text:'Spectral ist ein OpenAPI-Linter. Was prüft er?',options:['Ob Schemas valide JSON erzeugen','Ob die API schnell genug antwortet','Ob alle Endpunkte erreichbar sind','OpenAPI-Dokumente auf Stil- und Qualitätsverstöße gemäß konfigurierbaren Regelwerken'],correct:3,diff:'medium',expl:'<strong>Spectral</strong>: regelbasierter Linter. Im GPKE-Repo: <code>.spectral.mjs</code> verweist auf Stoplight-Regelwerk. Prüft z.B. ob alle Operationen eine <code>operationId</code> haben, ob Beschreibungen vorhanden sind.'},
-{text:'<code>x-edifact-mapping</code> erscheint in GPKE-Schema-Dateien. Was ist es?',options:['Automatische EDIFACT-Konvertierung','Selbst definierte OpenAPI-Erweiterung (alle x-Properties erlaubt), dokumentiert Segment + Qualifier des zugehörigen EDIFACT-Segments','OpenAPI-Standard-Keyword für EDI','Linter-Ausschluss-Regel'],correct:1,diff:'medium',expl:'<strong>x-edifact-mapping</strong>: Custom Extension (alle <code>x-</code>-Properties sind in OpenAPI erlaubt). Beispiel: <code>segment: LOC, de3227: "Z16"</code> = EDIFACT-Rückverfolgbarkeit. Für EDIFACT-Experten unverzichtbar bei der Migration.'},
-{text:'Synchron: Client wartet auf Ergebnis. Asynchron: Was passiert sofort?',options:['Server schickt 200 OK mit leerem Body','Server schickt 204 No Content','Server schickt 404 bis fertig','Server schickt 202 Accepted, verarbeitet im Hintergrund'],correct:3,diff:'easy',expl:'<strong>202 Accepted</strong>: sofortige Annahmebestätigung, Verarbeitung läuft noch. Client pollt später oder bekommt Callback. Für GPKE: NB nimmt Anmeldung an, prüft aber asynchron.'}
+{text:'API-First Entwicklung: Spec zuerst, dann Code. Was ist der Kern-Vorteil?',options:['Der Server braucht keine Tests mehr – gemäß REST-Prinzip – gilt für alle HTTP-Methoden','Deployment läuft automatisch ab – per YAML-Definition – per RFC-Definition','Spec ist Quelle der Wahrheit: Frontend + Backend arbeiten parallel am gleichen Vertrag','Die API ist immer abwärtskompatibel – für alle API-Typen – in OAS 3.0 und 3.1'],correct:2,diff:'easy',expl:'<strong>API-First</strong>: OpenAPI-Spec vor der Implementierung → gemeinsamer Vertrag → parallele Entwicklung → frühes Linting mit Spectral → bessere Governance. → <em>Syllabus Kap. 3 · stoplight.io/api-first</em>'},
+{text:'components/headers vs. components/parameters in OpenAPI – wo gehören Response-Header wie ETag hin?',options:['Beide Orte sind gleichwertig – egal wo – ohne Header-Angabe','components/headers – referenziert unter responses[x].headers','components/parameters mit in: header – im GPKE-Kontext – automatisch durch den Server','components/schemas als string-Typ – laut OpenAPI-Standard – unabhängig vom Statuscode'],correct:1,diff:'hard',expl:'<strong>Strikte Trennung</strong>: Response-Header (ETag, Location, Retry-After) → <code>components/headers</code>. Request-Header → <code>components/parameters</code> mit <code>in: header</code>. Vertauschen ist ein häufiger Fehler. → <em>OpenAPI Spec §4.8.11 · GPKE header/openapi.yaml</em>'},
+{text:'required-Felder in OpenAPI 3.0: Wie werden sie korrekt definiert?',options:['Mit Attribut required: true am einzelnen Feld – ohne Header-Angabe','Mit Ausrufezeichen am Feldnamen: maLoId! – per YAML-Definition','Als Liste von Feldnamen auf Objekt-Ebene: required: [maLoId, date]','Felder sind standardmäßig alle Pflicht – in OAS 3.0 und 3.1'],correct:2,diff:'medium',expl:'<strong>required ist eine Objekt-Level-Liste</strong>: <code>required: [maLoId, supplyStartDate]</code>. Kein Attribut am Feld. Felder ohne Nennung in required sind automatisch optional. → <em>OpenAPI Spec §4.8.24 · JSON Schema §10.3.5</em>'},
+{text:'OAS 3.1 nutzt JSON Schema 2020-12. Was ändert sich konkret (3 Punkte)?',options:['Nur der Versionsstring in der YAML-Datei ändert sich – standardmäßig aktiv – ohne weitere Konfiguration','Neue HTTP-Methoden (QUERY) werden unterstützt – in der Praxis üblich – unabhängig vom Statuscode','Swagger UI wird nicht mehr benötigt – laut OpenAPI-Standard – bei jeder Anfrage – für alle Ressourcen','if/then/else für bedingte Schemas; examples: nativ erlaubt; type:[string,\\\'null\\\'] statt nullable'],correct:3,diff:'hard',expl:'<strong>OAS 3.1</strong>: if/then/else für UTILMD-Bedingungsregeln; <code>examples:</code> nativ (kein Spectral-Workaround); <code>nullable: true</code> → <code>type: [string,"null"]</code>. Im GPKE-Repo: <code>oas31/</code>-Verzeichnis zeigt alle Unterschiede. → <em>OAS 3.1 Release Notes · Syllabus Kap. 8</em>'},
+{text:'oneOf vs. anyOf vs. allOf in OpenAPI/JSON Schema: Was bedeutet allOf?',options:['Mindestens eines der Schemas muss passen','Exakt eines der Schemas muss passen (mutual exclusive)','Alle Schemas müssen gleichzeitig passen – Komposition','Schemas werden alphabetisch sortiert geprüft'],correct:2,diff:'hard',expl:'<strong>allOf</strong>: alle Schemas müssen zutreffen (Vererbung/Komposition). <strong>oneOf</strong>: exakt eines (mutual exclusive, oft mit discriminator). <strong>anyOf</strong>: mindestens eines. → <em>JSON Schema 2020-12 §10.2 · OpenAPI Spec §4.8.14</em>'},
+{text:'Spectral ist ein OpenAPI-Linter. Was prüft er konkret?',options:['Ob die API schnell genug antwortet – auf allen Servern – im GPKE-Kontext','Ob alle Endpunkte HTTP 200 zurückgeben – unabhängig vom Statuscode','Ob Felder, Beschreibungen und Konventionen den Regelwerken entsprechen','Ob das JSON syntaktisch korrekt geparst werden kann – per RFC-Definition'],correct:2,diff:'medium',expl:'<strong>Spectral</strong>: regelbasierter Linter für OpenAPI-Qualität. Prüft z.B.: operationId vorhanden? Beschreibungen nicht leer? Keine veralteten Konstrukte? Im GPKE-Repo via <code>.spectral.mjs</code>. → <em>stoplight.io/open-source/spectral · GPKE .spectral.mjs</em>'}
 ]},
-{id:'async',tag:'Gruppe 4',title:'Asynchrone APIs, Events & Fehlerbehandlung',questions:[
-{text:'Webhook vs. Polling – was ist der Kernunterschied?',options:['Webhook: Server ruft aktiv die Client-URL auf (Push); Polling: Client fragt periodisch an (Pull)','Webhooks sind verschlüsselt, Polling nicht','Polling ist neuer als Webhooks','Webhooks funktionieren nur mit WebSocket'],correct:0,diff:'medium',expl:'<strong>Webhook (Push)</strong>: effizienter, nur aktiv bei Ereignis. Server sendet HTTP-POST an registrierte URL. <strong>Polling (Pull)</strong>: Client fragt regelmäßig – einfach, aber Serverbelastung. Für GPKE ideal: Webhook wenn NB eine Anmeldung bestätigt.'},
-{text:'Rate Limit überschritten – welcher Statuscode und welcher Header gehören zusammen?',options:['429 + Retry-After','503 + Retry-After','401 + WWW-Authenticate','400 + Content-Type'],correct:0,diff:'medium',expl:'<strong>429 Too Many Requests</strong> + <code>Retry-After</code>: Rate-Limit aktiv, Header gibt Wartezeit in Sekunden oder als HTTP-Datum. 503 = Server überlastet (anderes Problem). 401 = fehlende Authentifizierung.'},
-{text:'Idempotency-Key (RFC 8694): Client schickt POST mit UUID, Netzwerkfehler, Retry. Was macht der Server?',options:['Legt zweite Anmeldung an','Gibt 409 Conflict zurück','Gibt gecachte Erstantwort zurück – keine doppelte Anmeldung','Ignoriert den Key und verarbeitet erneut'],correct:2,diff:'medium',expl:'<strong>Idempotency-Key-Mechanismus</strong>: Server speichert UUID + Antwort. Bei Retry mit gleicher UUID: gecachte Antwort zurück, keine erneute Verarbeitung. RFC 8694 ist der Standard dafür. Für GPKE essentiell: verhindert doppelte Lieferanmeldungen.'},
-{text:'RFC 7807 „Problem Details for HTTP APIs" – was ist das?',options:['Ein HTTP-Statuscode für API-Fehler','Ein Protokoll für Fehler-Benachrichtigungen per E-Mail','Ein TLS-Erweiterungsformat','Standard-Struktur für API-Fehlerantworten: type, title, status, detail'],correct:3,diff:'medium',expl:'<strong>RFC 7807</strong> definiert: <code>{"type":"…","title":"Validation Error","status":422,"detail":"maLoId muss 11-stellig sein"}</code>. Maschinenlesbar und menschenlesbar. Im GPKE-Repo: <code>ErrorResponse</code>-Schema in <code>schema/common/</code>.'},
-{text:'SSE (Server-Sent Events) vs. WebSocket – was ist korrekt?',options:['SSE ist bidirektional','WebSocket läuft über normales HTTP','SSE: unidirektional Server→Client über HTTP; WebSocket: bidirektional, eigenes Protokoll ws://','WebSocket ist veraltet und durch SSE ersetzt'],correct:2,diff:'medium',expl:'<strong>SSE</strong>: HTTP bleibt offen, Server pusht Events (<code>text/event-stream</code>). Einfach, funktioniert mit normalem HTTP/2. <strong>WebSocket</strong>: Vollduplex, eigenes ws://-Protokoll. SSE reicht für GPKE-Statuspush (Anmeldungsfortschritt).'},
-{text:'409 Conflict vs. 412 Precondition Failed – wann wird welcher verwendet?',options:['409: Zustand verhindert Operation (doppelte Bestätigung); 412: ETag-Mismatch (If-Match-Header stimmt nicht)','Beide bedeuten dasselbe','412: Ressource nicht gefunden; 409: Server-Fehler','409 ist für GET, 412 nur für POST'],correct:0,diff:'medium',expl:'<strong>409 Conflict</strong>: Ressource existiert, aktueller Zustand lässt Operation nicht zu (z.B. bereits bestätigte Anmeldung erneut bestätigen). <strong>412 Precondition Failed</strong>: ETag im <code>If-Match</code>-Header stimmt nicht mit aktuellem ETag überein.'},
-{text:'Exponential Backoff bei Retries: Wie sieht das aus?',options:['Immer nach exakt 1 Sekunde wiederholen','Nach 3 Fehlern permanent aufgeben','Wartezeit verdoppelt sich mit jedem Versuch: 1s, 2s, 4s, 8s…','Anfragen in umgekehrter Reihenfolge wiederholen'],correct:2,diff:'medium',expl:'<strong>Exponential Backoff</strong>: Wartezeit = Basis^Versuch (z.B. 2^1=2s, 2^2=4s…). Verhindert Server-Überlastung bei vielen gleichzeitigen Retries. Oft mit Jitter (Zufallswert) kombiniert. Standard für 429 und 5xx-Antworten.'},
-{text:'EDIFACT: Batch-Verarbeitung, Latenzen in Stunden. Was ist der größte REST-Vorteil im GPKE-Kontext?',options:['Sofortige Fehlerrückmeldung per HTTP-Statuscode und Echtzeit-Statusabfrage','Kleinere Dateigrößen','REST ist sicherer','Weniger Netzwerkbandbreite'],correct:0,diff:'easy',expl:'<strong>Echtzeit vs. Batch</strong>: Bei EDIFACT sieht man Fehler erst Stunden später in der Antwort-UTILMD. REST: sofort 422 bei ungültiger MaLo-ID, sofort 409 bei Konflikt, ETag zeigt Prozessfortschritt. Monitoring in Echtzeit.'}
+{id:'async',tag:'Gruppe 4',title:'Asynchrone APIs & Fehlerbehandlung',questions:[
+{text:'HTTP 429 Too Many Requests – welcher Header gehört immer dazu?',options:['WWW-Authenticate: fordert neue Login-Credentials vom Client an','Retry-After: gibt Wartezeit in Sekunden oder als HTTP-Datum','Content-Type: beschreibt das Format der Rate-Limit-Fehlermeldung','Location: verweist auf einen alternativen, weniger ausgelasteten Endpunkt'],correct:1,diff:'medium',expl:'<strong>429 + Retry-After</strong>: Client hat Rate-Limit überschritten. <code>Retry-After: 30</code> = 30 Sekunden warten. 503 = Server überlastet (anderes Problem). → <em>RFC 6585 §4 · RFC 9110 §10.2.4 (Retry-After)</em>'},
+{text:'Webhook (Push) vs. Polling (Pull): Wann ist ein Webhook effizienter?',options:['Webhook ist immer effizienter als Polling – gemäß REST-Prinzip – standardmäßig aktiv','Webhook: Server informiert aktiv bei Ereignis; spart Polling-Requests wenn Ereignisse selten sind','Polling ist effizienter für häufige Ereignisse – im GPKE-Kontext – bei jeder Anfrage','Kein Unterschied – beide belasten den Server gleich – unabhängig vom Statuscode, unabhängig vom verwen'],correct:1,diff:'medium',expl:'<strong>Webhook</strong>: Server ruft Client-URL auf wenn Ereignis eintritt (Push). <strong>Polling</strong>: Client fragt periodisch (Pull). Effizienter bei seltenen Ereignissen. Für GPKE: Webhook bei NB-Bestätigung spart viele GET-Requests. → <em>Syllabus Kap. 5 · webhook.site (Debugging)</em>'},
+{text:'202 Accepted vs. 201 Created: Wann gibt eine API 202 zurück?',options:['Wenn die Ressource vollständig erstellt und sofort abrufbar ist','Wenn der Client nicht die nötigen Zugriffsrechte besitzt','Wenn der Request-Body fehlt und der Server einen Default verwendet','Wenn die Anfrage angenommen wurde, die Verarbeitung aber noch läuft'],correct:3,diff:'easy',expl:'<strong>202 Accepted</strong>: sofortige Bestätigung, asynchrone Verarbeitung. Client muss später den Status abfragen. Für GPKE: NB nimmt Anmeldung an, prüft aber nicht sofort synchron. → <em>RFC 9110 §15.3.3 · Syllabus Kap. 5</em>'},
+{text:'Exponential Backoff bei Netzwerkfehlern: Wie wächst die Wartezeit?',options:['Verdoppelt sich mit jedem Versuch: 1s, 2s, 4s, 8s…','Bleibt konstant bei exakt 1 Sekunde zwischen jedem Versuch','Wird mit jedem weiteren Versuch um eine Sekunde reduziert','Nach genau 3 Fehlversuchen wird die Verbindung dauerhaft getrennt'],correct:0,diff:'medium',expl:'<strong>Exponential Backoff</strong>: Wartezeit = Basis^Versuch. Verhindert Server-Überlastung durch gleichzeitige Retries. Oft mit Jitter (Zufallswert) kombiniert. Standard für 429 und 5xx. → <em>AWS Architecture Blog · Syllabus Kap. 5</em>'},
+{text:'RFC 7807 definiert eine Standard-Struktur für API-Fehlerantworten (Problem Details). Welche Felder hat sie?',options:['type, title, status, detail','code, message, stacktrace','error, description, timestamp','httpStatus, reason, errorCode'],correct:0,diff:'medium',expl:'<strong>RFC 7807</strong>: <code>{"type":"…","title":"Validation Error","status":422,"detail":"maLoId muss 11-stellig sein"}</code>. Maschinenlesbar und menschenlesbar. Im GPKE: ErrorResponse-Schema in schema/common/. → <em>RFC 7807 §3 · GPKE schema/common/errorResponse.yaml</em>'},
+{text:'409 Conflict vs. 412 Precondition Failed – welcher Statuscode bedeutet was?',options:['409: Zustand verhindert Operation; 412: ETag-Mismatch im If-Match-Header','409: ETag-Mismatch; 412: Zustand verhindert Operation – ohne Ausnahmen','Beide bedeuten dasselbe – Ressourcenkonflikt – ohne Ausnahmen','409 für GET, 412 nur für POST und PATCH – für alle API-Typen'],correct:0,diff:'medium',expl:'<strong>409 Conflict</strong>: Ressource vorhanden, Status erlaubt Operation nicht (bereits bestätigte Anmeldung erneut bestätigen). <strong>412</strong>: ETag im <code>If-Match</code> stimmt nicht mehr. → <em>RFC 9110 §15.5.10 (409) · RFC 9110 §15.5.13 (412)</em>'}
 ]},
 {id:'migration',tag:'Gruppe 5',title:'Migration EDIFACT → REST API',questions:[
-{text:'BGM (Beginning of Message) in EDIFACT enthält Nachrichtentyp und -kennung. Was entspricht dem in REST?',options:['<code>marketLocationId</code> in der URL','<code>validityPeriod</code>','HTTP-Statuscode der Antwort','<code>checkIdentifier</code> im <code>messageHeader</code> mit Prüf-ID und Kommunikationsrichtung'],correct:3,diff:'medium',expl:'<strong>BGM</strong>: Dokumententyp + Kennung. In REST: <code>messageHeader.checkIdentifier.value</code> (Prüf-ID z.B. "55001") + <code>communicationDirection</code> (z.B. "LF→NB") + <code>messageType</code> (z.B. "E01").'},
-{text:'Stufe 1 der API-Migration: EDIFACT-Struktur bleibt, nur das Format ändert sich (EDIFACT → JSON). Wie heißt diese Stufe?',options:['Transport-API','RPC-Prozess-API','RESTful Resource-API','Legacy-Wrapper'],correct:0,diff:'medium',expl:'<strong>Stufe 1 Transport-API</strong>: minimal invasiv, nur Übertragungsformat ändert sich. Keine echten REST-Vorteile (kein Caching, keine HATEOAS-Links). Ziel sollte Stufe 3 (RESTful Resource-API) sein.'},
-{text:'NAD-Segment in EDIFACT: Parteiidentifikation (Name, Adresse, ID). Was ist das REST-Äquivalent?',options:['<code>validityPeriod</code>','<code>messageHeader</code>','<code>checkIdentifier</code>','<code>marketActorId</code> + <code>address</code> im <code>marketActor</code>-Schema'],correct:3,diff:'medium',expl:'<strong>NAD</strong> (Name and Address): Parteiinfo. In REST: <code>marketActorId</code> (13-stellige MP-ID, GS1/BDEW-Codierschema 293) + <code>address</code>-Objekt. NAD DE3039 = <code>marketActorId.id</code>.'},
-{text:'ETag-Header enthält <code>"state:running"</code>. Client sendet <code>If-Match: "state:running"</code>. Zustand hat sich geändert. Was antwortet der Server?',options:['200 OK – Zustand wird aktualisiert','412 Precondition Failed – ETag stimmt nicht mehr','404 Not Found','202 Accepted'],correct:1,diff:'hard',expl:'<strong>Optimistic Locking mit ETag/If-Match</strong>: Server prüft ob aktueller ETag mit dem gesendeten übereinstimmt. Wenn der Zustand sich zwischenzeitlich geändert hat → <strong>412</strong>. Client muss erst GET machen um neuen ETag zu holen, dann erneut senden.'},
-{text:'GPKE-Prüf-ID 55010 – welchem REST-Endpunkt entspricht sie?',options:['POST /malo/{id}/registrations','POST /malo/{id}/deregistration-requests (NB schickt Abmeldeanfrage an LFA)','GET /malo/{id}/registrations/{ssId}','POST /malo/{id}/assignment-terminations'],correct:1,diff:'hard',expl:'<strong>Prüf-ID 55010</strong>: Schritt 3 des GPKE-Lieferbeginn-Prozesses. NB (Netzbetreiber) schickt Abmeldeanfrage an LFA (alten Lieferanten). REST: <code>POST /malo/{marketLocationId}/deregistration-requests</code>.'},
-{text:'9 Endpunkte in api/malo.yaml decken 7 Prozessschritte ab. Warum mehr Endpunkte als Schritte?',options:['Fehler im Design','Redundanz aus Kompatibilitätsgründen','Manche Schritte haben GET + POST (Lesen + Erstellen) oder eine Sub-Ressource /response','Jeder Marktakteur braucht eigene Endpunkte'],correct:2,diff:'hard',expl:'<strong>Endpunkte > Prozessschritte</strong>: Anmeldungen haben <code>POST</code> (erstellen) + <code>GET</code> (Liste) + <code>GET /{id}</code> + <code>PATCH /{id}</code> + <code>POST /{id}/response</code>. Mehrere REST-Operationen können zum selben Prozessschritt gehören.'},
-{text:'AuthN (Authentifizierung) vs. AuthZ (Autorisierung): Was ist was?',options:['Beides bedeutet dasselbe','AuthN für Menschen, AuthZ für Maschinen','AuthZ ist der ältere Begriff für AuthN','AuthN: Wer bist du? (Identität beweisen); AuthZ: Was darfst du? (Berechtigung prüfen)'],correct:3,diff:'easy',expl:'<strong>AuthN</strong>: Identitätsnachweis – JWT-Token, Zertifikat, API-Key. <strong>AuthZ</strong>: Darf dieser Lieferant diese MaLo-ID sehen? Beide Schichten sind im GPKE-Sicherheitskonzept erforderlich und unabhängig voneinander.'}
+{text:'9 REST-Endpunkte für 7 GPKE-Prozessschritte – warum mehr Endpunkte als Schritte?',options:['Fehler im API-Design – sollte 1:1 sein – automatisch durch den Server – in der Praxis üblich','Jeder Marktakteur bekommt eigene Endpunkte – im GPKE-Kontext – für alle Ressourcen','Anmeldungen brauchen mehrere Operationen: POST, GET Liste, GET einzeln, PATCH, POST /response','Redundanz für Hochverfügbarkeit – in jedem Fall – per YAML-Definition – ohne Ausnahmen'],correct:2,diff:'hard',expl:'<strong>REST-Ressource vs. Prozessschritt</strong>: Eine Ressource hat mehrere Operationen. Anmeldungen: POST (anlegen), GET /malo/../registrations (liste), GET /{id} (einzeln), PATCH /{id} (ändern), POST /{id}/response (Schritt 5). → <em>GPKE api/malo.yaml · Syllabus Kap. 3</em>'},
+{text:'EDIFACT NAD-Segment (Name and Address): Parteiidentifikation. Was ist das REST-Äquivalent im GPKE-Repo?',options:['validityPeriod (gültig-ab + gültig-bis) – gemäß REST-Prinzip','marketActorId (MP-ID 13-stellig) + address im marketActor-Schema','messageHeader mit Sender und Empfänger','checkIdentifier mit Prüf-ID und Richtung – gemäß REST-Prinzip'],correct:1,diff:'medium',expl:'<strong>NAD</strong>: Parteiinfo (Name, Adresse, ID, Rolle). In REST: <code>marketActorId</code> (MP-ID 13-stellig, GS1/BDEW Codierschema 293) + <code>address</code>-Objekt. NAD DE3039 = marketActorId.id. → <em>UTILMD AHB 2.1 NAD-Segment · GPKE schema/marketActors/</em>'},
+{text:'GPKE-Prüf-ID 55010: NB schickt Abmeldeanfrage an LFA (alten Lieferanten). Welcher REST-Endpunkt?',options:['POST /malo/{id}/deregistration-requests','POST /malo/{id}/registrations','GET /malo/{id}/registrations/{ssId}','POST /malo/{id}/assignment-terminations'],correct:0,diff:'hard',expl:'<strong>Prüf-ID 55010</strong>: Schritt 3 des GPKE-Lieferbeginn. NB informiert LFA über neue Anmeldung und fragt ob Abmeldung bestätigt wird. REST: <code>POST /malo/{marketLocationId}/deregistration-requests</code>. → <em>GPKE Teil 2 §4.3 · GPKE api/malo.yaml</em>'},
+{text:'EDIFACT BGM-Segment (Beginning of Message) enthält Nachrichtentyp + Kennung. Was entspricht dem in REST?',options:['checkIdentifier-Feld im messageHeader mit Prüf-ID und Kommunikationsrichtung','marketLocationId als Pfadparameter in der URL des REST-Endpunkts','HTTP-Statuscode der Server-Antwort, der den Verarbeitungsstatus signalisiert','validityPeriod-Objekt mit validFrom und validTo für den Gültigkeitszeitraum'],correct:0,diff:'medium',expl:'<strong>BGM</strong>: Dokumententyp + Kennung. In REST: <code>messageHeader.checkIdentifier.value</code> (Prüf-ID z.B. "55001") + <code>communicationDirection</code> ("LF→NB"). → <em>UTILMD AHB 2.1 §3 · GPKE schema/message/checkIdentifier.yaml</em>'},
+{text:'EDIFACT: Batch-Verarbeitung mit Latenz in Stunden. Was ist der größte REST-Vorteil im GPKE-Kontext?',options:['Kleinere Dateigrößen bei der Übertragung – per YAML-Definition','REST ist sicherer als EDIFACT-Verbindungen – in OAS 3.0 und 3.1','Sofortige HTTP-Fehlercodes und Echtzeit-Statusabfrage statt Stunden-Latenz','Weniger Netzwerkbandbreite nötig – gemäß REST-Prinzip – für alle API-Typen'],correct:2,diff:'easy',expl:'Echtzeit vs. Batch: EDIFACT-Fehler erscheinen erst in der Antwort-UTILMD nach Stunden. <strong>REST</strong>: sofort 422 bei ungültiger MaLo-ID, sofort 409 bei Konflikt, ETag zeigt Prozessfortschritt. → <em>Syllabus Kap. 1 · GPKE api/malo.yaml</em>'}
 ]},
 {id:'security',tag:'Gruppe 6',title:'Sicherheit & Authentifizierung',questions:[
-{text:'RFC 9421 ist der Standard für HTTP Message Signatures (digitale Signaturen über HTTP-Nachrichten). Was sichert er?',options:['TLS-Zertifikatsverwaltung','JWT-Token-Format','OAuth 2.0 Flows','Nichtabstreitbarkeit: Sender kann nicht leugnen, eine bestimmte Anfrage gesendet zu haben'],correct:3,diff:'hard',expl:'<strong>RFC 9421</strong> (HTTP Message Signatures): Signatur über Methode, URL, Body-Digest, Datum. Für GPKE: Lieferant kann Prüf-ID 55001 nicht abstreiten – Nichtabstreitbarkeit. Implementiert via <code>Signature</code> + <code>Signature-Input</code> + <code>Content-Digest</code>-Header.'},
-{text:'JWT (JSON Web Token) besteht aus Header.Payload.Signatur. Wie wird es validiert?',options:['Datenbankabfrage mit der Session-ID','Signaturprüfung mit Public Key – stateless, kein Datenbankzugriff','Entschlüsselung mit symmetrischem AES-Schlüssel','MD5-Prüfsumme des Payloads'],correct:1,diff:'medium',expl:'<strong>JWT-Validierung</strong>: asymmetrische Signaturprüfung (RS256 oder ES256). Stateless – kein Datenbankzugriff nötig. Payload enthält Claims: sub (Subject), iss (Issuer), exp (Expiry). Ideal für verteilte Microservice-Infrastruktur.'},
-{text:'Content-Digest (RFC 9530): SHA-256-Hash des HTTP-Body. Warum ist er für RFC 9421 Signaturen notwendig?',options:['Er gibt die Länge des Bodies an','Er bindet den Body an die Signatur – ohne ihn könnte ein Angreifer den Body austauschen ohne die Signatur zu brechen','Er komprimiert den Body','Er identifiziert das Verschlüsselungsformat'],correct:1,diff:'hard',expl:'<strong>Content-Digest</strong>: Format <code>sha-256=:&lt;base64&gt;:</code>. Ohne Binding: Man-in-the-Middle tauscht Body aus, Signatur bleibt gültig. Mit Content-Digest in den signierten Komponenten: Body-Manipulation bricht die Signatur sofort. RFC 9530 definiert diesen Header.'},
-{text:'OAuth 2.0 Client Credentials Flow: Maschine-zu-Maschine ohne Nutzer. Was sind die Schritte?',options:['Browser-Redirect zu Login-Seite → Code → Token','Nutzername + Passwort → Session-Cookie → API-Call','API-Key im Header → direkte Authentifizierung','Client-ID + Secret → Access Token → API-Call'],correct:3,diff:'medium',expl:'<strong>Client Credentials Flow</strong>: 1) Service sendet Client-ID + Secret an Token-Endpoint. 2) Erhält Access Token (JWT). 3) Nutzt Token für API-Calls. Kein Nutzer, kein Browser. Standard für NB→LF oder LF→NB Server-zu-Server in GPKE.'},
-{text:'RBAC (Role-Based Access Control) vs. ABAC (Attribute-Based Access Control) – warum ist ABAC für Messdaten besser?',options:['ABAC ist schneller als RBAC','RBAC ist in der EU nicht mehr erlaubt','RBAC zu grob: Rolle "Lieferant" erlaubt alle MaLos; ABAC prüft Attribute: "Gehört MaLo 51238… zu Lieferant X?"','ABAC benötigt weniger Speicher'],correct:2,diff:'hard',expl:'<strong>ABAC</strong>: feingranulare Entscheidung nach Attributen von Subjekt (Lieferant), Objekt (MaLo-ID) und Kontext. Lieferant sieht nur SEINE MaLos. <strong>RBAC</strong>: alle "Lieferant"-Rollen bekämen gleiche Rechte – zu grob für regulierte Energiemarktdaten.'},
-{text:'<code>redocly bundle api/malo.yaml</code> erzeugt eine einzige YAML-Datei. Warum ist das für Swagger UI nötig?',options:['Bundle-Dateien sind kleiner','Stoplight kann nur einzelne Dateien lesen','OpenAPI erlaubt nur eine Datei','Swagger UI auf Static Hosting (GitHub Pages) kann keine $refs mit relativen Dateipfaden auflösen – CORS blockiert das'],correct:3,diff:'medium',expl:'<strong>redocly bundle</strong>: löst alle 150+ $refs auf → eine selbst-enthaltene <code>openapi-bundled.yaml</code>. Swagger UI auf GitHub Pages lädt Dateien per fetch() – der Browser blockiert relative Pfade zu anderen Servern (CORS). Das Bundle umgeht das Problem.'}
+{text:'OAuth 2.0 Client Credentials Flow: Maschine-zu-Maschine ohne Nutzer. Was sind die Schritte?',options:['Browser leitet Nutzer zu Login-Seite um, Code wird gegen Token getauscht','API-Key wird direkt als Bearer-Token im Authorization-Header mitgesendet','Nutzername und Passwort → Server erstellt Session-Cookie → API-Zugriff','Client-ID + Secret → Token-Endpoint → Access Token → API-Call'],correct:3,diff:'medium',expl:'<strong>Client Credentials Flow</strong>: 1) Client-ID + Secret an Token-Endpoint. 2) Access Token (JWT) erhalten. 3) Token in Bearer-Authorization für API-Calls. Kein Nutzer, kein Browser. Standard für NB→LF in GPKE. → <em>RFC 6749 §4.4 · oauth.net/2/client-credentials</em>'},
+{text:'Content-Digest (RFC 9530) enthält einen SHA-256-Hash des HTTP-Body. Wozu dient er?',options:['Er gibt die Länge des Body in Bytes an – unabhängig vom Statuscode','Er bindet den Body an die Signatur – Manipulation bricht die Signatur','Er komprimiert den Body für die Übertragung – standardmäßig aktiv','Er identifiziert das Verschlüsselungsformat des Body – ohne Ausnahmen'],correct:1,diff:'hard',expl:'<strong>Content-Digest</strong>: Format <code>sha-256=:base64:</code>. Ohne Binding: Man-in-the-Middle tauscht Body aus, Signatur bleibt gültig. Mit Digest: Body-Manipulation → Signatur bricht. → <em>RFC 9530 · RFC 9421 §2.4 · GPKE header/headers/contentDigest.yaml</em>'},
+{text:'AuthN (Authentifizierung) vs. AuthZ (Autorisierung): Kurze Definition beider Begriffe?',options:['Beide bedeuten Zugangskontrolle – Synonyme – für alle API-Typen','AuthN: Wer bin ich? (Identität); AuthZ: Was darf ich? (Berechtigung)','AuthN: Was darf ich? AuthZ: Wer bin ich? – in OAS 3.0 und 3.1','AuthN für Menschen, AuthZ nur für Maschinen – in der Praxis üblich'],correct:1,diff:'easy',expl:'<strong>AuthN</strong>: Identitätsnachweis – JWT, Zertifikat, API-Key. <strong>AuthZ</strong>: Darf Lieferant X auf MaLo Y zugreifen? Beide Schichten im GPKE-Sicherheitskonzept erforderlich. → <em>OWASP Authentication Cheatsheet · Syllabus Kap. 6</em>'},
+{text:'RFC 9421 (HTTP Message Signatures) signiert HTTP-Nachrichten digital. Was sichert das vor allem?',options:['Verschlüsselung des Body-Inhalts – laut OpenAPI-Standard','Schutz vor zu vielen API-Anfragen – auf allen Servern, was bei allen HTTP-Clients funk','Automatische Sitzungsverwaltung – gemäß REST-Prinzip – ohne Ausnahmen','Nichtabstreitbarkeit: Sender kann nicht leugnen, eine Nachricht gesendet zu haben'],correct:3,diff:'hard',expl:'<strong>RFC 9421</strong>: Signatur über Methode, URL, Body-Digest, Datum (ECDSA P-256 / Ed25519). Für GPKE: <strong>Nichtabstreitbarkeit</strong> – Lieferant kann Prüf-ID 55001 nicht abstreiten. Via Signature + Signature-Input + Content-Digest. → <em>RFC 9421 · GPKE docs/security/</em>'},
+{text:'RBAC (rollenbasiert) vs. ABAC (attributbasiert): Warum ist ABAC für Energiemarktdaten besser?',options:['ABAC ist schneller und braucht weniger Speicher – standardmäßig aktiv – auf allen Servern – in jedem Fall','RBAC ist in der EU seit 2023 nicht mehr erlaubt – für alle API-Typen – laut OpenAPI-Standard – ohne Header-Angabe','ABAC ist einfacher zu implementieren als RBAC – bei REST und RPC – in jedem Fall – per RFC-Definition','RBAC zu grob: alle \\\'Lieferant\\\'-Rollen sehen alle MaLos; ABAC prüft: gehört diese MaLo zu Lieferant X?'],correct:3,diff:'hard',expl:'<strong>ABAC</strong>: feingranulare Entscheidung nach Subjekt-Attributen (Lieferant X), Objekt (MaLo-ID) und Kontext. <strong>RBAC</strong>: alle \'Lieferant\'-Rollen = gleiche Rechte. Für regulierte Energiemarktdaten: ABAC zwingend. → <em>NIST ABAC Guide · Syllabus Kap. 6</em>'}
 ]},
 {id:'tooling',tag:'Gruppe 7',title:'Tooling, CI/CD & GitHub',questions:[
-{text:'Git-Branch vs. Git-Tag: Kurze Antwort?',options:['Branch wächst mit jedem Commit; Tag ist eingefrorener Schnappschuss','Beides sind identische Git-Konzepte','Tags sind nur auf GitHub, Branches überall','Branch für Features, Tag nur für Bugfixes'],correct:0,diff:'easy',expl:'<strong>Branch</strong>: beweglicher Zeiger → <code>main</code> zeigt immer auf neuesten Commit. <strong>Tag</strong>: statischer Zeiger → <code>v2.1.0</code> zeigt immer auf denselben Commit. Tags = Versionsschnitte, unveränderlich.'},
-{text:'git pull schlägt fehl, git push meldet Fehler. Was ist die häufigste Ursache?',options:['Falsche Git-Version','Git-Konfiguration veraltet','Remote-Branch hat Commits die lokal fehlen (z.B. von GitHub Actions) – Git verhindert Push um keine Remote-Commits zu überschreiben','Datei zu groß'],correct:2,diff:'easy',expl:'<strong>Divergente Historien</strong>: Remote hat Commits (z.B. vom swagger-ui.yml-Workflow), die lokal fehlen. Git: erst pull (Merge der Remote-Änderungen), dann push. Lokale Commits gehen beim Pull nicht verloren – sie werden gemergt.'},
-{text:'<code>redocly.yaml</code> im Repository-Root: Was konfiguriert sie?',options:['GitHub Actions Workflow-Schritte','TLS-Zertifikate für die API','OpenAPI-Versionsdeklaration','Redocly CLI: API-Einstiegsdatei + welche Lint-Regeln deaktiviert sind (z.B. <code>no-unknown-extension: off</code> für x-edifact-mapping)'],correct:3,diff:'medium',expl:'<strong>redocly.yaml</strong>: Konfiguriert Redocly CLI. Definiert welche API-Datei der Einstiegspunkt ist (<code>api/malo.yaml</code>) und welche Lint-Regeln nicht gelten sollen (z.B. <code>x-edifact-mapping</code> ist kein Standard-OpenAPI-Keyword).'},
-{text:'Branch Protection auf main: Was wird erzwungen?',options:['Branch wird verschlüsselt','Kein direktes Pushen – alle Änderungen über Pull Requests, Reviews möglich, GitHub Actions als Gate','Branch vor Lesezugriffen geschützt','Nur Repository-Owner kann commits sehen'],correct:1,diff:'easy',expl:'<strong>Branch Protection</strong>: kein direkter Push auf main. Alle Änderungen per Pull Request → Code Review → GitHub Actions müssen grün sein. Verhindert fehlerhafte OpenAPI-Specs direkt auf main.'},
-{text:'gh-pages-Branch auf GitHub: Was enthält er?',options:['Nur die verschlüsselte Version von main','Nur die generierten Swagger-UI-Dateien (kein Quellcode) – von GitHub Pages als statische Website ausgeliefert','Alle gelöschten Dateien','Backup von main'],correct:1,diff:'medium',expl:'<strong>gh-pages</strong>: enthält ausschließlich generierte Dateien: <code>openapi-bundled.yaml</code>, Swagger-UI-Assets, <code>index.html</code>. Kein Quellcode. workflow pusht <code>ui/</code>-Inhalt → GitHub-System-Workflow <code>pages-build-deployment</code> deployed → öffentliche URL.'},
-{text:'GitHub Desktop vs. TortoiseGit: Hauptunterschied?',options:['GitHub Desktop: eigenes Fenster (Win+Mac); TortoiseGit: Windows-Explorer-Integration per Rechtsklick, beliebige Git-Server','TortoiseGit ist kostenpflichtig','GitHub Desktop nur für Public Repos','TortoiseGit unterstützt kein Git'],correct:0,diff:'easy',expl:'Gleiches Konzept: grafischer Git-Client ohne Kommandozeile. <strong>GitHub Desktop</strong>: separates Fenster, Win+Mac, GitHub-optimiert. <strong>TortoiseGit</strong>: Rechtsklick im Explorer, Windows only, GitHub/GitLab/eigene Server.'},
-{text:'11-stellige MaLo-ID (nur Ziffern). Welches Regex passt exakt?',options:['^\\\\d{10}$','^\\\\w{11}$','^\\\\d{11}$','^[0-9]{1,11}$'],correct:2,diff:'medium',expl:'<strong><code>^\\\\d{11}$</code></strong>: <code>^</code>=Anfang, <code>\\\\d</code>=Ziffer [0-9], <code>{11}</code>=exakt 11 Mal, <code>$</code>=Ende. <code>\\\\w</code> würde auch Buchstaben matchen. <code>{1,11}</code> erlaubt 1–11 Stellen. Teste auf <strong>regex101.com</strong>!',code:true,codeblock:'regex101.com (PCRE/ECMAScript-Modus):\\n  ✅ "51238696781"  → Match\\n  ❌ "5123869678"   → kein Match (10 Ziffern)\\n  ❌ "5123869678A"  → kein Match (Buchstabe)'}
+{text:'Branch Protection auf main erzwingt Pull Requests. Was ist der Kern-Effekt?',options:['Branch wird auf dem Server verschlüsselt gespeichert – gemäß REST-Prinzip','Nur der Repository-Owner kann noch Commits sehen – per YAML-Definition','Branch wird nach jedem Merge automatisch gelöscht – für alle Ressourcen','Alle Änderungen über PRs – Code Reviews und CI-Gates werden möglich'],correct:3,diff:'easy',expl:'<strong>Branch Protection</strong>: kein direkter Push auf main. Alle Änderungen per Pull Request → Review → GitHub Actions (Lint/Test) müssen grün sein. Verhindert fehlerhafte Specs direkt auf main. → <em>GitHub Docs · Syllabus Kap. 9</em>'},
+{text:'git push schlägt fehl mit \'remote contains work you do not have\'. Was ist die Ursache?',options:['Git-Version ist veraltet – bei REST und RPC – ohne Ausnahmen','Falsche Zugangsdaten für das Repository – auf allen Servern','Die Datei ist zu groß für GitHub – bei jeder Anfrage','Remote-Branch hat Commits die lokal fehlen – erst pull, dann push'],correct:3,diff:'easy',expl:'<strong>Divergente Historien</strong>: Remote hat Commits (z.B. vom swagger-ui.yml-Workflow) die lokal fehlen. Git schützt davor sie zu überschreiben. → <em>git-scm.com/book §3.5 · Syllabus Kap. 9</em>'},
+{text:'Git-Branch vs. Git-Tag in einem Satz:',options:['Beide sind identische Konzepte mit verschiedenen Namen','Tags sind nur auf GitHub verfügbar, Branches überall, ohne weitere Konfi','Branch wächst mit jedem Commit; Tag ist eingefrorener Schnappschuss','Branch für Features, Tag ausschließlich für Hotfixes'],correct:2,diff:'easy',expl:'<strong>Branch</strong>: zeigt auf neuesten Commit, wächst weiter. <strong>Tag</strong>: statischer Zeiger, ändert sich nie → Versionsschnitte (v2.1.0, v2.2.0). → <em>git-scm.com/book §3.1 · Syllabus Kap. 9</em>'},
+{text:'gh-pages-Branch auf GitHub – was enthält er und woher kommt sein Inhalt?',options:['Backup von main aus dem letzten Release – gilt für alle HTTP-Methoden','Nur generierte Swagger-UI-Dateien; Inhalt kommt vom swagger-ui.yml-Workflow','Alle gelöschten Dateien des Repositories – für alle API-Typen, was bei allen HTT','Verschlüsselte Version von main für GitHub Pages – per RFC-Definition'],correct:1,diff:'medium',expl:'<strong>gh-pages</strong>: enthält ausschließlich generierte Dateien (openapi-bundled.yaml, Swagger-UI-Assets, index.html). Kein Quellcode. Workflow pusht ui/-Inhalt → GitHub-System-Workflow pages-build-deployment deployed. → <em>GitHub Pages Docs · GPKE .github/workflows/</em>'},
+{text:'redocly.yaml im Repository-Root: Was konfiguriert diese Datei?',options:['GitHub Actions Workflow-Schritte und Runner – per RFC-Definition – im GPKE-Kontext','TLS-Zertifikate und Security-Policies – auf allen Servern – standardmäßig aktiv','Redocly CLI: API-Einstiegsdatei + Lint-Regeln deaktivieren (z.B. no-unknown-extension)','OpenAPI-Versionsdeklaration für alle Dateien – bei jeder Anfrage – in OAS 3.0 und 3.1'],correct:2,diff:'medium',expl:'<strong>redocly.yaml</strong>: Konfiguriert Redocly CLI. Definiert API-Einstiegspunkt (<code>api/malo.yaml</code>) und welche Regeln deaktiviert sind (z.B. <code>no-unknown-extension: off</code> für x-edifact-mapping). → <em>Redocly Docs · GPKE redocly.yaml</em>'}
 ]},
 {id:'design',tag:'Gruppe 8',title:'API Design, Regex & Governance',questions:[
-{text:'UUID v4 als Idempotency-Key (RFC 8694). Format: 8-4-4-4-12 Hex-Zeichen. Welches Regex ist korrekt?',options:['^[a-z0-9]{32}$','^\\\\d{8}-\\\\d{4}-\\\\d{4}-\\\\d{4}-\\\\d{12}$','^uuid:.+$','^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'],correct:3,diff:'hard',expl:'UUID v4: <code>xxxxxxxx-xxxx-<strong>4</strong>xxx-<strong>[89ab]</strong>xxx-xxxxxxxxxxxx</code>. Die <strong>4</strong> = Version 4. <strong>[89abAB]</strong> = Variant-Bit. Teste auf <strong>regex101.com</strong>!',code:true,codeblock:'regex101.com:\\n  ✅ "7c9b3a2e-3c8a-4f0e-9a16-2a4efc0d2b8a"\\n  ❌ "7c9b3a2e3c8a4f0e9a162a4efc0d2b8a"    (kein Bindestrich)\\n  ❌ "7c9b3a2e-3c8a-3f0e-9a16-2a4efc0d2b8a"  (Version 3, nicht 4)'},
-{text:'ETag State-Machine: Wert muss in Anführungszeichen stehen (RFC 9110). Nur 5 erlaubte Zustände. Welches Regex?',options:['^state:\\\\w+$','^state:[a-z]+$','^"state:(pending|running|completed|failed|cancelled)"$','^(W/)?"[^"]*"$'],correct:2,diff:'hard',expl:'RFC 9110: ETag muss in <strong>doppelten Anführungszeichen</strong> stehen. EDI@Energy: 5 feste Zustände. <code>^"state:(pending|running|completed|failed|cancelled)"$</code> validiert beides. Option C (<code>"[^"]*"</code>) ist zu generisch. Teste auf <strong>regex101.com</strong>!',code:true,codeblock:'regex101.com:\\n  ✅ "state:running"\\n  ✅ "state:completed"\\n  ❌ state:running       (keine Anführungszeichen)\\n  ❌ "state:unknown"    (kein erlaubter Zustand)'},
-{text:'Paginierung für GET /malo/{id}/registrations: Welches Muster ist korrekt?',options:['Alle Ergebnisse ohne Limit','?limit=50&offset=0 mit Default und Maximum','POST mit Paginierung im Body','Cursor-basiert zwingend notwendig'],correct:1,diff:'medium',expl:'GPKE-Spec: <code>?limit</code> (1–500, Default 50) + <code>?offset</code> (0-basiert). Einfach und toolingfreundlich. Paginierung im Body verletzt REST-Prinzipien. Cursor-Paginierung wäre sauberer für sehr große Datasets.'},
-{text:'Append-Only-Prinzip: Daten werden nur hinzugefügt, nie überschrieben. Warum ideal für Energiewirtschaft?',options:['Automatischer unveränderlicher Audit-Trail – regulatorische Pflicht (GPKE, MessZV)','Datenbanken werden kleiner','Performance-Vorteil','Weniger API-Endpunkte nötig'],correct:0,diff:'hard',expl:'<strong>Append-Only</strong>: Jede Änderung erzeugt einen neuen Datensatz. Für Energiemarkt: lückenlose, unveränderliche Abrechnungshistorie ist regulatorisch vorgeschrieben. Alle GPKE-Vorgänge müssen vollständig nachvollziehbar bleiben.'},
-{text:'13-stellige MP-ID (Marktpartner-ID). Welches Regex?',options:['^\\\\d+$','^[0-9]{13,}$','^\\\\d{12,14}$','^[0-9]{13}$'],correct:3,diff:'medium',expl:'<strong><code>^[0-9]{13}$</code></strong>: exakt 13 Ziffern. <code>\\\\d+</code> = beliebig viele. <code>{13,}</code> = mindestens 13. <code>{12,14}</code> = 12–14. Teste auf <strong>regex101.com</strong> mit "9904132000002" (✅).',code:true,codeblock:'regex101.com:\\n  ✅ "9904132000002"  (13 Stellen)\\n  ❌ "990413200000"   (12 Stellen)\\n  ❌ "99041320000020" (14 Stellen)'},
-{text:'lowerCamelCase vs. andere Konventionen: Warum lowerCamelCase für JSON-Felder?',options:['lowerCamelCase ist in der OpenAPI-Spec vorgeschrieben','lowerCamelCase ist schneller zu parsen','JavaScript/JSON-Konvention – alle modernen JSON-Bibliotheken erwarten lowerCamelCase nativ','REST-Standard schreibt es vor'],correct:2,diff:'easy',expl:'<strong>lowerCamelCase</strong> (z.B. <code>marketLocationId</code>, <code>supplyStartDate</code>): JavaScript/JSON-Konvention, wird von allen JSON-Bibliotheken nativ unterstützt (kein Mapping nötig). Im GPKE-Repo konsequent für alle Felder, Datei- und Verzeichnisnamen.'},
-{text:'X-Request-ID vs. X-Message-ID: Was ist der Unterschied?',options:['X-Request-ID: ein Request (Tracing-Log); X-Message-ID: alle Requests eines Geschäftsvorfalls (Prozesskorrelation)','Beide identisch','X-Message-ID veraltet','X-Request-ID für Server, X-Message-ID für Clients'],correct:0,diff:'hard',expl:'<strong>X-Request-ID</strong>: Lebt einen HTTP-Request lang – wie eine Paketnummer. <strong>X-Message-ID</strong>: EDI@Energy-Transaktionskennung – korreliert POST /registrations, GET /{id} und POST /response als einen Lieferbeginn-Vorgang. Wie eine Auftragsnummer.'}
+{text:'ETag-Wert muss laut RFC 9110 in doppelten Anführungszeichen stehen. Welches Regex prüft genau die 5 EDI@Energy-Zustände?',options:['^state:\\\\w+$ – für alle API-Typen, was bei allen HTTP-Cli','^(W/)?"[^"]*"$ – ohne weitere Konfiguration','^"state:[a-z]+"$ – ohne weitere Konfiguration','^"state:(pending|running|completed|failed|cancelled)"$'],correct:3,diff:'hard',expl:'RFC 9110: ETag MUSS in doppelten Anführungszeichen stehen. EDI@Energy: nur 5 feste Zustände. Option C ist zu generisch (passt auf jeden ETag). → <em>RFC 9110 §8.8.3 · regex101.com · GPKE header/headers/eTag.yaml</em>',code:true,codeblock:'regex101.com:\n  ✅ "state:running"\n  ✅ "state:completed"\n  ❌ state:running        (keine Anführungszeichen)\n  ❌ "state:unknown"     (kein erlaubter Zustand)'},
+{text:'X-Request-ID vs. X-Message-ID: Wie unterscheiden sie sich in der Lebensdauer?',options:['Beide leben genau einen HTTP-Request lang – per RFC-Definition – per YAML-Definition','X-Message-ID lebt länger als X-Request-ID – standardmäßig aktiv','X-Request-ID: ein Request; X-Message-ID: gesamter Geschäftsvorfall (mehrere Requests)','X-Request-ID lebt länger als X-Message-ID – standardmäßig aktiv'],correct:2,diff:'hard',expl:'<strong>X-Request-ID</strong>: Lebt einen HTTP-Request lang (Paketnummer). <strong>X-Message-ID</strong>: EDI@Energy-Transaktionskennung – korreliert POST/GET/response als einen GPKE-Lieferbeginn. → <em>GPKE header/openapi.yaml · W3C Trace Context</em>'},
+{text:'UUID v4 als Idempotency-Key (Format: 8-4-4-4-12 Hex, 3. Block beginnt mit \'4\'). Welches Regex prüft das?',options:['^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$','^[a-z0-9]{32}$ – in jedem Fall – bei jeder Anfrage – laut OpenAPI-Standard','^\\\\d{8}-\\\\d{4}-\\\\d{4}-\\\\d{4}-\\\\d{12}$ – auf allen Servern','^uuid:.+$ – automatisch durch den Server – im GPKE-Kontext, unabhängig vom verwendeten Fram'],correct:0,diff:'hard',expl:'UUID v4: 3. Block beginnt mit <strong>4</strong> (Version), 4. Block mit <strong>[89abAB]</strong> (Variant-Bit). Nur Hex-Zeichen [0-9a-fA-F] erlaubt. → <em>RFC 4122 §4.1 · regex101.com</em>',code:true,codeblock:'regex101.com:\n  ✅ "7c9b3a2e-3c8a-4f0e-9a16-2a4efc0d2b8a"\n  ❌ "7c9b3a2e3c8a4f0e9a162a4efc0d2b8a"  (kein Bindestrich)\n  ❌ "7c9b3a2e-3c8a-3f0e-..."  (Version 3, nicht 4)'},
+{text:'MP-ID (Marktpartner-ID) hat exakt 13 Ziffern. Welches Regex ist korrekt?',options:['^\\d+$','^[0-9]{13,}$','^[0-9]{13}$','^\\d{12,14}$'],correct:2,diff:'medium',expl:'<strong>^[0-9]{13}$</strong>: exakt 13. \\d+ = beliebig viele, {13,} = mindestens 13, {12,14} = 12–14. Im GPKE-Schema: minLength und maxLength jeweils 13. → <em>regex101.com · GPKE schema/marketActors/marketActorId.yaml</em>',code:true,codeblock:'regex101.com:\n  ✅ "9904132000002"   (13 Stellen)\n  ❌ "990413200000"    (12 Stellen)\n  ❌ "99041320000020"  (14 Stellen)'},
+{text:'Paginierung für GET /malo/{id}/registrations: Was ist korrekt laut GPKE-Spec?',options:['Alle Ergebnisse ohne Limit zurückgeben','POST-Body mit page und size-Parametern','?limit=50&offset=0 mit Default 50, Maximum 500','Cursor-basierte Paginierung zwingend, ohne weitere '],correct:2,diff:'medium',expl:'GPKE-Spec: <code>?limit</code> (1–500, Default 50) + <code>?offset</code> (0-basiert). Einfach, toolingfreundlich. Paginierung im Body verletzt REST. → <em>GPKE api/malo.yaml · Syllabus Kap. 3</em>'},
+{text:'MaLo-ID: exakt 11 Ziffern. Welches Regex-Muster (Syntax: ^ = Anfang, $ = Ende, \\d = Ziffer, {n} = genau n mal) ist korrekt?',options:['^\\d{10}$','^\\w{11}$','^\\d{11}$','^[0-9]{1,11}$'],correct:2,diff:'medium',expl:'<strong>^\\d{11}$</strong>: exakt 11 Ziffern. \\w würde Buchstaben matchen, {10} ist zu kurz, {1,11} erlaubt 1–11. Im GPKE-Schema: <code>pattern: "^[0-9]{11}$"</code>. → <em>regex101.com (PCRE-Modus) · GPKE schema/locations/marketLocation/marketLocationId.yaml</em>',code:true,codeblock:'regex101.com – PCRE/ECMAScript:\n  ✅ "51238696781"  → Match (11 Ziffern)\n  ❌ "5123869678"   → kein Match (10 Stellen)\n  ❌ "5123869678A"  → kein Match (Buchstabe)'}
 ]},
 {id:'rpc',tag:'Gruppe 9',title:'REST vs. RPC, Frankenstein-APIs & Architektur',questions:[
-{text:'REST vs. RPC (Remote Procedure Call) – was ist der Kernunterschied?',options:['REST nur für Browser, RPC für Server','REST: Ressourcen mit HTTP-Methoden; RPC: Prozeduren/Methoden aufrufen (oft POST + Methodenname)','REST ist moderner, RPC veraltet','Kein Unterschied'],correct:1,diff:'medium',expl:'<strong>REST</strong>: <code>POST /registrations</code> – Ressource + HTTP-Verb. <strong>RPC</strong>: <code>POST /createRegistration</code> oder gRPC-Call – Methodenaufruf. REST nutzt HTTP-Semantik (Verben, Statuscodes, Caching), RPC ignoriert sie zugunsten von Methodennamen.'},
-{text:'Was ist eine „Frankenstein-API"?',options:['API mit absichtlich gemischten Standards','API mit vollständiger HTTP-Implementierung','Uneinheitliche API durch inkonsistente Design-Entscheidungen: manche Endpunkte REST, andere RPC, verschiedene Fehlerformate je Team','API ohne Dokumentation'],correct:2,diff:'medium',expl:'<strong>Frankenstein-API</strong>: Gewachsene Inkonsistenz ohne Governance. Beispiel: <code>GET /getMarketLocation</code> (RPC) neben <code>POST /registrations</code> (REST), unterschiedliche Fehlerformate, Versionen mal in URL mal im Header. Entsteht ohne API-Design-Standards.'},
-{text:'gRPC nutzt Protocol Buffers statt JSON und HTTP/2. Wann ist gRPC REST überlegen?',options:['Immer','Nie – REST ist immer besser','Bei High-Performance-Microservices intern: schnell, stark typisiert, Streaming; REST besser für öffentliche und browserbasierte APIs','Nur bei Echtzeit-Daten'],correct:2,diff:'hard',expl:'<strong>gRPC</strong>: binär, sehr schnell, stark typisiert, Code-Generierung. Nachteile: kein Browser-Support ohne Proxy, schwieriger zu debuggen. <strong>REST</strong>: universell, JSON, toolingfreundlich. Für GPKE-B2B: REST ist besser für Interoperabilität.'},
-{text:'Warum können RPC-APIs (POST für alles) nicht gecacht werden?',options:['RPC-APIs sind zu komplex','HTTP-Caching funktioniert nur für GET: GET ist idempotent und cachebar; POST-Calls sind es nicht','RPC-APIs haben keinen Cache-Control-Header','Caching ist bei APIs grundsätzlich verboten'],correct:1,diff:'medium',expl:'<strong>HTTP-Caching</strong>: GET ist idempotent und cachebar (ETag, Cache-Control). POST ist es nicht. Im GPKE-Kontext: <code>GET /malo/{id}</code> kann gecacht werden. Ein RPC-Aufruf <code>POST /getStammdaten</code> kann nie gecacht werden – mehr Serverbelastung.'}
+{text:'REST adressiert Ressourcen, RPC (Remote Procedure Call) ruft Methoden auf. Was ist der Kernunterschied?',options:['REST ist neuer und besser; RPC ist veraltet – bei jeder Anfrage','REST ist für Browser, RPC für Server-zu-Server – ohne weitere Konfiguration','Kein Unterschied – REST ist eine Art von RPC – standardmäßig aktiv','REST: URL=Ressource + HTTP-Verb=Aktion; RPC: Methodenname in URL oder POST-Body'],correct:3,diff:'medium',expl:'<strong>REST</strong>: <code>POST /registrations</code>. <strong>RPC</strong>: <code>POST /createRegistration</code> oder gRPC. REST nutzt HTTP-Semantik (Caching, Statuscodes), RPC ignoriert sie. → <em>Syllabus Kap. 1 · fielding.ics.uci.edu/pubs/dis/rest</em>'},
+{text:'Eine \'Frankenstein-API\' ist eine gewachsene, inkonsistente API. Was ist ein typisches Zeichen?',options:['API hat mehr als 10 Endpunkte – bei jeder Anfrage – standardmäßig aktiv','API nutzt sowohl GET als auch POST – für alle Ressourcen, was bei allen HTTP-Clients','Manche Endpunkte REST-Stil, andere RPC-Stil, verschiedene Fehlerformate je Team','API hat keine OpenAPI-Dokumentation – gilt für alle HTTP-Methoden'],correct:2,diff:'medium',expl:'<strong>Frankenstein-API</strong>: entsteht ohne Governance. Z.B. <code>GET /getMarketLocation</code> neben <code>POST /registrations</code>, unterschiedliche Fehlerformate, Versionen mal in URL mal im Header. → <em>Syllabus Kap. 7 · apisyouwonthate.com</em>'},
+{text:'HTTP-Caching funktioniert für GET-Anfragen, nicht für POST. Was ist die Konsequenz für RPC-APIs?',options:['RPC-Calls per POST können nie gecacht werden – mehr Serverbelastung bei wiederholten Abrufen','RPC-APIs sind langsamer weil sie mehr Daten übertragen – standardmäßig aktiv, was bei allen HTTP-','RPC-APIs haben keine Statuscodes und können nicht debuggt werden – per RFC-Definition','RPC-APIs sind unsicherer weil POST keine Signatur erlaubt – in der Praxis üblich'],correct:0,diff:'medium',expl:'<strong>HTTP-Caching</strong>: GET ist idempotent → cachebar (ETag, Cache-Control). POST ist es nicht. Ein RPC-Aufruf <code>POST /getStammdaten</code> kann nie gecacht werden. REST <code>GET /malo/{id}</code> kann gecacht werden. → <em>RFC 9111 (HTTP Caching) · Syllabus Kap. 2</em>'},
+{text:'gRPC nutzt Protocol Buffers (binär) statt JSON und HTTP/2. Wann ist gRPC REST überlegen?',options:['Immer – gRPC ist REST in jeder Hinsicht überlegen – ohne weitere Konfiguration','Bei internen High-Performance-Microservices; REST besser für öffentliche Browser-APIs','Nie – REST ist für alle Anwendungsfälle besser – ohne Ausnahmen, was bei allen HTTP-Client','Nur bei Echtzeitdaten unter 100ms – bei REST und RPC – in OAS 3.0 und 3.1'],correct:1,diff:'hard',expl:'<strong>gRPC</strong>: schnell, stark typisiert, Streaming, Code-Generierung. Nachteile: kein Browser-Support ohne Proxy. <strong>REST</strong>: universell, JSON, toolingfreundlich, öffentliche Interoperabilität. → <em>grpc.io · Syllabus Kap. 1</em>'},
+{text:'Polyglotte API-Strategie: REST + GraphQL + gRPC. Was bedeutet das für die Energiewirtschaft?',options:['GraphQL ersetzt REST vollständig in den nächsten Jahren – laut OpenAPI-Standard – in jedem Fall – bei REST und RPC','EDIFACT bleibt dominant, APIs sind nur Übergangsformat – gemäß REST-Prinzip – unabhängig vom Statuscode – ohne Ausnahmen','SOAP erlebt ein Comeback durch bessere Security-Features – für alle API-Typen – gilt für alle HTTP-Methoden','Jedes Protokoll für seinen Use Case: REST für B2B-Schnittstellen, GraphQL für flexible Abfragen, gRPC intern'],correct:3,diff:'hard',expl:'<strong>Polyglotte Strategie</strong>: kein \'einen Standard für alles\'. REST für standardisierte GPKE-Kommunikation, GraphQL für flexible MaLo-Abfragen, gRPC für interne Microservices. → <em>Syllabus Kap. 1 · BDEW Digitalisierungsstrategie</em>'}
 ]},
 {id:'indexyaml',tag:'Gruppe 10',title:'OpenAPI index.yaml & Components-Architektur',questions:[
-{text:'Polyglotte API-Landschaft: REST + GraphQL + gRPC – was bedeutet das für die Energiewirtschaft?',options:['EDIFACT bleibt dominant','GraphQL ersetzt REST vollständig','REST für B2B-Schnittstellen, GraphQL für flexible Datenabrufe, gRPC intern – kein einziger Standard für alles','SOAP kommt zurück'],correct:2,diff:'hard',expl:'<strong>Polyglotte Strategie</strong>: REST für standardisierte GPKE/UTILMD-Kommunikation, GraphQL für flexible MaLo-Datenabrufe, gRPC für interne Hochleistungs-Microservices. Energieversorger brauchen alle drei – der Use Case entscheidet, nicht die Mode.'},
-{text:'Warum gibt es eine <code>index.yaml</code> im GPKE-Repo-Root?',options:['Enthält alle HTTP-Endpunkte','Zentraler Aggregator: verknüpft API-Spec, Schema-Bibliothek und Header-Definitionen – Tooling löst den gesamten Dependency-Graph von hier auf','Nur für GitHub Pages nötig','OpenAPI-Pflichtdatei laut Spec'],correct:1,diff:'medium',expl:'<strong>index.yaml</strong>: ein Einstiegspunkt für das gesamte Repository. Referenziert <code>api/malo.yaml</code> (Endpunkte), <code>schema/openapi.yaml</code> (Schemas) und <code>header/openapi.yaml</code> (Header) per $ref. Redocly, Stoplight und Spectral brauchen nur diese eine Datei.'},
-{text:'Warum registriert index.yaml Parameter in <code>components/parameters</code> obwohl sie schon in malo.yaml stehen?',options:['Repository-weite Wiederverwendung: andere API-Dateien können <code>$ref: "./index.yaml#/components/parameters/marketLocationId"</code> nutzen','Versehen im Repository-Design','Duplizierung für Schnellzugriff','YAML erlaubt keine Parameter außerhalb von /paths'],correct:0,diff:'hard',expl:'<strong>components/parameters in index.yaml</strong>: Stabile öffentliche Schnittstelle des Repos. Neue API-Dateien müssen nicht auf malo.yaml zeigen – sie referenzieren index.yaml. Bei Umbenennungen nur eine Stelle ändern.'},
-{text:'Unterschied <code>schema/openapi.yaml</code> vs. <code>index.yaml</code>?',options:['schema/openapi.yaml: nur Daten-Schemas (MaLo, MeLo…); index.yaml: aggregiert alles (Schemas + APIs + Header)','schema/openapi.yaml für OAS 3.1, index.yaml für OAS 3.0','Identisch','schema/openapi.yaml ist Produktion, index.yaml für Tests'],correct:0,diff:'medium',expl:'<strong>schema/openapi.yaml</strong>: reine Schema-Bibliothek, nur <code>components/schemas</code>. <strong>index.yaml</strong>: Repository-Aggregator, verweist auf schema/openapi.yaml + api/malo.yaml + header/openapi.yaml. Zwei Abstraktionsebenen.'},
-{text:'index.yaml hatte zwei <code>parameters:</code>-Schlüssel unter components. Was passierte?',options:['YAML-Syntaxfehler – Datei konnte nicht geladen werden','Zweiter Block überschrieb ersten stillschweigend – Parameter aus Block 1 gingen verloren','Beide Blöcke wurden zusammengeführt','OpenAPI-Validator zeigte Duplikat-Fehler'],correct:1,diff:'hard',expl:'<strong>YAML Duplicate Key</strong>: kein Syntaxfehler, aber der zweite Wert gewinnt stillschweigend. Im GPKE-Repo: <code>marketLocationId</code>, <code>supplyStartId</code> und <code>deregistrationRequestId</code> aus Block 1 gingen verloren. Stoplight meldete: "required property $ref missing".'}
+{text:'schema/openapi.yaml vs. index.yaml: Was ist der Unterschied?',options:['schema/openapi.yaml: nur Daten-Schemas; index.yaml: aggregiert Schemas + API + Header','Beide sind identisch – nur verschiedene Namen – per RFC-Definition – bei REST und RPC','schema/openapi.yaml für OAS 3.1, index.yaml für OAS 3.0 – auf allen Servern','schema/openapi.yaml ist für Produktion, index.yaml nur für Tests'],correct:0,diff:'medium',expl:'<strong>schema/openapi.yaml</strong>: reine Schema-Bibliothek, nur components/schemas (MaLo, MeLo, Enums…). <strong>index.yaml</strong>: Repository-Aggregator, verweist auf schema/, api/ und header/. Zwei Abstraktionsebenen. → <em>GPKE schema/openapi.yaml · GPKE index.yaml</em>'},
+{text:'index.yaml liegt im Repository-Root. Welche Funktion hat sie?',options:['Sie ist die Pflicht-Einstiegsdatei laut OpenAPI-Standard – im GPKE-Kontext','Sie aggregiert API-Spec, Schemas und Header – ein Einstiegspunkt für Tooling','Sie enthält alle HTTP-Endpunkte des Repositories direkt','Sie ist nur für den Redocly-Bundle-Schritt nötig – im GPKE-Kontext'],correct:1,diff:'medium',expl:'<strong>index.yaml</strong>: zentraler Aggregator. Referenziert api/malo.yaml (Endpunkte), schema/openapi.yaml (Schemas) und header/openapi.yaml (Header) per $ref. Redocly, Stoplight und Spectral brauchen nur diese eine Datei. → <em>Redocly Docs Multi-file · GPKE index.yaml</em>'},
+{text:'index.yaml hat components/parameters obwohl Parameter schon in malo.yaml stehen. Warum?',options:['YAML-Pflicht: Parameter müssen in jeder Datei neu deklariert werden – laut OpenAPI-Standard','Stoplight-Workaround für einen bekannten Linter-Fehler – ohne Header-Angabe – in OAS 3.0 und 3.1','Repository-weite Wiederverwendung: andere API-Dateien referenzieren index.yaml statt malo.yaml direkt','Performance: doppelte Deklaration beschleunigt das Bundling – per YAML-Definition'],correct:2,diff:'hard',expl:'<strong>Stabile öffentliche Schnittstelle</strong>: Neue API-Dateien referenzieren <code>index.yaml#/components/parameters/marketLocationId</code>. Bei Umbenennung in malo.yaml: nur index.yaml ändern, alle anderen Dateien bleiben unberührt. → <em>GPKE index.yaml · OpenAPI Spec §4.8.3</em>'},
+{text:'JSON Pointer (RFC 6901): Schrägstriche in $ref-Pfaden werden zu ~1. Was ergibt /malo/{id}/registrations?',options:['./api/malo.yaml#/paths/malo-id-registrations','./api/malo.yaml#/paths/~1malo~1{id}~1registrations','./api/malo.yaml#/paths/%2Fmalo%2F{id}%2Fregistrations','./api/malo.yaml#paths.malo.{id}.registrations'],correct:1,diff:'hard',expl:'<strong>JSON Pointer RFC 6901</strong>: <code>/</code> → <code>~1</code>, <code>~</code> → <code>~0</code>. Pfad <code>/malo/{id}/registrations</code> → <code>~1malo~1{id}~1registrations</code>. URL-Encoding %2F wäre falsch hier. → <em>RFC 6901 §3 · GPKE index.yaml paths-Abschnitt</em>'},
+{text:'index.yaml hatte zwei parameters:-Schlüssel unter components. Was passierte stillschweigend?',options:['YAML-Syntaxfehler – Datei konnte nicht geladen werden – in OAS 3.0 und 3.1','Zweiter Block überschrieb ersten – Parameter aus Block 1 gingen verloren','Beide Blöcke wurden automatisch zusammengeführt','OpenAPI-Validator zeigte sofort einen Fehler – in der Praxis üblich'],correct:1,diff:'hard',expl:'<strong>YAML Duplicate Key</strong>: kein Syntaxfehler, aber zweiter Wert gewinnt stillschweigend. marketLocationId, supplyStartId und deregistrationRequestId aus Block 1 waren unsichtbar. Stoplight meldete: "required property $ref missing". → <em>YAML Spec §3.3.1 · GPKE index.yaml Bugfix</em>'}
 ]},
-{id:'headers',tag:'Gruppe 11',title:'HTTP-Header: X-Request-ID, X-Message-ID, Idempotency-Key & Versionierung',questions:[
-{text:'X-Request-ID vs. X-Message-ID: Kurz gefasst?',options:['Beide identisch','X-Request-ID: ein Request (Tracing); X-Message-ID: alle Requests eines Geschäftsvorfalls (Prozesskorrelation)','X-Request-ID für Server, X-Message-ID für Clients','X-Message-ID veraltet'],correct:1,diff:'medium',expl:'<strong>X-Request-ID</strong>: Lebt einen HTTP-Request. Wie Paketnummer beim Kurier. <strong>X-Message-ID</strong>: EDI@Energy-Transaktionskennung. Wie Auftragsnummer – korreliert POST /registrations + GET /{id} + POST /response als einen GPKE-Lieferbeginn-Vorgang.'},
-{text:'Idempotency-Key (RFC 8694 = Standard für sichere POST-Retries): Netzwerkfehler nach POST. Was passiert beim Retry?',options:['Server legt zweite Anmeldung an','Server gibt gecachte Erstantwort zurück – keine doppelte Anmeldung','Server gibt 409 Conflict zurück','Server ignoriert den Key'],correct:1,diff:'medium',expl:'<strong>Ablauf</strong>: Client generiert UUID v4. POST mit <code>Idempotency-Key: 7c9b3a2e-…</code>. Netzwerkfehler. Retry mit gleicher UUID. Server findet UUID im Cache → gibt 201-Antwort zurück. Kein zweiter Lieferbeginn. RFC 8694 definiert genau dieses Verhalten.'},
-{text:'Warum gehört die API-Version NICHT in die URI (z.B. /v2/malo/{id})?',options:['URI-Versionierung ist empfohlener REST-Standard','/v1/ und /v2/ der gleichen MaLo verletzen REST: eine Ressource = eine URI; Version betrifft die Repräsentation, nicht die Ressource – gehört in den Header','URI-Versionierung ist technisch nicht möglich','Header-Versionierung ist schneller'],correct:1,diff:'hard',expl:'<strong>REST-Prinzip</strong>: eine URI identifiziert eine Ressource dauerhaft. MaLo 51238696781 ist immer <code>/malo/51238696781</code>. Versionen ändern die Darstellung, nicht die Ressource. Korrekt: <code>Accept: application/json; version=2</code> oder <code>X-API-Spec-Version: 2.0</code> im Header.'},
-{text:'X-API-Spec-Ref-Header enthält z.B. <code>git:edgar-jung-test/gpke@v2.1.0</code>. Warum?',options:['Identifiziert den API-Key','Enthält die Spec-Version: exakt nachvollziehbar mit welcher OpenAPI-Version ein Request verarbeitet wurde','Signiert die HTTP-Nachricht','Gibt die Antwortzeit an'],correct:2,diff:'hard',expl:'<strong>X-API-Spec-Ref</strong>: Reproduzierbarkeit und Compliance. Im Fehlerfall: welche Spec-Version war aktiv? Format: <code>git:org/repo@tag</code>. Für regulierte Energiewirtschaft unverzichtbar – Audit-Trail auf Spec-Ebene.'},
-{text:'If-Match schickt falschen ETag-Wert. Was antwortet der Server?',options:['200 OK – Zustand wird trotzdem aktualisiert','202 Accepted – asynchrone Verarbeitung','412 Precondition Failed – ETag stimmt nicht, Optimistic Locking greift','204 No Content'],correct:2,diff:'medium',expl:'<strong>412 Precondition Failed</strong>: Client hatte <code>"state:draft"</code> erwartet, Ressource ist bereits <code>"state:submitted"</code>. Optimistic Locking verhindert Lost-Update. Client muss erst GET → neuen ETag holen → dann erneut PATCH senden.'}
+{id:'headers',tag:'Gruppe 11',title:'HTTP-Header: X-Request-ID, Idempotency-Key & Versionierung',questions:[
+{text:'REST-Prinzip: Eine URI identifiziert eine Ressource dauerhaft. Warum verletzt /v2/malo/{id} dieses Prinzip?',options:['URI-Versionierung ist langsamer als Header-Versionierung – auf allen Servern','MaLo 51238… ist immer dieselbe Ressource – /v1/ und /v2/ führen zwei URIs für eine Ressource ein','OpenAPI 3.0 erlaubt keine Versionsnummern in Pfaden – standardmäßig aktiv, was bei allen HTTP-Clients','GitHub Pages kann versionierte Pfade nicht rendern – gilt für alle HTTP-Methoden'],correct:1,diff:'hard',expl:'REST-Prinzip (Roy Fielding): <strong>eine Ressource = eine URI</strong>. Version betrifft die Repräsentation, nicht die Ressource. Korrekt: <code>Accept: application/json; version=2</code> oder <code>X-API-Spec-Version</code>-Header. → <em>RFC 9110 §3.1 · fielding.ics.uci.edu/pubs/dis/rest · Syllabus Kap. 7</em>'},
+{text:'If-Match sendet falschen ETag-Wert. Was antwortet der Server und warum?',options:['412 Precondition Failed – ETag stimmt nicht, Optimistic Locking schützt vor Lost-Update','200 OK – Zustand wird trotzdem aktualisiert – ohne Header-Angabe, ohne weitere Konfiguration','202 Accepted – Verarbeitung asynchron gestartet – per YAML-Definition','204 No Content – keine Änderung nötig – in der Praxis üblich – bei REST und RPC'],correct:0,diff:'medium',expl:'<strong>412 Precondition Failed</strong>: Client hatte "state:draft" erwartet, Ressource ist bereits "state:submitted". Optimistic Locking verhindert verlorene Updates. Client muss GET → neuen ETag → erneut PATCH. → <em>RFC 9110 §13.1.1 (If-Match) · GPKE header/headers/ifMatch.yaml</em>'},
+{text:'X-API-Spec-Ref-Header enthält <code>git:edgar-jung-test/gpke@v2.1.0</code>. Warum ist das für GPKE wichtig?',options:['Er signiert die HTTP-Nachricht digital – per RFC-Definition – laut OpenAPI-Standard','Er gibt die Antwortzeit des Servers an – ohne weitere Konfiguration – laut OpenAPI-Standard','Er identifiziert den API-Key des Clients – für alle Ressourcen','Compliance: exakt nachvollziehbar mit welcher Spec-Version ein Request verarbeitet wurde'],correct:3,diff:'hard',expl:'<strong>X-API-Spec-Ref</strong>: Audit-Trail auf Spec-Ebene. Im Fehlerfall: welche OpenAPI-Version war aktiv? Für regulierte Energiewirtschaft unverzichtbar. Format: <code>git:org/repo@tag</code>. → <em>GPKE header/headers/xApiSpecRef.yaml · GPKE docs/security/</em>'},
+{text:'Idempotency-Key (RFC 8694): Netzwerkfehler nach POST, Retry mit gleicher UUID. Was macht der Server?',options:['Gibt die gecachte Erstantwort zurück – keine neue Ressource','Legt zweite Ressource an und gibt neue ID zurück','Gibt 409 Conflict zurück – ohne weitere Konfiguration','Ignoriert den Header und verarbeitet erneut, ohne weitere Konfig'],correct:0,diff:'medium',expl:'<strong>RFC 8694</strong>: Server cached UUID + Antwort. Retry = gleiche UUID → gecachte Antwort → kein zweiter Lieferbeginn. Für GPKE mit Abrechnungsrelevanz zwingend erforderlich. → <em>RFC 8694 · GPKE header/headers/idempotencyKey.yaml</em>'},
+{text:'X-Request-ID (ein Request) vs. X-Message-ID (ein Geschäftsvorfall): Was ist der Unterschied in der Lebensdauer?',options:['Beide leben genau einen HTTP-Request lang – gemäß REST-Prinzip, was bei allen HTTP-Client','X-Message-ID ist veraltet und durch X-Request-ID ersetzt – für alle API-Typen','X-Request-ID ist für Server-Logs, X-Message-ID nur für Client-Logs','X-Request-ID: ein Request (Tracing); X-Message-ID: alle Requests eines GPKE-Vorgangs'],correct:3,diff:'medium',expl:'<strong>X-Request-ID</strong>: Lebt einen Request. Wie Paketnummer beim Kurier. <strong>X-Message-ID</strong>: EDI@Energy-Transaktionskennung – korreliert POST, GET und POST /response als einen Lieferbeginn-Vorgang. → <em>GPKE header/openapi.yaml · W3C Trace Context</em>'}
 ]}
 ];
+// ═══════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════
+let allQ=[], cur=0, ans={}, timerInterval=null, timeLeft=1200;
+let currentMode='all'; // 'all' or group id
+let currentGroupStart=0, currentGroupEnd=0;
 
-let allQ=[],cur=0,ans={};
-function build(){allQ=[];G.forEach(g=>g.questions.forEach(q=>allQ.push({...q,gid:g.id,gtag:g.tag,gtitle:g.title})));}
+function buildQ(groupId){
+  if(groupId==='all'){
+    allQ=[];
+    G.forEach(g=>g.questions.forEach(q=>allQ.push({...q,gid:g.id,gtag:g.tag,gtitle:g.title})));
+  } else {
+    const g=G.find(x=>x.id===groupId);
+    allQ=g.questions.map(q=>({...q,gid:g.id,gtag:g.tag,gtitle:g.title}));
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  INIT & HOME
+// ═══════════════════════════════════════════════════════════
 window.onload=function(){
-  build();
-  const gp=document.getElementById('gp');
-  G.forEach(g=>{const r=document.createElement('div');r.className='gprow';r.innerHTML=`<span class="gpnum">${g.tag}</span><span class="gpname">${g.title}</span><span class="gpcnt">${g.questions.length} Fragen</span>`;gp.appendChild(r);});
+  buildGroupCards();
+  show('ss');
 };
-function go(){cur=0;ans={};document.getElementById('ss').style.display='none';document.getElementById('rs').style.display='none';document.getElementById('qs').style.display='block';render();}
+
+function buildGroupCards(){
+  const grid=document.getElementById('groups-grid');
+  grid.innerHTML='';
+  G.forEach(g=>{
+    const d=document.createElement('div');
+    d.className='gc-card';
+    d.id='gc-'+g.id;
+    d.innerHTML=`<span class="gc-num">${g.tag}</span>
+      <div class="gc-title">${g.title}</div>
+      <div class="gc-count">${g.questions.length} Fragen</div>
+      <span class="gc-arrow">→</span>`;
+    d.onclick=()=>startGroup(g.id);
+    grid.appendChild(d);
+  });
+}
+
+function updateGroupCards(){
+  G.forEach(g=>{
+    const card=document.getElementById('gc-'+g.id);
+    if(!card) return;
+    const qs=allQ.filter(q=>q.gid===g.id);
+    const answered=qs.filter((_,i)=>ans[allQ.indexOf(qs[i])]!==undefined).length;
+    card.className='gc-card' + (answered===g.questions.length?' done':(answered>0?' in-progress':''));
+  });
+}
+
+function goHome(){
+  stopTimer();
+  show('ss');
+  document.getElementById('timer-wrap').style.display='none';
+  document.getElementById('prog-wrap').style.display='none';
+  document.getElementById('htitle').textContent='API – Wissenstest';
+  updateGroupCards();
+}
+
+function show(id){
+  ['ss','qs','rs'].forEach(x=>document.getElementById(x).style.display=x===id?'block':'none');
+}
+
+// ═══════════════════════════════════════════════════════════
+//  START MODES
+// ═══════════════════════════════════════════════════════════
+function startAll(){
+  currentMode='all';
+  cur=0; ans={};
+  buildQ('all');
+  startTimer(1200);
+  document.getElementById('timer-wrap').style.display='flex';
+  document.getElementById('prog-wrap').style.display='flex';
+  document.getElementById('htitle').textContent='Alle Gruppen – 60 Fragen';
+  show('qs');
+  render();
+}
+
+function startGroup(groupId){
+  currentMode=groupId;
+  cur=0; ans={};
+  buildQ(groupId);
+  stopTimer();
+  document.getElementById('timer-wrap').style.display='none';
+  document.getElementById('prog-wrap').style.display='flex';
+  const g=G.find(x=>x.id===groupId);
+  document.getElementById('htitle').textContent=g.title;
+  show('qs');
+  render();
+}
+
+// ═══════════════════════════════════════════════════════════
+//  TIMER
+// ═══════════════════════════════════════════════════════════
+function startTimer(seconds){
+  stopTimer();
+  timeLeft=seconds;
+  updateTimerDisplay();
+  timerInterval=setInterval(()=>{
+    timeLeft--;
+    updateTimerDisplay();
+    if(timeLeft<=0){
+      stopTimer();
+      document.getElementById('modal-answered').textContent=Object.keys(ans).length;
+      document.getElementById('timeout-modal').classList.add('show');
+    }
+  },1000);
+}
+
+function stopTimer(){
+  if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
+}
+
+function updateTimerDisplay(){
+  const m=Math.floor(timeLeft/60), s=timeLeft%60;
+  const disp=document.getElementById('timer-display');
+  const fill=document.getElementById('timer-fill');
+  disp.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+  fill.style.width=(timeLeft/1200*100)+'%';
+  if(timeLeft<=120){
+    disp.className='timer-display danger';
+    fill.style.background='var(--timer-danger)';
+  } else if(timeLeft<=300){
+    disp.className='timer-display warn';
+    fill.style.background='var(--timer-warn)';
+  } else {
+    disp.className='timer-display';
+    fill.style.background='var(--blue)';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  RENDER QUESTION
+// ═══════════════════════════════════════════════════════════
 function render(){
   const q=allQ[cur];
-  document.getElementById('pf').style.width=Math.round(cur/allQ.length*100)+'%';
-  document.getElementById('pl').textContent=(cur+1)+' / '+allQ.length;
-  document.getElementById('gb').textContent=q.gtag;
-  document.getElementById('gt').textContent=q.gtitle;
+  // Progress
+  const pct=Math.round(cur/allQ.length*100);
+  document.getElementById('pf').style.width=pct+'%';
+  document.getElementById('pl').textContent=(cur+1)+'/'+allQ.length;
+  // Group header
+  document.getElementById('gbadge').textContent=q.gtag;
+  document.getElementById('gtitle').textContent=q.gtitle;
   const answered=ans[cur]!==undefined;
   const L=['A','B','C','D'];
+  const diff={easy:'Einfach',medium:'Mittel',hard:'Schwer'}[q.diff];
   const cb=q.code&&q.codeblock?`<div class="cblock">${q.codeblock}</div>`:'';
   const opts=q.options.map((o,i)=>{
     let c='';
     if(answered){if(i===q.correct)c=i===ans[cur]?'correct':'reveal';else if(i===ans[cur])c='wrong';}
     return `<button class="opt ${c}" onclick="pick(${i})" ${answered?'disabled':''}><span class="ol">${L[i]}</span><span>${o}</span></button>`;
   }).join('');
-  const diff={easy:'Einfach',medium:'Mittel',hard:'Schwer'}[q.diff];
-  document.getElementById('qc').innerHTML=`<div class="qcard"><div class="qmeta"><span class="qnum">Frage ${cur+1} von ${allQ.length}</span><span class="qdiff diff-${q.diff}">${diff}</span></div><div class="qtext">${q.text}</div>${cb}<div class="opts">${opts}</div><div class="expl ${answered?'show':''}">${q.expl}</div></div>`;
-  document.getElementById('bp2').disabled=cur===0;
+  document.getElementById('qc').innerHTML=`
+    <div class="qcard">
+      <div class="qmeta">
+        <span class="qnum">Frage ${cur+1} von ${allQ.length}</span>
+        <span class="qdiff diff-${q.diff}">${diff}</span>
+      </div>
+      <div class="qtext">${q.text}</div>
+      ${cb}
+      <div class="opts">${opts}</div>
+      <div class="expl ${answered?'show':''}">${q.expl}</div>
+    </div>`;
+  document.getElementById('btn-prev').disabled=cur===0;
   const last=cur===allQ.length-1;
-  document.getElementById('bn').textContent=last?'Auswertung →':'Weiter →';
-  document.getElementById('bn').disabled=!answered;
+  document.getElementById('btn-next').textContent=last?'Auswertung →':'Weiter →';
+  document.getElementById('btn-next').disabled=!answered;
+  window.scrollTo({top:0,behavior:'smooth'});
 }
-function pick(i){if(ans[cur]!==undefined)return;ans[cur]=i;render();}
-function nav(d){const n=cur+d;if(n<0)return;if(n>=allQ.length){results();return;}cur=n;render();window.scrollTo({top:0,behavior:'smooth'});}
-function results(){
-  document.getElementById('qs').style.display='none';
-  document.getElementById('rs').style.display='block';
-  const tot=allQ.length,corr=allQ.filter((q,i)=>ans[i]===q.correct).length,wrong=Object.keys(ans).length-corr,skip=tot-Object.keys(ans).length,pct=Math.round(corr/tot*100);
+
+function pick(i){
+  if(ans[cur]!==undefined) return;
+  ans[cur]=i;
+  render();
+}
+
+function nav(d){
+  const n=cur+d;
+  if(n<0) return;
+  if(n>=allQ.length){showResults();return;}
+  cur=n; render();
+}
+
+// ═══════════════════════════════════════════════════════════
+//  RESULTS
+// ═══════════════════════════════════════════════════════════
+function showResults(){
+  stopTimer();
+  document.getElementById('timeout-modal').classList.remove('show');
+  const tot=allQ.length;
+  const corr=allQ.filter((q,i)=>ans[i]===q.correct).length;
+  const wrong=Object.keys(ans).length-corr;
+  const skip=tot-Object.keys(ans).length;
+  const pct=Math.round(corr/tot*100);
+  const elapsed=1200-timeLeft;
+  const em=Math.floor(elapsed/60), es=elapsed%60;
+  const timeStr=currentMode==='all'?(em+'m '+(es<10?'0':'')+es+'s'):'–';
+
   let grade,gcol,title,sub;
   if(pct>=92){grade='1';gcol='#1E7E34';title='Sehr gut';sub='Exzellent – bereit für die REST-Migration.';}
-  else if(pct>=80){grade='2';gcol='#0070C0';title='Gut';sub='Solide – einige Details vertiefen.';}
+  else if(pct>=80){grade='2';gcol='#0070C0';title='Gut';sub='Solide Kenntnisse – einige Details vertiefen.';}
   else if(pct>=67){grade='3';gcol='#856404';title='Befriedigend';sub='Gute Basis, wichtige Lücken vorhanden.';}
   else if(pct>=50){grade='4';gcol='#E87722';title='Ausreichend';sub='Intensive Nacharbeit empfohlen.';}
   else if(pct>=30){grade='5';gcol='#C0392B';title='Mangelhaft';sub='Strukturierte Schulung erforderlich.';}
   else{grade='6';gcol='#C0392B';title='Ungenügend';sub='Grundlagen müssen erarbeitet werden.';}
-  const gc=document.getElementById('gc');gc.textContent=grade;gc.style.borderColor=gcol;gc.style.color=gcol;
+
+  const gc=document.getElementById('gc2');
+  gc.textContent=grade; gc.style.borderColor=gcol; gc.style.color=gcol;
   document.getElementById('rgl').textContent='Note '+grade+' – '+title;
-  document.getElementById('rsl').textContent=sub;
-  document.getElementById('sr').innerHTML=`<div class="sb"><div class="val" style="color:#1E7E34">${corr}</div><div class="lbl">Richtig</div></div><div class="sb"><div class="val" style="color:#C0392B">${wrong}</div><div class="lbl">Falsch</div></div><div class="sb"><div class="val" style="color:#856404">${skip}</div><div class="lbl">Übersprungen</div></div><div class="sb"><div class="val" style="color:#003F7D">${pct}%</div><div class="lbl">Gesamt</div></div>`;
-  document.getElementById('secrows').innerHTML=G.map(g=>{const qs=allQ.filter(q=>q.gid===g.id);const c=qs.filter(q=>ans[allQ.indexOf(q)]===q.correct).length;const p=Math.round(c/qs.length*100);const col=p>=75?'#1E7E34':p>=50?'#856404':'#C0392B';return`<div class="srow"><div class="sname">${g.tag}: ${g.title}</div><div class="sbw"><div class="sbf" style="width:${p}%;background:${col}"></div></div><div class="sfr">${c}/${qs.length}</div></div>`;}).join('');
-  const rm={json:{i:'📦',t:['json.org – Syntax-Referenz','json-schema.org – JSON Schema','OpenAPI type/format in schema/ des GPKE-Repos','jqplay.org – JSON interaktiv abfragen']},rest:{i:'🌐',t:['restfulapi.net – REST Best Practices','RFC 9110 – HTTP Semantics','httpstatuses.com – Statuscodes','Richardson Maturity Model']},openapi:{i:'📄',t:['spec.openapis.org/oas/v3.0.3','Stoplight Studio Tutorial','openapi-map.apihandyman.io – visuelles Cheatsheet','index.yaml im GPKE-Repo studieren']},async:{i:'⚡',t:['Syllabus Kapitel 5: Synchrone + asynchrone APIs','RFC 8694 – Idempotency-Key','ETag + If-Match in header/openapi.yaml nachvollziehen','developer.mozilla.org – HTTP Status 4xx/5xx']},migration:{i:'🔄',t:['Syllabus Kapitel 3: API-Migrationsstufen','x-edifact-mapping in schema/message/ studieren','GPKE Swagger UI: edgar-jung-test.github.io/gpke/','api/malo.yaml vollständig lesen']},security:{i:'🔒',t:['RFC 9421 – HTTP Message Signatures','jwt.io – JWT interaktiv dekodieren','docs/security/ im GPKE-Repo','oauth.net/2/ – Client Credentials Flow']},tooling:{i:'🛠',t:['docs.github.com – GitHub Actions','redocly.com/docs/cli – Quickstart','git-scm.com/book – Branching','tortoisegit.org/docs/']},design:{i:'🎨',t:['regex101.com – Regex interaktiv testen','Syllabus Kapitel 4: Ressourcenmodellierung','OpenAPI pattern-Validierung in schema/locations/','restfulapi.net/resource-naming']},
-rpc:{i:'🔀',t:['Syllabus Kapitel 1: API vs. RPC vs. Messaging','grpc.io – gRPC Einführung','restfulapi.net/rest-vs-rpc/','BDEW API-Governance-Konzept studieren']},
-indexyaml:{i:'📑',t:['index.yaml im GPKE-Repo vollständig lesen','Redocly Docs: Multi-file OpenAPI','JSON Pointer RFC 6901 (für $ref-Pfade mit ~1)','schema/openapi.yaml vs. index.yaml Unterschied nachvollziehen']},
-headers:{i:'📬',t:['header/openapi.yaml im GPKE-Repo lesen','RFC 8694 – Idempotency-Key','RFC 9110 §8.8.3 – ETag und If-Match','Roy Fielding: REST-Versionierung gehört in Content Negotiation, nicht in URI']}};
-  const weak=G.filter(g=>{const qs=allQ.filter(q=>q.gid===g.id);return qs.filter(q=>ans[allQ.indexOf(q)]===q.correct).length/qs.length<0.65;});
-  document.getElementById('recob').innerHTML=weak.length===0?'<div class="ri"><div class="rt">✅ Hervorragend!</div><p style="font-size:13px;color:#58595B">Alle Gruppen solide abgedeckt. Bereit für die GPKE REST-API-Migration.</p></div>':weak.map(g=>{const r=rm[g.id];return`<div class="ri"><div class="rt">${r.i} Nacharbeiten: ${g.title}</div><ul class="rl">${r.t.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;}).join('');
-  document.getElementById('refs').innerHTML=[{l:'GPKE Swagger UI',u:'https://edgar-jung-test.github.io/gpke/'},{l:'BDEW MaKo',u:'https://www.bdew-mako.de'},{l:'OpenAPI 3.0 Spec',u:'https://spec.openapis.org/oas/v3.0.3'},{l:'RFC 9421',u:'https://www.rfc-editor.org/rfc/rfc9421'},{l:'regex101.com',u:'https://regex101.com'},{l:'jwt.io',u:'https://jwt.io'},{l:'GPKE-Repo',u:'https://github.com/edgar-jung-test/gpke'},{l:'restfulapi.net',u:'https://restfulapi.net'}].map(r=>`<a href="${r.u}" target="_blank">↗ ${r.l}</a>`).join('');
+  document.getElementById('rsl').textContent=sub+(currentMode==='all'?' · Zeit: '+timeStr:'');
+
+  document.getElementById('sr-stats').innerHTML=`
+    <div class="sb"><div class="val" style="color:var(--green)">${corr}</div><div class="lbl">Richtig</div></div>
+    <div class="sb"><div class="val" style="color:var(--red)">${wrong}</div><div class="lbl">Falsch</div></div>
+    <div class="sb"><div class="val" style="color:var(--yellow)">${skip}</div><div class="lbl">Offen</div></div>
+    <div class="sb"><div class="val" style="color:var(--blue)">${pct}%</div><div class="lbl">Gesamt</div></div>`;
+
+  // Section rows
+  const secRows=G.map(g=>{
+    const qs=allQ.filter(q=>q.gid===g.id);
+    if(!qs.length) return '';
+    const c=qs.filter(q=>ans[allQ.indexOf(q)]===q.correct).length;
+    const p=Math.round(c/qs.length*100);
+    const col=p>=75?'var(--green)':p>=50?'var(--yellow)':'var(--red)';
+    return `<div class="srow" onclick="startGroup('${g.id}')">
+      <div class="sname">${g.tag}: ${g.title}</div>
+      <div class="sbw"><div class="sbf" style="width:${p}%;background:${col}"></div></div>
+      <div class="sfr">${c}/${qs.length}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('sec-rows').innerHTML=secRows;
+
+  // Recommendations
+  const rm={
+    json:{i:'📦',t:['<strong>json.org</strong> – JSON-Syntax','<strong>json-schema.org</strong> – JSON Schema','<strong>RFC 8259</strong> – The JavaScript Object Notation','OpenAPI type/format in <em>schema/</em>']},
+    rest:{i:'🌐',t:['<strong>restfulapi.net</strong> – REST Prinzipien','<strong>RFC 9110</strong> – HTTP Semantics','<strong>httpstatuses.com</strong> – Statuscodes','<strong>martinFowler.com</strong> – Richardson Maturity Model']},
+    openapi:{i:'📄',t:['<strong>spec.openapis.org/oas/v3.0.3</strong>','<strong>Stoplight Studio</strong> Tutorial','<strong>openapi-map.apihandyman.io</strong>','GPKE <em>.spectral.mjs</em> und <em>index.yaml</em>']},
+    async:{i:'⚡',t:['<strong>RFC 8694</strong> – Idempotency-Key','<strong>RFC 7807</strong> – Problem Details','<strong>RFC 6585</strong> – Additional HTTP Status Codes','Syllabus Kap. 5: Asynchrone APIs']},
+    migration:{i:'🔄',t:['Syllabus Kap. 3: API-Migrationsstufen','GPKE <em>api/malo.yaml</em> vollständig lesen','<strong>UTILMD AHB 2.1</strong> §3 BGM/NAD-Segmente','GPKE Swagger UI: edgar-jung-test.github.io/gpke/']},
+    security:{i:'🔒',t:['<strong>RFC 9421</strong> – HTTP Message Signatures','<strong>jwt.io</strong> – JWT interaktiv dekodieren','<strong>RFC 6749 §4.4</strong> – Client Credentials Flow','GPKE <em>docs/security/</em>']},
+    tooling:{i:'🛠',t:['<strong>docs.github.com</strong> – GitHub Actions','<strong>redocly.com/docs/cli</strong>','<strong>git-scm.com/book</strong> §3','<strong>tortoisegit.org/docs/</strong>']},
+    design:{i:'🎨',t:['<strong>regex101.com</strong> – Regex interaktiv','Syllabus Kap. 4: Ressourcenmodellierung','GPKE <em>schema/locations/</em> (Regex-Pattern)','<strong>Google JSON Style Guide</strong>']},
+    rpc:{i:'🔀',t:['Syllabus Kap. 1: REST vs. RPC','<strong>grpc.io</strong> – gRPC Einführung','<strong>apisyouwonthate.com</strong> – API-Design-Fehler','<strong>RFC 9110</strong> §9 (HTTP-Caching)']},
+    indexyaml:{i:'📑',t:['GPKE <em>index.yaml</em> vollständig lesen','<strong>RFC 6901</strong> – JSON Pointer (~1-Escaping)','Redocly Docs: Multi-file OpenAPI','GPKE <em>schema/openapi.yaml</em> vs. <em>index.yaml</em>']},
+    headers:{i:'📬',t:['GPKE <em>header/openapi.yaml</em>','<strong>RFC 8694</strong> – Idempotency-Key','<strong>RFC 9110 §13.1</strong> – Conditional Requests (ETag/If-Match)','Roy Fielding: REST-Versionierung in Content Negotiation']},
+  };
+
+  const weak=G.filter(g=>{
+    const qs=allQ.filter(q=>q.gid===g.id);
+    if(!qs.length) return false;
+    return qs.filter(q=>ans[allQ.indexOf(q)]===q.correct).length/qs.length<0.65;
+  });
+
+  let recoHtml=weak.length===0
+    ?'<div class="ri"><div class="rt">✅ Hervorragend!</div><p style="font-size:12px;color:var(--gray)">Alle Gruppen solid abgedeckt. Bereit für die GPKE REST-API-Migration.</p></div>'
+    :weak.map(g=>{const r=rm[g.id];return`<div class="ri"><div class="rt">${r.i} Nacharbeiten: ${g.title}</div><ul class="rl">${r.t.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;}).join('');
+  document.getElementById('reco-body').innerHTML=recoHtml;
+
+  document.getElementById('ref-links').innerHTML=[
+    {l:'GPKE Swagger UI',u:'https://edgar-jung-test.github.io/gpke/'},
+    {l:'BDEW MaKo',u:'https://www.bdew-mako.de'},
+    {l:'OpenAPI 3.0 Spec',u:'https://spec.openapis.org/oas/v3.0.3'},
+    {l:'RFC 9421',u:'https://www.rfc-editor.org/rfc/rfc9421'},
+    {l:'regex101.com',u:'https://regex101.com'},
+    {l:'jwt.io',u:'https://jwt.io'},
+    {l:'GPKE-Repo',u:'https://github.com/edgar-jung-test/gpke'},
+    {l:'restfulapi.net',u:'https://restfulapi.net'},
+    {l:'RFC 9110',u:'https://www.rfc-editor.org/rfc/rfc9110'},
+    {l:'Syllabus PDF',u:'#'},
+  ].map(r=>`<a href="${r.u}" target="_blank">↗ ${r.l}</a>`).join('');
+
   document.getElementById('pf').style.width='100%';
-  document.getElementById('pl').textContent=tot+' / '+tot;
+  document.getElementById('pl').textContent=tot+'/'+tot;
+  show('rs');
   window.scrollTo({top:0,behavior:'smooth'});
 }
-function restart(){cur=0;ans={};document.getElementById('rs').style.display='none';document.getElementById('ss').style.display='block';document.getElementById('pf').style.width='0%';document.getElementById('pl').textContent='0 / 73';window.scrollTo({top:0,behavior:'smooth'});}
 </script>
 </body>
 </html>
