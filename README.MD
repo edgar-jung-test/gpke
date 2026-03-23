@@ -19,6 +19,8 @@ gedacht. Im Unterverzeichnis wird auf die Vorteile von OAS 3.1 eingegangen. Das 
 Schema ist aus Gründen der Komatibiltit zur apiGIT nocht auf OAS 3.0. Der moderne
 Editor Stoplight Studio kann jedoch bereits mit OAS 3.1 umgehen.
 
+Die Swagger-UI Dokumentation erhalten Sie unter [![Swagger UI](https://img.shields.io/badge/Swagger_UI-live-85EA2D?logo=swagger)](https://edgar-jung-test.github.io/gpke/)
+
 Abgedeckte Prozesse:
 
 - UTILMD-Stammdatenkommunikation (MaLo, NeLo, MeLo, Bilanzierung, Marktakteure)
@@ -37,6 +39,8 @@ The directories oas30-31Mig and oas31 are intended to illustrate new features in
 The corresponding subdirectory explains the advantages of OAS 3.1. For compatibility reasons 
 with apiGIT, the current schema is still based on OAS 3.0. However, the modern editor Stoplight Studio
 already supports OAS 3.1.
+
+Refer to Swagge-UI Documentation [![Swagger UI](https://img.shields.io/badge/Swagger_UI-live-85EA2D?logo=swagger)](https://edgar-jung-test.github.io/gpke/)
 
 Covered processes:
 
