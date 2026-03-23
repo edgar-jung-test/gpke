@@ -24,6 +24,8 @@ Abgedeckte Prozesse:
 - UTILMD-Stammdatenkommunikation (MaLo, NeLo, MeLo, Bilanzierung, Marktakteure)
 - GPKE Lieferbeginn / Lieferantenwechsel (alle 7 Prozessschritte, Prüf-IDs 55001–55038)
 
+Die komplette Dokumentation ist auch als SWAGGER UI verfügbar: [![Swagger UI](https://img.shields.io/badge/Swagger_UI-live-85EA2D?logo=swagger)](https://edgar-jung-test.github.io/gpke/)
+
 ## EN – Overview
 
 This repository contains an OpenAPI-based schema building kit for modeling GPKE- and
