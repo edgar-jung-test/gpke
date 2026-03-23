@@ -7,9 +7,9 @@
 
 ## DE – Überblick
 
-Bei den API's handelt es sich ausschließlich um einen Rahmen. 
+**Bei den API's handelt es sich ausschließlich um einen Rahmen. 
 Die vorgeschlagenen API'S müssen gegen die Prozesse validiert und entsprechend angepasst werden.
-Diese Schnittstelle darf in dieser Version nicht verwendet werden
+Diese Schnittstelle darf in dieser Version nicht verwendet werden**
 
 Dieses Verzeichnis enthält die vollständigen OpenAPI 3.0 Spezifikationen für die
 REST-APIs des GPKE/UTILMD-Projekts. Jede API-Datei ist eine eigenständige,
@@ -18,9 +18,9 @@ Bibliothek unter `../schema/` und HTTP-Header-Definitionen aus `../header/` bezi
 
 ## EN – Overview
 
-The APIs are intended solely as a framework. 
+**The APIs are intended solely as a framework. 
 The proposed APIs must be validated against the processes and adapted accordingly.
-This interface must not be used in this version.
+This interface must not be used in this version.**
 
 This directory contains the complete OpenAPI 3.0 specifications for the GPKE/UTILMD
 REST APIs. Each API file is a self-contained, executable OpenAPI specification that
