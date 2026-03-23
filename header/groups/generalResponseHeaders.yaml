@@ -33,3 +33,6 @@ headers:
 
   X-Backend-Version:
     $ref: "../headers/xBackendVersion.yaml"
+
+  X-API-Spec-Version:
+    $ref: "../headers/xApiSpecVersion.yaml"
