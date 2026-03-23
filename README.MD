@@ -16,8 +16,8 @@ und API-Sichten zusammengesetzt werden.
 
 Die Verzeichnisse oas30-31Mig und oas31 sind zur Veranschaulichung neuer Funktionen in OAS 3.1
 gedacht. Im Unterverzeichnis wird auf die Vorteile von OAS 3.1 eingegangen. Das aktuelle
-Schema ist aus Gründen der Komatibiltit zur apiGIT nocht auf OAS 3.0. Der monderne 
-Editor lightstop kann jedoch bereits mit OAS 3.1 umgehen.
+Schema ist aus Gründen der Komatibiltit zur apiGIT nocht auf OAS 3.0. Der moderne
+Editor Stoplight Studio kann jedoch bereits mit OAS 3.1 umgehen.
 
 Abgedeckte Prozesse:
 
@@ -35,7 +35,7 @@ and API views.
 
 The directories oas30-31Mig and oas31 are intended to illustrate new features in OAS 3.1. 
 The corresponding subdirectory explains the advantages of OAS 3.1. For compatibility reasons 
-with apiGIT, the current schema is still based on OAS 3.0. However, the modern editor LightStop 
+with apiGIT, the current schema is still based on OAS 3.0. However, the modern editor Stoplight Studio
 already supports OAS 3.1.
 
 Covered processes:
@@ -209,6 +209,21 @@ $ref: "../schema/composed/locationBundle.yaml"
 ```
 
 Recommended tools: **Redocly CLI**, **Swagger Editor**, **Stoplight Studio**, **Spectral**
+
+---
+
+## DE – Empfohlene Werkzeuge / EN – Recommended Tools
+
+| Tool | Website | Dateitypen / File types | Beispiel / Example | DE – Beschreibung | EN – Description |
+|------|---------|-------------------------|--------------------|-------------------|------------------|
+| **Stoplight Studio** | [stoplight.io](https://stoplight.io/studio) | `.yaml`, `.json` (OAS 3.0, OAS 3.1) | `api/malo.yaml`, `index.yaml` | Visueller OpenAPI-Editor mit Formular- und Code-Ansicht, Linting via Spectral, $ref-Auflösung und Vorschau. Empfohlener Editor für dieses Repository. | Visual OpenAPI editor with form and code view, Spectral-based linting, $ref resolution and preview. Recommended editor for this repository. |
+| **apiGit** | [apigit.io](https://apigit.io) | `.yaml`, `.json` (OAS 3.0) | `index.yaml`, `api/malo.yaml` | Git-natives API-Lifecycle-Tool: versioniert OpenAPI-Spezifikationen direkt im Repository, zeigt Diffs auf Operationsebene und erzwingt Rückwärtskompatibilität. Das aktuelle Schema bleibt aus Kompatibilitätsgründen bei OAS 3.0. | Git-native API lifecycle tool: versions OpenAPI specs directly in the repository, shows operation-level diffs and enforces backwards compatibility. The current schema stays on OAS 3.0 for apiGit compatibility. |
+| **Swagger Editor / UI** | [editor.swagger.io](https://editor.swagger.io) | `.yaml`, `.json` (OAS 2.0, OAS 3.0, OAS 3.1) | `api/malo.yaml` | Browser-basierter OpenAPI-Editor mit Live-Vorschau der API-Dokumentation. Swagger UI rendert die Dokumentation als interaktive HTML-Seite. | Browser-based OpenAPI editor with live documentation preview. Swagger UI renders the spec as an interactive HTML page. |
+| **Redocly CLI** | [redocly.com/docs/cli](https://redocly.com/docs/cli/) | `.yaml`, `.json` (OAS 3.0, OAS 3.1), `redocly.yaml` | `index.yaml` | Kommandozeilenwerkzeug zum Bündeln (`bundle`), Validieren (`lint`) und Vorschauen (`preview-docs`) von OpenAPI-Spezifikationen. Löst `$ref`-Ketten über Dateigrenzen hinweg auf. | Command-line tool for bundling (`bundle`), validating (`lint`) and previewing (`preview-docs`) OpenAPI specifications. Resolves `$ref` chains across file boundaries. |
+| **Spectral** | [stoplight.io/open-source/spectral](https://stoplight.io/open-source/spectral) | `.yaml`, `.json` (OAS), `.mjs` (Ruleset) | `.spectral.mjs` | OpenAPI-Linter mit konfigurierbaren Regelwerken. Wird in diesem Repository über `.spectral.mjs` konfiguriert. Läuft als CLI oder ist in Stoplight Studio integriert. | OpenAPI linter with configurable rulesets. Configured in this repository via `.spectral.mjs`. Runs as CLI or is integrated into Stoplight Studio. |
+| **draw.io / diagrams.net** | [app.diagrams.net](https://app.diagrams.net) | `.drawio`, `.xml`, `.svg`, `.png` | `docs/gpke/*.drawio`, `gpke-utilmd.drawio` | Kostenloses Diagrammwerkzeug für Fluss-, Sequenz- und UML-Diagramme. Die GPKE-Prozessdiagramme und das UML-Datenmodell dieses Repositories liegen im `.drawio`-Format vor. | Free diagramming tool for flow, sequence and UML diagrams. The GPKE process diagrams and the UML data model of this repository are stored in `.drawio` format. |
+| **Modelio** | [modelio.org](https://www.modelio.org) | `.xmi` (UML 2.x / XMI 2.1), `.eap` | `gpke-utilmd-modelio.xmi` | Kostenloser Open-Source-UML-Editor. Importiert XMI 2.1-Dateien nativ (`File → Import/Export → XMI Import`). Empfohlen zum Bearbeiten und Erweitern des Datenmodells. | Free open-source UML editor. Imports XMI 2.1 files natively (`File → Import/Export → XMI Import`). Recommended for editing and extending the data model. |
+| **Enterprise Architect** | [sparxsystems.com](https://sparxsystems.com) | `.eap`, `.eapx`, `.qea`, `.xmi` (UML 2.x) | `gpke-utilmd-model.xml` | Kommerzielles UML-Modellierungswerkzeug. Importiert XMI 2.1 über `File → Import → Import Package from XMI`. Vollständige UML-2-Unterstützung inkl. Code-Generierung. | Commercial UML modelling tool. Imports XMI 2.1 via `File → Import → Import Package from XMI`. Full UML 2 support including code generation. |
 
 ---
 
