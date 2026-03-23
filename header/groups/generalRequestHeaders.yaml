@@ -24,3 +24,6 @@ parameters:
 
   xClientVersion:
     $ref: "../headers/xClientVersion.yaml"
+
+  X-API-Spec-Version:
+    $ref: "../headers/xApiSpecVersion.yaml"    

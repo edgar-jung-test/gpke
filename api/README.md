@@ -49,20 +49,66 @@ LFAlt (LFA) and future supplier (LFZ).
 
 #### Prozessablauf / Process flow
 
-```
-LFNeu (LFN)              NB (Netzbetreiber)              LFAlt (LFA)           LFZ
-     │                          │                              │                  │
-     │──(1) POST registrations─▶│                              │                  │
-     │◀── 202 Accepted ─────────│                              │                  │
-     │                          │──(3) POST dereg-requests────▶│                  │
-     │                          │◀─(4) POST …/response ────────│                  │
-     │                          │                              │                  │
-     │◀─(5a) POST …/response ───│  (Bestätigung PI 55002)      │                  │
-     │  oder                    │                              │                  │
-     │◀─(5b) POST …/response ───│  (Ablehnung PI 55003)        │                  │
-     │                          │                              │                  │
-     │                          │──(6) POST assignment-term.──▶│                  │
-     │                          │──(7) POST assignment-canc.───────────────────▶  │
+```mermaid
+sequenceDiagram
+    autonumber
+    participant LFN as LFNeu<br/>Neuer Lieferant
+    participant NB as NB<br/>Netzbetreiber
+    participant LFA as LFAlt<br/>Alter Lieferant
+    participant LFZ as LFZ<br/>LFZ<br/>Zukünft. Lieferant
+
+    rect rgb(240, 244, 255)
+        Note over LFN,NB: 1 Anmeldung
+        LFN->>NB: POST createRegistration\n/registrations · PI 55001 / 55077
+        NB-->>LFN: 201 Created + Location-Header
+        LFN->>NB: PATCH patchRegistration (nur Status: draft)
+    end
+
+    rect rgb(244, 248, 240)
+        Note over LFN,NB: 2 Zuordnung
+        LFN->>NB: GET getRegistration / listRegistrations
+        NB-->>LFN: 200 OK · SupplyStart\n(inkl. existierende Zuordnung)
+    end
+
+    rect rgb(240, 244, 255)
+        Note over NB,LFA: 3 Abmeldeanfrage
+        NB->>LFA: POST createDeregistrationRequest\n/deregistration-requests · PI 55010
+        LFA-->>NB: 201 Created + Location-Header
+    end
+
+    rect rgb(248, 245, 240)
+        Note over NB,LFA: 4 Beantwortung
+        alt Bestätigung
+            LFA->>NB: POST respondToDeregistrationRequest\n.../{id}/response · PI 55011
+            NB-->>LFA: 200 OK
+        else Widerspruch
+            LFA->>NB: POST respondToDeregistrationRequest\n.../{id}/response · PI 55012 + rejectionReasons
+            NB-->>LFA: 200 OK
+        end
+    end
+
+    rect rgb(240, 244, 255)
+        Note over LFN,NB: 5 Antwort NB
+        alt Bestätigung
+            NB->>LFN: POST respondToRegistration\n.../{regId}/response · PI 55002 / 55078\neffectiveSupplyStartDate + masterData
+            LFN-->>NB: 200 OK
+        else Ablehnung
+            NB->>LFN: POST respondToRegistration\n.../{regId}/response · PI 55003 / 55080\nrejectionReasons
+            LFN-->>NB: 200 OK
+        end
+    end
+
+    rect rgb(240, 244, 255)
+        Note over NB,LFA: 6 Beendigung
+        NB->>LFA: POST notifyAssignmentTermination\n/assignment-terminations · PI 55037
+        LFA-->>NB: 201 Created
+    end
+
+    rect rgb(250, 240, 245)
+        Note over NB,LFZ: 7 Aufhebung
+        NB->>LFZ: POST notifyAssignmentCancellation\n/assignment-cancellations · PI 55038\n(nur wenn LFZ vorhanden)
+        LFZ-->>NB: 201 Created
+    end
 ```
 
 #### Vorlauffristen / Lead times (Lieferantenwechsel)

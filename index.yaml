@@ -292,27 +292,59 @@ components:
 
   # ── Parameters ──────────────────────────────────────────────────────────────
   parameters:
+    # Path parameters
     marketLocationId:
       $ref: "./api/malo.yaml#/components/parameters/marketLocationId"
     supplyStartId:
       $ref: "./api/malo.yaml#/components/parameters/supplyStartId"
     deregistrationRequestId:
       $ref: "./api/malo.yaml#/components/parameters/deregistrationRequestId"
-
-  # ── Security headers ────────────────────────────────────────────────────────────
-  parameters:
-    marketLocationId:
-      $ref: "./api/malo.yaml#/components/parameters/marketLocationId"
-    supplyStartId:
-      $ref: "./api/malo.yaml#/components/parameters/supplyStartId"
-    deregistrationRequestId:
-      $ref: "./api/malo.yaml#/components/parameters/deregistrationRequestId"
+    # Security / signature request headers (RFC 9421 + RFC 9530)
     contentDigest:
       $ref: "./header/headers/contentDigest.yaml"
     signatureInput:
       $ref: "./header/headers/signatureInput.yaml"
     signature:
       $ref: "./header/headers/signature.yaml"
+    # General request headers
+    xRequestId:
+      $ref: "./header/headers/xRequestId.yaml"
+    xMessageId:
+      $ref: "./header/headers/xMessageId.yaml"
+    idempotencyKey:
+      $ref: "./header/headers/idempotencyKey.yaml"
+    traceparent:
+      $ref: "./header/headers/traceparent.yaml"
+    prefer:
+      $ref: "./header/headers/prefer.yaml"
+    xClientVersion:
+      $ref: "./header/headers/xClientVersion.yaml"
+    # State-machine request header
+    ifMatch:
+      $ref: "./header/headers/ifMatch.yaml"
+
+  # ── Headers (Response headers) ───────────────────────────────────────────────
+  headers:
+    location:
+      $ref: "./header/openapi.yaml#/components/headers/location"
+    xMessageId:
+      $ref: "./header/openapi.yaml#/components/headers/xMessageId"
+    eTag:
+      $ref: "./header/openapi.yaml#/components/headers/eTag"
+    preferenceApplied:
+      $ref: "./header/openapi.yaml#/components/headers/preferenceApplied"
+    retryAfter:
+      $ref: "./header/openapi.yaml#/components/headers/retryAfter"
+    xServerVersion:
+      $ref: "./header/openapi.yaml#/components/headers/xServerVersion"
+    xApiSpecVersion:
+      $ref: "./header/openapi.yaml#/components/headers/xApiSpecVersion"
+    xApiSpecRef:
+      $ref: "./header/openapi.yaml#/components/headers/xApiSpecRef"
+    xApiSpecId:
+      $ref: "./header/openapi.yaml#/components/headers/xApiSpecId"
+    xBackendVersion:
+      $ref: "./header/openapi.yaml#/components/headers/xBackendVersion"
 
   # ── Security ─────────────────────────────────────────────────────────────────
   securitySchemes:
