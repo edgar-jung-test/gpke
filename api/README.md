@@ -16,6 +16,8 @@ REST-APIs des GPKE/UTILMD-Projekts. Jede API-Datei ist eine eigenständige,
 ausführbare OpenAPI-Spezifikation, die Schemas per `$ref` aus der zentralen
 Bibliothek unter `../schema/` und HTTP-Header-Definitionen aus `../header/` bezieht.
 
+[Testen Sie Ihr Wissen zu API's](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke-quiz.html)
+
 ## EN – Overview
 
 **The APIs are intended solely as a framework. 
@@ -26,6 +28,8 @@ This directory contains the complete OpenAPI 3.0 specifications for the GPKE/UTI
 REST APIs. Each API file is a self-contained, executable OpenAPI specification that
 references schemas from the central library under `../schema/` and HTTP header
 definitions from `../header/`.
+
+[check you api knowledge](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke-quiz.html)
 
 ---
 
