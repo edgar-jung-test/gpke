@@ -125,6 +125,8 @@ docs/
 >
 > The Frankenstein approach only replaces the transport channel (AS4/e-mail → HTTPS) while keeping EDIFACT process logic and data structures intact. HTTP degrades to a mere pipe — all benefits of modern APIs are lost.
 
+ [`api differences`](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/usage/api-ansaetze-vergleich.html)
+
 ---
 
 ## Zusammenhang mit dem Repository / Relation to the Repository
