@@ -40,7 +40,7 @@ The corresponding subdirectory explains the advantages of OAS 3.1. For compatibi
 with apiGIT, the current schema is still based on OAS 3.0. However, the modern editor Stoplight Studio
 already supports OAS 3.1.
 
-Refer to Swagge-UI Documentation [![Swagger UI](https://img.shields.io/badge/Swagger_UI-live-85EA2D?logo=swagger)](https://edgar-jung-test.github.io/gpke/)
+Refer to Swagger-UI Documentation [![Swagger UI](https://img.shields.io/badge/Swagger_UI-live-85EA2D?logo=swagger)](https://edgar-jung-test.github.io/gpke/)
 
 Covered processes:
 
