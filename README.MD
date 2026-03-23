@@ -45,6 +45,8 @@ Covered processes:
 - UTILMD master data communication (MaLo, NeLo, MeLo, balancing, market actors)
 - GPKE supply start / supplier change (all 7 process steps, check identifiers 55001–55038)
 
+see Die komplette Dokumentation ist auch als SWAGGER UI verfügbar: [![Swagger UI](https://img.shields.io/badge/Swagger_UI-live-85EA2D?logo=swagger)](https://edgar-jung-test.github.io/gpke/) for Swagger UI
+
 ---
 
 ## Repository-Struktur / Repository Structure
