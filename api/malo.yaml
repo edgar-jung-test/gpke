@@ -31,8 +31,13 @@ paths:
       summary: Submit a registration request (Anmeldung) – Prüf-ID 55001 / 55077
       description: |
         **Step 1 – Registration (Anmeldung).** The new supplier (LFN) registers a market location with the grid operator (NB).
-        Lead times (working days before supply start): Case 1 (MaLo-ID only): ≥ 7 WT. Case 2 (address / attributes): ≥ 10 WT.
-        **German:** **Schritt 1 – Anmeldung.** Der neue Lieferant (LFN) meldet eine Marktlokation beim Netzbetreiber (NB) an. Vorlauffristen: Fall 1 (nur MaLo-ID) ≥ 7 WT, Fall 2 (Adresse / Attribute) ≥ 10 WT.
+        Lead times (working days before supply start): 
+        - Case 1 (MaLo-ID only): ≥ 7 WT. 
+        - Case 2 (address / attributes): ≥ 10 WT.
+        **German:** **Schritt 1 – Anmeldung.** 
+        Der neue Lieferant (LFN) meldet eine Marktlokation beim Netzbetreiber (NB) an. Vorlauffristen: 
+        - Fall 1 (nur MaLo-ID) ≥ 7 WT, 
+        - Fall 2 (Adresse / Attribute) ≥ 10 WT.
       operationId: createRegistration
       tags:
         - registrations
