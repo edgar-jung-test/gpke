@@ -75,61 +75,49 @@ jobs:
           cp ${SRC}/*.png  ui/ 2>/dev/null || true
           cp ${SRC}/swagger-initializer.js ui/
 
-      # ── 7. Patch swagger-initializer.js ──────────────────────────────────
-      # Replace the default Petstore URL with our bundled spec.
+      # ── 7. Write swagger-initializer.js ─────────────────────────────────
+      # Overwrite completely – avoids heredoc indentation issues and
+      # the double window.onload conflict in the shipped initializer.
       - name: Configure Swagger UI initializer
         run: |
-          sed -i \
-            's|url: "https://petstore.swagger.io/v2/swagger.json"|url: "./openapi-bundled.yaml"|g' \
-            ui/swagger-initializer.js
-
-          # Also set a custom title and disable the top-bar URL input
-          # so users cannot accidentally navigate away from our spec.
-          cat >> ui/swagger-initializer.js << 'JS'
-
-          // GPKE / UTILMD customisation – appended by CI
-          window.onload = function () {
-            window.ui = SwaggerUIBundle({
-              url:          "./openapi-bundled.yaml",
-              dom_id:       '#swagger-ui',
-              presets: [
-                SwaggerUIBundle.presets.apis,
-                SwaggerUIStandalonePreset
-              ],
-              layout:        "StandaloneLayout",
-              docExpansion:  "list",
-              deepLinking:   true,
-              displayRequestDuration: true,
-              filter:        true,
-              showExtensions: true,
-              showCommonExtensions: true,
-            });
-          };
-          JS
+          printf '%s\n' \
+            'window.onload = function() {' \
+            '  window.ui = SwaggerUIBundle({' \
+            '    url: "./openapi-bundled.yaml",' \
+            '    dom_id: "#swagger-ui",' \
+            '    presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],' \
+            '    layout: "StandaloneLayout",' \
+            '    docExpansion: "list",' \
+            '    deepLinking: true,' \
+            '    displayRequestDuration: true,' \
+            '    filter: true,' \
+            '    showExtensions: true,' \
+            '    showCommonExtensions: true' \
+            '  });' \
+            '};' \
+            > ui/swagger-initializer.js
 
       # ── 8. Write index.html ───────────────────────────────────────────────
-      # The Swagger UI dist ships its own index.html, but we overwrite it
-      # to inject our branding and canonical <title>.
       - name: Write custom index.html
         run: |
-          cat > ui/index.html << 'HTML'
-          <!DOCTYPE html>
-          <html lang="de">
-          <head>
-            <meta charset="UTF-8"/>
-            <meta name="viewport" content="width=device-width, initial-scale=1"/>
-            <title>GPKE / UTILMD – API-Dokumentation</title>
-            <link rel="stylesheet" href="./swagger-ui.css"/>
-            <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32"/>
-          </head>
-          <body>
-            <div id="swagger-ui"></div>
-            <script src="./swagger-ui-bundle.js"></script>
-            <script src="./swagger-ui-standalone-preset.js"></script>
-            <script src="./swagger-initializer.js"></script>
-          </body>
-          </html>
-          HTML
+          printf '%s\n' \
+            '<!DOCTYPE html>' \
+            '<html lang="de">' \
+            '<head>' \
+            '  <meta charset="UTF-8"/>' \
+            '  <meta name="viewport" content="width=device-width, initial-scale=1"/>' \
+            '  <title>GPKE / UTILMD - API-Dokumentation</title>' \
+            '  <link rel="stylesheet" href="./swagger-ui.css"/>' \
+            '  <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32"/>' \
+            '</head>' \
+            '<body>' \
+            '  <div id="swagger-ui"></div>' \
+            '  <script src="./swagger-ui-bundle.js"></script>' \
+            '  <script src="./swagger-ui-standalone-preset.js"></script>' \
+            '  <script src="./swagger-initializer.js"></script>' \
+            '</body>' \
+            '</html>' \
+            > ui/index.html
 
       # ── 9. Write .nojekyll (required for GitHub Pages) ───────────────────
       - name: Add .nojekyll
