@@ -108,7 +108,7 @@ docs/
 
 | Datei / File | Typ | Beschreibung / Description |
 |---|---|---|
-| [`api-ansaetze-vergleich.html`](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/usage/api-ansaetze-vergleich.html) | API Ansätze | Interaktiver Vergleich der drei API-Architekturansätze (REST · RPC · Frankenstein). 5 Tabs: Kommunikationsfluss je Ansatz, vollständiger Kriterienkatalog, Fazit mit Empfehlung. / Interactive comparison of three API architecture approaches with flow diagrams, criteria table and summary. |
+| [`api-ansaetze-vergleich.html`](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/usage/api-ansaetze-vergleich.html) | API Ansätze | Interaktiver Vergleich der drei API-Architekturansätze (REST · RPC · Frankenstein[Transport]). 5 Tabs: Kommunikationsfluss je Ansatz, vollständiger Kriterienkatalog, Fazit mit Empfehlung. / Interactive comparison of three API architecture approaches with flow diagrams, criteria table and summary. |
 | [`Idempotency_Key_Documentation.md`](usage/Idempotency_Key_Documentation.md) | Dokumentation | Vollständige Beschreibung des `Idempotency-Key`-Headers: Funktionsweise, Server-Verarbeitung, Retry-Semantik, Fehlerszenarien und OpenAPI-Schema (DE+EN). / Full description of the `Idempotency-Key` header including retry semantics and error scenarios (DE+EN). |
 | [`Idempotency_Key_Process_Flow.drawio`](usage/Idempotency_Key_Process_Flow.drawio) | Draw.io | Prozessablauf-Diagramm für Idempotency-Key-Verarbeitung inkl. Retry-Pfade. / Process flow diagram for Idempotency-Key handling including retry paths. |
 | [`Idempotency_Key_Process_Flow-Retry Process.jpg`](usage/Idempotency_Key_Process_Flow-Retry%20Process.jpg) | Bild / Image | Exportierte Grafik des Retry-Prozessablaufs. / Exported graphic of the retry process flow. |
@@ -119,7 +119,7 @@ docs/
 |---|---|---|
 | **REST API** | Ressourcen + HTTP-Verben · Request-Response · ETag-Zustand | Empfohlen |
 | **RPC API** | Prozeduraufrufe · aktionsorientiert · gRPC/JSON-RPC | Situationsabhängig |
-| **Frankenstein API** | UTILMD-Nachrichten per POST · HTTP als reines Transportmedium | Nicht empfohlen |
+| **Frankenstein (Transport) API** | UTILMD-Nachrichten per POST · HTTP als reines Transportmedium | Nicht empfohlen |
 
 > Der Frankenstein-Ansatz tauscht nur den Transportweg (AS4/E-Mail → HTTPS), behält aber EDIFACT-Prozesslogik und -Datenstrukturen vollständig bei. HTTP degeneriert zum reinen Transportrohr — alle Vorteile moderner APIs (Request-Response, sofortige Validierung, Zustandsverwaltung, Caching, Tooling) gehen verloren.
 >
