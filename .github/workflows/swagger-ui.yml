@@ -135,36 +135,23 @@ jobs:
       - name: Add .nojekyll
         run: touch ui/.nojekyll
 
-      # ── 10. Commit and push /ui back to the repository ───────────────────
-      - name: Commit and push /ui
-        run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+      # ── 10. Copy README into ui/ ─────────────────────────────────────────
+      # The README is committed in the repo at ui/README.md.
+      # If it exists, it survives in gh-pages; nothing to do here.
+      # We just ensure .nojekyll is present (done in step 9).
 
-          git add ui/
-
-          # Only commit if something actually changed
-          if git diff --staged --quiet; then
-            echo "No changes to /ui – skipping commit."
-          else
-            SPEC_SHA=$(git rev-parse --short HEAD)
-            git commit -m "chore(ui): rebuild Swagger UI from ${SPEC_SHA}
-
-          Bundled: api/malo.yaml → ui/openapi-bundled.yaml
-          Swagger UI version: 5.17.14
-          Triggered by: ${{ github.event_name }} on ${{ github.ref_name }}"
-
-            git push origin HEAD:${{ github.ref_name }}
-          fi
-
-      # ── 11. (Optional) Deploy to GitHub Pages ────────────────────────────
-      # Uncomment the block below and enable Pages in repo Settings
-      # (Source: Deploy from branch → main → /ui) to get a public URL.
+      # ── 11. Deploy to GitHub Pages (gh-pages branch) ─────────────────────
+      # Pushes the contents of ui/ to the root of the gh-pages branch.
+      # GitHub Pages settings: Branch = gh-pages, Folder = / (root)
       #
-      # - name: Deploy to GitHub Pages
-      #   uses: peaceiris/actions-gh-pages@v4
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_dir:  ./ui
-      #     publish_branch: gh-pages
-      #     destination_dir: .
+      # The gh-pages branch is created automatically on first run.
+      # It contains ONLY the Swagger UI files – no source code.
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir:   ./ui          # push contents of ui/ (not ui/ itself)
+          publish_branch: gh-pages     # target branch – created if missing
+          destination_dir: .           # place files at branch root
+          commit_message: |
+            chore(pages): rebuild Swagger UI from ${{ github.sha }}
