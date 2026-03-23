@@ -44,6 +44,7 @@ paths:
         - $ref: ../header/headers/contentDigest.yaml
         - $ref: ../header/headers/signatureInput.yaml
         - $ref: ../header/headers/signature.yaml
+        - $ref: ../header/headers/xApiSpecRef.yaml
       requestBody:
         required: true
         content:
@@ -129,6 +130,8 @@ paths:
               $ref: ../header/openapi.yaml#/components/headers/xMessageId
             ETag:
               $ref: ../header/openapi.yaml#/components/headers/eTag
+            X-API-Spec-Ref:
+              $ref: ../index.yaml#/components/headers/xApiSpecRef
           content:
             application/json:
               schema:
