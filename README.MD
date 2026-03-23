@@ -19,7 +19,7 @@ gedacht. Im Unterverzeichnis wird auf die Vorteile von OAS 3.1 eingegangen. Das 
 Schema ist aus Gründen der Komatibiltit zur apiGIT nocht auf OAS 3.0. Der moderne
 Editor Stoplight Studio kann jedoch bereits mit OAS 3.1 umgehen.
 
-Sie können Ihr Wissen zu API's auch selbst testen: [![API Test](https://img.shields.io/badge/Quiz-%C3%B6ffnen-brightgreen?style=for-the-badge)](docs/gpke-quiz.html)
+Sie können Ihr Wissen zu API's auch selbst testen: [![API Test](https://img.shields.io/badge/API-Test-blue?style=flat)](docs/gpke-quiz.html)
 
 Abgedeckte Prozesse:
 
@@ -42,7 +42,7 @@ The corresponding subdirectory explains the advantages of OAS 3.1. For compatibi
 with apiGIT, the current schema is still based on OAS 3.0. However, the modern editor Stoplight Studio
 already supports OAS 3.1.
 
-Check your knowledge: [![API Test](https://img.shields.io/badge/Quiz-%C3%B6ffnen-brightgreen?style=for-the-badge)](docs/gpke-quiz.html)
+Check your knowledge: [![API Test](https://img.shields.io/badge/API-Test-blue?style=flat)](docs/gpke-quiz.html)
 
 Covered processes:
 
