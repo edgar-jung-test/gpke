@@ -2,7 +2,7 @@ name: X-API-Spec-Version
 in: header
 required: false
 description: |
-  **Response header.** Version of the OpenAPI specification used by the server,
+  Version of the OpenAPI specification used by the server,
   referencing the Git release tag. Replaces the need to embed version numbers
   in the URI path (e.g. `/v1/`). References and links in documents do not need
   to be updated on every release change.
@@ -10,13 +10,11 @@ description: |
   The version follows the release tag from the EDI@Energy GitHub repository,
   allowing flexible semantic versioning rather than rigid `v1`/`v2` URI segments.
   
-  **German:** **Response-Header.** Hinweis auf die verwendete API-Version aus
+  **German:** Hinweis auf die verwendete API-Version aus
   dem Git (OpenAPI). Ersetzt die Verwendung der Version in der URI
   (z.B. `/maloIdent/v1`). Referenzen in Dokumenten müssen bei Releasewechsel
   nicht komplett angepasst werden. Release-Tag aus dem GitHub.
   
-  **Korrekturen gegenüber Vorlage:** `X-Api-Spec-Version` → **`X-API-Spec-Version`**
-  (Akronym API wird großgeschrieben).
 schema:
   type: string
   pattern: '^\d+\.\d+(\.\d+)?(-[a-zA-Z0-9._-]+)?$'
