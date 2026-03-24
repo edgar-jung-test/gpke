@@ -12,7 +12,7 @@ Es umfasst Prozessdiagramme, Sicherheitsarchitektur, Datenmodelle und Implementi
 Alle Inhalte ergänzen die normativen Spezifikationen in `api/` und `schema/` — bei Abweichungen
 gelten die YAML-Dateien.
 
-Die Gegenüberstellung der Arten von API's entnehmen Sie bitte [usage/api-ansaetze-vergleich.html](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/usage/api-ansaetze-vergleich.html)
+[Die Gegenüberstellung der Arten von API's](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/usage/api-ansaetze-vergleich.html)
 
 ## EN – Overview
 
@@ -21,7 +21,7 @@ It covers process diagrams, security architecture, data models and implementatio
 All content supplements the normative specifications in `api/` and `schema/` — in case of
 discrepancy, the YAML files take precedence.
 
-Concurrent API's implementation rules: [usage/api-ansaetze-vergleich.html](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/usage/api-ansaetze-vergleich.html)
+[Concurrent API's implementation rules](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/usage/api-ansaetze-vergleich.html)
 
 ---
 
