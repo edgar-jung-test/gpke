@@ -16,7 +16,7 @@ und API-Sichten zusammengesetzt werden.
 
 Die Verzeichnisse oas30-31Mig und oas31 sind zur Veranschaulichung neuer Funktionen in OAS 3.1
 gedacht. Im Unterverzeichnis wird auf die Vorteile von OAS 3.1 eingegangen. Das aktuelle
-Schema ist aus Gründen der Komatibiltit zur apiGIT nocht auf OAS 3.0. Der moderne
+Schema ist aus Gründen der Kompatibilität zur apiGIT noch auf OAS 3.0. Der moderne
 Editor Stoplight Studio kann jedoch bereits mit OAS 3.1 umgehen.
 
 [![API Wissen](https://img.shields.io/badge/API%20Wissen-öffnen-0A66C2?style=flat-square)](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke-quiz.html) [![API Vergleich](https://img.shields.io/badge/API--Vergleich-anzeigen-0A66C2?style=flat-square)](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/usage/api-ansaetze-vergleich.html) [![GPKE Datenmodell](https://img.shields.io/badge/GPKE--Datenmodell-in%20draw.io%20öffnen-F08705?style=flat-square)](https://app.diagrams.net/#Uhttps%3A%2F%2Fraw.githubusercontent.com%2Fedgar-jung-test%2Fgpke%2Fmain%2Fdocs%2Fmodels%2FBDEW_Datenmodell_v2.2_ERM.drawio) [![MaLo API](https://img.shields.io/badge/MaLo%20API-open%20in%20Stoplight-6A5ACD?style=flat-square)](https://gpke.stoplight.io/studio/gpke:?) [![Entscheidungsmatrix](https://img.shields.io/badge/Entscheidungsmatrix-open-0A66C2?style=flat-square)](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/entscheidungsmatrix.html) 
