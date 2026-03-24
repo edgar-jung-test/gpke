@@ -50,14 +50,12 @@ Ursprüngliche grafische Darstellung des Lieferantenwechsel-Prozesses im Draw.io
 Enthält die Swimlane-Darstellung mit BPMN-Elementen. Darüber hinuas haben wir eine 
 interaktive <a href="https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke/lieferbeginn-sequenz.html" target="_blank" rel="noopener noreferrer">Lieferbeginn</a> zur Verfügung gestellt
 
-[![SupplieChange.drawio](https://img.shields.io/badge/SupplierChange-blue?style=flat)](https://app.diagrams.net/#Uhttps%3A%2F%2Fraw.githubusercontent.com%2Fedgar-jung-test%2Fgpke%2Fmain%2Fdocs%2Fgpke%2Fsupplierchange.drawio)
-
-[![Lieferbeginn.drawio](https://img.shields.io/badge/Lieferbeginn-blue?style=flat)](https://app.diagrams.net/#Uhttps%3A%2F%2Fraw.githubusercontent.com%2Fedgar-jung-test%2Fgpke%2Fmain%2Fdocs%2Fgpke%2Flieferbeginn-api.drawio)
+In Arbeit befindliche Dokumente:[![SupplieChange.drawio](https://img.shields.io/badge/SupplierChange-blue?style=flat)](https://app.diagrams.net/#Uhttps%3A%2F%2Fraw.githubusercontent.com%2Fedgar-jung-test%2Fgpke%2Fmain%2Fdocs%2Fgpke%2Fsupplierchange.drawio), [![Lieferbeginn.drawio](https://img.shields.io/badge/Lieferbeginn-blue?style=flat)](https://app.diagrams.net/#Uhttps%3A%2F%2Fraw.githubusercontent.com%2Fedgar-jung-test%2Fgpke%2Fmain%2Fdocs%2Fgpke%2Flieferbeginn-api.drawio)
 
 Original graphical representation of the supplier change process in Draw.io format.
 Contains the swimlane view with BPMN elements. Check out the interactive <a href="https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke/lieferbeginn-sequenz.html" target="_blank" rel="noopener noreferrer">supplier-change</a>.
 
-Öffnen mit / Open with: [app.diagrams.net](https://app.diagrams.net) oder Draw.io Desktop.
+Documents under construction: [![SupplieChange.drawio](https://img.shields.io/badge/SupplierChange-blue?style=flat)](https://app.diagrams.net/#Uhttps%3A%2F%2Fraw.githubusercontent.com%2Fedgar-jung-test%2Fgpke%2Fmain%2Fdocs%2Fgpke%2Fsupplierchange.drawio), [![Lieferbeginn.drawio](https://img.shields.io/badge/Lieferbeginn-blue?style=flat)](https://app.diagrams.net/#Uhttps%3A%2F%2Fraw.githubusercontent.com%2Fedgar-jung-test%2Fgpke%2Fmain%2Fdocs%2Fgpke%2Flieferbeginn-api.drawio)
 
 ---
 
