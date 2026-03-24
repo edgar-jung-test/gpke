@@ -18,6 +18,8 @@ Bibliothek unter `../schema/` und HTTP-Header-Definitionen aus `../header/` bezi
 
 [Testen Sie Ihr Wissen zu API's](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke-quiz.html)
 
+[![API Test](https://img.shields.io/badge/API-Test-blue?style=flat)](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke-quiz.html)
+
 ## EN – Overview
 
 **The APIs are intended solely as a framework. 
