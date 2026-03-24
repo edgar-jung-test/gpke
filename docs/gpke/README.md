@@ -50,6 +50,8 @@ Ursprüngliche grafische Darstellung des Lieferantenwechsel-Prozesses im Draw.io
 Enthält die Swimlane-Darstellung mit BPMN-Elementen. Darüber hinuas haben wir eine 
 interaktive <a href="https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke/lieferbeginn-sequenz.html" target="_blank" rel="noopener noreferrer">Lieferbeginn</a> zur Verfügung gestellt
 
+[![SupplieChange.drawio](https://img.shields.io/badge/Diagramm-%C3%B6ffnen-blue?style=flat)](https://app.diagrams.net/#Uhttps%3A%2F%2Fraw.githubusercontent.com%2Fedgar-jung-test%2Fgpke%2Fmain%2Fdocs%2Fgpke%2Fsupplierchange.drawio)
+
 Original graphical representation of the supplier change process in Draw.io format.
 Contains the swimlane view with BPMN elements. Check out the interactive <a href="https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke/lieferbeginn-sequenz.html" target="_blank" rel="noopener noreferrer">supplier-change</a>.
 
