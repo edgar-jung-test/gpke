@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>API Entscheidungsmatrix – Energiewirtschaft</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;font-size:14px;background:#f8f9fa;color:#1a1a2e;line-height:1.5}
+.page{max-width:1240px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:18px;font-weight:600;color:#003F7D;margin-bottom:3px}
+.subtitle{font-size:12px;color:#58595B;margin-bottom:14px;line-height:1.6}
+.source-note{background:#EAF3DE;border-left:3px solid #3B6D11;padding:8px 12px;font-size:11px;color:#27500A;margin-bottom:14px;border-radius:0 4px 4px 0}
+.info-bar{background:#EEF4FB;border-left:3px solid #0070C0;padding:8px 12px;font-size:12px;color:#003F7D;margin-bottom:14px}
+.controls{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px;align-items:center}
+.filter-btn{padding:4px 10px;border:1px solid #D1D3D4;border-radius:4px;background:#fff;font-size:11px;cursor:pointer;color:#58595B;transition:all .15s;white-space:nowrap}
+.filter-btn.active{background:#003F7D;border-color:#003F7D;color:#fff}
+.reset-btn{padding:4px 10px;border:1px solid #E87722;border-radius:4px;background:#fff;font-size:11px;cursor:pointer;color:#E87722;margin-left:auto}
+.w-legend{display:flex;align-items:center;gap:9px;font-size:11px;color:#58595B;margin-bottom:10px;flex-wrap:wrap}
+.wdot{display:inline-block;width:7px;height:7px;border-radius:50%;margin:0 1px;vertical-align:middle}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #D1D3D4;font-size:12px;table-layout:fixed}
+colgroup col.c-cat{width:96px}
+colgroup col.c-name{width:auto}
+colgroup col.c-src{width:54px}
+colgroup col.c-wgt{width:62px}
+colgroup col.c-score{width:50px}
+colgroup col.c-ind{width:72px}
+thead tr{background:#003F7D;color:#fff}
+th{padding:7px 8px;font-weight:600;font-size:11px;text-align:left;white-space:nowrap}
+th.center{text-align:center}
+td{padding:6px 8px;border-bottom:1px solid #f0f0f0;vertical-align:top}
+tr.hidden{display:none}
+tr:hover td{background:#F8FAFD}
+tr.from-doc td:first-child::after{content:'';display:block;width:4px;height:4px;background:#3B6D11;border-radius:50%;margin-top:3px}
+.cat-badge{display:inline-block;padding:2px 6px;border-radius:3px;font-size:10px;font-weight:600;white-space:nowrap}
+.cat-Architektur{background:#EDE7F6;color:#4527A0}
+.cat-Daten{background:#E3F2FD;color:#0D47A1}
+.cat-Prozess{background:#E8F5E9;color:#1B5E20}
+.cat-Qualitaet{background:#FFF3E0;color:#E65100}
+.cat-Oekosystem{background:#F3E5F5;color:#6A1B9A}
+.cat-Umsetzung{background:#E0F5F4;color:#005F5D}
+.cat-Personal{background:#FFF3CD;color:#856404}
+.cat-Zukunft{background:#D4EDDA;color:#1E7E34}
+.cat-Compliance{background:#FDECEA;color:#C0392B}
+.cat-Sicherheit{background:#EDE7F6;color:#4527A0}
+.cat-Markt{background:#F5EEF9;color:#5B2D8E}
+.cat-Infrastruktur{background:#FDE8D0;color:#7D3000}
+.cat-Regulierung{background:#FCE4EC;color:#880E4F}
+.cat-Innovation{background:#E3F2FD;color:#0D47A1}
+.cat-Betrieb{background:#EEF4FB;color:#003F7D}
+.cat-Projektmanagement{background:#E8F5E9;color:#1B5E20}
+.src-badge{display:inline-block;padding:1px 5px;border-radius:3px;font-size:9px;font-weight:600;white-space:nowrap}
+.src-doc{background:#EAF3DE;color:#27500A;border:1px solid #97C459}
+.src-ext{background:#F1EFE8;color:#5F5E5A;border:1px solid #B4B2A9}
+.cname{font-weight:500;color:#1a1a2e;margin-bottom:2px;font-size:12px}
+.cdesc{font-size:11px;color:#58595B;line-height:1.4}
+.weight-cell{text-align:center}
+.wctrl{display:flex;align-items:center;justify-content:center;gap:3px;margin-bottom:2px}
+.wb{width:18px;height:18px;border:1px solid #D1D3D4;border-radius:3px;background:#fff;cursor:pointer;font-size:11px;line-height:1;padding:0;color:#58595B}
+.wb:hover{background:#EEF4FB;border-color:#003F7D;color:#003F7D}
+.wnum{font-size:14px;font-weight:700;min-width:14px;text-align:center}
+.w1{color:#888780}.w2{color:#BA7517}.w3{color:#E24B4A}
+.score-cell{text-align:center;cursor:pointer;position:relative;user-select:none;padding:5px 3px}
+.sv{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:4px;font-weight:700;font-size:13px;transition:transform .1s;border:1.5px solid transparent}
+.s1{background:#FDECEA;color:#A32D2D;border-color:#F7C1C1}
+.s2{background:#FFF3CD;color:#856404;border-color:#FAC775}
+.s3{background:#D4EDDA;color:#1E7E34;border-color:#97C459}
+.score-cell:hover .sv{transform:scale(1.18)}
+.nb{position:absolute;top:2px;right:2px;width:13px;height:13px;border-radius:50%;background:#E8E8E8;color:#58595B;font-size:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;line-height:1;border:none}
+.nb:hover{background:#003F7D;color:#fff}
+.indicator-cell{text-align:center}
+.wb-badge{display:inline-block;padding:2px 7px;border-radius:3px;font-size:11px;font-weight:600;white-space:nowrap}
+.win-REST{background:#EEF4FB;color:#003F7D;border:1px solid #B5D4F4}
+.win-RPC{background:#EDE7F6;color:#4527A0;border:1px solid #C5B5E8}
+.win-Transport{background:#FFF3CD;color:#856404;border:1px solid #FAC775}
+.win-tie{background:#F1EFE8;color:#5F5E5A;border:1px solid #B4B2A9;font-size:10px}
+.summary-row td{font-weight:600;font-size:12px;border-top:2px solid #D1D3D4;border-bottom:none;background:#F8F9FA}
+.results{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.rcard{background:#fff;border:1.5px solid #D1D3D4;border-radius:8px;padding:14px 16px}
+.rcard.winner{border-color:#003F7D;border-width:2px}
+.rapi{font-size:13px;font-weight:600;margin-bottom:3px}
+.rscore{font-size:22px;font-weight:600;line-height:1.1}
+.rpct{font-size:11px;color:#58595B}
+.rbar-w{height:7px;background:#F1EFE8;border-radius:99px;margin:6px 0 10px}
+.rbar{height:100%;border-radius:99px;transition:width .6s ease}
+.rrec{font-size:11px;color:#58595B;line-height:1.5;border-top:1px solid #F0F0F0;padding-top:8px}
+.winner-lbl{font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:#EEF4FB;color:#003F7D;display:inline-block;margin-bottom:5px}
+.ttip{position:absolute;z-index:9999;background:#1a1a2e;color:#fff;font-size:11px;padding:8px 10px;border-radius:4px;max-width:270px;line-height:1.5;white-space:normal;pointer-events:none;bottom:calc(100% + 5px);left:50%;transform:translateX(-50%);min-width:180px}
+.ttip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1a1a2e}
+</style>
+</head>
+<body>
+<div class="page">
+
+<h1>API-Entscheidungsmatrix – Energiewirtschaft</h1>
+<p class="subtitle">REST API · RPC API · Transport-API (Frankenstein/EDIFACT) · MSCONS · UTILMD · APERAK · PARTIN · INVOIC · IFTSTA · KRITIS · NIS2 · MakoHub · KI-Potenzial<br>
+Klicke auf Punktzahl (1–3) zum Ändern · Gewichtung +/– anpassen · Ergebnis wird sofort neu berechnet</p>
+
+<div class="source-note">
+  Kriterien aus <strong>docs/usage/api-ansaetze-vergleich</strong> (Repository) sind mit <span class="src-badge src-doc">Dok</span> markiert. Sie basieren auf der detaillierten Architekturanalyse REST vs. RPC vs. Frankenstein aus dem GPKE-Repository.
+</div>
+
+<div class="info-bar">
+  31 Kriterien in 16 Kategorien · Gewichtung 1 (niedrig) bis 3 (kritisch) · Punkte 1 (schlecht) bis 3 (gut) · Hover (i) für Begründung
+</div>
+
+<div class="controls">
+  <span style="font-size:11px;font-weight:600;color:#58595B">Filter:</span>
+  <button class="filter-btn active" onclick="setFilter('all')">Alle (31)</button>
+  <button class="filter-btn" onclick="setFilter('doc')">Aus Dokument</button>
+  <button class="filter-btn" onclick="setFilter('Architektur')">Architektur</button>
+  <button class="filter-btn" onclick="setFilter('Daten')">Daten &amp; Fehler</button>
+  <button class="filter-btn" onclick="setFilter('Prozess')">Prozess</button>
+  <button class="filter-btn" onclick="setFilter('Qualitaet')">Technische Qualität</button>
+  <button class="filter-btn" onclick="setFilter('Oekosystem')">Ökosystem</button>
+  <button class="filter-btn" onclick="setFilter('Umsetzung')">Umsetzung</button>
+  <button class="filter-btn" onclick="setFilter('Personal')">Personal</button>
+  <button class="filter-btn" onclick="setFilter('Zukunft')">Zukunft</button>
+  <button class="filter-btn" onclick="setFilter('Compliance')">KRITIS/NIS2</button>
+  <button class="filter-btn" onclick="setFilter('Sicherheit')">Sicherheit</button>
+  <button class="filter-btn" onclick="setFilter('Markt')">Markt</button>
+  <button class="filter-btn" onclick="setFilter('Infrastruktur')">Infrastruktur</button>
+  <button class="filter-btn" onclick="setFilter('Regulierung')">Regulierung</button>
+  <button class="filter-btn" onclick="setFilter('Innovation')">KI/Innovation</button>
+  <button class="filter-btn" onclick="setFilter('Betrieb')">Betrieb</button>
+  <button class="reset-btn" onclick="resetAll()">&#8635; Zurücksetzen</button>
+</div>
+
+<div class="w-legend">
+  <strong>Gewichtung:</strong>
+  <span><span class="wdot" style="background:#888780"></span>1 Niedrig</span>
+  <span><span class="wdot" style="background:#BA7517"></span>2 Mittel</span>
+  <span><span class="wdot" style="background:#E24B4A"></span>3 Kritisch</span>
+  &nbsp;
+  <strong>Punkte:</strong>
+  <span style="background:#FDECEA;color:#A32D2D;padding:1px 5px;border-radius:3px">1 schlecht</span>
+  <span style="background:#FFF3CD;color:#856404;padding:1px 5px;border-radius:3px">2 mittel</span>
+  <span style="background:#D4EDDA;color:#1E7E34;padding:1px 5px;border-radius:3px">3 gut</span>
+  &nbsp;
+  <span class="src-badge src-doc">Dok</span> = aus api-ansaetze-vergleich
+  &nbsp;
+  <span class="src-badge src-ext">Erw</span> = Erweiterungen
+</div>
+
+<table>
+<colgroup>
+  <col class="c-cat"/><col class="c-name"/>
+  <col class="c-src"/><col class="c-wgt"/>
+  <col class="c-score"/><col class="c-score"/><col class="c-score"/>
+  <col class="c-ind"/>
+</colgroup>
+<thead>
+<tr>
+  <th>Kategorie</th>
+  <th>Kriterium &amp; Beschreibung</th>
+  <th class="center">Quelle</th>
+  <th class="center">Gew.</th>
+  <th class="center">REST</th>
+  <th class="center">RPC</th>
+  <th class="center">Transport</th>
+  <th class="center">Gewinner</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+
+<div class="results" id="results"></div>
+<div id="ttip-el" class="ttip" style="display:none"></div>
+</div>
+
+<script>
+const C=[
+// ── ARCHITEKTUR (aus Dokument) ─────────────────────────────────────────
+{id:"grundprinzip",cat:"Architektur",src:"doc",name:"Grundprinzip & URL-Design",
+ desc:"REST: Ressourcen klar adressierbar (/malo/{id}/registrations). RPC: Aktionsname in URL (/submitAnmeldung). Frankenstein: ein Endpunkt für alles (/utilmd).",
+ weight:3,rest:3,rpc:2,transport:1,
+ notes:{rest:"Ressourcen + HTTP-Verben. Jede Entität klar adressierbar. /malo/{id}/registrations ist selbsterklärend.",rpc:"Prozeduraufrufe (Aktionen). Direktere Übersetzung von Prozessen, aber kein REST-Standard.",transport:"Nachrichtentransport. /utilmd – ein Endpunkt für alles. HTTP degeneriert zum Transportmedium wie AS4."}},
+{id:"http_verbs",cat:"Architektur",src:"doc",name:"HTTP-Verben & Standard-Konformität",
+ desc:"REST nutzt GET, POST, PATCH, DELETE semantisch. RPC meist nur POST. Frankenstein ausschließlich POST – HTTP wird missbraucht.",
+ weight:2,rest:3,rpc:2,transport:1,
+ notes:{rest:"Vollständig: GET (lesen), POST (erstellen), PATCH (anpassen), DELETE (löschen). RFC 9110 korrekt genutzt.",rpc:"Meist nur POST. HTTP-Semantik ignoriert, Methode hat keine Bedeutung.",transport:"Nur POST. HTTP wird als reines Transportrohr missbraucht – wie AS4 oder E-Mail, nur mit anderem Port."}},
+{id:"request_response",cat:"Architektur",src:"doc",name:"Request-Response-Muster",
+ desc:"Frankenstein hat KEIN Request-Response: Die Antwort kommt als komplett neue HTTP-Anfrage ohne Bezug zur ursprünglichen. Korrelation nur über MessageID im UTILMD-Body.",
+ weight:3,rest:3,rpc:3,transport:1,
+ notes:{rest:"Vollständig: jeder Request hat eine synchrone Antwort. 201/202 mit Location, ETag sofort zurück.",rpc:"Vollständig: jeder Methodenaufruf liefert sofort einen Rückgabewert oder Exception.",transport:"KRITISCH: Die Antwort (PI 55002) kommt als separate neue HTTP-Anfrage – kein Bezug zum POST PI 55001. Korrelation nur über MessageID im Body. Kein Dialog möglich."}},
+// ── DATEN & FEHLER (aus Dokument) ──────────────────────────────────────
+{id:"error_feedback",cat:"Daten",src:"doc",name:"Sofortige Fehlerrückmeldung",
+ desc:"REST: 400/422 + RFC 9457 Problem Details sofort synchron. Frankenstein: Fehler im UTILMD-Body verborgen, erst asynchron sichtbar.",
+ weight:3,rest:3,rpc:3,transport:1,
+ notes:{rest:"Sofort: 400 (Syntaxfehler), 422 (fachlicher Fehler), 409 (Conflict), 412 (ETag-Mismatch) mit Problem Details (RFC 9457).",rpc:"Sofort: Exception oder Fehler-Objekt im Rückgabewert. Klar erkennbar.",transport:"Kritisch: 202 Accepted ist nur Transportquittung. Fachlicher Fehler steckt im UTILMD-Body und kommt asynchron als neue Anfrage – Stunden später."}},
+{id:"datenmodell",cat:"Daten",src:"doc",name:"Datenmodell-Qualität",
+ desc:"REST: Domänenobjekte (SupplyStart, MarketLocation) fachlich sauber. Frankenstein: UTILMD-Segmente in JSON gepresst.",
+ weight:2,rest:3,rpc:2,transport:1,
+ notes:{rest:"Sauber: SupplyStart, MarketLocationId, TransactionReason als eigenständige Objekte. OpenAPI-Schema vollständig.",rpc:"Parameter-Objekte. Typsicher durch Protobuf, aber kein Standard-Datenmodell.",transport:"Gepresst: EDIFACT-Segmente (UNB, BGM, LOC, DTM…) in JSON-Struktur – kein echtes Domänenmodell. Entwickler brauchen EDIFACT-Kenntnisse."}},
+{id:"pruef_id",cat:"Daten",src:"doc",name:"Prüf-ID Nachverfolgbarkeit (EDI@Energy)",
+ desc:"REST: Prüf-ID (z.B. 55001) explizit in operationId nachvollziehbar. Frankenstein: PI im UTILMD-Header-Segment verborgen.",
+ weight:3,rest:3,rpc:2,transport:1,
+ notes:{rest:"Direkt: operationId: createRegistration · checkIdentifier: 55001. OpenAPI-Dokumentation zeigt PI sofort.",rpc:"Abbildbar: PI als Feld im Request-Objekt möglich, aber kein Standard.",transport:"Verborgen: PI steckt im messageHeader-Segment des UTILMD-Bodies. Nur mit EDIFACT-Kenntnissen auffindbar."}},
+{id:"idempotenz",cat:"Daten",src:"doc",name:"Idempotenz & Duplikatkontrolle",
+ desc:"REST: Idempotency-Key (RFC 8694) + ETag standardisiert. Frankenstein: kein Mechanismus – doppelter Versand erzeugt Duplikate.",
+ weight:3,rest:3,rpc:2,transport:1,
+ notes:{rest:"Built-in: Idempotency-Key (RFC 8694) im Header. ETag für Zustandskontrolle. Duplikate zuverlässig verhindert.",rpc:"Möglich: nicht standardisiert, manuell implementierbar in Response-Objekt.",transport:"Kritisch: kein Idempotenz-Mechanismus. Netzwerkfehler + Retry = doppelter UTILMD-POST = Duplikat-Anmeldung."}},
+// ── PROZESS (aus Dokument) ─────────────────────────────────────────────
+{id:"zustand",cat:"Prozess",src:"doc",name:"Zustandsmechanismus (ETag / State Machine)",
+ desc:"REST: ETag + If-Match für Optimistic Locking. Prozessstatus jederzeit abfragbar. Frankenstein: kein Zustandsmechanismus vorhanden.",
+ weight:3,rest:3,rpc:2,transport:1,
+ notes:{rest:"Vollständig: ETag: state:pending/running/completed/failed/cancelled. If-Match verhindert Race Conditions.",rpc:"Im Response-Objekt: Status als Feld möglich, aber kein HTTP-Standard-Mechanismus.",transport:"Fehlt komplett: kein ETag, kein Polling möglich, kein Zustandsabfrage. Prozessstatus nur über neue Nachricht erkennbar."}},
+{id:"prozess_mapping",cat:"Prozess",src:"doc",name:"Prozess-Mapping & Ressourcen-Übergänge",
+ desc:"REST: saubere Ressourcen-Übergänge für GPKE-Schritte. RPC: direkte Prozessübersetzung. Frankenstein: identisch mit EDIFACT – keine Anpassung.",
+ weight:2,rest:3,rpc:2,transport:2,
+ notes:{rest:"Sauber: POST /registrations → GET /registrations/{id} → POST /response. Jeder GPKE-Schritt = eigene Ressource.",rpc:"Direkt: submitAnmeldung() → getStatus() → receiveAntwort(). Prozessnah, aber kein HTTP-Standard.",transport:"EDIFACT-äquivalent: kein neues Mapping nötig, aber kein echter API-Mehrwert. Nur Transport ändert sich."}},
+{id:"caching",cat:"Prozess",src:"doc",name:"Caching & Performance",
+ desc:"REST GET-Antworten sind cachebar (ETag, Cache-Control). RPC: nicht vorgesehen. Frankenstein (nur POST): Caching nicht möglich.",
+ weight:1,rest:3,rpc:1,transport:1,
+ notes:{rest:"GET /registrations/{id} cachebar mit ETag + If-None-Match → 304 Not Modified. Spart Server-Last.",rpc:"Nicht vorgesehen: alle Calls als POST, kein HTTP-Caching möglich.",transport:"Nicht möglich: ausschließlich POST, kein Caching-Mechanismus, jede Anfrage vollständig verarbeitet."}},
+// ── TECHNISCHE QUALITÄT (aus Dokument) ─────────────────────────────────
+{id:"standards",cat:"Qualitaet",src:"doc",name:"Einhaltung offener Standards",
+ desc:"REST: RFC 9110, RFC 9421, OpenAPI 3.0. RPC: gRPC/Protobuf, JSON-RPC 2.0. Frankenstein: EDIFACT-Semantik, HTTP wird missbraucht.",
+ weight:2,rest:3,rpc:2,transport:1,
+ notes:{rest:"Vollständig: RFC 9110 (HTTP), RFC 9421 (Signaturen), RFC 8694 (Idempotency), RFC 7807 (Errors), OpenAPI 3.0.",rpc:"Gut: gRPC über HTTP/2 standardisiert, Protobuf offen. Aber kein HTTP-Semantik-Standard.",transport:"Missbrauch: EDIFACT-Semantik in HTTP-Transport. HTTP-Standard (RFC 9110) nicht eingehalten."}},
+{id:"kopplung",cat:"Qualitaet",src:"doc",name:"Kopplung Client–Server",
+ desc:"REST: lose Kopplung durch Ressourcen-URLs und HATEOAS. RPC: enge Kopplung an Interface-Definition. Frankenstein: eng gekoppelt an EDIFACT-Schema.",
+ weight:2,rest:3,rpc:2,transport:1,
+ notes:{rest:"Lose: Client kennt nur Ressourcen-URLs. Interface-Änderungen durch Versionierung abgefangen.",rpc:"Eng: Client muss exakt die Protobuf-Interface-Definition kennen. Breaking Changes häufig.",transport:"Sehr eng: Client muss EDIFACT-Segmentstruktur kennen. Jede UTILMD-AHB-Änderung bricht den Client."}},
+// ── ÖKOSYSTEM (aus Dokument) ────────────────────────────────────────────
+{id:"developer_exp",cat:"Oekosystem",src:"doc",name:"Developer Experience & Onboarding",
+ desc:"REST: selbstbeschreibend, interaktive Swagger-UI-Dokumentation. Frankenstein: EDIFACT-Kenntnisse für jeden Entwickler zwingend erforderlich.",
+ weight:2,rest:3,rpc:2,transport:1,
+ notes:{rest:"Exzellent: Swagger UI, interaktive Doku, Postman-Collection generierbar. Neuer Entwickler in 1–2 Tagen produktiv.",rpc:"Klar: benannte Aktionen, Protobuf-Typen dokumentiert. Aber kein Standard-UI.",transport:"Schlecht: Entwickler brauchen EDIFACT-Kenntnisse (BGM, LOC, DTM, NAD-Segmente). Onboarding: Wochen bis Monate."}},
+{id:"contract_testing",cat:"Oekosystem",src:"doc",name:"Testbarkeit & Contract Testing",
+ desc:"REST: OpenAPI-Spec generiert automatisch Contract Tests, Mock-Server, Testfälle. Frankenstein: kein modernes API-Testing möglich.",
+ weight:2,rest:3,rpc:2,transport:1,
+ notes:{rest:"Automatisch: Prism (Stoplight) generiert Mock aus OpenAPI. Pact für Contract Testing. Spectral für Linting.",rpc:"Gut: Protobuf-Schema ermöglicht typsichere Tests, aber kein Standard-Tooling.",transport:"Nicht möglich: kein modernes API-Testing-Tool unterstützt EDIFACT-in-JSON. Nur manuelle Tests."}},
+// ── UMSETZUNG ──────────────────────────────────────────────────────────
+{id:"impl_speed",cat:"Umsetzung",src:"ext",name:"Implementierungsgeschwindigkeit",
+ desc:"Wie schnell kann der Prozess in Betrieb genommen werden? EDIFACT-Know-how nutzbar?",
+ weight:3,rest:1,rpc:2,transport:3,
+ notes:{rest:"3–5 Jahre: neue Datenmodelle, Architektur, kaum REST-Know-how im Team.",rpc:"2–3 Jahre: schneller als REST, neue Protokolle nötig.",transport:"6–18 Monate: EDIFACT-Struktur bleibt, nur Transport ändert sich. Bestehende Teams nutzbar."}},
+{id:"datamodel_effort",cat:"Umsetzung",src:"ext",name:"Aufwand Datenmodell-Erstellung",
+ desc:"REST/RPC erfordern neue JSON-Schemas für alle 40+ EDIFACT-Nachrichtentypen (MSCONS, UTILMD, APERAK, PARTIN, INVOIC…).",
+ weight:2,rest:1,rpc:1,transport:3,
+ notes:{rest:"Sehr hoch: 40+ EDIFACT-Nachrichtentypen vollständig neu modellieren. Allein GPKE: Monate Aufwand.",rpc:"Hoch: Protobuf-Schemas für alle Nachrichtentypen. Ähnlicher Aufwand wie REST.",transport:"Niedrig: EDIFACT-Segmente 1:1 übernehmen, nur HTTP-Wrapper ergänzen."}},
+{id:"migration_risk",cat:"Umsetzung",src:"ext",name:"Migrationsrisiko & Betriebsstabilität",
+ desc:"Kritische Infrastruktur: Ausfälle bei MSCONS, UTILMD, APERAK für KRITIS unakzeptabel.",
+ weight:3,rest:1,rpc:2,transport:3,
+ notes:{rest:"Hoch: komplette Architekturumstellung. Big-Bang oder 3+ Jahre Parallelbetrieb notwendig.",rpc:"Mittel: schrittweise Migration möglich, Protokollwechsel kritisch.",transport:"Niedrig: Strangler-Fig-Muster möglich, EDIFACT läuft parallel. Schrittweise Umstellung."}},
+{id:"cost_transition",cat:"Umsetzung",src:"ext",name:"Gesamtkosten der Transition",
+ desc:"Schulung, Recruiting, Datenmodell-Erstellung, Parallelbetrieb, Konverter, Testing für 40+ Nachrichtentypen.",
+ weight:2,rest:1,rpc:2,transport:3,
+ notes:{rest:"Höchste Anfangskosten: 3–5 Jahre, REST-Architekten (150k+ EUR/Jahr), neue Infrastruktur.",rpc:"Mittlere Kosten: günstiger als REST durch weniger Datenmodell-Aufwand.",transport:"Niedrigste Anfangskosten: bestehende Teams + Infrastruktur wiederverwendbar."}},
+// ── PERSONAL ───────────────────────────────────────────────────────────
+{id:"staff_now",cat:"Personal",src:"ext",name:"Personalverfügbarkeit & Know-how (jetzt)",
+ desc:"EDIFACT-Spezialisten vorhanden, niemand kennt REST. Umschulungszeit 12–18 Monate.",
+ weight:3,rest:1,rpc:1,transport:3,
+ notes:{rest:"Kritisch: REST-Architekten fehlen komplett. Recruiting 6–12 Monate. Schulung 12–18 Monate.",rpc:"Kritisch: gRPC-Expertise noch seltener als REST im Energiemarkt.",transport:"Ideal: bestehende EDIFACT-Teams können direkt übernehmen, minimale Einarbeitung."}},
+{id:"personnel_cost",cat:"Personal",src:"ext",name:"Personalkostenentwicklung 2025–2035",
+ desc:"EDIFACT-Spezialisten werden rar und teuer. REST-Entwickler weltweit verfügbar. Tagessätze EDIFACT heute: 1.200–1.800 EUR, stark steigend.",
+ weight:3,rest:3,rpc:2,transport:1,
+ notes:{rest:"Stabil: REST-Entwickler weltweit verfügbar. Tagessatz 700–900 EUR. Kein Engpass absehbar.",rpc:"Mittel: gRPC-Experten rarer als REST, aber wachsender Pool.",transport:"Kritisch: EDIFACT-Tagessätze 1.200–1.800 EUR, stark steigend. In 5 Jahren kaum Bewerber unter 40 Jahren."}},
+// ── ZUKUNFT ────────────────────────────────────────────────────────────
+{id:"future",cat:"Zukunft",src:"ext",name:"Zukunftsfähigkeit & Technologie-Lebensdauer",
+ desc:"EDIFACT wird in 5–10 Jahren durch modernere Standards ersetzt. Transport-API verlängert Technologieschuld.",
+ weight:3,rest:3,rpc:2,transport:1,
+ notes:{rest:"Optimal: langfristiger Standard, Cloud-nativ, aktive Weiterentwicklung, EU-Strategie.",rpc:"Gut: zukunftsfähiger als EDIFACT, aber weniger verbreitet als REST im B2B.",transport:"Risiko: verlängert EDIFACT-Abhängigkeit. In 5–10 Jahren erneute Migration nötig."}},
+{id:"process_opt",cat:"Zukunft",src:"ext",name:"Prozessoptimierungspotenzial",
+ desc:"Können MSCONS, UTILMD, APERAK fundamental verbessert werden? Echtzeit statt Batch?",
+ weight:3,rest:3,rpc:2,transport:1,
+ notes:{rest:"Höchstes Potenzial: Echtzeit-Zählerstandsabfragen (MSCONS), async GPKE-Schritte, Event-Streaming.",rpc:"Gut: async Calls möglich, aber kein HTTP-Caching, keine native Ressourcenorientierung.",transport:"Minimal: EDIFACT-Batch-Logik bleibt. Keine echte Prozessoptimierung erreichbar."}},
+{id:"edifact_eol",cat:"Zukunft",src:"ext",name:"EDIFACT End-of-Life & Technologieschuld",
+ desc:"EDIFACT-Community schrumpft. Support-Ende absehbar. Transport-API verlängert aktiv die Abhängigkeit.",
+ weight:2,rest:3,rpc:2,transport:1,
+ notes:{rest:"Löst EDIFACT-Abhängigkeit vollständig. Einmaliger hoher Aufwand vs. dauernde Technologieschuld.",rpc:"Reduziert EDIFACT-Abhängigkeit, schafft aber neue Abhängigkeit von gRPC.",transport:"Verlängert EDIFACT-Abhängigkeit aktiv. Doppel-Migration in 5–10 Jahren vorprogrammiert."}},
+// ── COMPLIANCE ─────────────────────────────────────────────────────────
+{id:"kritis_nis2",cat:"Compliance",src:"ext",name:"KRITIS / NIS2-Compliance",
+ desc:"NIS2 (EU 2022/2555) fordert: Authentifizierung, Verschlüsselung, Audit-Trail, Incident Reporting. KRITIS: besondere Schutzanforderungen.",
+ weight:3,rest:3,rpc:2,transport:1,
+ notes:{rest:"Optimal: OAuth2/JWT, RFC 9421 Signaturen, ETag-Audit-Trail, OpenAPI-Doku für BSI-Meldungen.",rpc:"Gut: TLS/mTLS integrierbar, aber weniger standardisierte Compliance-Dokumentation.",transport:"Kritisch: EDIFACT hat keine nativen NIS2-Mechanismen. AS2/AS4-Zusatzsoftware = separates Projekt."}},
+// ── SICHERHEIT ─────────────────────────────────────────────────────────
+{id:"security",cat:"Sicherheit",src:"doc",name:"Sicherheit: Built-in vs. Zusatzaufwand",
+ desc:"REST: JWT+JWS+JWE+RFC 9421 vollständig integriert. RPC: TLS+Auth vorhanden. Transport: nur TLS möglich, Sicherheit = separates Projekt.",
+ weight:3,rest:3,rpc:2,transport:1,
+ notes:{rest:"Built-in: OAuth2/JWT in allen Frameworks, RFC 9421 Signaturen, Content-Digest (RFC 9530). 1–2 Sprints für sicheres Setup. OWASP-Leitfäden vorhanden.",rpc:"Gut: mTLS und Token-Auth vorhanden, aber weniger fertige Bibliotheken als REST.",transport:"Komplex: keine eingebauten Sicherheitsmechanismen. AS2/AS4-Zusatzsoftware nötig. Sicherheit = eigenständiges teures Projekt."}},
+// ── MARKT ──────────────────────────────────────────────────────────────
+{id:"market_perception",cat:"Markt",src:"ext",name:"Marktwahrnehmung & Partner-Image",
+ desc:"Wie nehmen Lieferanten, Netzbetreiber, ÜNB und internationale Partner einen Marktteilnehmer wahr, der noch mit EDIFACT/Transport-APIs arbeitet?",
+ weight:2,rest:3,rpc:2,transport:1,
+ notes:{rest:"Führend: signalisiert Innovationskraft, zieht moderne Partner an, erleichtert EU-Marktintegration.",rpc:"Neutral: nicht erkennbar nach außen, internes Architekturmuster.",transport:"Negativ: wirkt technologisch rückständig bei Lieferanten, NB, ÜNB und EU-Partnern."}},
+{id:"eu_compat",cat:"Markt",src:"ext",name:"EU-Regulierung & internationale Kompatibilität",
+ desc:"EU-Energiebinnenmarkt, ENTSO-E, CIM IEC 61968/61970, EU Digital Energy Act – alle setzen auf REST/JSON.",
+ weight:2,rest:3,rpc:2,transport:1,
+ notes:{rest:"Führend: CIM als REST-API, ENTSO-E setzt auf REST, EU Digital Energy Act fordert offene Standards.",rpc:"Teilkompatibel: Adapter zu REST-Standards möglich, aber Zusatzaufwand.",transport:"Isoliert: EDIFACT ist deutsch-regional. Kein EU-Standard. Hemmnis für grenzüberschreitende Dienste."}},
+// ── INFRASTRUKTUR ──────────────────────────────────────────────────────
+{id:"makohub",cat:"Infrastruktur",src:"ext",name:"MakoHub / Energy Data Hub Kompatibilität",
+ desc:"Der geplante zentrale Datenhub (MakoHub) setzt auf REST. Transport-APIs erzeugen Adapter-Aufwand.",
+ weight:3,rest:3,rpc:2,transport:1,
+ notes:{rest:"Nativ kompatibel: MakoHub spricht REST. Direkte Integration ohne Konverter. Strategische Ausrichtung BDEW/BNetzA.",rpc:"Partiell: Gateway/Adapter zum REST-Interface nötig, machbar.",transport:"Inkompatibel: EDIFACT-Konverter zum MakoHub-Interface nötig. Doppelte Übersetzungsschicht = Fehlerquelle."}},
+{id:"infra_cost",cat:"Infrastruktur",src:"ext",name:"Betriebskosten Hardware & Software",
+ desc:"EDI-Middleware (Seeburger, Axway, Sterling): 50.000–500.000 EUR/Jahr. REST läuft auf Standard-Cloud.",
+ weight:2,rest:3,rpc:2,transport:1,
+ notes:{rest:"Niedrig: Standard-Cloud (AWS/Azure/K8s), keine EDI-Lizenzkosten, Opex-Modell skaliert mit Bedarf.",rpc:"Niedrig-Mittel: ähnlich wie REST, keine EDI-Lizenzen.",transport:"Hoch: EDI-Middleware-Lizenzen 100k–500k EUR/Jahr, proprietäre Konverter, dedizierte Server."}},
+{id:"vendor_lock",cat:"Infrastruktur",src:"ext",name:"Vendor Lock-in & Herstellerabhängigkeit",
+ desc:"EDI-Konverter von Seeburger, Axway, Sterling: teuer, proprietär. REST: offene Standards, kein Lock-in.",
+ weight:2,rest:3,rpc:2,transport:1,
+ notes:{rest:"Kein Lock-in: offene Standards, Provider-Wechsel jederzeit möglich.",rpc:"Geringer Lock-in: Protobuf ist offen, gRPC-Ökosystem Google-getrieben.",transport:"Hoher Lock-in: proprietäre EDI-Software, Preiserhöhungen kaum abwendbar."}},
+// ── REGULIERUNG ────────────────────────────────────────────────────────
+{id:"bnetza_agility",cat:"Regulierung",src:"ext",name:"Umsetzungsgeschwindigkeit BNetzA-Änderungen",
+ desc:"BNetzA fordert Formatänderungen alle 6 Monate. Prüfidentifikatoren, Codelisten, neue Prozesse.",
+ weight:3,rest:3,rpc:2,transport:1,
+ notes:{rest:"Stunden bis Tage: Schema-Update + Spectral-Lint + OpenAPI-Versioning. Neue Prüf-ID = ein YAML-Feld.",rpc:"Tage bis 2 Wochen: Protobuf-Schema-Update notwendig, strukturiert möglich.",transport:"2–6 Wochen: EDIFACT-Parser-Update + Konverter-Update + Testing. Kritisch für 6-Monats-Zyklen."}},
+{id:"format_updates",cat:"Regulierung",src:"ext",name:"Halbjährliche AHB-Formatanpassungen",
+ desc:"EDIFACT-AHBs werden 2x/Jahr aktualisiert. Müssen weiterhin aufwendige Formatanpassungen stattfinden?",
+ weight:2,rest:3,rpc:2,transport:1,
+ notes:{rest:"Minimal: YAML-Schema ändern, CI/CD deployt in Stunden. SemVer-Versionierung automatisch.",rpc:"Gering: Protobuf-Update + Code-Regenerierung. 1–2 Tage Aufwand.",transport:"Hoch: EDIFACT-Parser, Konverter, Mapping-Tabellen, Testfälle updaten. Typisch: 2–4 Wochen pro Zyklus."}},
+// ── KI / INNOVATION ────────────────────────────────────────────────────
+{id:"ai_generation",cat:"Innovation",src:"ext",name:"KI-gestützte API-Generierung aus Prozessen",
+ desc:"EDI@Energy könnte Prozesse formal beschreiben, KI generiert OpenAPI-Specs + Schemas + Testfälle automatisch. Nur bei REST sinnvoll.",
+ weight:2,rest:3,rpc:2,transport:1,
+ notes:{rest:"Revolutionär: OpenAPI maschinenlesbar. LLMs generieren valide Specs. GPKE-Prozess als Prompt → vollständige API. BNetzA-Update in Minuten statt Wochen.",rpc:"Möglich: Protobuf-Generierung durch KI, aber weniger Training-Daten als REST.",transport:"Nicht anwendbar: EDIFACT-Struktur für KI schwer handhabbar. Kein nennenswerter Mehrwert."}},
+// ── BETRIEB ────────────────────────────────────────────────────────────
+{id:"maintenance",cat:"Betrieb",src:"ext",name:"Wartungsaufwand langfristig",
+ desc:"Wartung von EDIFACT-Konvertern, Dual-Stack (Alt+Neu), Versionspflege. REST einfacher wenn etabliert.",
+ weight:2,rest:3,rpc:2,transport:1,
+ notes:{rest:"Niedrig: Standard-Tools (OpenAPI, Spectral), breite Community, klare Versionierung.",rpc:"Mittel: schemabasiert (Protobuf), weniger Tools als REST.",transport:"Hoch: EDIFACT-Konverter + API = Doppelpflege. Wächst mit jeder ausstehenden REST-Migration."}},
+// ── PROJEKTMANAGEMENT ──────────────────────────────────────────────────
+{id:"crisis_resources",cat:"Projektmanagement",src:"ext",name:"Ressourcenakquise im Projektnotstand",
+ desc:"Wie schnell können externe Spezialisten für ein notleidendes Projekt gefunden werden?",
+ weight:2,rest:3,rpc:1,transport:2,
+ notes:{rest:"Einfach: REST-Entwickler auf GULP/Freelancermap in 2–4 Wochen verfügbar. Onboarding mit OpenAPI-Spec in Tagen.",rpc:"Schwierig: gRPC-Experten selten. Onboarding ohne Standard-Spec dauert Monate.",transport:"Mittel: EDIFACT-Freelancer vorhanden, aber teuer und Markt schrumpft."}}
+];
+
+const REC={
+  rest:{label:"RESTful API",color:"#003F7D",bar:"#378ADD",
+    rec:"Strategisch die einzig richtige Wahl. Alle 13 Architektur-/Fachkritierien (aus api-ansaetze-vergleich) belegen: REST ist der einzige Ansatz, der Request-Response, sofortige Fehlerrückmeldung, Zustandsmechanismus, Idempotenz und vollständige NIS2/KRITIS-Compliance nativ bietet. Empfehlung: Stufenplan mit Transport-API als Übergangslösung (max. 24 Monate)."},
+  rpc:{label:"RPC-API (gRPC)",color:"#4527A0",bar:"#7F77DD",
+    rec:"Situationsabhängig – sinnvoll nur für interne Microservice-Kommunikation, nicht als Standard für öffentliche EDI-Marktprozesse. Weder so schnell wie Transport-API noch so zukunftsfähig und standardkonform wie REST."},
+  transport:{label:"Transport-API (Frankenstein)",color:"#856404",bar:"#BA7517",
+    rec:"Taktisch als Übergangslösung (max. 12–24 Monate) akzeptabel. Kritische Architektur-Mängel (kein Request-Response, kein Zustandsmechanismus, Fehler verborgen, kein Idempotenz) machen es als Endzustand inakzeptabel. NIS2/KRITIS erfordern teure Zusatzmaßnahmen."}
+};
+
+let data=C.map(c=>({...c}));
+let curFilter='all';
+
+function sc(s){return s===1?'s1':s===2?'s2':'s3'}
+function wc(w){return w===1?'w1':w===2?'w2':'w3'}
+function wdots(w){const cl=w===1?'#888780':w===2?'#BA7517':'#E24B4A';return Array.from({length:w},()=>`<span class="wdot" style="background:${cl}"></span>`).join('')}
+function cycle(id,f){const c=data.find(x=>x.id===id);if(!c)return;c[f]=c[f]===3?1:c[f]+1;render()}
+function chgW(id,d){const c=data.find(x=>x.id===id);if(!c)return;c.weight=Math.max(1,Math.min(3,c.weight+d));render()}
+function showTip(el,txt){
+  const t=document.getElementById('ttip-el');
+  t.textContent=txt;t.style.display='block';
+  const r=el.getBoundingClientRect(),p=document.querySelector('.page').getBoundingClientRect();
+  t.style.left=(r.left-p.left+r.width/2)+'px';
+  t.style.top=(r.top-p.top-4)+'px';
+}
+function hideTip(){document.getElementById('ttip-el').style.display='none'}
+function winner(c){
+  const m=Math.max(c.rest,c.rpc,c.transport);
+  const w=[['REST',c.rest],['RPC',c.rpc],['Transport',c.transport]].filter(x=>x[1]===m);
+  if(w.length>1)return{l:'Gleichstand',cl:'win-tie'};
+  return{l:w[0][0],cl:'win-'+w[0][0]};
+}
+
+function render(){
+  const visible=curFilter==='all'?data:curFilter==='doc'?data.filter(c=>c.src==='doc'):data.filter(c=>c.cat===curFilter);
+  const restW=visible.reduce((s,c)=>s+c.rest*c.weight,0);
+  const rpcW=visible.reduce((s,c)=>s+c.rpc*c.weight,0);
+  const transW=visible.reduce((s,c)=>s+c.transport*c.weight,0);
+  const maxW=visible.reduce((s,c)=>s+3*c.weight,0);
+
+  document.getElementById('tbody').innerHTML=data.map(c=>{
+    const w=winner(c);
+    const hide=(curFilter!=='all'&&curFilter!=='doc'&&c.cat!==curFilter)||(curFilter==='doc'&&c.src!=='doc');
+    return`<tr data-cat="${c.cat}" data-src="${c.src}"${hide?' class="hidden"':''}>
+<td><span class="cat-badge cat-${c.cat}">${c.cat}</span></td>
+<td><div class="cname">${c.name}</div><div class="cdesc">${c.desc}</div></td>
+<td style="text-align:center"><span class="src-badge src-${c.src}">${c.src==='doc'?'Dok':'Erw'}</span></td>
+<td class="weight-cell">
+  <div class="wctrl">
+    <button class="wb" onclick="chgW('${c.id}',-1)">-</button>
+    <span class="wnum ${wc(c.weight)}">${c.weight}</span>
+    <button class="wb" onclick="chgW('${c.id}',1)">+</button>
+  </div>
+  <div style="text-align:center">${wdots(c.weight)}</div>
+</td>
+<td class="score-cell" onclick="cycle('${c.id}','rest')">
+  <span class="sv ${sc(c.rest)}">${c.rest}</span>
+  <button class="nb" onmouseenter="showTip(this,'REST: ${c.notes.rest}')" onmouseleave="hideTip()">i</button>
+</td>
+<td class="score-cell" onclick="cycle('${c.id}','rpc')">
+  <span class="sv ${sc(c.rpc)}">${c.rpc}</span>
+  <button class="nb" onmouseenter="showTip(this,'RPC: ${c.notes.rpc}')" onmouseleave="hideTip()">i</button>
+</td>
+<td class="score-cell" onclick="cycle('${c.id}','transport')">
+  <span class="sv ${sc(c.transport)}">${c.transport}</span>
+  <button class="nb" onmouseenter="showTip(this,'Transport: ${c.notes.transport}')" onmouseleave="hideTip()">i</button>
+</td>
+<td class="indicator-cell"><span class="wb-badge ${w.cl}">${w.l}</span></td>
+</tr>`}).join('')+
+`<tr class="summary-row">
+<td colspan="3" style="text-align:right;padding-right:10px;font-size:11px;color:#58595B">Gew. Gesamtscore${curFilter!=='all'?' (gefiltert)':''} (max. ${maxW})</td>
+<td></td>
+<td style="text-align:center;font-size:14px;font-weight:700;color:#003F7D">${restW}</td>
+<td style="text-align:center;font-size:14px;font-weight:700;color:#4527A0">${rpcW}</td>
+<td style="text-align:center;font-size:14px;font-weight:700;color:#856404">${transW}</td>
+<td></td>
+</tr>`;
+
+  const top=Math.max(restW,rpcW,transW);
+  document.getElementById('results').innerHTML=[['rest',restW],['rpc',rpcW],['transport',transW]].map(([k,v])=>{
+    const pct=maxW>0?Math.round(v/maxW*100):0;
+    const r=REC[k];const isW=v===top;
+    return`<div class="rcard${isW?' winner':''}">
+${isW?'<span class="winner-lbl">Empfehlung</span><br>':''}
+<div class="rapi" style="color:${r.color}">${r.label}</div>
+<div class="rscore" style="color:${r.color}">${v}<span style="font-size:13px;font-weight:400;color:#888"> / ${maxW}</span></div>
+<div class="rpct">${pct}% des max. Scores</div>
+<div class="rbar-w"><div class="rbar" style="width:${pct}%;background:${r.bar}"></div></div>
+<div class="rrec">${r.rec}</div>
+</div>`}).join('');
+}
+
+function setFilter(f){
+  curFilter=f;
+  document.querySelectorAll('.filter-btn').forEach(b=>{
+    const t=b.textContent.trim();
+    const match=f==='all'?t.startsWith('Alle'):f==='doc'?t==='Aus Dokument':t===f;
+    b.classList.toggle('active',match);
+  });
+  render();
+}
+
+function resetAll(){data=C.map(c=>({...c}));setFilter('all')}
+render();
+</script>
+</body>
+</html>
