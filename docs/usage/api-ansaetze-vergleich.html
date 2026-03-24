@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>API-Ansätze im Vergleich – REST · RPC · Frankenstein</title>
+  <title>API-Ansätze im Vergleich – REST · RPC · Transport API</title>
   <style>
     :root{
       --bg:#fff;--bg2:#f7f7f5;--bg3:#f0eeea;
@@ -17,6 +17,7 @@
       --green50:#EAF3DE;--green600:#3B6D11;--green800:#27500A;
       --red50:#FCEBEB;--red600:#A32D2D;--red800:#501313;
       --amber50:#FAEEDA;--amber600:#854F0B;--amber800:#412402;
+      --blue50:#E8F0FA;--blue600:#1A56C4;--blue800:#0D2E72;
     }
     @media(prefers-color-scheme:dark){
       :root{
@@ -29,6 +30,7 @@
         --green50:#173404;--green600:#97C459;--green800:#C0DD97;
         --red50:#501313;--red600:#F09595;--red800:#F7C1C1;
         --amber50:#412402;--amber600:#EF9F27;--amber800:#FAC775;
+        --blue50:#0D2E72;--blue600:#7BA7F0;--blue800:#BDD1FA;
       }
     }
     *{box-sizing:border-box;margin:0;padding:0}
@@ -79,9 +81,30 @@
     .pill-g{background:var(--green50);color:var(--green800)}
     .pill-a{background:var(--amber50);color:var(--amber800)}
     .pill-r{background:var(--red50);color:var(--red800)}
+    .pill-b{background:var(--blue50);color:var(--blue800)}
     .pos{color:var(--green600)}
     .neg{color:var(--red600)}
     .neu{color:var(--amber600)}
+
+    /* Maturity Level boxes */
+    .maturity-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+    .maturity-card{border:0.5px solid var(--border);border-radius:8px;overflow:hidden}
+    .maturity-head{padding:10px 14px;display:flex;align-items:center;gap:10px}
+    .maturity-level{font-size:22px;font-weight:700;line-height:1}
+    .maturity-title{font-size:11px;font-weight:500}
+    .maturity-body{padding:10px 14px;font-size:11px;color:var(--text2);line-height:1.6;background:var(--bg2)}
+    .maturity-body li{margin-left:14px;margin-bottom:3px}
+    .maturity-example{font-size:10px;color:var(--text3);margin-top:6px;font-family:var(--mono)}
+
+    /* Payload variant boxes */
+    .payload-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+    .payload-card{border:0.5px solid var(--border);border-radius:8px;overflow:hidden}
+    .payload-head{padding:10px 14px;font-size:12px;font-weight:500;display:flex;align-items:center;gap:8px}
+    .payload-body{padding:12px 14px;background:var(--bg2)}
+    .payload-body p{font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:8px}
+    .payload-pros{font-size:11px;color:var(--text2);line-height:1.6}
+    .payload-pros li{margin-left:14px;margin-bottom:2px}
+    .payload-badge{font-size:9px;font-weight:600;padding:2px 6px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em}
 
     .summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
     .summary-card{border:0.5px solid var(--border);border-radius:10px;overflow:hidden}
@@ -94,9 +117,14 @@
     .footer a{color:var(--text3);text-decoration:none}
     .footer a:hover{color:var(--text2);text-decoration:underline}
 
+    .info-box{background:var(--blue50);border:0.5px solid var(--blue600);border-radius:8px;padding:12px 16px;margin:16px 0;font-size:12px;color:var(--blue800);line-height:1.6}
+    .info-box strong{color:var(--blue600)}
+
     @media(max-width:700px){
       .pro-con{grid-template-columns:1fr}
       .summary-grid{grid-template-columns:1fr}
+      .maturity-grid{grid-template-columns:1fr}
+      .payload-grid{grid-template-columns:1fr}
     }
   </style>
 </head>
@@ -104,7 +132,7 @@
 
 <div class="page-header">
   <h1>API-Ansätze im Vergleich / API Design Approaches Compared</h1>
-  <p>REST API · RPC API · Frankenstein API — Architektur, Kommunikationsfluss, Vor- und Nachteile</p>
+  <p>REST API · RPC API · Transport API (Frankenstein) — Architektur, Kommunikationsfluss, Vor- und Nachteile</p>
   <div class="badge-row">
     <span class="badge">OpenAPI 3.0</span>
     <span class="badge">EDI@Energy</span>
@@ -118,7 +146,7 @@
 <nav class="tabs">
   <button class="tab teal active" onclick="show('rest',this)">REST API</button>
   <button class="tab purple" onclick="show('rpc',this)">RPC API</button>
-  <button class="tab coral" onclick="show('frank',this)">Frankenstein API</button>
+  <button class="tab coral" onclick="show('transport',this)">Transport API (Frankenstein)</button>
   <button class="tab gray" onclick="show('compare',this)">Vergleich / Comparison</button>
   <button class="tab gray" onclick="show('summary',this)">Fazit / Summary</button>
 </nav>
@@ -187,6 +215,74 @@
   <text font-family="system-ui,sans-serif" font-size="10" x="240" y="295" dominant-baseline="central" fill="#5F5E5A">HTTP-Antwort (synchron)</text>
   </svg>
 
+  <!-- Richardson Maturity Model -->
+  <div style="margin-top:22px;margin-bottom:6px">
+    <div class="section-title">Richardson Maturity Model — 3 Reifestufen / 3 Maturity Levels</div>
+  </div>
+
+  <div class="maturity-grid">
+    <div class="maturity-card">
+      <div class="maturity-head" style="background:var(--red50);border-bottom:0.5px solid var(--border)">
+        <div class="maturity-level" style="color:var(--red600)">0</div>
+        <div>
+          <div class="maturity-title" style="color:var(--red800)">Plain Old XML / HTTP-Tunnel</div>
+          <div style="font-size:10px;color:var(--red600);margin-top:1px">Ein Endpunkt, eine Aktion</div>
+        </div>
+      </div>
+      <div class="maturity-body">
+        <ul>
+          <li>Einzelner URI für alle Operationen</li>
+          <li>HTTP nur als Transportprotokoll</li>
+          <li>Kein semantischer Einsatz von Verben oder Status</li>
+          <li>Entspricht funktionalem Messaging (SOAP, XML-RPC)</li>
+        </ul>
+        <div class="maturity-example">POST /api — alle Aktionen im Body</div>
+      </div>
+    </div>
+
+    <div class="maturity-card">
+      <div class="maturity-head" style="background:var(--amber50);border-bottom:0.5px solid var(--border)">
+        <div class="maturity-level" style="color:var(--amber600)">1</div>
+        <div>
+          <div class="maturity-title" style="color:var(--amber800)">Ressourcen / Resources</div>
+          <div style="font-size:10px;color:var(--amber600);margin-top:1px">Separate URIs pro Entität</div>
+        </div>
+      </div>
+      <div class="maturity-body">
+        <ul>
+          <li>Jede Ressource hat eigene URI</li>
+          <li>Aber noch kein sinnvoller HTTP-Verbeneinsatz</li>
+          <li>Oft nur POST für alle Operationen</li>
+          <li>Ressourcen adressierbar, aber nicht hypermedia-fähig</li>
+        </ul>
+        <div class="maturity-example">POST /registrations/create<br>POST /registrations/delete</div>
+      </div>
+    </div>
+
+    <div class="maturity-card">
+      <div class="maturity-head" style="background:var(--teal50);border-bottom:0.5px solid var(--border)">
+        <div class="maturity-level" style="color:var(--teal600)">2</div>
+        <div>
+          <div class="maturity-title" style="color:var(--teal800)">HTTP-Verben + Statuscodes</div>
+          <div style="font-size:10px;color:var(--teal600);margin-top:1px">Vollständige HTTP-Semantik — empfohlene Stufe</div>
+        </div>
+      </div>
+      <div class="maturity-body">
+        <ul>
+          <li>GET, POST, PATCH, DELETE semantisch korrekt eingesetzt</li>
+          <li>HTTP-Statuscodes bedeutungsvoll (201, 400, 409, 422)</li>
+          <li>ETag, If-Match, Idempotency-Key vollständig genutzt</li>
+          <li>Caching über GET möglich — OpenAPI-Tooling voll unterstützt</li>
+        </ul>
+        <div class="maturity-example">POST /malo/{id}/registrations → 201<br>GET /registrations/{id} → 200<br>PATCH /registrations/{id} → 200</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>Hinweis zur GPKE-Spezifikation:</strong> Die in diesem Repository umgesetzte API (<code>api/malo.yaml</code>) entspricht <strong>Reifestufe 2</strong> — vollständige HTTP-Verb-Semantik, RFC-konforme Statuscodes (RFC 9110), Zustandsverwaltung über ETag + If-Match, Idempotenz via Idempotency-Key, und mehrschichtige Sicherheit (JWT + JWS + JWE + RFC 9421). Stufe 3 (HATEOAS) ist für Marktkommunkation nicht erforderlich.
+  </div>
+
   <div class="pro-con">
     <div class="pc-box">
       <div class="pc-title" style="color:var(--green600)">Vorteile / Advantages</div>
@@ -209,7 +305,7 @@
 
   <div class="verdict" style="background:var(--teal50);border-color:var(--teal600)">
     <span class="verdict-pill" style="background:var(--teal600);color:#fff">Empfohlen</span>
-    <span style="font-size:12px;color:var(--teal800)">Moderner Standard. Nutzt HTTP vollständig aus. Zukunftssicher. Tooling-Ökosystem (OpenAPI, Swagger, Redocly) voll unterstützt.</span>
+    <span style="font-size:12px;color:var(--teal800)">Moderner Standard. Nutzt HTTP vollständig aus. Reifestufe 2 ist der de-facto-Standard für öffentliche APIs. Zukunftssicher. Tooling-Ökosystem (OpenAPI, Swagger, Redocly) voll unterstützt.</span>
   </div>
 </div>
 
@@ -288,10 +384,10 @@
 </div>
 
 <!-- ══════════════════════════════════════════════════════════
-     TAB 3 — Frankenstein
+     TAB 3 — Transport API (Frankenstein)
 ══════════════════════════════════════════════════════════ -->
-<div id="tab-frank" class="tab-panel">
-  <div class="section-title">Frankenstein API — Kommunikationsfluss / Communication flow</div>
+<div id="tab-transport" class="tab-panel">
+  <div class="section-title">Transport API (Frankenstein) — Kommunikationsfluss / Communication flow</div>
 
   <svg viewBox="0 0 960 330" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -309,25 +405,25 @@
   <line x1="80" y1="74" x2="80" y2="320" stroke="#993C1D" stroke-width="1" stroke-dasharray="4 3"/>
   <line x1="880" y1="74" x2="880" y2="320" stroke="#993C1D" stroke-width="1" stroke-dasharray="4 3"/>
 
-  <!-- POST UTILMD Anmeldung -->
+  <!-- POST Anmeldung -->
   <line x1="80" y1="108" x2="870" y2="108" stroke="#993C1D" stroke-width="1.5" fill="none" marker-end="url(#ar3)"/>
   <rect x="190" y="91" width="530" height="24" rx="4" fill="#FAECE7"/>
-  <text font-family="system-ui,sans-serif" font-size="11" font-weight="500" text-anchor="middle" x="455" y="101" fill="#4A1B0C">POST /utilmd — UTILMD Nachricht: Anmeldung (PI 55001)</text>
-  <text font-family="system-ui,sans-serif" font-size="10" text-anchor="middle" x="455" y="115" fill="#993C1D">Body: {messageType:"E01", transactions:[{…EDIFACT-Segmente…}]}</text>
+  <text font-family="system-ui,sans-serif" font-size="11" font-weight="500" text-anchor="middle" x="455" y="101" fill="#4A1B0C">POST /utilmd — Anmeldung (PI 55001)</text>
+  <text font-family="system-ui,sans-serif" font-size="10" text-anchor="middle" x="455" y="115" fill="#993C1D">Body: EDIFACT-String oder JSON mit /schema-Datenmodell</text>
 
-  <!-- 202 Accepted — nur Transportquittung -->
+  <!-- 202 Accepted -->
   <line x1="870" y1="138" x2="90" y2="138" stroke="#888780" stroke-width="1" stroke-dasharray="4 2" fill="none" marker-end="url(#ar3)"/>
   <rect x="290" y="126" width="330" height="18" rx="4" fill="#f0eeea"/>
   <text font-family="system-ui,sans-serif" font-size="10" text-anchor="middle" x="455" y="135" fill="#A32D2D">202 Accepted — nur Transportquittung, keine fachliche Prüfung</text>
 
-  <!-- Warten — keine Kommunikation -->
+  <!-- Warten -->
   <line x1="80" y1="155" x2="880" y2="155" stroke="#D3D1C7" stroke-width="0.5" stroke-dasharray="2 3"/>
   <text font-family="system-ui,sans-serif" font-size="10" text-anchor="middle" x="480" y="170" fill="#B4B2A9">… Zeit vergeht — kein Dialog, kein Status, kein Polling möglich …</text>
 
-  <!-- POST UTILMD Antwort — als neue separate Anfrage von NB→LFN -->
+  <!-- POST Antwort NB→LFN -->
   <line x1="870" y1="196" x2="90" y2="196" stroke="#D85A30" stroke-width="1.5" fill="none" marker-end="url(#ar3)"/>
   <rect x="180" y="179" width="560" height="24" rx="4" fill="#FAECE7"/>
-  <text font-family="system-ui,sans-serif" font-size="11" font-weight="500" text-anchor="middle" x="460" y="188" fill="#4A1B0C">POST /utilmd — UTILMD Nachricht: Antwort Anmeldung (PI 55002)</text>
+  <text font-family="system-ui,sans-serif" font-size="11" font-weight="500" text-anchor="middle" x="460" y="188" fill="#4A1B0C">POST /utilmd — Antwort Anmeldung (PI 55002)</text>
   <text font-family="system-ui,sans-serif" font-size="10" text-anchor="middle" x="460" y="203" fill="#993C1D">Völlig neue HTTP-Anfrage — kein Bezug zur ursprünglichen Anfrage</text>
 
   <!-- 202 again -->
@@ -338,15 +434,84 @@
   <!-- Annotation box -->
   <rect x="180" y="250" width="560" height="50" rx="6" fill="#FCEBEB" stroke="#E24B4A" stroke-width="0.5"/>
   <text font-family="system-ui,sans-serif" font-size="11" font-weight="500" text-anchor="middle" x="460" y="265" fill="#501313">Kein Request-Response-Muster</text>
-  <text font-family="system-ui,sans-serif" font-size="10" text-anchor="middle" x="460" y="281" fill="#A32D2D">Fehler im Body verborgen · Kein Status-Polling möglich · Korrelation nur über MessageID im UTILMD-Body</text>
+  <text font-family="system-ui,sans-serif" font-size="10" text-anchor="middle" x="460" y="281" fill="#A32D2D">Fehler im Body verborgen · Kein Status-Polling möglich · Korrelation nur über MessageID im Body</text>
 
   <line x1="20" y1="315" x2="55" y2="315" stroke="#993C1D" stroke-width="1.5" fill="none" marker-end="url(#ar3)"/>
-  <text font-family="system-ui,sans-serif" font-size="10" x="60" y="315" dominant-baseline="central" fill="#5F5E5A">UTILMD-Nachricht (POST)</text>
+  <text font-family="system-ui,sans-serif" font-size="10" x="60" y="315" dominant-baseline="central" fill="#5F5E5A">Nachricht (POST)</text>
   <line x1="230" y1="315" x2="265" y2="315" stroke="#888780" stroke-width="1" stroke-dasharray="4 2" fill="none" marker-end="url(#ar3)"/>
   <text font-family="system-ui,sans-serif" font-size="10" x="270" y="315" dominant-baseline="central" fill="#5F5E5A">202 Transportquittung</text>
   <line x1="430" y1="315" x2="465" y2="315" stroke="#D3D1C7" stroke-width="0.5" stroke-dasharray="2 3" fill="none"/>
   <text font-family="system-ui,sans-serif" font-size="10" x="470" y="315" dominant-baseline="central" fill="#B4B2A9">kein Dialog</text>
   </svg>
+
+  <!-- Payload Variants -->
+  <div style="margin-top:22px;margin-bottom:6px">
+    <div class="section-title">Payload-Varianten / Payload Variants</div>
+  </div>
+
+  <div class="payload-grid">
+    <div class="payload-card">
+      <div class="payload-head" style="background:var(--amber50);border-bottom:0.5px solid var(--border)">
+        <span class="payload-badge" style="background:var(--amber600);color:#fff">Variante A</span>
+        <span style="color:var(--amber800)">EDIFACT 1:1 als String-Element</span>
+      </div>
+      <div class="payload-body">
+        <p>Die EDIFACT-Nachricht (UTILMD) wird unverändert als String-Wert in den HTTP-Body übernommen. HTTP dient ausschließlich als Transportmedium — die gesamte Semantik verbleibt im EDIFACT-Envelope.</p>
+        <pre style="font-size:10px;margin-top:8px">{
+  "messageType": "UTILMD",
+  "payload": "UNA:+.? 'UNB+UNOC:3+...'",
+  "senderId": "9900000000002",
+  "receiverId": "9900000000001"
+}</pre>
+        <div class="payload-pros">
+          <strong style="font-size:11px;color:var(--text)">Charakteristik:</strong>
+          <ul style="margin-top:4px">
+            <li>Keine Transformation der EDIFACT-Nachricht erforderlich</li>
+            <li>Bestehende EDIFACT-Validatoren weiterhin einsetzbar</li>
+            <li>JSON-Wrapper nur für Transport-Metadaten</li>
+            <li>Niedrigste Migrationskosten — nur Transportweg wechselt</li>
+            <li style="color:var(--red600)">EDIFACT-Parsing weiterhin auf Empfängerseite nötig</li>
+            <li style="color:var(--red600)">Kein modernes JSON-Tooling für Validierung nutzbar</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="payload-card">
+      <div class="payload-head" style="background:var(--blue50);border-bottom:0.5px solid var(--border)">
+        <span class="payload-badge" style="background:var(--blue600);color:#fff">Variante B</span>
+        <span style="color:var(--blue800)">JSON-Datenmodell via <code>/schema</code></span>
+      </div>
+      <div class="payload-body">
+        <p>Das EDIFACT-Datenmodell wird in eine strukturierte JSON-Repräsentation überführt. Das Schema wird unter <code>/schema</code> (oder als OpenAPI-Komponente) bereitgestellt und ermöglicht JSON-Schema-Validierung.</p>
+        <pre style="font-size:10px;margin-top:8px">{
+  "messageType": "UTILMD",
+  "transactions": [{
+    "processIndicator": "E01",
+    "marketLocationId": "52003456789",
+    "supplyStartDate": "2025-04-01",
+    "meterReadingReasons": ["Z04"]
+  }]
+}
+// Schema: GET /schema/utilmd → JSON Schema</pre>
+        <div class="payload-pros">
+          <strong style="font-size:11px;color:var(--text)">Charakteristik:</strong>
+          <ul style="margin-top:4px">
+            <li>Vollständige JSON-Schema-Validierung möglich</li>
+            <li>Moderne Toolchain: OpenAPI, Spectral, Postman</li>
+            <li>Lesbareres Format — kein EDIFACT-Parsing nötig</li>
+            <li>Schema unter <code>/schema</code> versionierbar und dokumentierbar</li>
+            <li style="color:var(--amber600)">Höherer Transformationsaufwand (EDIFACT ↔ JSON)</li>
+            <li style="color:var(--amber600)">Transport-Muster bleibt: kein Request-Response</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box" style="background:var(--amber50);border-color:var(--amber600)">
+    <strong style="color:var(--amber600)">Hinweis zu beiden Varianten:</strong> Unabhängig vom Payload-Format (EDIFACT-String oder JSON) bleibt das grundlegende Muster der Transport API erhalten: HTTP dient als Transportkanal, die Antwort kommt als neue separate Anfrage, und es gibt keinen Request-Response-Mechanismus. Variante B verbessert die Lesbarkeit und Validierbarkeit, löst jedoch die strukturellen Limitierungen nicht.
+  </div>
 
   <div class="pro-con">
     <div class="pc-box">
@@ -355,6 +520,7 @@
       <div class="pc-item"><div class="dot-pos"></div>Bestehende UTILMD-Dokumentation gilt weiter</div>
       <div class="pc-item"><div class="dot-pos"></div>Geringer Migrationsaufwand für Fachseite</div>
       <div class="pc-item"><div class="dot-pos"></div>Technisch einfach umsetzbar (nur Transportweg wechseln)</div>
+      <div class="pc-item"><div class="dot-pos"></div>Variante B: JSON-Schema-Validierung und moderne Toolchain möglich</div>
     </div>
     <div class="pc-box">
       <div class="pc-title" style="color:var(--red600)">Nachteile / Disadvantages</div>
@@ -363,15 +529,14 @@
       <div class="pc-item"><div class="dot-neg"></div>Keine sofortige fachliche Fehlerrückmeldung (Fehler im Body)</div>
       <div class="pc-item"><div class="dot-neg"></div>Kein Zustandsmechanismus (kein ETag, kein Status-Polling)</div>
       <div class="pc-item"><div class="dot-neg"></div>Keine Idempotenz — doppelter Versand erzeugt Duplikate</div>
-      <div class="pc-item"><div class="dot-neg"></div>EDIFACT-Altlasten: hohe Einstiegshürde für neue Implementierungen</div>
-      <div class="pc-item"><div class="dot-neg"></div>Kein modernes API-Tooling verwendbar</div>
+      <div class="pc-item"><div class="dot-neg"></div>Kein modernes API-Tooling vollständig verwendbar</div>
       <div class="pc-item"><div class="dot-neg"></div>Technische Schulden — langfristig schwer wartbar</div>
     </div>
   </div>
 
   <div class="verdict" style="background:var(--red50);border-color:var(--red600)">
     <span class="verdict-pill" style="background:var(--red600);color:#fff">Nicht empfohlen</span>
-    <span style="font-size:12px;color:var(--red800)">API als Transportrohr. Alle Vorteile moderner APIs gehen verloren. HTTP-Standard wird missbraucht. Technische Schulden vorprogrammiert. Passend benannt: aus verschrotteten Altteilen erzwungen.</span>
+    <span style="font-size:12px;color:var(--red800)">API als Transportrohr. Alle Vorteile moderner APIs gehen verloren. HTTP-Standard wird nicht ausgeschöpft. Technische Schulden vorprogrammiert. Der Name „Frankenstein" trifft es: aus verschrotteten Altteilen erzwungen.</span>
   </div>
 </div>
 
@@ -386,7 +551,7 @@
         <th style="width:18%">Kriterium</th>
         <th style="width:27%;color:var(--teal800);background:var(--teal50)">REST API</th>
         <th style="width:27%;color:var(--purple800);background:var(--purple50)">RPC API</th>
-        <th style="width:28%;color:var(--coral800);background:var(--coral50)">Frankenstein API</th>
+        <th style="width:28%;color:var(--coral800);background:var(--coral50)">Transport API (Frankenstein)</th>
       </tr>
     </thead>
     <tbody>
@@ -394,11 +559,14 @@
       <tr><td style="font-weight:500;font-size:11px">Grundprinzip</td><td>Ressourcen + HTTP-Verben</td><td>Prozeduraufrufe (Aktionen)</td><td>Nachrichtentransport</td></tr>
       <tr><td style="font-weight:500;font-size:11px">URL-Design</td><td class="pos">/malo/{id}/registrations<br>Ressource klar adressierbar</td><td>/submitAnmeldung<br>Aktionsname in URL</td><td class="neg">/utilmd — ein Endpunkt für alles</td></tr>
       <tr><td style="font-weight:500;font-size:11px">HTTP-Verben</td><td class="pos">GET, POST, PATCH, DELETE<br>semantisch korrekt</td><td>Meist nur POST</td><td class="neg">Ausschließlich POST<br>HTTP degeneriert</td></tr>
+      <tr><td style="font-weight:500;font-size:11px">REST Reifestufe</td><td class="pos"><span class="pill pill-g">Level 2</span> HTTP-Verben + Statuscodes vollständig</td><td><span class="pill pill-a">Level 0–1</span> Aktionsorientiert</td><td class="neg"><span class="pill pill-r">Level 0</span> HTTP als Tunnel</td></tr>
       <tr><td style="font-weight:500;font-size:11px">Request–Response</td><td class="pos">Synchron + async (202+Polling)</td><td>Synchron oder async</td><td class="neg">Kein Response — Antwort als neue Anfrage</td></tr>
-      <tr><td colspan="4" class="cat-row"><td>DATEN & FEHLER</td></tr>
-      <tr><td style="font-weight:500;font-size:11px">Datenmodell</td><td class="pos">Domänenobjekte (SupplyStart)<br>fachlich sauber</td><td>Parameter-Objekte</td><td class="neg">UTILMD-Segmente in JSON gepresst</td></tr>
-      <tr><td style="font-weight:500;font-size:11px">Fehler­rückmeldung</td><td class="pos">400/422 + RFC 9457<br>sofort, synchron</td><td>Im Response-Objekt</td><td class="neg">Im UTILMD-Body, asynchron<br>keine sofortige Rückmeldung</td></tr>
-      <tr><td style="font-weight:500;font-size:11px">Prüf-ID (PI)</td><td class="pos">Explizit in operationId<br>direkt nachvollziehbar</td><td>Abbildbar</td><td>Im UTILMD-Header-Segment verborgen</td></tr>
+      <tr><td colspan="4" class="cat-row"><td>DATEN & PAYLOAD</td></tr>
+      <tr><td style="font-weight:500;font-size:11px">Datenmodell</td><td class="pos">Domänenobjekte (SupplyStart)<br>fachlich sauber, JSON-Schema validiert</td><td>Parameter-Objekte</td><td><span class="pill pill-a">Var. A</span> EDIFACT-String im Body<br><span class="pill pill-b">Var. B</span> JSON via /schema</td></tr>
+      <tr><td style="font-weight:500;font-size:11px">Payload-Format</td><td class="pos">Strukturiertes JSON nach OpenAPI-Schema</td><td>JSON, Protobuf oder XML</td><td><span class="pill pill-a">Var. A</span> EDIFACT 1:1 als String-Wert<br><span class="pill pill-b">Var. B</span> JSON-Repräsentation des EDIFACT-Modells unter /schema</td></tr>
+      <tr><td style="font-weight:500;font-size:11px">Schema-Validierung</td><td class="pos">Vollständig über OpenAPI + Spectral</td><td>Protobuf-Kompilierung oder JSON-Schema</td><td class="neg"><span class="pill pill-a">Var. A</span> Nur EDIFACT-Validator<br><span class="pill pill-b">Var. B</span> JSON-Schema möglich</td></tr>
+      <tr><td style="font-weight:500;font-size:11px">Fehler­rückmeldung</td><td class="pos">400/422 + RFC 9457<br>sofort, synchron</td><td>Im Response-Objekt</td><td class="neg">Im Body, asynchron<br>keine sofortige Rückmeldung</td></tr>
+      <tr><td style="font-weight:500;font-size:11px">Prüf-ID (PI)</td><td class="pos">Explizit in operationId<br>direkt nachvollziehbar</td><td>Abbildbar</td><td>Im Nachrichten-Header verborgen</td></tr>
       <tr><td colspan="4" class="cat-row"><td>PROZESS</td></tr>
       <tr><td style="font-weight:500;font-size:11px">Prozess-Mapping</td><td>Ressourcen-Übergänge</td><td class="pos">Direkte Prozessübersetzung</td><td class="pos">Identisch mit EDIFACT<br>keine Anpassung nötig</td></tr>
       <tr><td style="font-weight:500;font-size:11px">Zustand</td><td class="pos">ETag + If-Match<br>optimistic locking</td><td>Im Response-Objekt</td><td class="neg">Kein Mechanismus</td></tr>
@@ -407,13 +575,13 @@
       <tr><td style="font-weight:500;font-size:11px">Standards</td>
         <td><span class="pill pill-g">RFC 9110</span><span class="pill pill-g">RFC 9421</span><span class="pill pill-g">OpenAPI 3.0</span></td>
         <td><span class="pill pill-g">gRPC/Protobuf</span><span class="pill pill-g">JSON-RPC 2.0</span></td>
-        <td><span class="pill pill-a">EDIFACT-Semantik</span><span class="pill pill-r">HTTP missbraucht</span></td>
+        <td><span class="pill pill-a">EDIFACT-Semantik</span><span class="pill pill-r">HTTP nicht ausgeschöpft</span></td>
       </tr>
       <tr><td style="font-weight:500;font-size:11px">Idempotenz</td><td class="pos">Idempotency-Key + ETag</td><td>Möglich, nicht standardisiert</td><td class="neg">Kein Mechanismus</td></tr>
       <tr><td style="font-weight:500;font-size:11px">Caching</td><td class="pos">GET cachebar</td><td>Nicht vorgesehen</td><td class="neg">Nicht möglich</td></tr>
       <tr><td style="font-weight:500;font-size:11px">Sicherheit</td><td class="pos">JWT + JWS + JWE + RFC 9421</td><td>TLS + Auth</td><td>TLS möglich</td></tr>
       <tr><td colspan="4" class="cat-row"><td>ÖKOSYSTEM</td></tr>
-      <tr><td style="font-weight:500;font-size:11px">Tooling</td><td class="pos">Swagger, Redocly, Postman, Spectral</td><td>gRPC-Tools, Protobuf</td><td class="neg">Nur generisches HTTP</td></tr>
+      <tr><td style="font-weight:500;font-size:11px">Tooling</td><td class="pos">Swagger, Redocly, Postman, Spectral</td><td>gRPC-Tools, Protobuf</td><td class="neg">Nur generisches HTTP<br>Var. B: teilweise JSON-Tools</td></tr>
       <tr><td style="font-weight:500;font-size:11px">Developer Experience</td><td class="pos">Selbstbeschreibend, interaktive Doku</td><td>Klar benannte Aktionen</td><td class="neg">EDIFACT-Kenntnisse erforderlich</td></tr>
       <tr><td colspan="4" class="cat-row"><td>GESAMTBEWERTUNG</td></tr>
       <tr>
@@ -435,11 +603,11 @@
   <div class="summary-grid">
     <div class="summary-card" style="border-color:var(--teal600)">
       <div class="summary-head" style="background:var(--teal50);color:var(--teal800)">
-        REST API <span style="font-size:10px;font-weight:400;color:var(--teal600)">— Empfohlen</span>
+        REST API <span style="font-size:10px;font-weight:400;color:var(--teal600)">— Empfohlen · Reifestufe 2</span>
       </div>
       <div class="summary-body" style="padding-top:14px">
         <p>Der REST-Ansatz — so wie er in diesem Repository umgesetzt ist — ist der einzige der alle drei API-Versprechen gleichzeitig einlöst: einheitliche Schnittstelle, sofortiges Feedback, und Selbstbeschreibung.</p>
-        <p>Der Prüfidentifikator-Mechanismus von EDI@Energy lässt sich sauber auf <code>operationId</code> und HTTP-Statuscodes mappen, ohne EDIFACT-Semantik im Transport mitzuschleppen.</p>
+        <p>Mit Reifestufe 2 (Richardson Maturity Model) werden HTTP-Verben und Statuscodes vollständig semantisch eingesetzt. Der Prüfidentifikator-Mechanismus von EDI@Energy lässt sich sauber auf <code>operationId</code> und HTTP-Statuscodes mappen.</p>
         <p>Das gesamte moderne API-Ökosystem steht zur Verfügung: OpenAPI-Generatoren, interaktive Dokumentation, Linting mit Spectral, Contract Testing — alles ohne zusätzlichen Aufwand.</p>
         <p>Zustandsverwaltung über ETag + If-Match ist ein etabliertes, sicheres Muster für optimistic locking. Mehrschichtige Sicherheit (JWT + JWS + JWE + RFC 9421) ist vollständig integriert.</p>
       </div>
@@ -450,7 +618,7 @@
         RPC API <span style="font-size:10px;font-weight:400;color:var(--amber600)">— Situationsabhängig</span>
       </div>
       <div class="summary-body" style="padding-top:14px">
-        <p>Der RPC-Ansatz ist ehrlicher als der Frankenstein-Ansatz, weil er offen zugibt dass es um Aktionen geht — nicht um Ressourcen. Er ist prozessnah und für interne Microservices (gRPC) hervorragend geeignet.</p>
+        <p>Der RPC-Ansatz ist ehrlicher als der Transport-Ansatz, weil er offen zugibt dass es um Aktionen geht — nicht um Ressourcen. Er ist prozessnah und für interne Microservices (gRPC) hervorragend geeignet.</p>
         <p>Für öffentliche EDI-APIs im deutschen Strommarkt ist er jedoch unüblich. Das Tooling-Ökosystem ist anders als bei REST, und bestehende EDI@Energy-Spezifikationen orientieren sich nicht an RPC-Semantik.</p>
         <p>Als Brücke zwischen internem System und externem REST-Endpunkt kann RPC sinnvoll sein — aber nicht als das nach außen sichtbare API-Design.</p>
       </div>
@@ -458,13 +626,13 @@
 
     <div class="summary-card" style="border-color:var(--red600)">
       <div class="summary-head" style="background:var(--red50);color:var(--red800)">
-        Frankenstein API <span style="font-size:10px;font-weight:400;color:var(--red600)">— Nicht empfohlen</span>
+        Transport API <span style="font-size:10px;font-weight:400;color:var(--red600)">(Frankenstein) — Nicht empfohlen</span>
       </div>
       <div class="summary-body" style="padding-top:14px">
-        <p>Die Frankenstein API ist technisch gesehen kein API-Design, sondern ein Protokollwechsel auf Transportebene. Man tauscht AS4 oder E-Mail gegen HTTPS — die Nachrichtenstruktur und Prozesslogik bleiben unverändert.</p>
+        <p>Die Transport API ist technisch gesehen kein API-Design, sondern ein Protokollwechsel auf Transportebene. Man tauscht AS4 oder E-Mail gegen HTTPS — die Nachrichtenstruktur und Prozesslogik bleiben unverändert.</p>
+        <p>Zwei Payload-Varianten sind denkbar: <strong>Variante A</strong> übernimmt EDIFACT 1:1 als String-Element — minimale Migration, maximale EDIFACT-Altlasten. <strong>Variante B</strong> verwendet das Datenmodell als JSON unter <code>/schema</code> — bessere Toolchain, aber Transport-Muster bleibt gleich.</p>
         <p>Die eigentliche Erkenntnis: wenn man nur den Transportweg wechselt, kauft man sich alle Nachteile beider Welten — die Starrheit von EDIFACT und die Komplexität von HTTP — ohne die Vorteile einer der beiden zu nutzen.</p>
-        <p>Das Fehlen von Request-Response bedeutet: kein sofortiges Feedback, keine Validierung im Transport, keine Idempotenz, kein Zustandsmechanismus. Technische Schulden sind vorprogrammiert.</p>
-        <p style="font-weight:500;color:var(--red800)">Der Name trifft es: aus verschrotteten Altteilen wird ein neues Konstrukt erzwungen — das zwar funktioniert, aber keiner modernen API-Architektur entspricht.</p>
+        <p style="font-weight:500;color:var(--red800)">Der Name „Frankenstein" trifft es: aus verschrotteten Altteilen wird ein neues Konstrukt erzwungen — das zwar funktioniert, aber keiner modernen API-Architektur entspricht.</p>
       </div>
     </div>
   </div>
@@ -472,7 +640,7 @@
   <div style="margin-top:24px;padding:16px 20px;background:var(--bg2);border:0.5px solid var(--border);border-radius:8px">
     <div style="font-size:12px;font-weight:500;margin-bottom:10px;color:var(--text)">Empfehlung für EDI@Energy / Recommendation for EDI@Energy</div>
     <div style="font-size:12px;color:var(--text2);line-height:1.7">
-      Für den deutschen Strommarkt und die GPKE/UTILMD-Prozesse ist <strong style="color:var(--teal600)">REST die klare Empfehlung</strong>. Die in diesem Repository umgesetzte Spezifikation (<code>api/malo.yaml</code>) zeigt, dass sich alle 7 Prozessschritte des SD: Lieferbeginn sauber auf REST-Ressourcen abbilden lassen — mit vollständiger Prüfidentifikator-Nachverfolgbarkeit, sofortiger Fehlerrückmeldung und dem gesamten modernen API-Ökosystem.
+      Für den deutschen Strommarkt und die GPKE/UTILMD-Prozesse ist <strong style="color:var(--teal600)">REST (Reifestufe 2) die klare Empfehlung</strong>. Die in diesem Repository umgesetzte Spezifikation (<code>api/malo.yaml</code>) zeigt, dass sich alle 7 Prozessschritte des SD: Lieferbeginn sauber auf REST-Ressourcen abbilden lassen — mit vollständiger Prüfidentifikator-Nachverfolgbarkeit, sofortiger Fehlerrückmeldung und dem gesamten modernen API-Ökosystem. Die Transport API kann als Migrationsstufe betrachtet werden, ist aber kein Zielzustand.
     </div>
   </div>
 </div>
