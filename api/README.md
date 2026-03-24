@@ -16,9 +16,7 @@ REST-APIs des GPKE/UTILMD-Projekts. Jede API-Datei ist eine eigenständige,
 ausführbare OpenAPI-Spezifikation, die Schemas per `$ref` aus der zentralen
 Bibliothek unter `../schema/` und HTTP-Header-Definitionen aus `../header/` bezieht.
 
-[Testen Sie Ihr Wissen zu API's](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke-quiz.html)
-
-[![API Test](https://img.shields.io/badge/API-Test-blue?style=flat)](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke-quiz.html)
+Möchten Sie Ihre API Wissenlücken aufdecken? [![API Test](https://img.shields.io/badge/API-Test-blue?style=flat)](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke-quiz.html)
 
 ## EN – Overview
 
@@ -31,7 +29,7 @@ REST APIs. Each API file is a self-contained, executable OpenAPI specification t
 references schemas from the central library under `../schema/` and HTTP header
 definitions from `../header/`.
 
-[check you api knowledge](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke-quiz.html)
+Check your API knwoledge [![API Test](https://img.shields.io/badge/API-Test-blue?style=flat)](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke-quiz.html)
 
 ---
 
