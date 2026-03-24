@@ -21,7 +21,7 @@ info:
      Deckt alle 7 Prozessschritte des SD: Lieferbeginn (GPKE Teil 2, S. 31 ff.) ab.
       Die Geschäftsdaten entsprechen den EDIFACT-UTILMD-Nachrichten der Marktkommunikation.
   contact:
-    name: BDEW
+    name: Edgar Jung
     url: 'https://www.bdew-mako.de'
     email: edgar.jung.external@westnetz.de
   license:
