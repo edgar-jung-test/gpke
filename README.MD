@@ -42,7 +42,7 @@ The corresponding subdirectory explains the advantages of OAS 3.1. For compatibi
 with apiGIT, the current schema is still based on OAS 3.0. However, the modern editor Stoplight Studio
 already supports OAS 3.1.
 
-[![API Knowledge](https://img.shields.io/badge/API%20Knowledge-open-0A66C2?style=flat-square)](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke-quiz.html)
+[![API Knowledge](https://img.shields.io/badge/API%20Knowledge-open-0A66C2?style=flat-square)](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke-quiz.html) [![API Comparison](https://img.shields.io/badge/API%20Comparison-open-0A66C2?style=flat-square)](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/usage/api-ansaetze-vergleich.html) [![GPKE Data Model](https://img.shields.io/badge/GPKE%20Data%20Model-open%20in%20draw.io-F08705?style=flat-square)](https://app.diagrams.net/#Uhttps%3A%2F%2Fraw.githubusercontent.com%2Fedgar-jung-test%2Fgpke%2Fmain%2Fdocs%2Fmodels%2FBDEW_Datenmodell_v2.2_ERM.drawio)
 
 Covered processes:
 
