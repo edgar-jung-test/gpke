@@ -12,7 +12,7 @@ Es umfasst Prozessdiagramme, Sicherheitsarchitektur, Datenmodelle und Implementi
 Alle Inhalte ergänzen die normativen Spezifikationen in `api/` und `schema/` — bei Abweichungen
 gelten die YAML-Dateien.
 
-[![API-Ansätze Vergleich](https://img.shields.io/badge/API--Ans%C3%A4tze-Vergleich-0A66C2?style=flat-square)](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/usage/api-ansaetze-vergleich.html)
+[![API-Ansätze Vergleich](https://img.shields.io/badge/API--Ans%C3%A4tze-Vergleich-0A66C2?style=flat-square)](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/usage/api-ansaetze-vergleich.html) [![API Test](https://img.shields.io/badge/API%20Test-open-0A66C2?style=flat-square)](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/gpke-quiz.html) 
 
 ## EN – Overview
 
@@ -21,7 +21,7 @@ It covers process diagrams, security architecture, data models and implementatio
 All content supplements the normative specifications in `api/` and `schema/` — in case of
 discrepancy, the YAML files take precedence.
 
-[![Concurrent APIs – Implementation Rules](https://img.shields.io/badge/Concurrent%20APIs-Implementation%20Rules-0A66C2?style=flat-square)](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/usage/api-ansaetze-vergleich.html)
+[![Concurrent APIs – Implementation Rules](https://img.shields.io/badge/Concurrent%20APIs-Implementation%20Rules-0A66C2?style=flat-square)](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/usage/api-ansaetze-vergleich.html) [![API Prüfung](https://img.shields.io/badge/API%20Pr%C3%BCfung-open-0A66C2?style=flat-square)](https://htmlpreview.github.io/?https://github.com/edgar-jung-test/gpke/blob/main/docs/api-test.html)
 
 ---
 
